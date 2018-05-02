@@ -1,0 +1,106 @@
+<template>
+  <div>
+     <mu-grid-list :cols="3" :padding="10" :cellHeight="231">
+        <!-- :class="[selectedId === tile.id ? 'active' : 'inactive']" -->
+      <mu-grid-tile :cols="1" v-for="(tile, index) in items" :key="index">
+        <div class="img-container">
+          <img src="../../../assets/tile_grey.png" class="avatar" 
+            :style="{width: tile.dw + 'px!important', height: tile.dh + 'px!important'}"/>
+        </div>
+        <span slot="title">{{tile.w}}x{{tile.h}}</span>
+        <span slot="subTitle">{{tile.label}}</span>
+        <div id="click-area" style="width: 100%; height: 100%; background-color: transparent;
+          position: absolute; z-index: 1" 
+          @click="onItemSelected(tile, index)"/>
+      </mu-grid-tile>
+    </mu-grid-list>
+  </div>
+</template>
+<script>
+/*
+  @component: tab-detail
+  @props:
+    items: the items to be populated on the list
+  @events: 
+    onItemSelected: occurs then an item is clicked
+*/
+export default {
+  name: 'tab-detail',
+  props: ['items'],
+  data() {
+    return {
+      selectedId: '',
+    }
+  },
+  beforeUpdate() {
+    this.$_setSelected(-1);
+  },
+  methods: {
+    onItemSelected(item, index) {
+      this.selectedId = item.id
+      this.$_setSelected(index);
+      this.$emit('onItemSelected', item);
+    },
+    $_setSelected(index) {
+      var els = this.$el.getElementsByClassName('mu-grid-tile');
+      if (!els) {
+        return;
+      }
+      for (var i = 0; i < els.length; i++) {
+        if(i === index) {
+          els[i].style.border = '2px solid #4A574B';
+        } else {
+          els[i].style.border = '';
+        }
+      }
+    },
+  },
+}
+</script>
+<style>
+.mu-grid-tile-titlebar {
+  background-color: transparent;
+}
+.active {
+   border: 2px solid #4A574B;
+}
+.inactive {
+  border: #222222 solid 2px;
+}
+.mu-grid-tile {
+  border-radius: 2px;
+  border: #222222 solid 2px;
+}
+.mu-grid-tile:hover {
+  border: 2px solid #4A574B;
+}
+.mu-grid-tile-title {
+  text-align: center;
+  color: #767676;
+  font-size: 14px;
+}
+.mu-grid-tile-subtitle {
+  font-size: 16px;
+  text-align: center;
+}
+.avatar {
+  text-align: center;
+  margin: auto auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.list {
+  float:left
+}
+.img-container {
+  width: 100%;
+  height: 70%;
+  position: absolute;
+}
+</style>
+
+
+
