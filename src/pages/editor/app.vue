@@ -1,6 +1,6 @@
 <template>
 <div>
-<headers></headers>
+<headers style="z-index: 999"></headers>
 <side-bar></side-bar>
 </div>
 </template>
