@@ -49,14 +49,14 @@
          <div class="item inp" style="display: flex;">
            <div style="width: 50%; padding">
              Width
-            <input v-model="setupData.width" spellcheck="false" v-digitsonly type="text"/>
+            <input v-model="width" spellcheck="false" v-digitsonly type="text"/>
            </div>
            <div class="x">
             <span >x</span> 
            </div>
            <div style="width: 50%;">
              Height
-            <input v-model="setupData.height" spellcheck="false" v-digitsonly type="text"/>
+            <input v-model="height" spellcheck="false" v-digitsonly type="text"/>
            </div>
         </div>
         <div class="item">
@@ -72,7 +72,8 @@
         </div>
         <div class="item inp">
           Canvas Background Colour
-          <div :style="{backgroundColor: setupData.canvasBackground}" class="color-div" @click="pickerisShow = true">
+          <div :style="{backgroundColor: setupData.canvasBackground, color: getInvertedColor(setupData.canvasBackground)}" class="color-div" @click="pickerisShow = true">
+            <span class="color-value">{{setupData.canvasBackground || '#FFFFFF'}}</span>
           </div>
         </div>
       </div>
@@ -85,9 +86,9 @@
       </div>
     </mu-col>
     <hsc-window-style-metal>
-      <hsc-window initialPosition="center" id="colorPicker" style="z-index:999;" :resizable="true" :initialWidth="225" :initialHeight="275"
+      <hsc-window @blur="pickerisShow = false" initialPosition="center" id="colorPicker" style="z-index:999;  padding: 0!important; margin: 0!important;" :resizable="true" :initialWidth="225" :initialHeight="275"
       :closeButton="true" :isOpen="pickerisShow" @closebuttonclick="pickerisShow=false">
-      <color-picker v-model="colors" @input="colorSelected"></color-picker>
+      <color-picker v-model="colors" @input="colorSelected" style="width: 100%; height: 100%;"></color-picker>
     </hsc-window>
   </hsc-window-style-metal>
   </mu-row>
@@ -102,12 +103,16 @@
 */
 import tabDetail from './tabs-content/tab-detail'
 import { Photoshop, Chrome } from "vue-color";
+import colorHelper from '../../helpers/color-helper'
 export default {
   name: "new-project",
   components: {
     tabDetail,
     "photoshop-picker": Photoshop,
     "color-picker": Chrome,
+  },
+  beforeMount() {
+    this.setupData.template = {};
   },
   mounted() {
     // removing the
@@ -119,6 +124,8 @@ export default {
       tabStyle: {'color': '#fff'},
       setupData: {},
       pickerisShow: false,
+      width: '',
+      height: '',
       colors: {
         hex: '#194d33',
         hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
@@ -151,11 +158,12 @@ export default {
       this.activeTab = val;
     },
     onItemSelected(item) {
-      this.setupData.template = item;
+      this.width = item.w;
+      this.height = item.h;
+      this.$set(this.setupData, 'template', item);
     },
     colorSelected(val) {
       this.setupData.canvasBackground = val.hex;
-      console.log(this.setupData.canvasBackground);
     },
     $_getItemsFromType(type) {
       if (!type) {
@@ -256,6 +264,9 @@ export default {
       }
 
       return arrData;
+    },
+    getInvertedColor(hex) {
+      return colorHelper.invertColor(hex);
     }
   }
 }
@@ -353,7 +364,12 @@ export default {
     margin-top: 10px;
     margin-bottom: 10px;
     cursor: pointer;
-    border: 1px solid #fff;
+    display: table;
+    padding: 5px;
+  }
+  .color-value {
+    vertical-align: middle;
+    display: table-cell;
   }
   .x {
     display: flex;
@@ -376,6 +392,7 @@ export default {
   }
   .content {
     margin-top: 0;
+    padding: 0px!important;
   }
   .vc-chrome {
     height: 100%;;
