@@ -6,9 +6,14 @@
 
 <script>
 export default {
+  data () {
+    return {
+      show: false
+    }
+  },
   name: 'App'
 }
 </script>
 
-<style>
+<style scoped>
 </style>

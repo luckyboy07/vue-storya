@@ -2,6 +2,9 @@
   background-color: #222222;
   color: #ffffff;
 }
+.mu-appbar-title {
+ font-size: 14px;
+}
 .mu-avatar {
   color: #303030;
   background-color: #727272;
@@ -287,8 +290,9 @@ a {
   color: rgba(255, 255, 255, 0.3);
 }
 .mu-paper {
-  background-color: #424242;
+  background-color: #040404;
   color: #ffffff;
+  border-right: 1px solid #303030;
 }
 .mu-picker {
   background-color: #424242;
@@ -308,6 +312,8 @@ a {
 }
 .mu-popover {
   background-color: #424242;
+  left: 249px;
+  top: 123px;
 }
 .mu-popup {
   background-color: #424242;

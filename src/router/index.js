@@ -12,10 +12,10 @@ export default new Router({
       name: 'Login',
       component: LoginPage
     },
-  {
-     path: '/editor',
+    {
+      path: '/editor',
       name: 'EditorApp',
       component: EditorPage
-  }
+    }
   ]
 })
