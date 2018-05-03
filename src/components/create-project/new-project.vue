@@ -96,7 +96,7 @@
 </template>
 <script>
 /*
-* @coimponent: new-project
+* @component: new-project
   @events: 
     onCancel: occurs when the process is cancelled
     onFinished: occurs when the submit button is clicked
@@ -110,9 +110,6 @@ export default {
     tabDetail,
     "photoshop-picker": Photoshop,
     "color-picker": Chrome,
-  },
-  beforeMount() {
-    this.setupData.template = {};
   },
   mounted() {
     // removing the
