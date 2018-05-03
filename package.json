@@ -14,10 +14,13 @@
     "lint:fix": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs --fix"
   },
   "dependencies": {
+    "@hscmap/vue-window": "^1.8.2",
     "less": "^2.7.2",
     "less-loader": "^2.2.3",
+    "linq": "^3.1.0",
     "muse-ui": "^2.1.0",
     "vue": "^2.5.2",
+    "vue-color": "^2.4.6",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
