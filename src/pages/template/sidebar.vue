@@ -2,10 +2,10 @@
 <div>
   <mu-drawer left :open="true" @close="toggle()" :zDepth="0" class="custom-drawer">
       <mu-appbar title="Add New Layer">
-        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_down" slot="left" @click="open()"/>
-        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_up" slot="left" @click="open()"/>
+        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_down" slot="left"/>
+        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_up" slot="left"/>
         <mu-icon-button class="custom-icon-button" icon="delete" slot="left"/>
-        <mu-icon-menu class="custom-icon-button" icon="add" slot="right" desktop :anchorOrigin="leftBot" :targetOrigin="leftBot" @click.native="open" @close="closeLayer">
+        <mu-icon-menu class="custom-icon-button" icon="add" slot="right" desktop :anchorOrigin="leftBot" :targetOrigin="leftBot" @close="closeLayer">
             <span class="pop-title" >Add New Layer</span>
             <mu-divider style="margin-left: 10px;" />
             <div class="pop-content">
@@ -30,14 +30,9 @@
         </mu-icon-menu>
       </mu-appbar>
     <mu-list>
-      <mu-list-item title="Shape Layer" :open="openpanel">
-        <mu-icon slot="left" value="landscape" />
-          <mu-icon-button icon="remove_red_eye" slot="right" />
-          <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.native="open"/>
-        <mu-list-item value="#/install" slot="nested" title="asdasd"/>
-        <mu-list-item value="#/usage" slot="nested" title="asdasdasd"/>
-        <mu-list-item value="#/faq" slot="nested" title="s"/>
-      </mu-list-item>
+     <image-layer/>
+     <shape-layer/>
+     <shape-svg-layer/>
       <!-- <ul class="expansion-panel">
         <li class="ep-container">
 
@@ -104,7 +99,6 @@ export default {
       trigger: null,
       showhover:false,
       shapeSelected: false,
-      openpanel: false,
       expandIcon: 'expand_more',
       buttons: [
         {name: 'Shape', icon: 'landscape'},
@@ -134,31 +128,12 @@ export default {
     // },50)
   },
   methods: {
-    open (event) {
-      console.log('oepn')
-      this.openpanel = !this.openpanel
-      if(this.openpanel){
-        this.expandIcon = 'expand_less'
-      }else{
-        this.expandIcon = 'expand_more'
-      }
-      // setTimeout(() => {
-      //   let targetelem = document.getElementsByClassName('mu-popover')
-      //   targetelem[0].style.left = '307px'
-      //   targetelem[0].style.top = '116px'
-      //   targetelem[0].style.width = '350px'
-      //   targetelem[0].style.backgroundColor = '#171616'
-      //   targetelem[0].firstElementChild.children[0].style.overflow = 'hidden'
-      //   targetelem[0].firstElementChild.children[0].style.width = '350px'
-      // }, 50)
-    },
     hoverBtn () {
-      console.log('asdasd')
-      this.showhover = true;
+      this.showhover = true
     },
     closeLayer () {
       console.log('as')
-      this.showhover = false;
+      this.showhover = false
     }
   }
 }
@@ -208,26 +183,7 @@ export default {
   width: 350px;
   overflow: hidden;
 }
-.expansion-panel {
-  display: flex;
-  flex: wrap;
-  justify-content: center;
-  list-style-type: none;
-  padding: 0;
-  text-align: left;
-  width: 100%;
-  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-}
-.mu-item.show-right {
-    background-color: #424242;
-    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-}
-.expand-btn{
-  margin-right: 45px;
-}
-.mu-icon-button{
-  color: #fff;
-}
+
 .mu-paper{
   background-color: #111111;
 }

@@ -1,7 +1,7 @@
 <template>
 <div>
    <mu-appbar title="">
-    <mu-icon-button icon="keyboard_arrow_left" slot="left"/>
+    <mu-flat-button icon="keyboard_arrow_left" slot="left"/>
       <img slot="left" class="appBarIcon" src="@/assets/storya.png" alt="App Logo"/>
        <mu-flat-button label="File" slot="left" class="btn-file"/>
     <mu-flat-button label="Help" slot="left" class="btn-file"/>
