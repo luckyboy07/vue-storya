@@ -385,7 +385,7 @@ a {
 .mu-paper {
   background-color: #040404;
   color: #ffffff;
-  /* border-right: 1px solid #303030; */
+  border-right: 1px solid #303030;
 }
 
 .mu-picker {

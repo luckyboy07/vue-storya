@@ -225,4 +225,10 @@ export default {
 .expand-btn{
   margin-right: 45px;
 }
+.mu-icon-button{
+  color: #fff;
+}
+.mu-paper{
+  background-color: #111111;
+}
 </style>
