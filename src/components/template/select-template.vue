@@ -1,5 +1,6 @@
 <template>
-  <div class="list-container">
+  <div>
+    <div class="list-container">
     <mu-grid-list :cols="2" :padding="10">
       <mu-grid-tile :cols="1" v-for="(tile, index) in sampleItems" :key="index">
          <mu-flat-button class="tem-avatar" @click="templateSelectionChanged(tile)">
@@ -15,6 +16,10 @@
         <mu-list-item title="Apply" class="tem-action-item" @click="onApply"/>
       </mu-list>
     </div>
+  </div>
+    <mu-dialog :open="dialogOpen" @close="dialogOpen = false" :title="selectedTemplate ? selectedTemplate.name : ''" scrollable>
+      <mu-flat-button primary label="Close" @click="dialogOpen = false" slot="actions"/>
+    </mu-dialog>
   </div>
 </template>
 <script>
@@ -36,6 +41,7 @@ export default {
   },
   data() {
     return {
+      dialogOpen: false,
       selectedTemplate: null,
       showMenu: false,
       sampleItems: [
@@ -64,6 +70,7 @@ export default {
       this.$emit('templateSelectionChanged', item);
     },
     onPreview() {
+       this.dialogOpen = true;
        this.showMenu = false;
        this.$emit('onPreview', this.selectedTemplate);
     },
@@ -73,7 +80,9 @@ export default {
     },
     listenForDocumentClickEvents(evt) {
       if (!evt.target || !this.$refs.tempPopupMenu.contains(evt.target)) {
-        this.selectedTemplate = null;
+        if (!this.dialogOpen) {
+          this.selectedTemplate = null;
+        }
         this.showMenu = false
       }
     }
