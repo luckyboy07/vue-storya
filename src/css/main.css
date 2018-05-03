@@ -7,9 +7,7 @@ body {
     background-color: #222222;
     color: #ffffff;
 }
-.mu-appbar-title {
- font-size: 14px;
-}
+
 .mu-avatar {
     color: #303030;
     background-color: #727272;
@@ -383,9 +381,8 @@ a {
 }
 
 .mu-paper {
-  background-color: #040404;
-  color: #ffffff;
-  border-right: 1px solid #303030;
+    background-color: #424242;
+    color: #ffffff;
 }
 
 .mu-picker {
@@ -410,10 +407,7 @@ a {
 }
 
 .mu-popover {
-  background-color: #424242;
-  left: 249px;
-  top: 123px;
-    /* background-color: #424242; */
+    background-color: #424242;
 }
 
 .mu-popup {
@@ -735,4 +729,8 @@ a {
 
 .mu-tooltip-ripple.when-shown {
     background-color: #616161;
+}
+
+.mu-item.show-right {
+    background-color: #191919!important;
 }

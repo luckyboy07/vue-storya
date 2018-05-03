@@ -1,6 +1,13 @@
 <template>
 <div>
   <mu-drawer left :open="true" @close="toggle()" :zDepth="0" class="custom-drawer">
+      <mu-list>
+        <mu-list-item afterText="(None)" title="Template Selected" :open="true" :toggleNested="true">
+          <mu-list-item slot="nested" :disableRipple="true">
+            <select-template :items="[{'id': '1', 'name': 'ej'}, {'id': '2', 'name': 'ej'}]"></select-template>
+          </mu-list-item>
+        </mu-list-item>
+      </mu-list>
       <mu-appbar title="Add New Layer">
         <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_down" slot="left" @click="open()"/>
         <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_up" slot="left" @click="open()"/>
@@ -37,6 +44,7 @@
         <mu-list-item value="#/install" slot="nested" title="asdasd"/>
         <mu-list-item value="#/usage" slot="nested" title="asdasdasd"/>
         <mu-list-item value="#/faq" slot="nested" title="s"/>
+        
       </mu-list-item>
       <!-- <ul class="expansion-panel">
         <li class="ep-container">
@@ -92,6 +100,7 @@
 <script>
 // import {mapMutations, mapGetters, mapState} from 'vuex'
 import Expanding from '../../components/Expanding'
+import templateSelection from '../../components/template/select-template'
 export default {
   name: 'Sidebar',
   data () {
@@ -118,7 +127,8 @@ export default {
     }
   },
   components: {
-    Expanding
+    Expanding,
+    'select-template': templateSelection
   },
   mounted () {
     this.trigger = this.$refs.iconbtn
