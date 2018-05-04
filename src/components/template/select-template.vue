@@ -93,6 +93,7 @@ export default {
 .list-container {
   margin: -16px;
   background-color: #111111;
+  padding-right: 10px;
 }
 .mu-grid-tile-titlebar {
   display: none!important

@@ -44,19 +44,19 @@
       <div style="display: table">
         <div class="item inp">
            Project Name
-          <input type="text" v-model="setupData.project_name"/>
+          <input class="default-inp" type="text" v-model="setupData.project_name"/>
         </div>
-         <div class="item inp" style="display: flex;">
+        <div class="item inp" style="display: flex;">
            <div style="width: 50%; padding">
              Width
-            <input v-model="width" spellcheck="false" v-digitsonly type="text"/>
+            <input class="default-inp" v-model="width" spellcheck="false" v-digitsonly type="text"/>
            </div>
            <div class="x">
             <span >x</span> 
            </div>
            <div style="width: 50%;">
              Height
-            <input v-model="height" spellcheck="false" v-digitsonly type="text"/>
+            <input class="default-inp" v-model="height" spellcheck="false" v-digitsonly type="text"/>
            </div>
         </div>
         <div class="item">
@@ -334,25 +334,6 @@ export default {
   }
   .inp {
     padding-right: 50px;
-  }
-  input[type=text] {
-    border: none;
-    outline: none;
-    background: #333333;
-    width: 100%;
-    height: 35px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 10px;
-    color: #fff;
-    font-family: Lato;
-    transition: all 0.30s ease-in-out;
-  }
-  input[type=text]:active {
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    outline: none;
-    border: none;
   }
   .color-div {
     width: 100%;
