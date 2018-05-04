@@ -33,6 +33,7 @@
      <image-layer/>
      <shape-layer/>
      <shape-svg-layer/>
+     <text-layer/>
       <!-- <ul class="expansion-panel">
         <li class="ep-container">
 
@@ -117,15 +118,17 @@ export default {
   mounted () {
     this.trigger = this.$refs.iconbtn
     console.log('trigger:', this.$refs)
-    // setTimeout(() => {
-    // let targetelem = document.getElementsByClassName('mu-popover')
-    //     targetelem[0].style.left = '307px'
-    //     targetelem[0].style.top = '116px'
-    //     targetelem[0].style.width = '350px'
-    //     targetelem[0].style.backgroundColor = '#171616'
-    //     targetelem[0].firstElementChild.children[0].style.overflow = 'hidden'
-    //     targetelem[0].firstElementChild.children[0].style.width = '350px'
-    // },50)
+    let targetelem = document.getElementsByClassName('mu-item-wrapper')
+    console.log('targetelem',targetelem[0])
+    // NEED FOUR LOOP
+    targetelem[0].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
+    targetelem[0].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
+    targetelem[1].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
+    targetelem[1].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
+    targetelem[2].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
+    targetelem[2].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
+    targetelem[3].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
+    targetelem[3].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
   },
   methods: {
     hoverBtn () {
@@ -187,4 +190,5 @@ export default {
 .mu-paper{
   background-color: #111111;
 }
+
 </style>
