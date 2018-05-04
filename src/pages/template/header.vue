@@ -5,6 +5,9 @@
       <img slot="left" class="appBarIcon" src="@/assets/storya.png" alt="App Logo"/>
       <mu-flat-button label="File" slot="left" class="btn-file"/>
       <mu-flat-button label="Help" slot="left" class="btn-file"/>
+      <div class="acct-settings" slot="right">
+        <div class="acct-avatar"></div>
+      </div>
   </mu-appbar>
   <mu-divider/>
   <editor-tools></editor-tools>
@@ -46,8 +49,21 @@ margin: 12px;
 .mu-flat-button.hover{
   background-color: #fff8f829;
 }
-  .appBarIcon {
-    height: 100%;
-    width: 60px;
-  }
+.appBarIcon {
+  height: 100%;
+  width: 60px;
+}
+.acct-settings {
+   height: 65%;
+   width: 45px;
+   text-align: center;
+}
+.acct-avatar {
+  border-radius: 50%;
+  background-color:#009d70;
+  height: 100%;
+}
+.mu-popover {
+  display: none!important;
+}
 </style>

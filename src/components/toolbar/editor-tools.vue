@@ -1,16 +1,9 @@
 <template>
-<mu-appbar class="header-tools editor-tools">
+<div>
+  <mu-appbar class="header-tools editor-tools">
     <mu-flat-button id="btn" class="save-menu-btn" labelPosition="before" 
       label="Save Project" slot="left" icon="keyboard_arrow_down"
-      @click="menuOpen = !menuOpen"/>
-    <mu-icon-menu icon="" @change="handleChange" 
-      :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
-      <mu-menu-item value="1" title="Save As" />
-      <mu-divider inset class="temp-action-item-divider"/>
-      <mu-menu-item value="1" title="Save As Template" />
-        <mu-divider inset class="temp-action-item-divider"/>
-      <mu-menu-item value="1" title="Export As" />
-    </mu-icon-menu>
+      @click="saveButtonClicked"/>
     <!-- start: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
       <div class="tool-item-group-content label-item">Project Name</div> 
@@ -55,6 +48,16 @@
      </div>
     <mu-flat-button labelPosition="before" icon="add" style="text-transform: none; background-color: #222222; margin-right: 20px; height: 70%" slot="right" label="Add Canvas" class="demo-flat-button"/>
   </mu-appbar>
+  <mu-icon-menu icon="" @change="handleChange" :anchorOrigin="rightTop"
+      :targetOrigin="rightTop"
+      :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
+      <mu-menu-item value="1" title="Save As" />
+      <mu-divider inset class="temp-action-item-divider"/>
+      <mu-menu-item value="1" title="Save As Template" />
+        <mu-divider inset class="temp-action-item-divider"/>
+      <mu-menu-item value="1" title="Export As" />
+    </mu-icon-menu>
+</div>
 </template>
 <script>
 import customMenu from '../menus/custom-menu'
@@ -67,13 +70,34 @@ export default {
     return {
       value: '3',
       saveMenu: null,
-      menuOpen: false
+      menuOpen: false,
+      rightTop: {horizontal: 'left', vertical: 'top'},
     }
   },
   methods: {
     handleChange(val) {
       this.value = val;
-    }
+    },
+    saveButtonClicked() {
+      this.menuOpen = !this.menuOpen;
+      if (this.menuOpen) {
+        // force override ;(
+        // pandamai najud
+        // last resort
+        setTimeout(() => {
+          var elem = document.getElementsByClassName('mu-popover')[0];
+          if (elem) {
+            elem.setAttribute('style', `
+              left: 10px!important; z-index: 4; background-color: #009d70!important;`);
+            elem = document.getElementsByClassName('mu-menu')[0]; 
+               elem.setAttribute('style', `width: 200px!important;`);
+            // get the seconds child
+            elem = document.getElementsByClassName('mu-menu-list')[0]; 
+               elem.setAttribute('style', `width: auto!important;`);
+          }
+        }, 50)
+      }
+    },
   }
 }
 </script>
@@ -143,6 +167,9 @@ export default {
 .mu-icon-button {
   width: auto;
   height: auto;
+}
+.mu-popover {
+background-color: red!important;
 }
 </style>
 
