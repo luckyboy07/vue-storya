@@ -79,6 +79,14 @@ module.exports = {
        {
         test: /muse-ui.src.*?js$/,
         loader: 'babel-loader'
+      },
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader'
+      },
+      {
+        test: /\.s[a|c]ss$/,
+          loader: 'style!css!sass'
       }
     ]
   },

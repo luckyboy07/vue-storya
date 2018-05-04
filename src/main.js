@@ -11,6 +11,7 @@ import Multiselect from 'vue-multiselect'
 // import JustDigits from './directives/only-number-filter.js'
 import * as VueWindow from '@hscmap/vue-window'
 import LayerComponent from './pages/template/menus'
+import RotatableResizer from './components/draggable/rotatable-resizer'
 // import 'muse-components/styles/base.less'
 Vue.use(MuseUI)
 Vue.use(VueWindow)
@@ -18,6 +19,7 @@ Vue.config.productionTip = false
 Vue.use(VTooltip)
 Vue.use(LayerComponent)
 Vue.component('multiselect', Multiselect)
+Vue.component('rotatable-resizer', RotatableResizer)
 /* eslint-disable no-new */
 new Vue({
     el: '#app',
