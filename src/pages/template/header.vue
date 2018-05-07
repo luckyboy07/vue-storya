@@ -4,9 +4,11 @@
       <mu-flat-button class="s-header-btn-back" slot="left">
         <i class="si-keyboard-arrow-left"></i>
       </mu-flat-button>
-      <img slot="left" class="appBarIcon" src="@/assets/storya.png" alt="App Logo"/>
-      <mu-flat-button label="File" slot="left" class="btn-file h-60-p"/>
+      <img slot="left" class="appBarIcon" src="@/assets/storya.png" alt="App Logo" style="margin-left: 10px"/>
+      <mu-flat-button label="Create" slot="left" class="btn-file h-60-p" style="margin-left: 10px"/>
       <mu-flat-button label="Help" slot="left" class="btn-file h-60-p"/>
+      <div v-if="currentPage === 'editor'" slot="left" class="s-header-prj-name s-f-14" style="margin-left: 10px">Project Name:</div>
+      <input v-if="currentPage === 'editor'" spellcheck="false" slot="left" class="default-inp" style="margin-left: 10px"/>
       <div class="acct-settings" slot="right">
         <div class="acct-avatar"></div>
       </div>
@@ -27,10 +29,28 @@ export default {
   props: ['hideSecondHeader'],
   components: {
     'editor-tools':editorTools,
+  },
+  created() {
+    this.currentPage = this.$route.path.replace('/', '')
+  },
+  data() {
+    return {
+      currentPage: '',
+    }
   }
 }
 </script>
 <style scoped>
+.default-inp {
+  color: #7D7D7D;
+}
+.s-header-prj-name {
+  width: 60%;
+  color: #7D7D7D;
+}
+.s-f-14 {
+  font-size: 14px;
+}
 .s-header-btn-back {
   width: 40px;
   background-color: #2a2a2a;
@@ -52,8 +72,8 @@ export default {
  background: #808080;
 }
 .btn-file{
-margin: 12px;
-    font-size: 25px;
+  margin:2px;
+  font-size: 25px;
 }
 .img-logo{
   width: 7%;
