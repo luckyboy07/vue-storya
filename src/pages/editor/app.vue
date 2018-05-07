@@ -5,32 +5,27 @@
     <div class="editor-container">
       <div class="editor-box">
         <div class="canvas-wrap">
-            <rotatable-resizer
-        :active="true"
-        :rotatable="true"
-        :draggable="true"
-        :handles="''"
-        :rotation="0"
-        :fixedProportion="false"
-        :left="100"
-        :top="100"
-        :width="100"
-        :height="100">
-        Slot Content
-      </rotatable-resizer>
+            <layer :layers="getLayers"></layer>
         </div>
       </div>
     </div>
 </div>
 </template>
 <script>
+
+import {mapGetters} from 'vuex'
 import Header from '../template/header'
 import Siderbar from '../template/sidebar'
+import selectionBox from './layer'
 export default {
   name: 'Editor',
   components: {
     headers: Header,
-    sideBar: Siderbar
+    sideBar: Siderbar,
+    layer: selectionBox
+  },
+  computed: {
+    ...mapGetters(['getLayers'])
   }
 }
 </script>

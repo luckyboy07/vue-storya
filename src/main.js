@@ -12,6 +12,7 @@ import Multiselect from 'vue-multiselect'
 import * as VueWindow from '@hscmap/vue-window'
 import LayerComponent from './pages/template/menus'
 import RotatableResizer from './components/draggable/rotatable-resizer'
+import {store} from './store/index.js'
 // import 'muse-components/styles/base.less'
 Vue.use(MuseUI)
 Vue.use(VueWindow)
@@ -24,6 +25,7 @@ Vue.component('rotatable-resizer', RotatableResizer)
 new Vue({
     el: '#app',
     router,
+    store,
     components: { App },
     template: '<App/>'
 })
