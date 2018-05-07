@@ -13,9 +13,9 @@
         </div>
         <div class="s-create-right-content">
           <input placeholder="Search" type="text" class="default-inp">
-        <div class="s-create-tab-btns">
-          <storya-tabs></storya-tabs>
-        </div>
+          <div class="s-create-tab-btns">
+            <storya-tabs></storya-tabs>
+          </div>
         </div>
       </div>
     </div>
@@ -56,11 +56,13 @@ export default {
   padding: 15px 30px;
   text-align: center;
   line-height: 45px;
+  overflow: hidden;
 }
 .s-create-right-content {
   width: 87%;
   padding: 15px 30px;
   line-height: 50px;
+  overflow: hidden;
 }
 .s-create-t {
   font-family: Raleway;

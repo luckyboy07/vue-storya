@@ -183,22 +183,27 @@ export default {
         return;
       }
       this.tabType = type;
-      this.$_showMenu(evnt, type)
+      // set a delay to make sure the menu is rendered
+      setTimeout(() => {
+        this.$_showMenu(evnt, type)
+      }, 50);
     },
     $_getMenu(type) {
       if (this.tabType === 'template') {
         return this.$refs.templateMenu;
-      } else if (this.tabType === 'project') {
+      } else if (this-tab-btns.tabType === 'project') {
         return this.$refs.projectMenu;
       } else {
         return null;
       }
     },
     $_showMenu(evnt, type) {
-      console.log(type);
       var elem = this.$_getMenu();
       var tp = evnt.target.getBoundingClientRect();
-      elem.style.cssText += 'position: absolute; left: ' + (tp.x - tp.width)  + 'px' + '; top: ' + tp.y + 'px;';
+      var elemRect = elem.getBoundingClientRect();
+      elem.style.cssText += 'position: absolute; margin-left: ' + 
+        ((tp.left + (tp.width / 2) ) - (elemRect.width / 2)) 
+        + 'px;' + 'top: ' + (tp.top - tp.height ) + 'px;';
     },
     listenForDocumentClickEvents(evt) {
       if (! this.tabType) {
@@ -276,6 +281,9 @@ export default {
   height: 100%;
   margin-top: 10px;
   font-family: Raleway;
+}
+.s-create-tab-btns>:last-child, .s-create-tab-btns>:nth-last-child(2){
+  margin-left: -10px;
 }
 .s-tab-btn {
   width: 170px;

@@ -5,8 +5,8 @@
         <i class="si-keyboard-arrow-left"></i>
       </mu-flat-button>
       <img slot="left" class="appBarIcon" src="@/assets/storya.png" alt="App Logo"/>
-      <mu-flat-button label="File" slot="left" class="btn-file"/>
-      <mu-flat-button label="Help" slot="left" class="btn-file"/>
+      <mu-flat-button label="File" slot="left" class="btn-file h-60-p"/>
+      <mu-flat-button label="Help" slot="left" class="btn-file h-60-p"/>
       <div class="acct-settings" slot="right">
         <div class="acct-avatar"></div>
       </div>
@@ -57,6 +57,9 @@ margin: 12px;
 }
 .img-logo{
   width: 7%;
+}
+.h-60-p {
+  height: 60%;
 }
 /* .mu-appbar .mu-flat-button {
   height: 60%;
