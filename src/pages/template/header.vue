@@ -1,7 +1,9 @@
 <template>
 <div class="header-with-tools">
   <mu-appbar title="">
-      <mu-icon-button class="header-back-button" icon="keyboard_arrow_left" slot="left"/>
+      <mu-flat-button class="s-header-btn-back" slot="left">
+        <i class="si-keyboard-arrow-left"></i>
+      </mu-flat-button>
       <img slot="left" class="appBarIcon" src="@/assets/storya.png" alt="App Logo"/>
       <mu-flat-button label="File" slot="left" class="btn-file"/>
       <mu-flat-button label="Help" slot="left" class="btn-file"/>
@@ -29,6 +31,13 @@ export default {
 }
 </script>
 <style scoped>
+.s-header-btn-back {
+  width: 40px;
+  background-color: #2a2a2a;
+  border-radius: 0;
+  margin: 5px 5px;
+   height: 80%;
+}
 .header-back-button {
   height: 75%;
   background-color: #2a2a2a;
@@ -49,9 +58,9 @@ margin: 12px;
 .img-logo{
   width: 7%;
 }
-.mu-appbar .mu-flat-button {
-    height: 60%;
-}
+/* .mu-appbar .mu-flat-button {
+  height: 60%;
+} */
 .mu-flat-button.hover{
   background-color: #fff8f829;
 }
