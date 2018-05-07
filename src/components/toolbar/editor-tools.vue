@@ -7,7 +7,7 @@
     <!-- start: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
       <div class="tool-item-group-content label-item">File Name</div> 
-      <input value="The File Name" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
+      <input @change="filenameChanged" ref="filename" value="The File Name" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
     </div>
     <!-- end: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
@@ -15,7 +15,7 @@
        <div class="tool-item-group-content" style="width: 260px; display: flex">
          <div class="tool-item-group-content" style="width: 106px; display: flex">
             <div class="label-item p-r">W:</div> 
-            <input style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly v-append-unit="'px'" type="text"/>
+            <input @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly v-append-unit="'px'" type="text"/>
            </div>
            <div class="tool-item-group-content">
             <div class="label-item">
@@ -24,7 +24,7 @@
            </div>
            <div class="tool-item-group-content" style="width: 106px; display: flex;">
             <div class="label-item p-r">H:</div> 
-            <input style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'px'" type="text"/>
+            <input  @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'px'" type="text"/>
            </div>
        </div>
      </div>
@@ -32,13 +32,13 @@
        <div class="label-item">Zoom</div>
        <div class="tool-item-group-content" style="width: 168px; display: flex">
          <mu-flat-button  class="s-editor-btn-zoom-ctrl">
-            <i class="si-zoomout" style="height: 100%"></i>
+            <i class="si-zoomout" style="height: 90%"></i>
           </mu-flat-button>
           <div class="tool-item-group-content">
             <input style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'" type="text"/>
           </div>
           <mu-flat-button class="s-editor-btn-zoom-ctrl">
-            <i class="si-zoomin" style="height: 100%"></i>
+            <i class="si-zoomin" style="height: 90%"></i>
           </mu-flat-button>
        </div>
      </div>
@@ -56,6 +56,28 @@
 </div>
 </template>
 <script>
+/*
+* @component: editor-tools
+  @events:
+    onSaveTriggered:
+      - occurs when saving the project
+      params: 
+        saveType: could be unpecifiedSave (save as), template (save as template), unpecifiedExport (export as)
+    filenameChanged:
+      - occurs when modifying the filename textbox
+      params:
+        newName: the new filename of the project
+    onResize:
+      - occurs when resizing the content using the input boxes
+      params:
+        resizeVal: the new dimension of the canvas
+    onZoom:
+      - occurs when zooming (in, out)
+      params:
+        zoomVal: zoom value
+    onAdd:
+      - occurs when the 'Add Canvas' button was clicked
+*/
 import customMenu from '../menus/custom-menu'
 export default {
   name: 'editor-tools',
@@ -94,6 +116,15 @@ export default {
         }, 50)
       }
     },
+    filenameChanged() {
+      this.$emit('filenameChanged' , this.$refs.filename.value)
+    },
+    onResize() {
+      this.$emit('onResize', {with:  this.$refs.width.value, height:  this.$refs.height.value});
+    },
+    onZoom() {
+      
+    }
   }
 }
 </script>

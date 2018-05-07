@@ -18,8 +18,8 @@
             <div class="pop-content">
               <div v-for="(item, i) in buttons"  :key="i" class="content-btn">
               <mu-raised-button  ref="iconbtn"  class="raised-btn"  :icon="item.icon" @hover="shapeSelected = i === 0" />
-               <br>
-               <span >{{item.name}}</span> 
+               <br/>
+               <span>{{item.name}}</span> 
               </div>
             </div>
             <mu-divider v-show="shapeSelected"/>
