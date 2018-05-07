@@ -105,34 +105,7 @@ export default {
 .mu-item-wrapper.hover {
   background-color: transparent;
 }
-.tem-action-menu {
-  width: 100px;
-  position: absolute;
-  margin: auto auto;
-  bottom: 30px;
-  left: 0;
-  right: 0;
-  background: #77c589;
-  box-shadow: 0 1px 6px rgba(0,0,0,.117647), 0 1px 4px rgba(0,0,0,.117647);
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s, opacity 0.5s linear;
-}
-.tem-action-menu-hidden {
-  visibility: hidden;
-  opacity: 0;
-}
-.tem-action-menu-shown {
-  visibility: visible;
-  opacity: 1;
-}
-.tem-action-item {
-  background-color: #009d70;
-  text-align: center
-}
-.temp-action-item-divider {
-  background-color: #77c589;
-}
+
 </style>
 
 

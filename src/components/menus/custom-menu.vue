@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mu-icon-menu icon="" @change="handleChange" 
+    <!-- <mu-icon-menu icon="" @change="handleChange" 
       :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false" 
       :value="value" class="save-menu">
       <mu-menu-item value="1" title="Refresh" />
@@ -8,7 +8,13 @@
       <mu-menu-item value="3" title="Settings" />
       <mu-menu-item value="4" title="Help" />
       <mu-menu-item value="5" title="Sign out" />
-    </mu-icon-menu>
+    </mu-icon-menu> -->
+    <mu-menu>
+      <mu-menu-item title="Maps"/>
+      <mu-menu-item title="Books"/>
+      <mu-menu-item title="Flights"/>
+      <mu-menu-item title="Apps"/>
+    </mu-menu>
   </div>
 </template>
 <script>

@@ -10,13 +10,19 @@
       </div>
   </mu-appbar>
   <mu-divider/>
-  <editor-tools></editor-tools>
+  <editor-tools v-if="!hideSecondHeader"></editor-tools>
 </div>
 </template>
 <script>
+/*
+* @component: Header
+  @properties:
+    hideSecondHeader: show or hide the toolbar/editing tools
+*/
 import editorTools from '../../components/toolbar/editor-tools'
 export default {
   name: 'Header',
+  props: ['hideSecondHeader'],
   components: {
     'editor-tools':editorTools,
   }
