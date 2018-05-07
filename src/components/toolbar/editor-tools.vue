@@ -98,6 +98,10 @@ export default {
 }
 </script>
 <style scoped>
+.s-editor-btn-zoom-ctrl {
+  padding: 3px 3px;
+  
+}
 .temp-action-item-divider {
   background-color: #77c589;
 }
