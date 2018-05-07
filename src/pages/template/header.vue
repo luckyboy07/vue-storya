@@ -9,8 +9,15 @@
       <mu-flat-button label="Help" slot="left" class="btn-file h-60-p"/>
       <div v-if="currentPage === 'editor'" slot="left" class="s-header-prj-name s-f-14" style="margin-left: 10px">Project Name:</div>
       <input v-if="currentPage === 'editor'" spellcheck="false" slot="left" class="default-inp" style="margin-left: 10px"/>
-      <div class="acct-settings" slot="right">
-        <div class="acct-avatar"></div>
+      <div slot="right" class="s-header-acct-sett-container">
+        <div class="s-header-acct-owner"><div>Hi Storjak</div></div>
+        <div class="acct-settings">
+          <div class="acct-avatar">
+            <div class="acct-avatar-wrapper">
+              <div>SS</div>
+            </div>
+          </div>
+        </div>
       </div>
   </mu-appbar>
   <mu-divider/>
@@ -41,6 +48,18 @@ export default {
 }
 </script>
 <style scoped>
+.s-header-acct-owner {
+  height: 100%;
+  font-weight: bold;
+  color: #fff;
+  font-size: 16px;
+  margin-right: 15px;
+  display: table;
+}
+.s-header-acct-owner>:first-child {
+  display: table-cell;
+  vertical-align: middle
+}
 .default-inp {
   color: #7D7D7D;
 }
@@ -91,15 +110,29 @@ export default {
   height: 100%;
   width: 60px;
 }
+.s-header-acct-sett-container {
+  height: 65%;
+  display: flex;
+}
 .acct-settings {
-   height: 65%;
-   width: 45px;
-   text-align: center;
+  height: 100%;
+  width: 45px;
+  text-align: center;
 }
 .acct-avatar {
   border-radius: 50%;
   background-color:#009d70;
   height: 100%;
+}
+.acct-avatar-wrapper {
+   height: 100%;
+   width: 100%;
+  display: table;
+}
+.acct-avatar-wrapper>:first-child {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 20px;
 }
 .mu-popover {
   display: none!important;

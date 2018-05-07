@@ -6,8 +6,8 @@
       @click="saveButtonClicked"/>
     <!-- start: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
-      <div class="tool-item-group-content label-item">Project Name</div> 
-      <input value="The Project Name" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
+      <div class="tool-item-group-content label-item">File Name</div> 
+      <input value="The File Name" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
     </div>
     <!-- end: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
@@ -31,19 +31,15 @@
     <div class="tool-item tool-item-group" slot="left">
        <div class="label-item">Zoom</div>
        <div class="tool-item-group-content" style="width: 168px; display: flex">
-         <div style="height: 10%!important;">
-             <mu-icon-button style="padding: 0">
-                <i class="si-zoomout"></i>
-              </mu-icon-button>
-          </div>
+         <mu-flat-button  class="s-editor-btn-zoom-ctrl">
+            <i class="si-zoomout" style="height: 100%"></i>
+          </mu-flat-button>
           <div class="tool-item-group-content">
             <input style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'" type="text"/>
           </div>
-          <div class="" style="">
-            <mu-icon-button style="padding: 0; height: 67%">
-              <i class="si-zoomin"></i>
-            </mu-icon-button>
-          </div>
+          <mu-flat-button class="s-editor-btn-zoom-ctrl">
+            <i class="si-zoomin" style="height: 100%"></i>
+          </mu-flat-button>
        </div>
      </div>
     <mu-flat-button labelPosition="before" icon="add" style="text-transform: none; background-color: #222222; margin-right: 20px; height: 70%" slot="right" label="Add Canvas" class="demo-flat-button"/>
