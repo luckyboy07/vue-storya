@@ -1,6 +1,13 @@
 <template>
 <div>
   <mu-drawer left :open="true" @close="toggle()" :zDepth="0" class="custom-drawer">
+      <mu-list style="padding-top: 0;">
+        <mu-list-item afterText="(None)" title="Template Selected" :open="true" :toggleNested="true">
+          <mu-list-item slot="nested" :disableRipple="true">
+            <select-template :items="[{'id': '1', 'name': 'ej'}, {'id': '2', 'name': 'ej'}]"></select-template>
+          </mu-list-item>
+        </mu-list-item>
+      </mu-list>
       <mu-appbar title="Add New Layer">
         <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_down" slot="left"/>
         <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_up" slot="left"/>
@@ -32,7 +39,7 @@
         </mu-icon-menu>
       </mu-appbar>
     <mu-list>
-      <component v-for="(t,i) in getLayers" :key="i" :is="t.component"  :openpanel="t.open"></component>
+    <component v-for="(t,i) in getLayers" :key="i" :is="t.component"  :openpanel="t.open"></component>
      <!-- <image-layer/> -->
      <!-- <shape-layer/> -->
      <!-- <shape-svg-layer/> -->
@@ -91,6 +98,7 @@
 <script>
 import {mapActions, mapGetters} from 'vuex'
 import Expanding from '../../components/Expanding'
+import templateSelection from '../../components/template/select-template'
 export default {
   name: 'Sidebar',
   data () {
@@ -122,7 +130,8 @@ export default {
     }
   },
   components: {
-    Expanding
+    Expanding,
+    'select-template': templateSelection
   },
   computed: {
     ...mapGetters(['getItems','getLayers'])

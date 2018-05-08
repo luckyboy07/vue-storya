@@ -1,9 +1,14 @@
+/*
+ * Filters user inputs to only digits
+ */
 import Vue from 'vue'
 Vue.directive('digitsonly', {
     bind(el, binding, vnode) {
         var filter = function(evt) {
             var key = evt.key.toLowerCase();
-            if (isNaN(key) && key !== 'backspace' && key !== '.' && key !== 'delete' && key !== 'enter' && key !== 'a') {
+            if (isNaN(key) && key !== 'backspace' && key !== '.' &&
+                key !== 'delete' && key !== 'enter' && key !== 'a' &&
+                key !== 'tab') {
                 evt.preventDefault();
             }
             // check for . (dots)
