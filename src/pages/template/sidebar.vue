@@ -9,19 +9,21 @@
         </mu-list-item>
       </mu-list>
       <mu-appbar title="Add New Layer">
-        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_down" slot="left" @click="open()"/>
-        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_up" slot="left" @click="open()"/>
+        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_down" slot="left"/>
+        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_up" slot="left"/>
         <mu-icon-button class="custom-icon-button" icon="delete" slot="left"/>
-        <mu-icon-menu class="custom-icon-button" icon="add" slot="right" desktop :anchorOrigin="leftBot" :targetOrigin="leftBot" @click.native="open" @close="closeLayer">
+        <mu-icon-menu class="custom-icon-button" icon="add"  slot="right" :open="showhover" @open="hoverBtn" @close="closeLayer" desktop :anchorOrigin="leftBot" :targetOrigin="leftBot">
             <span class="pop-title" >Add New Layer</span>
             <mu-divider style="margin-left: 10px;" />
+              <mu-menu value="" title="">
             <div class="pop-content">
-              <div v-for="(item, i) in buttons"  :key="i" class="content-btn">
-              <mu-raised-button  ref="iconbtn"  class="raised-btn"  :icon="item.icon" @hover="shapeSelected = i === 0" />
-               <br/>
-               <span>{{item.name}}</span> 
+              <div v-for="(item, i) in getItems"  :key="i" class="content-btn" @click.stop="addLayer(item);toggle($event)">
+              <mu-raised-button  ref="iconbtn"  class="raised-btn"  :icon="item.icon" @hover="shapeSelected = i === 0"/>
+               <br>
+               <span >{{item.title}}</span> 
               </div>
             </div>
+              </mu-menu>
             <mu-divider v-show="shapeSelected"/>
             <mu-menu v-show="shapeSelected" class="pop-content">
               <div class="">
@@ -37,15 +39,11 @@
         </mu-icon-menu>
       </mu-appbar>
     <mu-list>
-      <mu-list-item title="Shape Layer" :open="openpanel">
-        <mu-icon slot="left" value="landscape" />
-          <mu-icon-button icon="remove_red_eye" slot="right" />
-          <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.native="open"/>
-        <mu-list-item value="#/install" slot="nested" title="asdasd"/>
-        <mu-list-item value="#/usage" slot="nested" title="asdasdasd"/>
-        <mu-list-item value="#/faq" slot="nested" title="s"/>
-        
-      </mu-list-item>
+    <component v-for="(t,i) in getLayers" :key="i" :is="t.component"  :openpanel="t.open"></component>
+     <!-- <image-layer/> -->
+     <!-- <shape-layer/> -->
+     <!-- <shape-svg-layer/> -->
+     <!-- <text-layer/> -->
       <!-- <ul class="expansion-panel">
         <li class="ep-container">
 
@@ -98,7 +96,7 @@
 </div>
 </template>
 <script>
-// import {mapMutations, mapGetters, mapState} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import Expanding from '../../components/Expanding'
 import templateSelection from '../../components/template/select-template'
 export default {
@@ -113,8 +111,13 @@ export default {
       trigger: null,
       showhover:false,
       shapeSelected: false,
-      openpanel: false,
       expandIcon: 'expand_more',
+      elements: [
+        {type:'image-layer'},
+        {type: 'shape-layer'},
+        {type: 'shape-svg-layer'},
+        {type: 'text-layer'}
+      ],
       buttons: [
         {name: 'Shape', icon: 'landscape'},
         {name: 'Image', icon: 'insert_photo'},
@@ -130,45 +133,38 @@ export default {
     Expanding,
     'select-template': templateSelection
   },
+  computed: {
+    ...mapGetters(['getItems','getLayers'])
+  },
   mounted () {
     this.trigger = this.$refs.iconbtn
-    console.log('trigger:', this.$refs)
-    // setTimeout(() => {
-    // let targetelem = document.getElementsByClassName('mu-popover')
-    //     targetelem[0].style.left = '307px'
-    //     targetelem[0].style.top = '116px'
-    //     targetelem[0].style.width = '350px'
-    //     targetelem[0].style.backgroundColor = '#171616'
-    //     targetelem[0].firstElementChild.children[0].style.overflow = 'hidden'
-    //     targetelem[0].firstElementChild.children[0].style.width = '350px'
-    // },50)
+    // console.log('trigger:', this.$refs)
+    // let targetelem = document.getElementsByClassName('mu-item-wrapper')
+    // console.log('targetelem',targetelem[0])
+    // // NEED FOUR LOOP
+    // targetelem[0].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
+    // targetelem[0].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
+    // targetelem[1].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
+    // targetelem[1].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
+    // targetelem[2].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
+    // targetelem[2].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
+    // targetelem[3].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
+    // targetelem[3].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
   },
   methods: {
-    open (event) {
-      console.log('oepn')
-      this.openpanel = !this.openpanel
-      if(this.openpanel){
-        this.expandIcon = 'expand_less'
-      }else{
-        this.expandIcon = 'expand_more'
-      }
-      // setTimeout(() => {
-      //   let targetelem = document.getElementsByClassName('mu-popover')
-      //   targetelem[0].style.left = '307px'
-      //   targetelem[0].style.top = '116px'
-      //   targetelem[0].style.width = '350px'
-      //   targetelem[0].style.backgroundColor = '#171616'
-      //   targetelem[0].firstElementChild.children[0].style.overflow = 'hidden'
-      //   targetelem[0].firstElementChild.children[0].style.width = '350px'
-      // }, 50)
-    },
+    ...mapActions([
+      'addLayer'
+      ]),
     hoverBtn () {
-      console.log('asdasd')
-      this.showhover = true;
+      this.showhover = true
     },
     closeLayer () {
       console.log('as')
-      this.showhover = false;
+      this.showhover = !this.showhover
+    },
+    toggle (event) {
+      this.showhover = !this.showhover
+     event.stopPropagation()
     }
   }
 }
@@ -218,27 +214,9 @@ export default {
   width: 350px;
   overflow: hidden;
 }
-.expansion-panel {
-  display: flex;
-  flex: wrap;
-  justify-content: center;
-  list-style-type: none;
-  padding: 0;
-  text-align: left;
-  width: 100%;
-  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-}
-.mu-item.show-right {
-    background-color: #424242;
-    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-}
-.expand-btn{
-  margin-right: 45px;
-}
-.mu-icon-button{
-  color: #fff;
-}
+
 .mu-paper{
   background-color: #111111;
 }
+
 </style>

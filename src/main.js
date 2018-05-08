@@ -7,19 +7,29 @@ import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
 import './css/main.css'
 import VTooltip from 'v-tooltip'
-import * as VueWindow from '@hscmap/vue-window'
 // directives
 import JustDigits from './directives/only-number-filter.js'
 import UnitAppender from './directives/append-unit.js'
+import Multiselect from 'vue-multiselect'
+// import JustDigits from './directives/only-number-filter.js'
+import * as VueWindow from '@hscmap/vue-window'
+import LayerComponent from './pages/template/menus'
+import RotatableResizer from './components/draggable/rotatable-resizer'
+import { store } from './store/index.js'
 // import 'muse-components/styles/base.less'
 Vue.use(MuseUI)
 Vue.use(VueWindow)
 Vue.config.productionTip = false
 Vue.use(VTooltip)
     /* eslint-disable no-new */
+Vue.use(LayerComponent)
+Vue.component('multiselect', Multiselect)
+Vue.component('rotatable-resizer', RotatableResizer)
+    /* eslint-disable no-new */
 new Vue({
     el: '#app',
     router,
+    store,
     components: { App },
     template: '<App/>'
 })
