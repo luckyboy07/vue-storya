@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "baseUrl": ".",
+    "rootDirs": [
+      "../common",
+      "./src/main",
+      "./src/renderer"
+    ],
+    "paths": {
+      "pm_common": ["../common"],
+      "settings": ["./src/main/settings"]
+    }
+  },
+  "include": [
+    "src/**/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

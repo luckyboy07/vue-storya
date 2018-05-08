@@ -28,7 +28,9 @@ export const store = new Vuex.Store({
         visible: true,
         animation: null,
         selected: false,
+        open: false,
         type: 'shape',
+        component: 'shape-layer',
         attributes: [
           {
             id: 1,
@@ -67,18 +69,20 @@ export const store = new Vuex.Store({
             name: 'backgrond repeat',
             display: 'background-repeat',
             content_type: 'background-repeat',
+            value: 'no-repeat',
             item: [{
               name: 'Repeat',
               value: 'repeat'
             }, {
               name: 'No repeat',
               value: 'no-repeat'
-            }],
-            value: 'no-repeat'},
+            }]
+          },
           {id: 19,
             name: 'backgrond position',
             display: 'background-position',
             content_type: 'background-position',
+            value: null,
             item: [{
               name: 'Top',
               value: 'top'
@@ -94,8 +98,8 @@ export const store = new Vuex.Store({
             }, {
               name: 'Center',
               value: 'center'
-            }],
-            value: null},
+            }]
+          },
           {id: 20,
             name: 'background attachment',
             display: 'background-attachment',
@@ -136,6 +140,8 @@ export const store = new Vuex.Store({
         type: 'image',
         width: 100,
         height: 100,
+        component: 'image-layer',
+        open: false,
         attributes: [
           {id: 1, name: 'src', display: 'URL', content_type: 'uri', request_load: true, value: 'http://via.placeholder.com/140x100', value_type: 'attribute'},
           {id: 2, name: 'area', display: 'Size', content_type: 'area', value: 0, width: null, height: null, unit: 'px'},
@@ -172,6 +178,8 @@ export const store = new Vuex.Store({
         selected: false,
         type: 'text',
         target_element: null,
+        component: 'text-layer',
+        open: false,
         attributes: [
           {id: 1, name: 'text', display: 'Text', content_type: 'text', value: 'Text Layer', value_type: 'content'},
           {id: 2, name: 'color', display: 'Color', content_type: 'color', value: null, value_type: 'css'},
@@ -295,7 +303,7 @@ export const store = new Vuex.Store({
   mutations: {
     addLayer: (state, payload) => {
       let layers = state.layers
-
+      console.log('layers:', layers)
       payload.x = 148
       payload.y = 153
       payload.width = 200

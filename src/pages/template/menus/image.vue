@@ -1,6 +1,6 @@
 <template>
-<div class="yaawa activeTool">
-    <mu-list-item title="Image Layer" :open="openpanel" @click.stop="open">
+<div class="yawaa activeTool">
+    <mu-list-item title="Image Layer" :open="panelopen" @click.stop="open">
           <mu-icon slot="left" value="image" style="color: #fff"/>
           <mu-icon-button icon="remove_red_eye" slot="right" @click.stop="hideLayer"/>
           <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.stop="open"/>
@@ -111,9 +111,9 @@
 <script>
 export default {
   name: 'ImageLayer',
+  props:['openpanel'],
   data (){
       return {
-        openpanel: false,
         expandIcon: 'expand_more',
         value: '',
         value1:0,
@@ -135,8 +135,9 @@ export default {
   },
   methods: {
     open (event) {
-      this.openpanel = !this.openpanel
-      if(this.openpanel){
+      this.panelopen = !this.panelopen
+      this.$emit('openpanel',this.panelopen)
+      if(this.panelopen){
         this.expandIcon = 'expand_less'
       }else{
         this.expandIcon = 'expand_more'
@@ -145,6 +146,9 @@ export default {
     hideLayer (){
         console.log('HIDE')
     }
+  },
+  created () {
+      this.panelopen = this.openpanel
   }
 }
 </script>

@@ -105,9 +105,9 @@
 <script>
 export default {
   name: 'ShapeLayer',
+  props:['openpanel'],
   data () {
       return {
-          openpanel: false,
          expandIcon: 'expand_more',
          value: '',
          value1: '',

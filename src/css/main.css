@@ -1,152 +1,15 @@
 html,
 body {
     width: 100%;
+    overflow: hidden;
 }
-
-.paddingZero .mu-item {
-    padding: 0px !important;
-}
-
-.minHytZero .mu-item {
-    min-height: 0px !important;
-}
-.minHytZero .mu-item-wrapper{
-        width: 307px;
-    margin: 0 auto;
-margin-bottom: 5px;
-    height: 34px !important;
-
-}
-.multiselect__tags{
-        min-height: 35px !important;
-        border-radius: 0px !important;
-        border: 1px solid #333333 !important;
-    background: #333 !important;
-        padding: 6px 40px 0 8px !important;
-}
-.multiselect__single{
-    margin-bottom: 0px !important;
-    background: transparent !important;
-        color: #fff;
-        font-size: 14px !important;
-            text-align: right;
-}
-.multiselect__select{
-    height: 35px !important;
-        padding: 0px 8px !important;
-}
-.paddingZero .mu-item-wrapper{
-    height: 43px;
-}
-
-.mu-item.show-left {
-    background: #222;
-    border-bottom: 1px solid #2d2d2d;
-}
-.mu-item-wrapper{
-    border-top: 0px !important
-}
-
-
 .custom-drawer {
     width: 340px !important;
-    top: 115px;
 }
 
-.labelSpyker{
-    padding-top: 6px;
-    padding-right: 2px;
-}
-.inputSpyker{
-margin-top: 0px;
-    margin-bottom: -2px;
-    width: 64px;
-    text-align: right;
-}
-.iconSpyker{
-    color: rgb(255, 255, 255);
-    padding: 5px 8px;
-    margin-bottom: -1px;
-}
-.mmslider{
-        width: 135px;
-    margin-right: 3px;
-    margin-top: 6px;
-    margin-bottom: 11px;
-}
-.sliderInput{
-    width: 64px !important;
-    margin-right: -2px !important;
-    height: 35px !important;
-    margin-left: 2px !important;
-    text-align: right;
-}
-.colorPicka{
-        width: 135px !important;
-    margin-right: 3px !important;
-    height: 35px !important;
-    text-align: right;
-}
-.demiBlackbg{
-    background: #191919 !important;
-}
-
-.demiBlackbg .gridlist-demo{
-    font-size: 12px !important;
-    color: #ccc !important;
-    padding: 8px !important;
-}
 .activeTool{
-        border: 1px solid #1da675 !important;
+    border: 1px solid #1da675 !important;
 }
-.multiselect__content-wrapper{
-        max-height: 225px !important;
-        background: #333 !important;
-    color: #fff !important;
-    overflow: auto;
-    border: 1px solid #333333 !important;
-    border-top: 1px solid #333333 !important;
-}
-.mu-list::-webkit-scrollbar,
-.multiselect__content-wrapper::-webkit-scrollbar {
-    width: 0px;
-}
-
-.multiselect__option:after {
-    top: 0;
-    right: 0;
-    position: absolute;
-    line-height: 40px;
-    padding-right: 5px !important;
-    padding-left: 10px !important;
-    font-size: 11px !important;
-}
-.left{
-    margin-left: 0px;
-    width: 21.5%;
-        padding: 6px 0;
-}
-.right{
-  width: 60.5%
-}
-.flex-container{
-height: 35px;
-    background-color: #3333339c;
-    text-align: center;
-    line-height: 32px;
-    /* opacity: 0.5; */
-    border: 1px dashed;
-    border-color: #5d5b5b;
-}
-.gridlist-demo-container{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-
-
-
 
 
 
@@ -156,9 +19,7 @@ height: 35px;
     background-color: #222222;
     color: #ffffff;
 }
-.mu-appbar-title {
- font-size: 14px;
-}
+
 .mu-avatar {
     color: #303030;
     background-color: #727272;
@@ -427,7 +288,7 @@ a {
 }
 
 .mu-grid-tile-titlebar {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: transparent;
 }
 
 .mu-grid-tile-title-container {
@@ -533,9 +394,8 @@ a {
 }
 
 .mu-paper {
-  background-color: #040404;
-  color: #ffffff;
-  border-right: 1px solid #303030;
+    background-color: #424242;
+    color: #ffffff;
 }
 
 .mu-picker {
@@ -560,10 +420,7 @@ a {
 }
 
 .mu-popover {
-  background-color: #424242;
-  left: 249px;
-  top: 123px;
-    /* background-color: #424242; */
+    background-color: #424242;
 }
 
 .mu-popup {
@@ -885,4 +742,115 @@ a {
 
 .mu-tooltip-ripple.when-shown {
     background-color: #616161;
+}
+
+.mu-item.show-right {
+    background-color: #191919!important;
+}
+
+.mu-flat-button {
+    text-transform: none;
+}
+
+
+/* custom input tyling */
+
+.default-inp {
+    border: none;
+    outline: none;
+    background: #333333;
+    width: 100%;
+    height: 35px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    color: #fff;
+    font-family: Lato;
+    transition: all 0.30s ease-in-out;
+}
+
+.default-inp:active {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: none;
+    border: none;
+}
+
+
+/* custom icons */
+
+
+/* the prefix 'si' stands for 'storya-icon' */
+
+.si-zoomin {
+    content: url(../assets/icons/zoom_in.png);
+}
+
+.si-zoomout {
+    content: url(../assets/icons/zoom_out.png);
+}
+
+.si-link {
+    content: url(../assets/icons/link.png);
+}
+
+.si-keyboard-arrow-left {
+    content: url(../assets/icons/keyboard_arrow_left.png)
+}
+
+.si-plus {
+    content: url(../assets/icons/icon_plus.png)
+}
+
+
+/* storya defaults */
+
+.s-primary-btn {
+    background-color: #009d70;
+    border-radius: 0;
+    border: 1px solid #77c589;
+    text-transform: none;
+}
+
+.s-default-btn {
+    background-color: #111111;
+    border-radius: 0;
+    border: 1px solid #333333;
+    text-transform: none;
+}
+
+
+/* popup menus */
+
+.tem-action-menu {
+    width: 100px;
+    position: absolute;
+    margin: auto auto;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    background: #77c589;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .117647), 0 1px 4px rgba(0, 0, 0, .117647);
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+}
+
+.tem-action-menu-hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.tem-action-menu-shown {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tem-action-item {
+    background-color: #009d70;
+    text-align: center
+}
+
+.temp-action-item-divider {
+    background-color: #77c589;
 }

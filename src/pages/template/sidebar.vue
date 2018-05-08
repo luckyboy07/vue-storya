@@ -1,20 +1,29 @@
 <template>
 <div>
   <mu-drawer left :open="true" @close="toggle()" :zDepth="0" class="custom-drawer">
+      <mu-list style="padding-top: 0;">
+        <mu-list-item afterText="(None)" title="Template Selected" :open="true" :toggleNested="true">
+          <mu-list-item slot="nested" :disableRipple="true">
+            <select-template :items="[{'id': '1', 'name': 'ej'}, {'id': '2', 'name': 'ej'}]"></select-template>
+          </mu-list-item>
+        </mu-list-item>
+      </mu-list>
       <mu-appbar title="Add New Layer">
         <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_down" slot="left"/>
         <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_up" slot="left"/>
         <mu-icon-button class="custom-icon-button" icon="delete" slot="left"/>
-        <mu-icon-menu class="custom-icon-button" icon="add" slot="right" desktop :anchorOrigin="leftBot" :targetOrigin="leftBot" @close="closeLayer">
+        <mu-icon-menu class="custom-icon-button" icon="add"  slot="right" :open="showhover" @open="hoverBtn" @close="closeLayer" desktop :anchorOrigin="leftBot" :targetOrigin="leftBot">
             <span class="pop-title" >Add New Layer</span>
             <mu-divider style="margin-left: 10px;" />
+              <mu-menu value="" title="">
             <div class="pop-content">
-              <div v-for="(item, i) in buttons"  :key="i" class="content-btn">
-              <mu-raised-button  ref="iconbtn"  class="raised-btn"  :icon="item.icon" @hover="shapeSelected = i === 0" />
+              <div v-for="(item, i) in getItems"  :key="i" class="content-btn" @click.stop="addLayer(item);toggle($event)">
+              <mu-raised-button  ref="iconbtn"  class="raised-btn"  :icon="item.icon" @hover="shapeSelected = i === 0"/>
                <br>
-               <span >{{item.name}}</span> 
+               <span >{{item.title}}</span> 
               </div>
             </div>
+              </mu-menu>
             <mu-divider v-show="shapeSelected"/>
             <mu-menu v-show="shapeSelected" class="pop-content">
               <div class="">
@@ -30,10 +39,11 @@
         </mu-icon-menu>
       </mu-appbar>
     <mu-list>
-     <image-layer/>
-     <shape-layer/>
-     <shape-svg-layer/>
-     <text-layer/>
+    <component v-for="(t,i) in getLayers" :key="i" :is="t.component"  :openpanel="t.open"></component>
+     <!-- <image-layer/> -->
+     <!-- <shape-layer/> -->
+     <!-- <shape-svg-layer/> -->
+     <!-- <text-layer/> -->
       <!-- <ul class="expansion-panel">
         <li class="ep-container">
 
@@ -86,8 +96,9 @@
 </div>
 </template>
 <script>
-// import {mapMutations, mapGetters, mapState} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import Expanding from '../../components/Expanding'
+import templateSelection from '../../components/template/select-template'
 export default {
   name: 'Sidebar',
   data () {
@@ -101,6 +112,12 @@ export default {
       showhover:false,
       shapeSelected: false,
       expandIcon: 'expand_more',
+      elements: [
+        {type:'image-layer'},
+        {type: 'shape-layer'},
+        {type: 'shape-svg-layer'},
+        {type: 'text-layer'}
+      ],
       buttons: [
         {name: 'Shape', icon: 'landscape'},
         {name: 'Image', icon: 'insert_photo'},
@@ -113,36 +130,48 @@ export default {
     }
   },
   components: {
-    Expanding
+    Expanding,
+    'select-template': templateSelection
+  },
+  computed: {
+    ...mapGetters(['getItems','getLayers'])
   },
   mounted () {
     this.trigger = this.$refs.iconbtn
-    console.log('trigger:', this.$refs)
-    let targetelem = document.getElementsByClassName('mu-item-wrapper')
-    console.log('targetelem',targetelem[0])
-    // NEED FOUR LOOP
-    targetelem[0].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
-    targetelem[0].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
-    targetelem[1].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
-    targetelem[1].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
-    targetelem[2].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
-    targetelem[2].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
-    targetelem[3].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
-    targetelem[3].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
+    // console.log('trigger:', this.$refs)
+    // let targetelem = document.getElementsByClassName('mu-item-wrapper')
+    // console.log('targetelem',targetelem[0])
+    // // NEED FOUR LOOP
+    // targetelem[0].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
+    // targetelem[0].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
+    // targetelem[1].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
+    // targetelem[1].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
+    // targetelem[2].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
+    // targetelem[2].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
+    // targetelem[3].style.backgroundColor = 'rgba(115, 111, 111, 0.37)'
+    // targetelem[3].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
   },
   methods: {
+    ...mapActions([
+      'addLayer'
+      ]),
     hoverBtn () {
       this.showhover = true
     },
     closeLayer () {
       console.log('as')
-      this.showhover = false
+      this.showhover = !this.showhover
+    },
+    toggle (event) {
+      this.showhover = !this.showhover
+     event.stopPropagation()
     }
   }
 }
 </script>
 <style  lang="scss">
 @import '../../css/tooltip.scss';
+@import '../../css/menu2.scss';
 .custom-drawer{
   width: 306px;
   top: 115px;
@@ -178,7 +207,7 @@ export default {
 
 }
 .mu-popover {
-  left: 340px !important;
+  left: 345px !important;
     top: 115px !important;
   background-color: #171616;
 }
