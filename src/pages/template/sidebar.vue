@@ -178,8 +178,8 @@ export default {
 
 }
 .mu-popover {
-  left: 307px !important;
-    top: 116px !important;
+  left: 340px !important;
+    top: 115px !important;
   background-color: #171616;
 }
 .mu-menu-list{
