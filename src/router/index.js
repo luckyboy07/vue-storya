@@ -18,8 +18,8 @@ export default new Router({
             component: EditorPage
         },
         {
-            path: '/create',
-            name: 'Create Project',
+            path: '/new-storya',
+            name: 'New Storya',
             component: CreateProject
         }
     ]

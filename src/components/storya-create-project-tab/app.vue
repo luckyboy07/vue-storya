@@ -281,8 +281,9 @@ export default {
   height: 100%;
   margin-top: 10px;
   font-family: Raleway;
+  overflow: hidden;
 }
-.s-create-tab-btns>:last-child, .s-create-tab-btns>:nth-last-child(2){
+.s-create-tab-btns>:last-child, .s-create-tab-btns>:nth-last-child(2) {
   margin-left: -10px;
 }
 .s-tab-btn {
