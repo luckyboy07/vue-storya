@@ -3,6 +3,17 @@ body {
     width: 100%;
     overflow: hidden;
 }
+.custom-drawer {
+    width: 340px !important;
+}
+
+.activeTool{
+    border: 1px solid #1da675 !important;
+}
+
+
+
+
 
 .mu-appbar {
     background-color: #222222;
@@ -311,6 +322,7 @@ a {
 .mu-item-wrapper.hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
+
 
 .mu-item {
     color: #ffffff;
@@ -770,23 +782,23 @@ a {
 
 /* the prefix 'si' stands for 'storya-icon' */
 
-.si-zoomin {
+.si-zoomin::before {
     content: url(../assets/icons/zoom_in.png);
 }
 
-.si-zoomout {
+.si-zoomout::before {
     content: url(../assets/icons/zoom_out.png);
 }
 
-.si-link {
+.si-link::before {
     content: url(../assets/icons/link.png);
 }
 
-.si-keyboard-arrow-left {
+.si-keyboard-arrow-left::before {
     content: url(../assets/icons/keyboard_arrow_left.png)
 }
 
-.si-plus {
+.si-plus::before {
     content: url(../assets/icons/icon_plus.png)
 }
 

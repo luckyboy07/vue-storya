@@ -171,6 +171,7 @@ export default {
 </script>
 <style  lang="scss">
 @import '../../css/tooltip.scss';
+@import '../../css/menu2.scss';
 .custom-drawer{
   width: 306px;
   top: 115px;
@@ -209,8 +210,8 @@ export default {
 
 }
 .mu-popover {
-  left: 307px !important;
-    top: 116px !important;
+  left: 345px !important;
+    top: 115px !important;
   background-color: #171616;
 }
 .mu-menu-list{
