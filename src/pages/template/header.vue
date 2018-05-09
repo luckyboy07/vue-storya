@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     backButtonClicked() {
-     if (this.$route.path.replace('/', '' === 'editor')) {
+     if (this.$route.path.replace('/', '')  === 'editor') {
        this.confirmOpen = true;
      } else {
       this.$router.go(-1);

@@ -1,5 +1,7 @@
 /*
- * Filters user inputs to only digits
+ * Filters user inputs to only digits.
+ * usage:
+ *  <input type="text" v-digitsonly>
  */
 import Vue from 'vue'
 Vue.directive('digitsonly', {

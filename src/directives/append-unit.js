@@ -1,5 +1,9 @@
 /*
- * Filters user inputs to only digits
+ * Appends a value to the input element
+ * usage:
+ *  <input type="text" v-append-unit='px'>
+ *  - every time the value of this input is changed, it will be concatenated with 'px'
+ *  example when you input 1, the result will be 1px
  */
 import Vue from 'vue'
 Vue.directive('append-unit', {
