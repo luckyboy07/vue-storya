@@ -7,7 +7,7 @@
     <!-- start: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
       <div class="tool-item-group-content label-item">File Name</div> 
-      <input @change="filenameChanged" ref="filename" value="The File Name" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
+      <input @change="filenameChanged" ref="filename" value="The File Name 123232" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
     </div>
     <!-- end: Project Name -->
     <div class="tool-item tool-item-group" slot="left">

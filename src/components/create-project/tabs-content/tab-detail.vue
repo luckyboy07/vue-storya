@@ -7,8 +7,10 @@
           <img src="../../../assets/tile_grey.png" class="avatar" 
             :style="{width: tile.dw + 'px!important', height: tile.dh + 'px!important'}"/>
         </div>
-        <span slot="title">{{tile.w}}x{{tile.h}}</span>
-        <span slot="subTitle">{{tile.label}}</span>
+        <div class="td-d">
+          <div class="td-d-item " style="color: #767676;">{{tile.w}}x{{tile.h}}</div>
+          <div class="td-d-item ">{{tile.label}}</div>
+        </div>
         <div id="click-area" style="width: 100%; height: 100%; background-color: transparent;
           position: absolute; z-index: 1" 
           @click="onItemSelected(tile, index)"/>
@@ -26,19 +28,22 @@
 */
 export default {
   name: 'tab-detail',
-  props: ['items'],
+  props: ['items', 'selectedTab'],
   data() {
     return {
       selectedId: '',
     }
   },
-  beforeUpdate() {
-    this.$_setSelected(-1);
+  mounted() {
+    this.onItemSelected(this.items[0], 0);
   },
   methods: {
     onItemSelected(item, index) {
+      if (!item) {
+        return
+      }
       this.selectedId = item.id
-      this.$_setSelected(index);
+      this.$_setSelected(index, true);
       this.$emit('onItemSelected', item);
     },
     $_setSelected(index) {
@@ -50,14 +55,35 @@ export default {
         if(i === index) {
           els[i].style.border = '2px solid #4A574B';
         } else {
-          els[i].style.border = '';
+           els[i].style.border = '#222222 solid 2px';
         }
       }
     },
   },
+  watch :{
+    selectedTab: function(val) {
+      setTimeout(() => {
+        this.onItemSelected(this.items[0], 0);
+      }, 50);
+    }
+  }
 }
 </script>
-<style>
+<style scoped>
+.td-d {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 20px;
+  display: grid;
+  text-align: center
+}
+.td-d-item {
+  margin: auto auto;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+}
 .mu-grid-tile-titlebar {
   background-color: transparent;
 }
@@ -69,7 +95,7 @@ export default {
 }
 .mu-grid-tile {
   border-radius: 2px;
-  border: #222222 solid 2px;
+  border: #222222 solid 2px!important;
 }
 .mu-grid-tile:hover {
   border: 2px solid #4A574B;
@@ -99,6 +125,7 @@ export default {
   width: 100%;
   height: 70%;
   position: absolute;
+  text-align: center
 }
 </style>
 
