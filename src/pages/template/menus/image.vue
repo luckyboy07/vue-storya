@@ -74,7 +74,7 @@
             <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
             <mu-grid-list class="right">
             <input spellcheck="false" class="input-size colorPicka">
-            <input spellcheck="false" class="input-size sliderInput">
+            <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -93,7 +93,7 @@
             <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
             <mu-grid-list class="right">
             <input spellcheck="false" class="input-size colorPicka">
-            <input spellcheck="false" class="input-size sliderInput">
+            <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
             </mu-grid-list>
           </div>
         </mu-list-item>

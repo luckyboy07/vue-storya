@@ -78,7 +78,6 @@ export default {
             // or redo action is the output from the last action
             if (layer !== this.lastLayer) {
                 this.lastLayer = layer;
-                // get the last layer before the undo action
                 return {
                     layer: layer,
                     lastAction: this.layers[this.layers.length - 1].lastAction
