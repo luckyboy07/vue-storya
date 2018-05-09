@@ -1,7 +1,7 @@
 <template>
 <div class="header-with-tools">
   <mu-appbar title="">
-      <mu-flat-button class="s-header-btn-back" slot="left">
+      <mu-flat-button class="s-header-btn-back" slot="left" @click="backButtonClicked">
         <i class="si-keyboard-arrow-left"></i>
       </mu-flat-button>
       <img slot="left" class="appBarIcon" src="@/assets/storya.png" alt="App Logo" style="margin-left: 10px"/>
@@ -22,6 +22,12 @@
   </mu-appbar>
   <mu-divider/>
   <editor-tools v-if="!hideSecondHeader"></editor-tools>
+  <!-- alert modal -->
+  <mu-dialog :open="confirmOpen" title="Leave Page?">
+    <div style="font-family: Lato; font-size: 17px; color: #fff">Are you sure you want to leave this page?</div> 
+    <mu-flat-button label="Yes" slot="actions" primary @click="confirm"/>
+    <mu-flat-button label="No" slot="actions" primary @click="confirmOpen = false"/>
+  </mu-dialog>
 </div>
 </template>
 <script>
@@ -43,6 +49,20 @@ export default {
   data() {
     return {
       currentPage: '',
+      confirmOpen: false,
+    }
+  },
+  methods: {
+    backButtonClicked() {
+     if (this.$route.path.replace('/', '' === 'editor')) {
+       this.confirmOpen = true;
+     } else {
+      this.$router.go(-1);
+     }
+    },
+    confirm() {
+      this.confirmOpen = false;
+       this.$router.go(-1);
     }
   }
 }

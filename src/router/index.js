@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import LoginPage from '@/pages/login/login'
 import EditorPage from '@/pages/editor/app'
 import CreateProject from '../pages/editor/create-project'
+import NewProject from '../components/create-project/new-project'
 
 Vue.use(Router)
 
@@ -21,6 +22,11 @@ export default new Router({
             path: '/new-storya',
             name: 'New Storya',
             component: CreateProject
+        },
+        {
+            path: '/new-project',
+            name: 'New Project',
+            component: NewProject
         }
     ]
 })

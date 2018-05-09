@@ -1,97 +1,118 @@
 <template>
-  <div class="project-container">
-    <mu-row gutter>
-    <mu-col width="100" class="left-content">
-      <mu-tabs :value="activeTab" @change="tabChanged">
-          <mu-tab :titleClass="tabStyle" value="1" title="Templates"/>
-          <mu-tab value="2" title="Custom"/>
-          <mu-tab value="3" title="Facebook"/>
-          <mu-tab value="4" title="Twitter"/>
-          <mu-tab value="5" title="Web"/>
-          <mu-tab value="6" title="Print"/>
-          <mu-tab value="7" title="Video"/>
-        </mu-tabs>
-        <div v-if="activeTab === '1'" class="tab-item">
-          <tab-detail :type="'templates'" @onItemSelected="onItemSelected"
-            :items="$_setAppraiteAvatar($_getItemsFromType('templates'))"></tab-detail>
-        </div>
-        <div v-if="activeTab === '2'" class="tab-item">
-          <tab-detail :type="'custom'" @onItemSelected="onItemSelected"
-            :items="$_setAppraiteAvatar($_getItemsFromType('custom'))"></tab-detail>
-        </div>
-        <div v-if="activeTab === '3'" class="tab-item">
-          <tab-detail :type="'facebook'" @onItemSelected="onItemSelected"
-             :items="$_setAppraiteAvatar($_getItemsFromType('facebook'))"></tab-detail>
-        </div>
-        <div v-if="activeTab === '4'" class="tab-item">
-          <tab-detail :type="'twitter'" @onItemSelected="onItemSelected"
-             :items="$_setAppraiteAvatar($_getItemsFromType('twitter'))"></tab-detail>
-        </div>
-        <div v-if="activeTab === '5'" class="tab-item">
-          <tab-detail :type="'web'" @onItemSelected="onItemSelected"
-             :items="$_setAppraiteAvatar($_getItemsFromType('web'))"></tab-detail>
-        </div>
-        <div v-if="activeTab === '6'" class="tab-item">
-          <tab-detail :type="'print'" @onItemSelected="onItemSelected"
-            :items="$_setAppraiteAvatar($_getItemsFromType('web'))"></tab-detail>
-        </div>
-        <div v-if="activeTab === '7'" class="tab-item">
-          <tab-detail :type="'video'" @onItemSelected="onItemSelected"
-             :items="$_setAppraiteAvatar($_getItemsFromType('video'))"></tab-detail>
-        </div>
-    </mu-col>
-    <mu-col width="50" tablet="60" desktop="35" class="right-content">
-      <div style="display: table">
-        <div class="item inp">
-           Project Name
-          <input class="default-inp" type="text" v-model="setupData.project_name"/>
-        </div>
-        <div class="item inp" style="display: flex;">
-           <div style="width: 50%; padding">
-             Width
-            <input class="default-inp" v-model="width" spellcheck="false" v-digitsonly type="text"/>
-           </div>
-           <div class="x">
-            <span >x</span> 
-           </div>
-           <div style="width: 50%;">
-             Height
-            <input class="default-inp" v-model="height" spellcheck="false" v-digitsonly type="text"/>
-           </div>
-        </div>
-        <div class="item">
-         Orientation
-         <div class="orient-container">
-            <img id="h"
-            class="orient-item" src="../../assets/tile_grey.png" 
-            style="width: 53px; height: 77px" @click="orientSelected('horizontal', $event)"/> 
-            <img id="v"
-            class="orient-item" src="../../assets/tile_grey.png" 
-            style="vertical-align: top; width:77px; height: 53px" @click="orientSelected('vertical', $event)"/> 
-         </div>
-        </div>
-        <div class="item inp">
-          Canvas Background Colour
-          <div :style="{backgroundColor: setupData.canvasBackground, color: getInvertedColor(setupData.canvasBackground)}" class="color-div" @click="pickerisShow = true">
-            <span class="color-value">{{setupData.canvasBackground || '#FFFFFF'}}</span>
+  <div>
+    <app-header :hideSecondHeader="true"></app-header>
+    <div class="project-container">
+      <mu-row gutter>
+      <mu-col width="100" class="left-content">
+        <mu-tabs :value="activeTab" @change="tabChanged">
+            <mu-tab :titleClass="tabStyle" value="1" title="Templates"/>
+            <mu-tab value="2" title="Custom"/>
+            <mu-tab value="3" title="Facebook"/>
+            <mu-tab value="4" title="Twitter"/>
+            <mu-tab value="5" title="Web"/>
+            <mu-tab value="6" title="Print"/>
+            <mu-tab value="7" title="Video"/>
+          </mu-tabs>
+          <div v-if="activeTab === '1'" class="tab-item">
+            <tab-detail :selectedTab="activeTab" :type="'templates'" @onItemSelected="onItemSelected"
+              :items="$_setAppraiteAvatar($_getItemsFromType('templates'))"></tab-detail>
+          </div>
+          <div v-if="activeTab === '2'" class="tab-item">
+            <tab-detail :selectedTab="activeTab" :type="'custom'" @onItemSelected="onItemSelected"
+              :items="$_setAppraiteAvatar($_getItemsFromType('custom'))"></tab-detail>
+          </div>
+          <div v-if="activeTab === '3'" class="tab-item">
+            <tab-detail :selectedTab="activeTab" :type="'facebook'" @onItemSelected="onItemSelected"
+              :items="$_setAppraiteAvatar($_getItemsFromType('facebook'))"></tab-detail>
+          </div>
+          <div v-if="activeTab === '4'" class="tab-item">
+            <tab-detail :selectedTab="activeTab" :type="'twitter'" @onItemSelected="onItemSelected"
+              :items="$_setAppraiteAvatar($_getItemsFromType('twitter'))"></tab-detail>
+          </div>
+          <div v-if="activeTab === '5'" class="tab-item">
+            <tab-detail :selectedTab="activeTab" :type="'web'" @onItemSelected="onItemSelected"
+              :items="$_setAppraiteAvatar($_getItemsFromType('web'))"></tab-detail>
+          </div>
+          <div v-if="activeTab === '6'" class="tab-item">
+            <tab-detail :selectedTab="activeTab" :type="'print'" @onItemSelected="onItemSelected"
+              :items="$_setAppraiteAvatar($_getItemsFromType('web'))"></tab-detail>
+          </div>
+          <div v-if="activeTab === '7'" class="tab-item">
+            <tab-detail :selectedTab="activeTab" :type="'video'" @onItemSelected="onItemSelected"
+              :items="$_setAppraiteAvatar($_getItemsFromType('video'))"></tab-detail>
+          </div>
+      </mu-col>
+      <mu-col width="50" tablet="60" desktop="35" class="right-content">
+        <div style="display: table">
+          <div class="item inp">
+            Project Name
+            <div class="np-g-inp" ref="menuContainer">
+              <input style="margin: 0;" class="default-inp" type="text" v-model="setupData.project_name"/>
+              <mu-flat-button class="np-g-more-btn" @click="showMore">
+                <i class="material-icons">
+                  expand_more
+                  </i>
+              </mu-flat-button>
+            </div>
+            <div class="np-more-items" ref="menuMore" v-show="showMoreItems">
+              <mu-list style="padding: 0">
+                <mu-list-item v-for="(item, i) in prjs" :key="i" :title="item.name" 
+                  class="tem-action-item" @click="handleItemClick(item)"/>
+                <!-- <mu-divider inset class="temp-action-item-divider"/> -->
+              </mu-list>
+            </div>
+          </div>
+          <div class="item inp">
+            File Name
+            <input class="default-inp" type="text" v-model="setupData.file_name"/>
+          </div>
+          <div class="item inp" style="display: flex;">
+            <div style="width: 50%; padding">
+              Width
+              <input class="default-inp" v-model="width" spellcheck="false" v-digitsonly type="text"/>
+            </div>
+            <div class="x">
+              <span >x</span> 
+            </div>
+            <div style="width: 50%;">
+              Height
+              <input class="default-inp" v-model="height" spellcheck="false" v-digitsonly type="text"/>
+            </div>
+          </div>
+          <div class="item">
+          Orientation
+          <div class="orient-container">
+              <img id="h"
+              class="orient-item" src="../../assets/tile_grey.png" 
+              style="width: 53px; height: 77px" @click="orientSelected('horizontal', $event)"/> 
+              <img id="v"
+              class="orient-item" src="../../assets/tile_grey.png" 
+              style="vertical-align: top; width:77px; height: 53px" @click="orientSelected('vertical', $event)"/> 
+          </div>
+          </div>
+          <div class="item inp">
+            Canvas Background Colour
+            <div :style="{backgroundColor: setupData.canvasBackground, color: getInvertedColor(setupData.canvasBackground)}" class="color-div" @click="pickerisShow = true">
+              <span class="color-value">{{setupData.canvasBackground || '#FFFFFF'}}</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="create-action-buttons">
-        <mu-raised-button @click="onCancel" label="Cancel" class="demo-raised-button create-action-buttons-item"
-          style="background-color: transparent; border: 1px solid #4B4B4B; text-transform: none"/>
-        <br/>
-        <mu-raised-button @click="onSubmit" label="Create" class="demo-raised-button create-action-buttons-item" 
-        style="margin-top: 10px; background-color: #009D70; text-transform: none"/>
-      </div>
-    </mu-col>
-    <hsc-window-style-metal>
-      <hsc-window @blur="pickerisShow = false" initialPosition="center" id="colorPicker" style="z-index:999;  padding: 0!important; margin: 0!important;" :resizable="true" :initialWidth="225" :initialHeight="275"
-      :closeButton="true" :isOpen="pickerisShow" @closebuttonclick="pickerisShow=false">
-      <color-picker v-model="colors" @input="colorSelected" style="width: 100%; height: 100%;"></color-picker>
-    </hsc-window>
-  </hsc-window-style-metal>
-  </mu-row>
+        <div class="create-action-buttons">
+          <mu-raised-button @click="onCancel" label="Cancel" class="demo-raised-button create-action-buttons-item"
+            style="background-color: transparent; border: 1px solid #4B4B4B; text-transform: none"/>
+          <br/>
+          <mu-raised-button @click="onSubmit" label="Create" class="demo-raised-button create-action-buttons-item" 
+          style="margin-top: 10px; background-color: #009D70; text-transform: none"/>
+        </div>
+      </mu-col>
+      <hsc-window-style-metal>
+        <hsc-window @blur="pickerisShow = false" initialPosition="center" id="colorPicker" style="z-index:999;  padding: 0!important; margin: 0!important;" :resizable="true" :initialWidth="225" :initialHeight="275"
+        :closeButton="true" :isOpen="pickerisShow" @closebuttonclick="pickerisShow=false">
+        <color-picker v-model="colors" @input="colorSelected" style="width: 100%; height: 100%;"></color-picker>
+      </hsc-window>
+    </hsc-window-style-metal>
+    </mu-row>
+    </div>
   </div>
 </template>
 <script>
@@ -104,16 +125,22 @@
 import tabDetail from './tabs-content/tab-detail'
 import { Photoshop, Chrome } from "vue-color";
 import colorHelper from '../../helpers/color-helper'
+import header from '../../pages/template/header'
 export default {
   name: "new-project",
   components: {
     tabDetail,
     "photoshop-picker": Photoshop,
     "color-picker": Chrome,
+    'app-header': header
   },
   mounted() {
     // removing the
     this.$el.getElementsByClassName('mu-tab-link-highlight')[0].className = '';
+    document.addEventListener('click', this.handleMouseDown);
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.handleMouseDown);
   },
   data() {
     return {
@@ -129,17 +156,37 @@ export default {
         hsv: { h: 150, s: 0.66, v: 0.30, a: 1 },
         rgba: { r: 25, g: 77, b: 51, a: 1 },
         a: 1
-      }
+      },
+      showMoreItems: false,
+      userShow: false,
+      prjs: [
+        {name: 'test 1'},
+        {name: 'test 2'},
+        {name: 'test 3'},
+        {name: 'test 4'},
+        {name: 'test 5'},
+      ]
     }
   },
   methods: {
+    handleMouseDown(evt) {
+      if (this.userShow) {
+        this.userShow = false;
+        return;
+      }
+      if (!this.$refs.menuMore.contains(evt.target)) {
+        this.showMoreItems = false;
+      }
+    },
     onCancel() {
       console.log('onCancel');
       this.$emit('onCancel');
+      this.$router.go(-1)
     },
     onSubmit() {
       console.log('onSubmit', this.setupData);
-       this.$emit('onSubmit', this.setupData);
+      this.$emit('onSubmit', this.setupData);
+      this.$router.push({name: 'EditorApp'})
     },
     orientSelected(val, evt) {
       this.setupData.orientation = val;
@@ -264,11 +311,43 @@ export default {
     },
     getInvertedColor(hex) {
       return colorHelper.invertColor(hex);
-    }
+    },
+    showMore() {
+      this.userShow = true;
+      this.showMoreItems = !this.showMoreItems;
+      if (this.showMoreItems) {
+        var m = this.$refs.menuMore;
+        var mc = this.$refs.menuContainer.getBoundingClientRect();
+        m.style.width = mc.width + 'px';
+      }
+    },
+    handleItemClick(item) {
+      this.setupData.project_name = item.name;
+       this.showMoreItems = false;
+    },
   }
 }
 </script>
 <style scoped>
+  .np-g-inp {
+    display: flex;
+    margin-top: 10px;
+    background-color: #333333;
+  }
+  .np-g-more-btn {
+    color: #989898;
+    width: 50px;
+    border-radius: 0;
+    min-width: 0;
+  }
+  .np-more-items {
+    position: absolute;
+    width: auto;
+    margin-top: 1px;
+    max-height:300px;
+    display: flex;
+    box-shadow: 0 1px 6px rgba(0,0,0,.117647), 0 1px 4px rgba(0,0,0,.117647);
+  }
   .mu-text-field {
     width: 100%;
   }
@@ -374,6 +453,11 @@ export default {
   }
   .vc-chrome {
     height: 100%;;
+  }
+  .tem-action-item {
+    text-align: left;
+    background-color: #333333;
+    font-family: Lato;
   }
 </style>
 
