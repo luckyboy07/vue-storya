@@ -176,6 +176,9 @@ export default {
   width: 306px;
   top: 115px;
 }
+.mu-appbar-title {
+    font-size: 14px;
+}
 .custom-icon-button{
   width: 43px;
 }
