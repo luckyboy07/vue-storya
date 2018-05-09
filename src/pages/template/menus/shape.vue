@@ -1,103 +1,174 @@
 <template>
-  <div>
+  <div class="yawaa">
         <mu-list-item title="Shape Layer" :open="openpanel">
              <mu-icon slot="left" value="landscape" style="color: #fff"/>
              <mu-icon-button icon="remove_red_eye" slot="right" />
              <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.native="open"/>
-            <mu-list-item  slot="nested">
-                <span>Size Option</span>
-                <multiselect style="z-index:99999" v-model="value" open-direction="bottom" :options="options" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
-            </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>Size</span>
-                <div class="input-container" slot="right">
-                    <span style="color: #fff;margin-right: 10px;">W:</span>
-                        <input spellcheck="false"  class="input-size">
-                        <span style="color: #fff;margin-right: 10px;">H:</span>
-                        <input spellcheck="false" class="input-size">
+        
+            <mu-list-item  slot="nested"  class="paddingZero">
+                <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Size Option</mu-grid-list>
+                <mu-grid-list class="right">
+                <multiselect v-model="value" :options="options" :searchable="false" open-direction="bottom" :close-on-select="true" placeholder="Pick a value"></multiselect>
+                </mu-grid-list>
                 </div>
             </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>Opacity</span>
-                <mu-slider v-model="value1" style="width: 53%;"/>
-                <input spellcheck="false" slot="right" class="input-size">
+            <mu-list-item  slot="nested" class="paddingZero">
+                <div class="gridlist-demo-container" style="margin-top: -7px;">
+                <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
+                <mu-grid-list class="right" style="margin-left: 2px;">
+                  <div class="input-container">
+                        <span class="labelSpyker">W:</span>
+                        <input spellcheck="false" class="inputSpyker">
+                        <mu-icon slot="left" value="link" class="iconSpyker"/>
+                        <span class="labelSpyker">H:</span>
+                        <input spellcheck="false" class="inputSpyker">
+                  </div>
+                </mu-grid-list>
+                </div>
             </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>Rotate</span>
-                <mu-slider v-model="value1" style="width: 53%;"/>
-                <input spellcheck="false" slot="right" class="input-size">
+            <mu-list-item  slot="nested" class="paddingZero">
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Opacity</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="value1" class="mmslider"/>
+                <input spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
             </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>Colour</span>
-                <input spellcheck="false" class="secondary-input">
-                <span class="square" slot="right"></span>
+            <mu-list-item  slot="nested" class="paddingZero">
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="value2" class="mmslider" />
+                <input spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <mu-list-item  slot="nested" class="paddingZero">
+              <div class="gridlist-demo-container" style="margin-top: -6px;">
+                <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
+                <mu-grid-list class="right">
+                <input spellcheck="false" class="input-size colorPicka">
+                <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
+                </mu-grid-list>
+              </div>
             </mu-list-item>
             <mu-sub-header slot="nested">Gradient Background</mu-sub-header>
-            <mu-list-item  slot="nested">
-                <span>Selected Position</span>
-                <div class="input-container" slot="right">
-                    <input spellcheck="false" class="input-size">
-                </div>
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+              <div class="gridlist-demo-container" style="margin-top: -6px;">
+                <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Position</mu-grid-list>
+                <mu-grid-list class="right">
+                <input spellcheck="false" class="input-size colorPicka" style="pointer-events: none;
+                    background: transparent;">
+                <input spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
             </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>Selected Colour</span>
-                <input spellcheck="false" class="secondary-input">
-                <span class="square" slot="right"></span>
+             <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+              <div class="gridlist-demo-container" style="margin-top: -6px;">
+                <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Colour</mu-grid-list>
+                <mu-grid-list class="right">
+                <input spellcheck="false" class="input-size colorPicka">
+                <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
+                </mu-grid-list>
+              </div>
             </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>Rotate</span>
-                <mu-slider v-model="value1" style="width: 53%;"/>
-                <input spellcheck="false" slot="right" class="input-size">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="value3" class="mmslider" />
+                <input spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
             </mu-list-item>
             <mu-sub-header slot="nested">Border</mu-sub-header>
-            <mu-list-item  slot="nested">
-                <span>Size</span>
-                <mu-slider v-model="value1" style="width: 53%;"/>
-                <input spellcheck="false" slot="right" class="input-size">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="value3" class="mmslider" />
+                <input spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
             </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>Style</span>
+            <mu-list-item  slot="nested"  class="paddingZero demiBlackbg">
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Style</mu-grid-list>
+                <mu-grid-list class="right">
                 <multiselect v-model="value" :options="options" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
+                </mu-grid-list>
+              </div>
             </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>Colour</span>
-                <input spellcheck="false" class="secondary-input">
-                <span class="square" slot="right"></span>
+             <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+              <div class="gridlist-demo-container" style="margin-top: -6px;">
+                <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
+                <mu-grid-list class="right">
+                <input spellcheck="false" class="input-size colorPicka">
+                <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
+                </mu-grid-list>
+              </div>
             </mu-list-item>
             <mu-sub-header slot="nested">Shadow</mu-sub-header>
-            <mu-list-item  slot="nested">
-                <span>Size</span>
-                <mu-slider v-model="value1" style="width: 53%;"/>
-                <input spellcheck="false" slot="right" class="input-size">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="value3" class="mmslider" />
+                <input spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
             </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>Colour</span>
-                <input spellcheck="false" class="secondary-input">
-                <span class="square" slot="right"></span>
+             <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+              <div class="gridlist-demo-container" style="margin-top: -6px;">
+                <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
+                <mu-grid-list class="right">
+                <input spellcheck="false" class="input-size colorPicka">
+                <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
+                </mu-grid-list>
+              </div>
             </mu-list-item>
             <mu-sub-header slot="nested">Background Image</mu-sub-header>
-            <mu-list-item  slot="nested">
-                <mu-flexbox>
-                    <mu-flexbox-item class="flex-container"> 
-                        + Drag and Drop
-                    </mu-flexbox-item>
-                </mu-flexbox>
+            <mu-list-item  slot="nested"  class="paddingZero minHytZero">
+             <mu-flexbox>
+                  <mu-flexbox-item class="flex-container"> 
+                      + Drag and Drop
+                  </mu-flexbox-item>
+             </mu-flexbox>
             </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>URL</span>
-                <input spellcheck="false" class="secondary-input" style="width: 175px;">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+              <div class="gridlist-demo-container" style="margin-top: -6px;">
+                <mu-grid-list class="gridlist-demo left">URL</mu-grid-list>
+                <mu-grid-list class="right">
+                <input spellcheck="false" class="input-size colorPicka" style="width: 205px !important;
+                    margin-right: 0 !important;">
+                </mu-grid-list>
+              </div>
             </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>Repeat</span>
+           <mu-list-item  slot="nested"  class="paddingZero demiBlackbg">
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Repeat</mu-grid-list>
+                <mu-grid-list class="right">
                 <multiselect v-model="value" :options="options" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
+                </mu-grid-list>
+              </div>
             </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>Position</span>
+            <mu-list-item  slot="nested"  class="paddingZero demiBlackbg">
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Position</mu-grid-list>
+                <mu-grid-list class="right">
                 <multiselect v-model="value" :options="options" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
+                </mu-grid-list>
+              </div>
             </mu-list-item>
-            <mu-list-item  slot="nested">
-                <span>Attachment</span>
+            <mu-list-item  slot="nested"  class="paddingZero demiBlackbg">
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Attachment</mu-grid-list>
+                <mu-grid-list class="right">
                 <multiselect v-model="value" :options="options" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
+                </mu-grid-list>
+              </div>
             </mu-list-item>
         </mu-list-item>
   </div>

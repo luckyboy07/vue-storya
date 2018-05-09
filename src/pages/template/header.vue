@@ -4,7 +4,7 @@
       <mu-flat-button class="s-header-btn-back" slot="left" @click="backButtonClicked">
         <i class="si-keyboard-arrow-left"></i>
       </mu-flat-button>
-      <img slot="left" class="appBarIcon" src="@/assets/storya.png" alt="App Logo" style="margin-left: 10px"/>
+      <img slot="left" class="appBarIcon" src="@/assets/storya.png" alt="App Logo" style="margin-left: 10px;width: inherit;"/>
       <mu-flat-button label="Create" slot="left" class="btn-file h-60-p" style="margin-left: 10px"/>
       <mu-flat-button label="Help" slot="left" class="btn-file h-60-p"/>
       <div v-if="currentPage === 'editor'" slot="left" class="s-header-prj-name s-f-14" style="margin-left: 10px">Project Name:</div>

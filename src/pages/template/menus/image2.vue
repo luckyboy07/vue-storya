@@ -1,6 +1,6 @@
 <template>
-<div class="yawaa activeTool">
-    <mu-list-item title="Image Layer" :open="panelopen" @click.stop="open">
+<div class="yaawa activeTool">
+    <mu-list-item title="Image Layer" :open="openpanel" @click.stop="open">
           <mu-icon slot="left" value="image" style="color: #fff"/>
           <mu-icon-button icon="remove_red_eye" slot="right" @click.stop="hideLayer"/>
           <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.stop="open"/>
@@ -74,7 +74,7 @@
             <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
             <mu-grid-list class="right">
             <input spellcheck="false" class="input-size colorPicka">
-            <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
+            <input spellcheck="false" class="input-size sliderInput">
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -93,7 +93,7 @@
             <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
             <mu-grid-list class="right">
             <input spellcheck="false" class="input-size colorPicka">
-            <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
+            <input spellcheck="false" class="input-size sliderInput">
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -111,9 +111,9 @@
 <script>
 export default {
   name: 'ImageLayer',
-  props:['openpanel'],
   data (){
       return {
+        openpanel: false,
         expandIcon: 'expand_more',
         value: '',
         value1:0,
@@ -135,9 +135,8 @@ export default {
   },
   methods: {
     open (event) {
-      this.panelopen = !this.panelopen
-      this.$emit('openpanel',this.panelopen)
-      if(this.panelopen){
+      this.openpanel = !this.openpanel
+      if(this.openpanel){
         this.expandIcon = 'expand_less'
       }else{
         this.expandIcon = 'expand_more'
@@ -146,9 +145,6 @@ export default {
     hideLayer (){
         console.log('HIDE')
     }
-  },
-  created () {
-      this.panelopen = this.openpanel
   }
 }
 </script>

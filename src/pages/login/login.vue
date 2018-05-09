@@ -25,7 +25,7 @@ export default {
   methods: {
     login () {
       this.$router.push({
-        name: 'Create Project'
+        name: 'EditorApp'
       })
     }
   }

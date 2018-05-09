@@ -14,7 +14,7 @@
         <mu-icon-button class="custom-icon-button" icon="delete" slot="left"/>
         <mu-icon-menu class="custom-icon-button" icon="add"  slot="right" :open="showhover" @open="hoverBtn" @close="closeLayer" desktop :anchorOrigin="leftBot" :targetOrigin="leftBot">
             <span class="pop-title" >Add New Layer</span>
-            <mu-divider style="margin-left: 10px;" />
+            <mu-divider style="margin-left: 10px;width: 315px;" />
               <mu-menu value="" title="">
             <div class="pop-content">
               <div v-for="(item, i) in getItems"  :key="i" class="content-btn" @click.stop="addLayer(item);toggle($event)">
@@ -171,9 +171,13 @@ export default {
 </script>
 <style  lang="scss">
 @import '../../css/tooltip.scss';
+@import '../../css/menu2.scss';
 .custom-drawer{
   width: 306px;
   top: 115px;
+}
+.mu-appbar-title {
+    font-size: 14px;
 }
 .custom-icon-button{
   width: 43px;
@@ -206,17 +210,20 @@ export default {
 
 }
 .mu-popover {
-  left: 307px !important;
-    top: 116px !important;
+  left: 345px !important;
+    top: 115px !important;
   background-color: #171616;
 }
 .mu-menu-list{
-  width: 350px;
+  width: 330px !important;
   overflow: hidden;
 }
 
 .mu-paper{
   background-color: #111111;
+}
+.mu-menu{
+  width: 336px !important;
 }
 
 </style>
