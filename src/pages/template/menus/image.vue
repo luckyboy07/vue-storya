@@ -4,9 +4,9 @@
           <mu-icon slot="left" value="image" style="color: #fff"/>
           <mu-icon-button icon="remove_red_eye" slot="right" @click.stop="hideLayer"/>
           <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.stop="open"/>
-        <mu-list-item  slot="nested"  class="paddingZero minHytZero">
+        <mu-list-item  slot="nested"  class="paddingZero minHytZero"   @click="openModalimage">
              <mu-flexbox>
-                  <mu-flexbox-item class="flex-container"> 
+                  <mu-flexbox-item class="flex-container" > 
                       + Drag and Drop
                   </mu-flexbox-item>
              </mu-flexbox>
@@ -105,21 +105,27 @@
             </mu-grid-list>
           </div>
         </mu-list-item>
+    <modal :dialog="dialog"></modal>
     </mu-list-item>
 </div>
 </template>
 <script>
+import imageModal from '../../../components/layer-modal/image-modal'
 export default {
   name: 'ImageLayer',
   props:['openpanel'],
+  components:{
+    modal: imageModal
+  },
   data (){
       return {
         expandIcon: 'expand_more',
         value: '',
         value1:0,
         value2: null,
-        list: ['阴阳师', '影之刃', '天下HD', '穿越火线', '英雄联盟', '王者荣耀'],
-        options: ['Select option', 'options', 'selected', 'mulitple', 'label', 'searchable', 'clearOnSelect', 'hideSelected', 'maxHeight', 'allowEmpty', 'showLabels', 'onChange', 'touched']
+        value3: null,
+        options: ['Select option', 'options', 'selected', 'mulitple', 'label', 'searchable', 'clearOnSelect', 'hideSelected', 'maxHeight', 'allowEmpty', 'showLabels', 'onChange', 'touched'],
+        dialog: false
       }
   },
   mounted (){
@@ -145,6 +151,10 @@ export default {
     },
     hideLayer (){
         console.log('HIDE')
+    },
+    openModalimage () {
+        console.log('click')
+      this.dialog = true
     }
   },
   created () {
