@@ -137,5 +137,38 @@
         flex-wrap: wrap;
         justify-content: space-around;
     }
+    .csFlatBtn{
+        margin-top: -5px;
+        min-width: 40px;
+        width: 40px;
+        margin-right: 5px;
+        height: 35px;
+        line-height: 35px;
+    }
+    .ativeBtn{
+        border: 1px solid #636363;
+    }
+    .optionInput{
+        width: 64px !important;
+        margin-right: 11px !important;
+        height: 35px !important;
+        text-align: right;
+        margin-top: -5px;
+    }
+    .nestedBtnGroup{
+        background-color: rgb(25, 25, 25) !important;
+        margin-top: 4px !important;
+        margin-bottom: 4px !important;
+    }
+    .limitGroupBtn{
+        margin-right: 15px !important;
+        margin-left: 15px !important;
+    }
+    .groupBtnR{
+        float: right !important;
+        right: 10px !important;
+        text-align: right;
+        position: absolute;
+    }
 
 }
