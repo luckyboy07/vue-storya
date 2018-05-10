@@ -1,6 +1,6 @@
 <template>
   <div>
-     <mu-grid-list :cols="3" :padding="10" :cellHeight="231">
+     <mu-grid-list :cols="3" :padding="10">
         <!-- :class="[selectedId === tile.id ? 'active' : 'inactive']" -->
       <mu-grid-tile :cols="1" v-for="(tile, index) in items" :key="index">
         <div class="img-container">
@@ -27,12 +27,12 @@
     onItemSelected: occurs then an item is clicked
 */
 export default {
-  name: 'tab-detail',
-  props: ['items', 'selectedTab'],
+  name: "tab-detail",
+  props: ["items", "selectedTab"],
   data() {
     return {
-      selectedId: '',
-    }
+      selectedId: ""
+    };
   },
   mounted() {
     this.onItemSelected(this.items[0], 0);
@@ -40,34 +40,34 @@ export default {
   methods: {
     onItemSelected(item, index) {
       if (!item) {
-        return
+        return;
       }
-      this.selectedId = item.id
+      this.selectedId = item.id;
       this.$_setSelected(index, true);
-      this.$emit('onItemSelected', item);
+      this.$emit("onItemSelected", item);
     },
     $_setSelected(index) {
-      var els = this.$el.getElementsByClassName('mu-grid-tile');
+      var els = this.$el.getElementsByClassName("mu-grid-tile");
       if (!els) {
         return;
       }
       for (var i = 0; i < els.length; i++) {
-        if(i === index) {
-          els[i].style.border = '2px solid #4A574B';
+        if (i === index) {
+          els[i].style.border = "2px solid #4A574B";
         } else {
-           els[i].style.border = '#222222 solid 2px';
+          els[i].style.border = "#222222 solid 2px";
         }
       }
-    },
+    }
   },
-  watch :{
+  watch: {
     selectedTab: function(val) {
       setTimeout(() => {
         this.onItemSelected(this.items[0], 0);
       }, 50);
     }
   }
-}
+};
 </script>
 <style scoped>
 .td-d {
@@ -76,7 +76,7 @@ export default {
   bottom: 0;
   margin-bottom: 20px;
   display: grid;
-  text-align: center
+  text-align: center;
 }
 .td-d-item {
   margin: auto auto;
@@ -88,17 +88,17 @@ export default {
   background-color: transparent;
 }
 .active {
-   border: 2px solid #4A574B;
+  border: 2px solid #4a574b;
 }
 .inactive {
   border: #222222 solid 2px;
 }
 .mu-grid-tile {
   border-radius: 2px;
-  border: #222222 solid 2px!important;
+  border: #222222 solid 2px !important;
 }
 .mu-grid-tile:hover {
-  border: 2px solid #4A574B;
+  border: 2px solid #4a574b;
 }
 .mu-grid-tile-title {
   text-align: center;
@@ -119,13 +119,13 @@ export default {
   bottom: 0;
 }
 .list {
-  float:left
+  float: left;
 }
 .img-container {
   width: 100%;
   height: 70%;
   position: absolute;
-  text-align: center
+  text-align: center;
 }
 </style>
 
