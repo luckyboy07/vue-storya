@@ -1,11 +1,15 @@
 import ResizerState from './resizer-state.ts';
 import draggable from './draggable.ts';
+import * as $ from 'linq'
 const TYPE_PREFIX = 'rr-ord-';
 const HANDLE_SELECTOR = '.rr-handle';
 
 export default {
   name: 'rotatable-resizer',
   props: {
+    id: {
+      type: String
+    },
     disabled: {
       type: Boolean
     },
@@ -49,6 +53,10 @@ export default {
     octant: {
       type: Number,
       default: 0
+    },
+    parent: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -90,6 +98,14 @@ export default {
     this.bindResizeEvent();
     this.bindDragEvent();
     this.bindRotateEvent();
+
+    // to trigegr activated event
+    this.$el.addEventListener('mousedown', this.emitActivated)
+    this.$refs.rotateHandle.addEventListener('mousedown', this.emitActivated)
+  },
+  beforeDestroy() {
+    this.$el.removeEventListener('mousedown', this.emitActivated)
+    this.$refs.rotateHandle.removeEventListener('mousedown', this.emitActivated)
   },
 
   computed: {
@@ -124,6 +140,67 @@ export default {
       this.$emit('before-input', this.value);
     },
 
+    emitActivated() {
+      this.$emit("activated");
+    },
+
+    emitRotated(deg) {
+      this.$emit("rotated", deg);
+    },
+
+    emitRotateEnded() {
+      this.$emit("rotateEnded");
+    },
+
+    emitDragging(left, top) {
+      this.$emit("dragging", left,  top);
+    },
+
+    emitDragEnd() {
+      this.$emit("dragEnded");
+    },
+
+    emitResizing(left, top, width, height) {
+      this.$emit('resizing', left, top, width, height);
+    },
+
+    emitEndResize(left, top, width, height) {
+      this.$emit('resizeEnded', left, top, width, height);
+    },
+
+    // for vertical lines
+    $_getDraggableGuideline() {
+      for (var i = 0;i < this.$el.children.length; i++) {
+        if (this.$el.children[i].className === 'p-d-g')
+        return this.$el.children[i].children[0]
+      }
+    },
+    $_toggleDraggableLines(show, line) {
+      line.style.display = show ? 'block' : 'none';
+    },
+    showGridLine(deg) {
+      if (!this.id) {
+        return;
+      }
+      var line = this.$_getDraggableGuideline();
+      this.$_toggleDraggableLines(false, line);
+      // 0 degree & 180
+      // show the horizontal ruler line
+      // 90 degrees and 270
+      // show the vertical ruler line 
+      if ((deg - 1 >= -2 && deg + 1 <= 2) ||
+          (deg - 1 >= 178 && deg + 1 <= 182) ||
+          (deg - 1 >= 88 && deg + 1 <= 91) ||
+          (deg - 1 >= 268 && deg + 1 >= -88)) {
+          this.$_toggleDraggableLines(true, line);
+      }
+    },
+
+    hideDraggableLines: function() {
+      var line = this.$_getDraggableGuideline(this.id);
+      this.$_toggleDraggableLines(false, line);
+    },
+
     hasHandle(ord) {
       return this.rectHandles.indexOf(ord) !== -1;
     },
@@ -139,6 +216,7 @@ export default {
           if (self.disabled) return false;
           self.dragging = true;
           self.emitBeforeInputEvent();
+          self.showGridLine(self.state.rotation);
         },
         drag(event: MouseEvent) {
           const bounds = el.getBoundingClientRect();
@@ -146,7 +224,7 @@ export default {
             left: bounds.left + bounds.width / 2,
             top: bounds.top + bounds.height / 2
           };
-          self.state.rotation = (Math.atan2(event.clientY - center.top, event.clientX - center.left) * 180 / Math.PI + 90) % 360;
+          var degree = (Math.atan2(event.clientY - center.top, event.clientX - center.left) * 180 / Math.PI + 90) % 360;
           if(self.value.rotation >= 31 && self.value.rotation <= 68) {
             self.state.octant = 1
           }else if(self.value.rotation >= 68 && self.value.rotation <= 90){
@@ -164,11 +242,31 @@ export default {
           }else if(self.value.rotation >= 0 && self.value.rotation <= 30) {
             self.state.octant = 0
           }
-         self.emitInputEvent(self.value);
+
+          // added grid lines (same as canva)
+          if (degree - 1 >= -5 && degree + 1 <= 5) {
+            degree = 0;
+          }
+          if (degree - 1 >= 175 && degree + 1 <= 185) {
+            degree = 180;
+          }
+          if (degree - 1 >= 85 && degree + 1 <= 95) {
+            degree = 90;
+          }
+          if (degree - 1 >= 265 && degree + 1 >= -85) {
+            degree = 270;
+          }
+          
+          self.state.rotation = degree;
+          self.showGridLine(self.state.rotation);
+          self.emitInputEvent(self.value);
+          self.emitRotated(self.state.rotation);
         },
         end() {
           self.emitChangeEvent();
           self.dragging = false;
+          self.emitRotateEnded();
+          self.hideDraggableLines();
         }
       });
     },
@@ -177,6 +275,8 @@ export default {
       const self = this;
       const dom = this.$el;
       const dragState: any = {};
+      let mX = 0, mY = 0; // max x and y moves
+      let pW =  0, pH = 0; // parent width and height
 
       draggable(dom, {
         handle: self.dragMode === 'border' ? '.rr-bar' : null,
@@ -185,6 +285,12 @@ export default {
           dragState.startX = event.clientX;
           dragState.startY = event.clientY;
           self.dragging = true;
+
+          pW = dom.parentElement.parentElement.offsetWidth; // parent width;
+          pH = dom.parentElement.parentElement.offsetHeight;
+          mX = pW - dom.offsetWidth;
+          mY = pH - dom.offsetHeight;
+
           self.emitBeforeInputEvent();
         },
         drag(event: MouseEvent) {
@@ -197,10 +303,31 @@ export default {
 
           dragState.rect = rect;
 
+          // checking to avoid draggable going out to the parents content
+          // left
+          if (self.parent && rect.left < 0) {
+            rect.left = -2;
+          }
+          // right
+          if (self.parent && ((rect.left + dom.offsetWidth) - 2) >= pW) {
+            rect.left = mX;
+          }
+          // top
+          if (self.parent && rect.top < 0) {
+            rect.top = 0;
+          }
+          // bottom
+          if (self.parent && ((rect.top + dom.offsetHeight) - 2) >= pH) {
+           rect.top = mY;
+          }
+
           dom.style.left = rect.left + 'px';
           dom.style.top = rect.top + 'px';
           dom.style.width = rect.width + 'px';
           dom.style.height = rect.height + 'px';
+
+          // emit dragging event
+          self.emitDragging(rect.left,  rect.top);
         },
         end() {
           if (dragState.rect) {
@@ -208,6 +335,8 @@ export default {
             self.emitChangeEvent();
           }
           self.dragging = false;
+          // throw drag-ended event
+          self.emitDragEnd();
         }
       });
     },
@@ -270,6 +399,9 @@ export default {
             el.style.width = rect.width + 'px';
             el.style.height = rect.height + 'px';
           }
+
+          // throw the resizing event
+          self.emitResizing(rect.left, rect.top, rect.width, rect.height)
         },
         end() {
           if (resizeState.rect) {
@@ -277,6 +409,8 @@ export default {
             self.emitChangeEvent();
           }
           self.dragging = false;
+          // throw the resize-ended event
+          self.emitEndResize(el.style.left, el.style.top, el.style.width, el.style.height);
         }
       });
     }

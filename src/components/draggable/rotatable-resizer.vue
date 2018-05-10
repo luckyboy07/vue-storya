@@ -24,6 +24,9 @@
     <div class="rr-handle rr-ord-ne" v-if="hasHandle('ne')" key="ord-ne"></div>
     <div class="rr-handle rr-ord-se" v-if="hasHandle('se')" key="ord-se"></div>
     <div class="rr-handle rr-ord-sw" v-if="hasHandle('sw')" key="ord-sw"></div>
+    <div class="p-d-g">
+        <div id="hGLine" class="h-l-g" style="display: none"></div>
+    </div>
     <div class="rr-content">
       <slot></slot>
     </div>
@@ -32,6 +35,22 @@
 
 <style lang="scss">
 @import './resizer.scss';
+
+.h-l-g {
+  height:100%;
+  width: 1px;
+  border-left: black 1px dashed;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+}
+.p-d-g {
+  width: 100%;
+  height: 100%;
+  position: absolute
+}
 </style>
 
 <script>

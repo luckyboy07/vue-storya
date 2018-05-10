@@ -22,24 +22,24 @@
   </div>
 </template>
 <script>
-import Header from '../template/header'
+import Header from "../template/header";
 // custom tab
-import StoryaTab from '../../components/storya-create-project-tab/app'
+import StoryaTab from "../../components/storya-create-project-tab/app";
 export default {
-  name: 'create-project',
+  name: "create-project",
   components: {
-     headers: Header,
-     'storya-tabs': StoryaTab
+    headers: Header,
+    "storya-tabs": StoryaTab
   },
   methods: {
     createButtonClicked() {
-      this.$router.push({name: 'New Project'});
+      this.$router.push({ name: "New Project" });
     },
     closeButtonClicked() {
-      this.$router.go(-1)
+      this.$router.go(-1);
     }
   }
-}
+};
 </script>
 <style scoped>
 .s-create-container {
@@ -52,10 +52,11 @@ export default {
 }
 .s-create-content {
   border: 1px solid #333333;
-  background-color:#111111;
+  background-color: #111111;
   width: 100%;
   height: 100%;
-  box-shadow: 0 1px 6px rgba(0,0,0,.117647), 0 1px 4px rgba(0,0,0,.117647);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.117647),
+    0 1px 4px rgba(0, 0, 0, 0.117647);
   display: flex;
   padding: 30px;
 }
@@ -99,5 +100,4 @@ export default {
     font-size: 8px;
   }
 }
-
 </style>

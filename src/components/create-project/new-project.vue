@@ -90,9 +90,15 @@
               style="vertical-align: top; width:77px; height: 53px" @click="orientSelected('vertical', $event)"/> 
           </div>
           </div>
-          <div class="item inp">
+          <div class="item inp" style="position: relative">
+            <!-- Color popup -->
+            <div ref="colorPicker" class="color-container" v-show="pickerisShow">
+              <color-picker v-model="colors" @input="colorSelected" 
+                style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
+            </div>
             Canvas Background Colour
-            <div :style="{backgroundColor: setupData.canvasBackground, color: getInvertedColor(setupData.canvasBackground)}" class="color-div" @click="pickerisShow = true">
+            <div :style="{backgroundColor: setupData.canvasBackground, color: getInvertedColor(setupData.canvasBackground)}" 
+              class="color-div" @click="showPicker">
               <span class="color-value">{{setupData.canvasBackground || '#FFFFFF'}}</span>
             </div>
           </div>
@@ -105,14 +111,16 @@
           style="margin-top: 10px; background-color: #009D70; text-transform: none"/>
         </div>
       </mu-col>
-      <hsc-window-style-metal>
-        <hsc-window @blur="pickerisShow = false" initialPosition="center" id="colorPicker" style="z-index:999;  padding: 0!important; margin: 0!important;" :resizable="true" :initialWidth="225" :initialHeight="275"
-        :closeButton="true" :isOpen="pickerisShow" @closebuttonclick="pickerisShow=false">
-        <color-picker v-model="colors" @input="colorSelected" style="width: 100%; height: 100%;"></color-picker>
-      </hsc-window>
-    </hsc-window-style-metal>
     </mu-row>
     </div>
+    <!-- Dialog -->
+    <mu-dialog :open="confirmDialogOpen" title="Project Detail" class="si-p-ha">
+      Show Project Detail here
+      <br/>
+      Continue? or no no?
+      <mu-flat-button label="No no" slot="actions" primary @click="confirmDialogOpen = false"/>
+       <mu-flat-button label="G" slot="actions" primary @click="onConfirm"/>
+    </mu-dialog>
   </div>
 </template>
 <script>
@@ -144,6 +152,7 @@ export default {
   },
   data() {
     return {
+      confirmDialogOpen: false,
       activeTab: '1',
       tabStyle: {'color': '#fff'},
       setupData: {},
@@ -169,24 +178,38 @@ export default {
     }
   },
   methods: {
+    showPicker(evt) {
+      this.pickerisShow = true
+    },
     handleMouseDown(evt) {
-      if (this.userShow) {
-        this.userShow = false;
-        return;
+      // for custom expand list at project name
+      if ( this.showMoreItems) {
+        if (this.userShow) {
+          this.userShow = false;
+          return;
+        }
+        if (!this.$refs.menuMore.contains(evt.target)) {
+          this.showMoreItems = false;
+        }
       }
-      if (!this.$refs.menuMore.contains(evt.target)) {
-        this.showMoreItems = false;
-      }
+
+      // for color picker div
+      if (this.$refs.colorPicker.style.display !== 'none' && !this.$refs.colorPicker.contains(evt.target)) {
+          this.pickerisShow = false;
+        }
     },
     onCancel() {
       console.log('onCancel');
       this.$emit('onCancel');
       this.$router.go(-1)
     },
+    onConfirm() {
+      this.$router.push({name: 'EditorApp'})
+    },
     onSubmit() {
       console.log('onSubmit', this.setupData);
       this.$emit('onSubmit', this.setupData);
-      this.$router.push({name: 'EditorApp'})
+      this.confirmDialogOpen = true;
     },
     orientSelected(val, evt) {
       this.setupData.orientation = val;
@@ -329,6 +352,21 @@ export default {
 }
 </script>
 <style scoped>
+  .color-container {
+    box-shadow: 0 1px 6px rgba(0,0,0,.117647), 0 1px 4px rgba(0,0,0,.117647);
+    width: 100%;
+    position: absolute;
+    padding-right: 56px; 
+    z-index: 1;
+    top: -240px;
+    border-radius: 2px;
+  }
+  .mu-dialog {
+    width: auto!important;
+  }
+  .si-p-ha {
+    width: auto;
+  }
   .np-g-inp {
     display: flex;
     margin-top: 10px;
@@ -427,6 +465,7 @@ export default {
   .color-value {
     vertical-align: middle;
     display: table-cell;
+    font-weight: bold;
   }
   .x {
     display: flex;
