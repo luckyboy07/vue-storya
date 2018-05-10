@@ -1,6 +1,8 @@
 <template>
 <div>
-    <rotatable-resizer
+    <rotatable-resizer 
+    :id="elem.id"
+    :parent="true"
     :active="true"
     :rotatable="true"
     :draggable="true"
@@ -12,7 +14,10 @@
     :width="100"
     :height="100"
     v-for="(elem, i) in layers" :key="i"
-    >
+    @activated="activated(elem)"
+    @rotated="rotated" @rotateEnded="rotateEnded"
+    @dragging="dragging" @dragEnded="dragEnded"
+    @resizing="resizing" @resizeEnded="resizeEnded">
     <shape id="shape"  v-if="elem.type ==='shape'" :layerId="elem.id" 
     :shape="[elem.attributes[0].value.split(' ')[0].toLowerCase(),elem.attributes]">
     </shape>
@@ -23,22 +28,44 @@
 </div>
 </template>
 <script>
-import shape from './shapes/shape.vue'
-import {mapActions, mapGetters} from 'vuex'
+import shape from "./shapes/shape.vue";
+import { mapActions, mapGetters } from "vuex";
 export default {
-  name: 'selectionBox',
-  props:['layers'],
+  name: "selectionBox",
+  props: ["layers"],
   components: {
-      shape
+    shape
   },
-  data () {
-      return {
-
-      }
+  data() {
+    return {
+    };
+  },
+  methods: {
+    activated(elem) {
+      console.log('activated');
+    },
+    rotated(deg) {
+      console.log('rotated');
+    },
+    rotateEnded() {
+      console.log('rotateEnded');
+    },
+    dragging(left,  top) {
+      console.log('dragging');
+    },
+    dragEnded() {
+      console.log('dragEnded');
+    },
+    resizing(left, top, width, height) {
+      console.log('resizing');
+    },
+    resizeEnded(left, top, width, height) {
+      console.log('resizeEnded');
+    }
   },
   computed: {
-       ...mapGetters(['getItems'])
+    ...mapGetters(["getItems"])
   }
-}
+};
 </script>
 
