@@ -118,20 +118,7 @@ export const store = new Vuex.Store({
                         content_type: 'background-size',
                         item: ['auto', 'cover', 'contain'],
                         value: null
-                    }
-                    // {id: 3, name: 'area', display: 'Size', content_type: 'area', value: 0, width: null, height: null, unit: 'px', value_type: 'css'},
-                    // {id: 4, name: 'border_radius', display: 'Border-radius', content_type: 'number', value: 0, unit: 'px', value_type: 'css'},
-                    // {id: 5, name: 'gradient', display: 'Gradient', content_type: 'text', value: null},
-                    // {id: 6, name: 'gradient_angle', display: 'Gradient Angle', content_type: 'number', value: 0, unit: '°' },
-                    // {
-                    //   id: 7,
-                    //   name: 'animation',
-                    //   display: 'Animation',
-                    //   content_type: 'option',
-                    //   value: null,
-                    //   items: ['Mawala-mobalik', 'M0balik-mawala', 'Dagan pawala', 'Dagan patuo', 'Kapoi dagan ahahaha']
-                    // }
-                ]
+                    }]
 
             },
             {

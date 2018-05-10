@@ -4,7 +4,7 @@
           <mu-icon slot="left" value="image" style="color: #fff"/>
           <mu-icon-button icon="remove_red_eye" slot="right" @click.stop="hideLayer"/>
           <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.stop="open"/>
-        <mu-list-item  slot="nested"  class="paddingZero minHytZero"   @click="openModalimage">
+        <mu-list-item  slot="nested"  class="paddingZero minHytZero"   @click="$modal.show('image-modal')">
              <mu-flexbox>
                   <mu-flexbox-item class="flex-container" > 
                       + Drag and Drop
@@ -15,7 +15,7 @@
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Size Option</mu-grid-list>
             <mu-grid-list class="right">
-            <multiselect v-model="value" :options="options" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
+            <multiselect v-model="value" :open-direction="'bottom'" :options="options" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -65,7 +65,7 @@
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Style</mu-grid-list>
             <mu-grid-list class="right">
-            <multiselect v-model="value" :options="options" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
+            <multiselect v-model="value" :open-direction="'bottom'" :options="options" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -105,17 +105,14 @@
             </mu-grid-list>
           </div>
         </mu-list-item>
-    <modal :dialog="dialog"></modal>
     </mu-list-item>
 </div>
 </template>
 <script>
-import imageModal from '../../../components/layer-modal/image-modal'
 export default {
   name: 'ImageLayer',
   props:['openpanel'],
   components:{
-    modal: imageModal
   },
   data (){
       return {
@@ -125,7 +122,7 @@ export default {
         value2: null,
         value3: null,
         options: ['Select option', 'options', 'selected', 'mulitple', 'label', 'searchable', 'clearOnSelect', 'hideSelected', 'maxHeight', 'allowEmpty', 'showLabels', 'onChange', 'touched'],
-        dialog: false
+        dialog: ''
       }
   },
   mounted (){
@@ -153,8 +150,7 @@ export default {
         console.log('HIDE')
     },
     openModalimage () {
-        console.log('click')
-      this.dialog = true
+        console.log('click',this.$modal)
     }
   },
   created () {
