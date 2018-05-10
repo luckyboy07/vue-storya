@@ -73,10 +73,10 @@ export default {
         this.undoManager.redo();
         if (this.layers.length > 0) {
             let layer = this.layers[this.layers.length - 1].layer;
-            console.log('redo: last and curr not equal?', layer !== this.lastLayer);
+            // console.log('redo: last and curr not equal?', layer !== this.lastLayer);
             // check if redo reaches its limit
             // or redo action is the output from the last action
-            if (layer !== this.lastLayer) {
+            if (!this.$_layerEqual(layer, this.lastLayer)) {
                 this.lastLayer = layer;
                 return {
                     layer: layer,
@@ -87,4 +87,7 @@ export default {
 
         return null;
     },
+    $_layerEqual(a, b) {
+        return JSON.stringify(a) === JSON.stringify(b)
+    }
 }
