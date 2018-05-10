@@ -1,6 +1,6 @@
 <template>
   <div>
-     <mu-grid-list :cols="3" :padding="10" :cellHeight="231">
+     <mu-grid-list :cols="3" :padding="10">
         <!-- :class="[selectedId === tile.id ? 'active' : 'inactive']" -->
       <mu-grid-tile :cols="1" v-for="(tile, index) in items" :key="index">
         <div class="img-container">
