@@ -17,12 +17,12 @@ export const store = new Vuex.Store({
         removableId: null,
         layers: [],
         selectedImage: {},
-        setAnimation: {
-            name: null,
-            id: null
+        setAnimation: 
+        {
+        name: null,
+        id: null
         },
         items: [
-            // Shape layer
             {
                 id: null,
                 title: 'Shape',
@@ -35,8 +35,8 @@ export const store = new Vuex.Store({
                 type: 'shape',
                 component: 'shape-layer',
                 attributes: {
-                    width: "100",
-                    height: "100",
+                    width: 100,
+                    height: 100,
                     shape: "Circle",
                     sizeOption: "Auto",
                     opacity: "1",
@@ -46,14 +46,16 @@ export const store = new Vuex.Store({
                     gradientColor: "",
                     gradientRotation: "",
                     borderSize: "0",
-                    borderStyle: "",
+                    borderStyle: "none",
                     borderColor: "",
                     shadowSize: "",
                     shadowColor: "",
                     backgroundImageUri: "",
                     backgroundImageRepeat: "none",
                     backgroundImagePosition: "Left",
-                    backgroundImageAttachment: "none"
+                    backgroundImageAttachment: "none",
+                    top: 153,
+                    left: 148                   
                 },
             },
             // image
@@ -69,8 +71,8 @@ export const store = new Vuex.Store({
                 component: 'image-layer',
                 open: false,
                 attributes: {
-                    width: "100",
-                    height: "100",
+                    width: 100,
+                    height: 100,
                     src: 'http://via.placeholder.com/140x100',
                     sizeOption: "Auto",
                     opacity: "1",
@@ -80,7 +82,9 @@ export const store = new Vuex.Store({
                     borderColor: "",
                     shadowSize: "0",
                     shadowColor: "",
-                    objectFit: "Fit"
+                    objectFit: "none",
+                    top: 153,
+                    left: 148  
                 },
             },
             {
@@ -96,6 +100,8 @@ export const store = new Vuex.Store({
                 component: 'text-layer',
                 open: false,
                 attributes: {
+                    width: 100,
+                    height: 100,
                     fontFamily: "",
                     fontSize: "16px",
                     fontWeight: "",
@@ -110,35 +116,36 @@ export const store = new Vuex.Store({
                     borderStyle: "solid",
                     borderColor: "",
                     shadowSize: "",
-                    shadowColor: ""
+                    shadowColor: "",
+                    top: 153,
+                    left: 148  
                 }
             },
             {
-                id: null,
-                title: 'Video',
-                icon: 'play_arrow',
-                order: 0,
-                visible: true,
-                animation: null,
-                selected: false,
-                type: 'video',
-                attributes: {
-                    width: "100",
-                    height: "100",
-
-                    src: ""
-                },
+            id: null,
+            title: 'Video',
+            icon: 'play_arrow',
+            order: 0,
+            visible: true,
+            animation: null,
+            selected: false,
+            type: 'video',
+            attributes: {
+                width: "100",
+                height: "100",
+                src: ""
+            },
             },
             {
-                id: null,
-                title: 'Audio',
-                icon: 'volume_down',
-                order: 0,
-                visible: true,
-                animation: null,
-                selected: false,
-                type: 'audio',
-                attributes: {}
+            id: null,
+            title: 'Audio',
+            icon: 'volume_down',
+            order: 0,
+            visible: true,
+            animation: null,
+            selected: false,
+            type: 'audio',
+            attributes: {}
             }
         ]
     },
@@ -148,8 +155,8 @@ export const store = new Vuex.Store({
                 payload.id = appHelper.generateGUID();
             }
             let layers = state.layers
-            payload.x = 148
-            payload.y = 153
+            // payload.x = 148
+            // payload.y = 153
             payload.width = 200
             payload.height = 150
             layers.push(payload)

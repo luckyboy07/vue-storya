@@ -6,16 +6,28 @@
          <div class="modal-title">
             <mu-icon value="image" /><span style="margin-left: 5px"> Upload Image - Layer 1</span>
         </div>
-         <mu-flexbox class="flx">
-            <mu-flexbox-item class="flex-container" > 
-                        + Drag and Drop Images
-            </mu-flexbox-item>
-         </mu-flexbox>
+         <file-upload
+                extensions="gif,jpg,jpeg,png,webp"
+                accept="image/png,image/gif,image/jpeg,image/webp"
+                :size="1024 * 1024 * 10"
+                @input-filter="inputFilter"
+                @input-file="inputFile"
+                :multiple="true"
+                :drop="true"
+                :drop-directory="true"
+                v-model="files"
+                ref="upload">
+            <mu-flexbox class="flx">
+              <mu-flexbox-item class="flex-container" > 
+                          + Drag and Drop Images
+              </mu-flexbox-item>
+          </mu-flexbox>
+        </file-upload>
          <br>
           <div class="container-grid">
           <mu-grid-list class="gridlist">
-            <mu-grid-tile v-for="(img,i) in images" :key="i">
-               <img :src="img.image" @click.stop="selectImage(img)" class="img-grid selected" />
+            <mu-grid-tile v-for="(img,i) in files" :key="i">
+               <img :src="img.url" @click.stop="selectImage(img)" class="img-grid" :class="`${img.selected? 'selected' : ''}`"/>
             </mu-grid-tile>
           </mu-grid-list>
         </div>
@@ -23,10 +35,10 @@
        <mu-col width="30"  desktop="30" style="margin-top: 10px;">
          <mu-grid-list>
              <mu-grid-tile class="overview-tile">
-               <img src="https://marketplace.canva.com/MACPvCG4Ti4/1/0/thumbnail_large/canva-gray-and-blue-photo-fitness-facebook-post-MACPvCG4Ti4.jpg"/>
+               <img :src="selectedImage.url"/>
              </mu-grid-tile>
               <div class="selected-title">
-            Watermelon.3gp<br>
+            {{selectedImage.name}}<br>
             <span class="sub-title">1080x1920, 287KB</span>
           </div>
          <div class="buttons">
@@ -95,6 +107,7 @@ export default {
     methods:{
       ...mapMutations(['addImage']),
         inputFilter(newFile, oldFile, prevent) {
+            console.log("DIRI")
           if (newFile && !oldFile) {
           if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
             this.alert('Your choice is not a picture')
@@ -107,7 +120,6 @@ export default {
           let URL = window.URL || window.webkitURL
           console.log(URL)
           if (URL && URL.createObjectURL) {
-            console.log("DIRI",URL.createObjectURL(newFile.file))
             newFile.url = URL.createObjectURL(newFile.file)
             // img.onload = function(){
             //   console.log('width', img.naturalWidth)
@@ -117,9 +129,9 @@ export default {
         }
       },
       inputFile(newFile, oldFile,prevent) {
+          console.log('add', newFile)
         if (newFile && !oldFile) {
           // add
-          console.log('add', newFile)
         }
         if (newFile && oldFile) {
           // update
@@ -137,7 +149,7 @@ export default {
       selectImage (image) {
         console.log('image:', image)
         this.selectedImage = image
-      this.files.forEach(row => {
+        this.files.forEach(row => {
             row.selected = row.id === image.id
         })
       },
@@ -148,9 +160,6 @@ export default {
         this.$emit('updated-dialog',false)
         // console.log('files:',this.selectedImage)
         // this.selectedImage = this.selectedImage
-      },
-      selectImage(tile) {
-        console.log('tile:',tile)
       }
   },
   // upated () {
