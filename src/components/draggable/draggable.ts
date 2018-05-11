@@ -130,7 +130,6 @@ interface DraggableOptions {
     };
   
     const upFn = function(event: MouseEvent) {
-      console.log("CLICK")
       setTimeout(() => {
         if (preventClick && element.getAttribute(PREVENT_CLICK_PROP)) {
           element.removeAttribute(PREVENT_CLICK_PROP);
@@ -155,7 +154,6 @@ interface DraggableOptions {
     element.addEventListener('mousedown', function(event: MouseEvent) {
       if (isDragging) return;
       target = <Element>event.target;
-      console.log('target:',target);
       document.addEventListener('mousemove', moveFn);
       document.addEventListener('mouseup', upFn);
   

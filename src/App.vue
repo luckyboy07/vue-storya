@@ -51,7 +51,7 @@ export default {
     //this.idleTimer = setInterval(this.handleIdleTimerElapsed, this.idleTimeout)
   },
   methods :{
-    ...mapMutations(['addLayer', 'updateLayers']),
+    ...mapMutations(['addLayer', 'setLayerValue', 'updateLayers']),
     keydownEventHandler(evt) {
       // resetting idle time in key activities
       if (this.idleTime !== 0) {
@@ -96,12 +96,12 @@ export default {
       }
     },
     $_handleUndo(item, action) {
-      // console.log('_handleUndoRedo', item, action);
       if (action === 'create') {
         // if it was created, remove it
         this.updateLayers(this.$_removeFromArray(this.layers, item.id));
       } else if (action === 'modify') {
-
+        // console.log('_handleUndoRedo', item, action);
+        this.setLayerValue(item);
       }
     },
     $_handleRedo(item, action) {
@@ -115,6 +115,9 @@ export default {
         item.fromUndoRedo = true;
         
         this.addLayer(item);
+      } else if (action === 'modify') {
+        // console.log('_handleUndoRedo', item, action);
+        this.setLayerValue(item);
       }
     },
     $_removeFromArray(arr, id) {

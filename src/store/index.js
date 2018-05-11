@@ -4,8 +4,7 @@ import Vuex from 'vuex'
 // import modules from './modules'
 
 import appHelper from '../helpers/app.helper'
-import * as _enumerable from 'linq'
-Vue.use(_enumerable)
+import * as $ from 'linq'
 
 Vue.use(Vuex)
 
@@ -25,6 +24,8 @@ export const store = new Vuex.Store({
             // Shape layer
             {
                 id: null,
+                x: 0,
+                y: 0,
                 title: 'Shape',
                 icon: 'landscape',
                 order: 0,
@@ -35,8 +36,8 @@ export const store = new Vuex.Store({
                 type: 'shape',
                 component: 'shape-layer',
                 attributes: {
-                    width: "100",
-                    height: "100",
+                    width: 100,
+                    height: 100,
                     shape: "Circle",
                     sizeOption: "Auto",
                     opacity: "1",
@@ -59,6 +60,8 @@ export const store = new Vuex.Store({
             // image
             {
                 id: null,
+                x: 0,
+                y: 0,
                 title: 'Image',
                 icon: 'image',
                 order: 0,
@@ -85,6 +88,8 @@ export const store = new Vuex.Store({
             },
             {
                 id: null,
+                x: 0,
+                y: 0,
                 title: 'Text',
                 icon: 'text_fields',
                 order: 0,
@@ -95,20 +100,21 @@ export const store = new Vuex.Store({
                 target_element: null,
                 component: 'text-layer',
                 open: false,
+                content: "Text Layer",
                 attributes: {
-                    fontFamily: "",
-                    fontSize: "16px",
-                    fontWeight: "",
-                    fontStyle: "",
-                    textDecoration: "", // underline or not
-                    textAlignment: "center",
+                    fontFamily: "Lato",
+                    fontSize: "20px",
+                    fontWeight: "normal",
+                    fontStyle: "normal",
+                    textDecoration: "none", // underline or not
+                    textAlign: "left",
                     listStyle: "ol",
                     lineHeight: "1em",
                     color: "#000",
                     backgroundColor: "#fff",
                     borderSize: "",
-                    borderStyle: "solid",
-                    borderColor: "",
+                    borderStyle: "",
+                    borderColor: "#000",
                     shadowSize: "",
                     shadowColor: ""
                 }
@@ -125,7 +131,6 @@ export const store = new Vuex.Store({
                 attributes: {
                     width: "100",
                     height: "100",
-
                     src: ""
                 },
             },
@@ -148,8 +153,8 @@ export const store = new Vuex.Store({
                 payload.id = appHelper.generateGUID();
             }
             let layers = state.layers
-            payload.x = 148
-            payload.y = 153
+            payload.x = 0
+            payload.y = 0
             payload.width = 200
             payload.height = 150
             layers.push(payload)
@@ -169,16 +174,25 @@ export const store = new Vuex.Store({
             }
             Vue.set(state, 'selectedLayerId', _layerId)
         },
-        editLayer: (state, item) => {
-            let layer = _enumerable.from(state.layers).where(l => l.id === item.id)
-                .firstOrDefault()
+        setLayerValue: (state, item) => {
+            let layers = state.layers;
+            // let layer = $.from(state.layers).where(l => l.id === item.id)
+            //     .firstOrDefault()
 
-            var timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
-            let timeChanged = (timeStampInMs, Date.now())
+            // layer.x = item.x;
+            // layer.y = item.y;
+            for (var i = 0; i < layers.length; i++) {
+                if (layers[i].id === item.id) {
+                    layers[i].x = item.x;
+                    layers[i].y = item.y;
+                    break;
+                }
+            }
+            // state.layers = layers;
 
-            Vue.set(state.layers, layer, item)
-            Vue.set(state, 'selectedLayerId', item.id)
-            Vue.set(state, 'lastUpdateTime', timeChanged)
+            Vue.set(state, 'layers', layers);
+            // state.layers = layers;
+            console.log('layers new ', state.layers);
         },
         updateLayers: (state, newLayers) => {
             state.layers = newLayers
@@ -201,6 +215,9 @@ export const store = new Vuex.Store({
         getLayers: state => {
             return state.layers
         },
+        getLayer: (state, id) => {
+            return
+        },
         getRemoveId: state => {
             return state.removableId
         },
@@ -210,7 +227,7 @@ export const store = new Vuex.Store({
         getLastEditTime: state => {
             return {
                 'time': state.lastUpdateTime,
-                'layer': _enumerable.from(state.layers).where(l => l.id === state.selectedLayerId)
+                'layer': $.from(state.layers).where(l => l.id === state.selectedLayerId)
                     .firstOrDefault()
             }
         },

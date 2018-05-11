@@ -49,7 +49,9 @@
 .p-d-g {
   width: 100%;
   height: 100%;
-  position: absolute
+  position: absolute;
+  z-index: -1;
+  top: 0;
 }
 </style>
 

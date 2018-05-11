@@ -1,9 +1,9 @@
 <template>
   <div class="yawaa">
-   <mu-list-item title="Text Layer" :open="openpanel">
+   <mu-list-item title="Text Layer" :open="panelopen" @click.stop="open">
         <mu-icon slot="left" value="text_fields" style="color: #fff"/>
         <mu-icon-button icon="remove_red_eye" slot="right" />
-        <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.native="open"/>
+        <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.stop="open"/>
         <mu-list-item  slot="nested"  class="paddingZero">
                 <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Font</mu-grid-list>
@@ -17,7 +17,8 @@
                 <mu-grid-list class="gridlist-demo left"></mu-grid-list>
                 <mu-grid-list class="right">
                 <div class="input-container">
-                    <input class="input-size optionInput">
+                    <input class="input-size optionInput" v-digitsonly  v-append-unit="'px'"
+                      v-model="data.attributes.fontSize" @keyup.enter="apply('fontSize', $event)" @blur="apply('fontSize', $event)">
                     <mu-flat-button class="demo-flat-button csFlatBtn" icon="format_bold" slot="right"/>
                     <mu-flat-button class="demo-flat-button csFlatBtn" icon="format_italic" slot="right"/>
                     <mu-flat-button class="demo-flat-button csFlatBtn" icon="format_underlined" slot="right"/>
@@ -113,26 +114,40 @@
  </div>
 </template>
 <script>
+import {mapMutations} from 'vuex'
 export default {
   name: 'TextLayer',
+  props: ['data', 'openpanel'],
+  beforeMount() {
+    this.attrs = this.data.attributes;
+  },
+  mounted() {
+    console.log('text layer', this.data);
+  },
   data () {
       return {
-        openpanel: false,
+        attrs: null,
         expandIcon: 'expand_more',
         value: '',
         value1: '',
+        value3: '',
         options:['Manual','Automatic','test','TEst 2']
       }
   },
   methods: {
-      open (event) {
-        this.openpanel = !this.openpanel
-        if(this.openpanel){
-            this.expandIcon = 'expand_less'
-        }else{
-            this.expandIcon = 'expand_more'
-        }
-    }
+    ...mapMutations(['setLayerValue']),
+    open (event) {
+      this.panelopen = !this.panelopen
+      this.$emit('openpanel',this.panelopen)
+      if(this.panelopen) {
+          this.expandIcon = 'expand_less'
+      } else {
+          this.expandIcon = 'expand_more'
+      }
+    },
+  },
+  created () {
+      this.panelopen = true
   }
 }
 </script>
