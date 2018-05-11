@@ -65,11 +65,17 @@ export default {
       if (evt.ctrlKey) {
         if (evt.key === 'y') {
            var redoData = undoRedo.redo();
+           if (redoData && redoData.lastAction === 'scale') {
+            redoData = undoRedo.redo();
+          }
           if (redoData) {
            this.$_handleRedo(redoData.layer, redoData.lastAction);
           }
         } else if (evt.key === 'z') {
           var undoData = undoRedo.undo();
+          if (undoData && undoData.lastAction === 'scale') {
+            undoData = undoRedo.undo();
+          }
           if (undoData) {
              this.$_handleUndo(undoData.layer, undoData.lastAction)
           }
@@ -96,11 +102,11 @@ export default {
       }
     },
     $_handleUndo(item, action) {
+        console.log('_handleUndoRedo', item, action);
       if (action === 'create') {
         // if it was created, remove it
         this.updateLayers(this.$_removeFromArray(this.layers, item.id));
-      } else if (action === 'modify') {
-        // console.log('_handleUndoRedo', item, action);
+      } else if (action === 'scale') {
         this.setLayerValue(item);
       }
     },
@@ -115,7 +121,7 @@ export default {
         item.fromUndoRedo = true;
         
         this.addLayer(item);
-      } else if (action === 'modify') {
+      } else if (action === 'scale') {
         // console.log('_handleUndoRedo', item, action);
         this.setLayerValue(item);
       }

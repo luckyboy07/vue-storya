@@ -92,6 +92,8 @@ export const store = new Vuex.Store({
                 y: 0,
                 title: 'Text',
                 icon: 'text_fields',
+                width: 200,
+                height: 150,
                 order: 0,
                 visible: true,
                 animation: null,
@@ -102,6 +104,7 @@ export const store = new Vuex.Store({
                 open: false,
                 content: "Text Layer",
                 attributes: {
+                    rotation: 0,
                     fontFamily: "Lato",
                     fontSize: "20px",
                     fontWeight: "normal",
@@ -153,10 +156,10 @@ export const store = new Vuex.Store({
                 payload.id = appHelper.generateGUID();
             }
             let layers = state.layers
-            payload.x = 0
-            payload.y = 0
-            payload.width = 200
-            payload.height = 150
+            payload.x = 100
+            payload.y = 100
+                // payload.width = 200
+                // payload.height = 150
             layers.push(payload)
             Vue.set(state, 'layers', layers)
 
@@ -176,23 +179,20 @@ export const store = new Vuex.Store({
         },
         setLayerValue: (state, item) => {
             let layers = state.layers;
-            // let layer = $.from(state.layers).where(l => l.id === item.id)
-            //     .firstOrDefault()
-
-            // layer.x = item.x;
-            // layer.y = item.y;
             for (var i = 0; i < layers.length; i++) {
                 if (layers[i].id === item.id) {
                     layers[i].x = item.x;
                     layers[i].y = item.y;
+                    layers[i].width = item.width;
+                    layers[i].height = item.height;
+                    // attributes
+                    for (var key in layers[i].attributes) {
+                        layers[i].attributes[key] = item.attributes[key];
+                    }
                     break;
                 }
             }
-            // state.layers = layers;
-
             Vue.set(state, 'layers', layers);
-            // state.layers = layers;
-            console.log('layers new ', state.layers);
         },
         updateLayers: (state, newLayers) => {
             state.layers = newLayers

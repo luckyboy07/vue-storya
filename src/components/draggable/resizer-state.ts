@@ -145,7 +145,6 @@ const toRadians = function(degree: number): number {
   
     constructor(rect?: Rect, rotation?: number, fixedProportion?: boolean) {
       this.rotation = rotation;
-      console.log('rotation:',this.rotation)
       this.fixedProportion = fixedProportion;
       if (rect) {
         const { left, top, width, height, octant } = rect;
