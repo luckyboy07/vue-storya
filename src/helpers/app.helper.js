@@ -35,6 +35,9 @@ export default {
             return true
         }
     },
+    cloneLayer: function(_layerDetail) {
+        return JSON.parse(JSON.stringify(_layerDetail))
+    },
     // creates a new layer
     createLayer: function(_layerDetail) {
         let layerDetail = JSON.parse(JSON.stringify(_layerDetail))

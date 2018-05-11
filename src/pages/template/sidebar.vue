@@ -39,7 +39,7 @@
         </mu-icon-menu>
       </mu-appbar>
     <mu-list>
-    <component v-for="(t,i) in getLayers" :key="i" :is="t.component"  :openpanel="t.open"></component>
+    <component v-for="(t,i) in getLayers" :key="i" :is="t.component"  :openpanel="t.open" :data="t"></component>
      <!-- <image-layer/> -->
      <!-- <shape-layer/> -->
      <!-- <shape-svg-layer/> -->

@@ -152,6 +152,9 @@ export default {
       this.$emit("rotateEnded");
     },
 
+    emitDragStart() {
+      this.$emit("dragStarted");
+    },
     emitDragging(left, top) {
       this.$emit("dragging", left,  top);
     },
@@ -292,6 +295,7 @@ export default {
           mY = pH - dom.offsetHeight;
 
           self.emitBeforeInputEvent();
+          self.emitDragStart();
         },
         drag(event: MouseEvent) {
           const deltaX = event.clientX - dragState.startX;
