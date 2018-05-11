@@ -102,10 +102,22 @@ export default {
     // to trigegr activated event
     this.$el.addEventListener('mousedown', this.emitActivated)
     this.$refs.rotateHandle.addEventListener('mousedown', this.emitActivated)
+
+    // when resizing
+    const handles = this.$el.querySelectorAll(HANDLE_SELECTOR);
+    for (let i = 0, j = handles.length; i < j; i++) {
+      handles[i].addEventListener('mousedown', this.emitActivated)
+    }
   },
   beforeDestroy() {
     this.$el.removeEventListener('mousedown', this.emitActivated)
     this.$refs.rotateHandle.removeEventListener('mousedown', this.emitActivated)
+
+    // removing event listeners on handles
+    const handles = this.$el.querySelectorAll(HANDLE_SELECTOR);
+    for (let i = 0, j = handles.length; i < j; i++) {
+      handles[i].removeEventListener('mousedown', this.emitActivated)
+    }
   },
 
   computed: {
@@ -144,6 +156,10 @@ export default {
       this.$emit("activated");
     },
 
+    emitRotateStated() {
+      this.$emit("rotateStarted");
+    },
+
     emitRotated(deg) {
       this.$emit("rotated", deg);
     },
@@ -161,6 +177,10 @@ export default {
 
     emitDragEnd() {
       this.$emit("dragEnded");
+    },
+
+    emitResizeStarted() {
+      this.$emit('resizeStarted');
     },
 
     emitResizing(left, top, width, height) {
@@ -220,6 +240,7 @@ export default {
           self.dragging = true;
           self.emitBeforeInputEvent();
           self.showGridLine(self.state.rotation);
+          self.emitRotateStated();
         },
         drag(event: MouseEvent) {
           const bounds = el.getBoundingClientRect();
@@ -383,6 +404,7 @@ export default {
           };
           self.dragging = true;
           self.emitBeforeInputEvent();
+          self.emitResizeStarted();
         },
         drag(event: MouseEvent) {
           const deltaX = event.clientX - resizeState.startX;
