@@ -11,6 +11,7 @@ import VTooltip from 'v-tooltip'
 import JustDigits from './directives/only-number-filter.js'
 import UnitAppender from './directives/append-unit.js'
 import Multiselect from 'vue-multiselect'
+import VModal from 'vue-js-modal'
 // import JustDigits from './directives/only-number-filter.js'
 import * as VueWindow from '@hscmap/vue-window'
 import LayerComponent from './pages/template/menus'
@@ -21,6 +22,7 @@ Vue.use(MuseUI)
 Vue.use(VueWindow)
 Vue.config.productionTip = false
 Vue.use(VTooltip)
+Vue.use(VModal)
     /* eslint-disable no-new */
 Vue.use(LayerComponent)
 Vue.component('multiselect', Multiselect)

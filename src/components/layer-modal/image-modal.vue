@@ -1,69 +1,65 @@
 <template>
- <mu-dialog :open="dialog" title="ASDASDASDASD" icon="image" @close="closeModal">
-     <div>
-    <mu-icon slot="left" value="image"/>
-     </div>
-    <mu-flat-button slot="actions" @click="closeModal" primary label="取消"/>
-    <mu-flat-button slot="actions" primary @click="closeModal" label="确定"/>
-  </mu-dialog>
-  <!-- <v-dialog
-        v-model="dialog"
-        max-width="1000px"
-        scrollable
-        :persistent="true"
-        :overlay="true"
-        :multiple="true"
-      >
-      <v-card tile>
-       <v-toolbar card dark color="primary">
-              <v-btn icon @click="closeModal" dark>
-                <v-icon>close</v-icon>
-              </v-btn>
-              <v-toolbar-title>Upload Image</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-toolbar-items>
-                 
-                <v-btn dark flat><file-upload
-                      class="btn btn--flat btn_content"
-                      extensions="gif,jpg,jpeg,png,webp"
-                      v-model="files"
-                      accept="image/png,image/gif,image/jpeg,image/webp"
-                      :size="1024 * 1024 * 10"
-                      @input-filter="inputFilter"
-                      @input-file="inputFile"
-                      :multiple="true"
-                      :drop="true"
-                      :drop-directory="true"
-                      ref="upload" style="padding-top: 20px;">
-                      Select files
-                      </file-upload></v-btn>
-              </v-toolbar-items>
-              <v-menu bottom right offset-y>
-                <v-btn slot="activator" dark icon>
-                  <v-icon>more_vert</v-icon>
-                </v-btn>
-                <v-list>
-                 
-                </v-list>
-              </v-menu>
-               
-            </v-toolbar>
-            <v-container fluid grid-list-sm >
-              <v-layout row wrap>
-                <v-flex xs4 v-for="(file, i) in files" :key="i">
-                  <img  @click="selectImage(file)" class="image" :src="file.url" :class="`${file.selected? 'img-active':'' }`" style="width:200px; height:200px">
-                </v-flex>
-              </v-layout>
-              <div v-show="$refs.upload && $refs.upload.dropActive" class="drop-active">
-                      <h3>Drop files to upload</h3>
-                    </div>
-            </v-container>
-          <v-card-actions>
-            <v-btn color="primary" flat @click.stop="dialog3=false">Close</v-btn>
-            <v-btn color="primary" flat @click="confirm">Ok</v-btn>
-          </v-card-actions>
-      </v-card>
-      </v-dialog> -->
+<modal name="image-modal"  transition="pop-out" :width="900" :height="600" >
+  <div class="box">
+   <mu-row gutter>
+       <mu-col width="70" desktop="70" style="border-right: 1px rgba(255, 255, 255, 0.21) solid;">
+         <div class="modal-title">
+            <mu-icon value="image" /><span style="margin-left: 5px"> Upload Image - Layer 1</span>
+        </div>
+         <mu-flexbox class="flx">
+            <mu-flexbox-item class="flex-container" > 
+                        + Drag and Drop Images
+            </mu-flexbox-item>
+         </mu-flexbox>
+         <br>
+          <div class="container-grid">
+          <mu-grid-list class="gridlist">
+            <mu-grid-tile v-for="(img,i) in images" :key="i">
+               <img :src="img.image" @click.stop="selectImage(img)" class="img-grid selected" />
+            </mu-grid-tile>
+          </mu-grid-list>
+        </div>
+       </mu-col>
+       <mu-col width="30"  desktop="30" style="margin-top: 10px;">
+         <mu-grid-list>
+             <mu-grid-tile class="overview-tile">
+               <img src="https://marketplace.canva.com/MACPvCG4Ti4/1/0/thumbnail_large/canva-gray-and-blue-photo-fitness-facebook-post-MACPvCG4Ti4.jpg"/>
+             </mu-grid-tile>
+              <div class="selected-title">
+            Watermelon.3gp<br>
+            <span class="sub-title">1080x1920, 287KB</span>
+          </div>
+         <div class="buttons">
+            <mu-raised-button label="Cancel" fullWidth class="btn-buttons"/>
+            <mu-raised-button label="Ok" fullWidth class="btn-buttons"/>
+         </div>
+         </mu-grid-list>
+         
+       </mu-col>
+   </mu-row>
+  </div>
+  <!-- <div class="box">
+    <div class="modal-title">
+    <mu-icon value="image" /><span style="margin-left: 5px"> Upload Image - Layer 1</span>
+    </div>
+     <mu-row gutter style="margin-top: 10px;">
+       <mu-flexbox class="flx">
+          <mu-flexbox-item class="flex-container" > 
+                      + Drag and Drop Images
+          </mu-flexbox-item>
+       </mu-flexbox>
+     </mu-row>
+      <mu-row gutter >
+        <div class="container-grid">
+          <mu-grid-list class="gridlist">
+            <mu-grid-tile v-for="(img,i) in images" :key="i">
+               <img :src="img.image"/>
+            </mu-grid-tile>
+          </mu-grid-list>
+        </div>
+      </mu-row>
+  </div> -->
+</modal>
 </template>
 <script>
   import Vue from 'vue'
@@ -76,7 +72,24 @@ export default {
     data () {
       return {
        files: [],
-       selectedImage: {}
+       selectedImage: {},
+       images:[{
+         id: 1,
+         image: 'https://marketplace.canva.com/MACPvCG4Ti4/1/0/thumbnail_large/canva-gray-and-blue-photo-fitness-facebook-post-MACPvCG4Ti4.jpg'
+       },
+       {
+         id:2,
+         image: 'https://marketplace.canva.com/MACPvCG4Ti4/1/0/thumbnail_large/canva-gray-and-blue-photo-fitness-facebook-post-MACPvCG4Ti4.jpg'
+       },
+        {
+         id:3,
+         image: 'https://marketplace.canva.com/MACPvCG4Ti4/1/0/thumbnail_large/canva-gray-and-blue-photo-fitness-facebook-post-MACPvCG4Ti4.jpg'
+       },
+        {
+         id:4,
+         image: 'https://marketplace.canva.com/MACPvCG4Ti4/1/0/thumbnail_large/canva-gray-and-blue-photo-fitness-facebook-post-MACPvCG4Ti4.jpg'
+       }
+       ]
       }
     },
     methods:{
@@ -135,6 +148,9 @@ export default {
         this.$emit('updated-dialog',false)
         // console.log('files:',this.selectedImage)
         // this.selectedImage = this.selectedImage
+      },
+      selectImage(tile) {
+        console.log('tile:',tile)
       }
   },
   // upated () {
@@ -144,7 +160,7 @@ export default {
   // }
 }
 </script>
-<style scoped>
+<style scoped >
   .drop-active {
     top: 0;
     bottom: 0;
@@ -173,6 +189,102 @@ export default {
    border: 1px solid rgba(81, 203, 238, 1);
     box-shadow: 0 0 5px rgba(81, 203, 238, 1);
  }
+ 
+ .box {
+   background: #191919;
+    overflow: hidden;
+  width: 900px;
+  height: 600px;
+  box-shadow: 0 0 40px black;
+  border: 1px rgb(103, 96, 96) solid;
+ }
+ .modal-title {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    /* -webkit-box-pack: justify; */
+    /* -webkit-justify-content: space-between; */
+    /* -ms-flex-pack: justify; */
+    /* justify-content: space-between; */
+    padding: 24px 24px 20px;
+    margin: 0;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 32px;
+    color: #ffffff;
+    width: 622px;
+    border-bottom: 1px rgba(255, 255, 255, 0.21) solid;
+    /* border-right: 1px rgba(255, 255, 255, 0.21) solid; */
+    margin-bottom: 10px;
+ }
+ .flx {
+   width: 623px;
+ }
+  .flex-container{
+         width: 623px;
+        height: 35px;
+        background-color: #3333339c;
+        text-align: center;
+        line-height: 32px;
+        border: 1px dashed;
+        border-color: #5d5b5b;
+}
+.container-grid{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.gridlist{
+  /* width: 625px;
+  height: 486px;
+  overflow-y: auto; */
+  display: flex;
+   width: 625px;
+  height: 486px;
+  overflow-y: auto;
+   /* display: flex; */
+  /* flex-wrap: nowrap;
+  overflow-x: auto; */
+}
+.gridlist .img-grid {
+  cursor: pointer;
+}
+.gridlist .img-grid.selected{
+  border: 1px #009D70 solid;
+}
+.overview-tile {
+  width: 90% !important;
+  height: 198px !important;
+}
+.selected-title {
+    /* position: absolute; */
+    width: 232px;
+    text-align: center;
+    font-size: 15px;
+}
+.selected-title .sub-title {
+  font-size: 12px;
+  color: #fffefe8f;
+}
+.buttons{
+    position: absolute;
+    bottom: 0;
+    width: 232px;
+    height: 125px;
+}
+.buttons .btn-buttons {
+  margin-bottom: 10px;
+   border: 1px rgba(255, 255, 255, 0.13) solid;
+    background-color: #1A1A1A;
+}
+.mu-raised-button.hover{
+  background-color: #009D70;
+}
 </style>
 
 

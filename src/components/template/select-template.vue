@@ -173,7 +173,7 @@ export default {
 }
 .dialog-btn-width{
   width: 45%;
-  border: 1px #ffffff solid;
+ border: 1px rgba(255, 255, 255, 0.13) solid;
   background-color: #1A1A1A;
 }
 .dialog-col{

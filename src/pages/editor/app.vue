@@ -9,10 +9,12 @@
         </div>
       </div>
     </div>
+     <modal></modal>
 </div>
 </template>
 <script>
 
+import imageModal from '../../components/layer-modal/image-modal'
 import {mapGetters} from 'vuex'
 import Header from '../template/header'
 import Siderbar from '../template/sidebar'
@@ -22,7 +24,9 @@ export default {
   components: {
     headers: Header,
     sideBar: Siderbar,
-    layer: selectionBox
+    layer: selectionBox,
+    modal: imageModal
+    
   },
   computed: {
     ...mapGetters(['getLayers'])

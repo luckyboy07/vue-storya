@@ -2,7 +2,7 @@
 <div>
   <mu-drawer left :open="true" @close="toggle()" :zDepth="0" class="custom-drawer">
       <mu-list style="padding-top: 0;">
-        <mu-list-item afterText="(None)" title="Template Selected" :open="true" :toggleNested="true">
+        <mu-list-item afterText="(None)" title="Template Selected" :open="false" :toggleNested="true">
           <mu-list-item slot="nested" :disableRipple="true">
             <select-template :items="[{'id': '1', 'name': 'ej'}, {'id': '2', 'name': 'ej'}]"></select-template>
           </mu-list-item>
