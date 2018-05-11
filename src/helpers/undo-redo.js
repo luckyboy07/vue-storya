@@ -12,8 +12,6 @@ export default {
             'layer': layerDetail,
             'lastAction': lastAction
         });
-
-        console.log('_addLayer', this.layers);
     },
     $_removeLayer: function(id) {
         for (var i = 0; i < this.layers.length; i++) {
@@ -22,16 +20,13 @@ export default {
                 break;
             }
         }
-        console.log(this.layers.length);
     },
     /**
      * Creates a new layer to the undo manager memory
      * @param  {} layerDetail layerDetail the layer to be created on the memory
      * @param  {} lastAction
      */
-    add(_layerDetail, lastAction) {
-        // console.log(layerDetail, lastAction);
-        var layerDetail = appHelper.cloneLayer(_layerDetail);
+    add(layerDetail, lastAction) {
         let id = appHelper.generateGUID();
         this.$_addLayer(id, layerDetail, lastAction);
         var _removeItem = (_layerId) => {

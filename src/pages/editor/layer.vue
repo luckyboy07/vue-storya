@@ -7,7 +7,7 @@
     :rotatable="true"
     :draggable="true"
     :handles="''"
-    :rotation="0"
+    :rotation="elem.attributes.rotation"
     :fixedProportion="false"
     :left="elem.x"
     :top="elem.y"
@@ -15,9 +15,9 @@
     :height="elem.height"
     v-for="(elem, i) in layers" :key="i"
     @activated="activated(elem)"
-    @rotated="rotated" @rotateEnded="rotateEnded"
+    @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
     @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
-    @resizing="resizing" @resizeEnded="resizeEnded">
+    @resizeStarted="resizeStarted" @resizing="resizing" @resizeEnded="resizeEnded">
 
     <!-- shape layer -->
     <shape id="shape"  v-if="elem.type ==='shape'" :layerId="elem.id" 
@@ -54,13 +54,12 @@ export default {
   data() {
     return {
       selectedLayer: null,
-      tempLayer: null, // for undo/redo storage before the actual layer changes
     };
   },
   methods: {
     ...mapMutations(['setLayerValue']),
     activated(elem) {
-      console.log('activated');
+      console.log('%c activated ' + elem.id, 'background-color: red; color: white');
       //  check if there is a previously assigned layer
       // and if the new layer is not equal to the current selected layer
       if (this.selectedLayer && this.selectedLayer.id !== elem.id) {
@@ -71,36 +70,40 @@ export default {
       this.selectedLayer = elem;
       this.selectedLayer.selected = true;
     },
+    rotateStarted() {
+      // starting point 
+       this.$_recordEvent();
+    },
     rotated(deg) {
-      console.log('rotated');
+      this.selectedLayer.attributes.rotation = deg;
     },
     rotateEnded() {
-      console.log('rotateEnded');
+       this.$_recordEvent();
     },
     dragStarted() {
-      console.log("drag started");
-      // this.tempLayer = appHelper.cloneLayer(this.selectedLayer);
-      undoRedo.add(appHelper.cloneLayer(this.selectedLayer), 'modify');
+      this.$_recordEvent();
     },
     dragging(left,  top) {
-      console.log('dragging');
       this.selectedLayer.x = left;
       this.selectedLayer.y = top;
     },
     dragEnded() {
-      console.log('dragEnded');
       // record for undoo redo event
-      console.log(this.tempLayer);
-      // undoRedo.add(this.tempLayer, 'modify');
-      undoRedo.add(appHelper.cloneLayer(this.selectedLayer), 'modify');
+      this.$_recordEvent();
+    },
+    resizeStarted() {
+      this.$_recordEvent();
     },
     resizing(left, top, width, height) {
-      this.selectedLayer.width = width
-      this.selectedLayer.height = height
-      // this.selectedLayer
+      this.selectedLayer.width = width;
+      this.selectedLayer.height = height;
     },
     resizeEnded(left, top, width, height) {
-      console.log('resizeEnded');
+      this.$_recordEvent();
+    },
+    // record event to undo/redo module
+    $_recordEvent() {
+      undoRedo.add(appHelper.cloneLayer(this.selectedLayer), 'scale');
     }
   },
   computed: {

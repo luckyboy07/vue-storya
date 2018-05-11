@@ -94,6 +94,8 @@ export const store = new Vuex.Store({
                 height: 100,
                 title: 'Text',
                 icon: 'text_fields',
+                width: 200,
+                height: 150,
                 order: 0,
                 visible: true,
                 animation: null,
@@ -104,21 +106,22 @@ export const store = new Vuex.Store({
                 open: false,
                 content: 'Text Layer',
                 attributes: {
-                    fontFamily: 'Lato',
-                    fontSize: '20px',
-                    fontWeight: 'normal',
-                    fontStyle: 'normal',
-                    textDecoration: 'none', // underline or not
-                    textAlign: 'left',
-                    listStyle: 'ol',
-                    lineHeight: '1em',
-                    color: '#000',
-                    backgroundColor: '#fff',
-                    borderSize: '',
-                    borderStyle: '',
-                    borderColor: '#000',
-                    shadowSize: '',
-                    shadowColor: ''
+                    rotation: 0,
+                    fontFamily: "Lato",
+                    fontSize: "20px",
+                    fontWeight: "normal",
+                    fontStyle: "normal",
+                    textDecoration: "none", // underline or not
+                    textAlign: "left",
+                    listStyle: "ol",
+                    lineHeight: "1em",
+                    color: "#000",
+                    backgroundColor: "#fff",
+                    borderSize: "",
+                    borderStyle: "",
+                    borderColor: "#000",
+                    shadowSize: "",
+                    shadowColor: ""
                 }
             },
             {
@@ -155,11 +158,11 @@ export const store = new Vuex.Store({
                 payload.id = appHelper.generateGUID();
             }
             let layers = state.layers
-            payload.x = 0
-            payload.y = 0
-            payload.width = 200
-            payload.height = 150
+            payload.x = 100
+            payload.y = 100
             payload.open = true
+                // payload.width = 200
+                // payload.height = 150
             layers.push(payload)
             Vue.set(state, 'layers', layers)
 
@@ -178,24 +181,21 @@ export const store = new Vuex.Store({
             Vue.set(state, 'selectedLayerId', _layerId)
         },
         setLayerValue: (state, item) => {
-            console.log('item:',item)
-            let layers = state.layers
-            // let layer = $.from(state.layers).where(l => l.id === item.id)
-            //     .firstOrDefault()
-            // layer.x = item.x;
-            // layer.y = item.y;
+            let layers = state.layers;
             for (var i = 0; i < layers.length; i++) {
                 if (layers[i].id === item.id) {
-                    layers[i].x = item.x
-                    layers[i].y = item.y
-                    break
+                    layers[i].x = item.x;
+                    layers[i].y = item.y;
+                    layers[i].width = item.width;
+                    layers[i].height = item.height;
+                    // attributes
+                    for (var key in layers[i].attributes) {
+                        layers[i].attributes[key] = item.attributes[key];
+                    }
+                    break;
                 }
             }
-            // state.layers = layers;
-
             Vue.set(state, 'layers', layers);
-            // state.layers = layers;
-            console.log('layers new ', state.layers);
         },
         updateLayers: (state, newLayers) => {
             state.layers = newLayers
