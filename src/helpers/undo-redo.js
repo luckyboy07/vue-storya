@@ -26,7 +26,7 @@ export default {
      * @param  {} layerDetail layerDetail the layer to be created on the memory
      * @param  {} lastAction
      */
-    add: function(layerDetail, lastAction) {
+    add(layerDetail, lastAction) {
         let id = appHelper.generateGUID();
         this.$_addLayer(id, layerDetail, lastAction);
         var _removeItem = (_layerId) => {
@@ -50,7 +50,7 @@ export default {
     /**
      * Undo the last action
      */
-    undo: function() {
+    undo() {
         // appply the last item to the layer
         // specified by id
         if (this.layers.length > 0) {
@@ -69,14 +69,14 @@ export default {
     /**
      * Redo the last action
      */
-    redo: function() {
+    redo() {
         this.undoManager.redo();
         if (this.layers.length > 0) {
             let layer = this.layers[this.layers.length - 1].layer;
-            console.log('redo: last and curr not equal?', layer !== this.lastLayer);
+            // console.log('redo: last and curr not equal?', layer !== this.lastLayer);
             // check if redo reaches its limit
             // or redo action is the output from the last action
-            if (layer !== this.lastLayer) {
+            if (!this.$_layerEqual(layer, this.lastLayer)) {
                 this.lastLayer = layer;
                 return {
                     layer: layer,
@@ -87,4 +87,7 @@ export default {
 
         return null;
     },
+    $_layerEqual(a, b) {
+        return JSON.stringify(a) === JSON.stringify(b)
+    }
 }

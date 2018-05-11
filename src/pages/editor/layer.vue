@@ -2,7 +2,6 @@
 <div>
     <rotatable-resizer 
     :id="elem.id"
-    :parent="true"
     :active="true"
     :rotatable="true"
     :draggable="true"
