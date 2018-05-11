@@ -39,7 +39,7 @@
         </mu-icon-menu>
       </mu-appbar>
     <mu-list>
-    <component v-for="(t,i) in getLayers" :key="i" :is="t.component"  :openpanel="t.open" :data="t"></component>
+    <component v-for="(t,i) in getLayers" :key="i" :is="t.component"  :openpanel="t.open" :data="t" @isOpen="isOpen"></component>
      <!-- <image-layer/> -->
      <!-- <shape-layer/> -->
      <!-- <shape-svg-layer/> -->
@@ -96,7 +96,7 @@
 </div>
 </template>
 <script>
-import {mapActions, mapGetters} from 'vuex'
+import {mapActions, mapGetters, mapMutations} from 'vuex'
 import Expanding from '../../components/Expanding'
 import templateSelection from '../../components/template/select-template'
 export default {
@@ -152,6 +152,7 @@ export default {
     // targetelem[3].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
   },
   methods: {
+    ...mapMutations(['setLayerValue']),
     ...mapActions([
       'addLayer'
       ]),
@@ -165,7 +166,11 @@ export default {
     toggle (event) {
       this.showhover = !this.showhover
      event.stopPropagation()
-    }
+    },
+    isOpen (val){
+      this.setLayerValue(val)
+
+    } 
   }
 }
 </script>

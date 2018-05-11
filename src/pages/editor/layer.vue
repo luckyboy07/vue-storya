@@ -3,6 +3,7 @@
     <rotatable-resizer 
     :id="elem.id"
     :active="true"
+    :disabled="!elem.open" 
     :rotatable="true"
     :draggable="true"
     :handles="''"
@@ -25,7 +26,7 @@
     <!-- shape layer -->
 
     <!-- image layer -->
-    <img v-if="elem.type ==='image'" id="image" src="http://via.placeholder.com/140x100" style="width: 100%; height: 100%; pointer-events: none;"/>
+    <img v-if="elem.type ==='image'"  id="image"  src="http://via.placeholder.com/140x100" style="width: 100%; height: 100%; pointer-events: none;"/>
     <!-- image layer -->
     
     <!-- text layer -->
@@ -94,7 +95,8 @@ export default {
       undoRedo.add(appHelper.cloneLayer(this.selectedLayer), 'modify');
     },
     resizing(left, top, width, height) {
-      console.log('resizing', left, top, width, height);
+      this.selectedLayer.width = width
+      this.selectedLayer.height = height
       // this.selectedLayer
     },
     resizeEnded(left, top, width, height) {

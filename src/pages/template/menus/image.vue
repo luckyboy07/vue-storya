@@ -25,10 +25,10 @@
             <mu-grid-list class="right">
               <div class="input-container">
                     <span class="labelSpyker">W:</span>
-                    <input spellcheck="false" class="inputSpyker" v-model="data.attributes.width">
+                    <input spellcheck="false" class="inputSpyker" v-model="data.width">
                     <mu-icon slot="left" value="link" class="iconSpyker"/>
                     <span class="labelSpyker">H:</span>
-                    <input spellcheck="false" class="inputSpyker"  v-model="data.attributes.height">
+                    <input spellcheck="false" class="inputSpyker"  v-model="data.height">
               </div>
             </mu-grid-list>
           </div>
@@ -149,7 +149,7 @@ export default {
           value: 'cover'
         }],
         dialog: '',
-        details: {}
+        detail: {}
       }
   },
   mounted (){
@@ -164,6 +164,14 @@ export default {
     //     targetelem[0].firstElementChild.children[0].style.width = '350px'
     // },50)
   },
+  watch: {
+    // detail: {
+    //   handler(val){
+    //   console.log('val:',val)
+    //   },
+    //   deep: true
+    // }
+  },
   methods: {
     open (event) {
       this.panelopen = !this.panelopen
@@ -173,6 +181,8 @@ export default {
       }else{
         this.expandIcon = 'expand_more'
       }
+      this.data.open = this.panelopen
+      this.$emit('isOpen',this.data)
     },
     hideLayer (){
         console.log('HIDE')
@@ -183,6 +193,7 @@ export default {
   },
   created () {
       this.panelopen = this.openpanel
+      // this.detail = this.data
   }
 }
 </script>

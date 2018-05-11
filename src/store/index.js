@@ -26,6 +26,8 @@ export const store = new Vuex.Store({
                 id: null,
                 x: 0,
                 y: 0,
+                width: 100,
+                height: 100,
                 title: 'Shape',
                 icon: 'landscape',
                 order: 0,
@@ -36,25 +38,23 @@ export const store = new Vuex.Store({
                 type: 'shape',
                 component: 'shape-layer',
                 attributes: {
-                    width: 100,
-                    height: 100,
-                    shape: "Circle",
-                    sizeOption: "Auto",
-                    opacity: "1",
-                    rotation: "0",
-                    color: "",
-                    gradientPosition: "",
-                    gradientColor: "",
-                    gradientRotation: "",
-                    borderSize: "0",
-                    borderStyle: "none",
-                    borderColor: "",
-                    shadowSize: "",
-                    shadowColor: "",
-                    backgroundImageUri: "",
-                    backgroundImageRepeat: "none",
-                    backgroundImagePosition: "Left",
-                    backgroundImageAttachment: "none"  
+                    shape: 'Circle',
+                    sizeOption: 'Auto',
+                    opacity: '1',
+                    rotation: '0',
+                    color: '',
+                    gradientPosition: '',
+                    gradientColor: '',
+                    gradientRotation: '',
+                    borderSize: '0',
+                    borderStyle: 'none',
+                    borderColor: '',
+                    shadowSize: '',
+                    shadowColor: '',
+                    backgroundImageUri: '',
+                    backgroundImageRepeat: 'none',
+                    backgroundImagePosition: 'Left',
+                    backgroundImageAttachment: 'none'
                 },
             },
             // image
@@ -62,6 +62,8 @@ export const store = new Vuex.Store({
                 id: null,
                 x: 0,
                 y: 0,
+                width: 100,
+                height: 100,
                 title: 'Image',
                 icon: 'image',
                 order: 0,
@@ -72,24 +74,24 @@ export const store = new Vuex.Store({
                 component: 'image-layer',
                 open: false,
                 attributes: {
-                    width: 100,
-                    height: 100,
                     src: 'http://via.placeholder.com/140x100',
-                    sizeOption: "Auto",
-                    opacity: "1",
-                    rotation: "0",
-                    borderSize: "0",
-                    borderStyle: "solid",
-                    borderColor: "",
-                    shadowSize: "0",
-                    shadowColor: "",
-                    objectFit: "none"
-                },
+                    sizeOption: 'Auto',
+                    opacity: '1',
+                    rotation: '0',
+                    borderSize: '0',
+                    borderStyle: 'solid',
+                    borderColor: '',
+                    shadowSize: '0',
+                    shadowColor: '',
+                    objectFit: 'none'
+                }
             },
             {
                 id: null,
                 x: 0,
                 y: 0,
+                width: 100,
+                height: 100,
                 title: 'Text',
                 icon: 'text_fields',
                 order: 0,
@@ -100,23 +102,23 @@ export const store = new Vuex.Store({
                 target_element: null,
                 component: 'text-layer',
                 open: false,
-                content: "Text Layer",
+                content: 'Text Layer',
                 attributes: {
-                    fontFamily: "Lato",
-                    fontSize: "20px",
-                    fontWeight: "normal",
-                    fontStyle: "normal",
-                    textDecoration: "none", // underline or not
-                    textAlign: "left",
-                    listStyle: "ol",
-                    lineHeight: "1em",
-                    color: "#000",
-                    backgroundColor: "#fff",
-                    borderSize: "",
-                    borderStyle: "",
-                    borderColor: "#000",
-                    shadowSize: "",
-                    shadowColor: ""
+                    fontFamily: 'Lato',
+                    fontSize: '20px',
+                    fontWeight: 'normal',
+                    fontStyle: 'normal',
+                    textDecoration: 'none', // underline or not
+                    textAlign: 'left',
+                    listStyle: 'ol',
+                    lineHeight: '1em',
+                    color: '#000',
+                    backgroundColor: '#fff',
+                    borderSize: '',
+                    borderStyle: '',
+                    borderColor: '#000',
+                    shadowSize: '',
+                    shadowColor: ''
                 }
             },
             {
@@ -129,10 +131,10 @@ export const store = new Vuex.Store({
                 selected: false,
                 type: 'video',
                 attributes: {
-                    width: "100",
-                    height: "100",
-                    src: ""
-                },
+                    width: '100',
+                    height: '100',
+                    src: ''
+                }
             },
             {
             id: null,
@@ -157,6 +159,7 @@ export const store = new Vuex.Store({
             payload.y = 0
             payload.width = 200
             payload.height = 150
+            payload.open = true
             layers.push(payload)
             Vue.set(state, 'layers', layers)
 
@@ -175,17 +178,17 @@ export const store = new Vuex.Store({
             Vue.set(state, 'selectedLayerId', _layerId)
         },
         setLayerValue: (state, item) => {
-            let layers = state.layers;
+            console.log('item:',item)
+            let layers = state.layers
             // let layer = $.from(state.layers).where(l => l.id === item.id)
             //     .firstOrDefault()
-
             // layer.x = item.x;
             // layer.y = item.y;
             for (var i = 0; i < layers.length; i++) {
                 if (layers[i].id === item.id) {
-                    layers[i].x = item.x;
-                    layers[i].y = item.y;
-                    break;
+                    layers[i].x = item.x
+                    layers[i].y = item.y
+                    break
                 }
             }
             // state.layers = layers;
