@@ -10,7 +10,7 @@ Vue.directive('digitsonly', {
             var key = evt.key.toLowerCase();
             if (isNaN(key) && key !== 'backspace' && key !== '.' &&
                 key !== 'delete' && key !== 'enter' && key !== 'a' &&
-                key !== 'tab') {
+                key !== 'tab' && key !== 'arrowright' && key !== 'arrowleft') {
                 evt.preventDefault();
             }
             // check for . (dots)

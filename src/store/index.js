@@ -4,8 +4,7 @@ import Vuex from 'vuex'
 // import modules from './modules'
 
 import appHelper from '../helpers/app.helper'
-import * as _enumerable from 'linq'
-Vue.use(_enumerable)
+import * as $ from 'linq'
 
 Vue.use(Vuex)
 
@@ -25,6 +24,8 @@ export const store = new Vuex.Store({
         items: [
             {
                 id: null,
+                x: 0,
+                y: 0,
                 title: 'Shape',
                 icon: 'landscape',
                 order: 0,
@@ -53,14 +54,14 @@ export const store = new Vuex.Store({
                     backgroundImageUri: "",
                     backgroundImageRepeat: "none",
                     backgroundImagePosition: "Left",
-                    backgroundImageAttachment: "none",
-                    top: 153,
-                    left: 148                   
+                    backgroundImageAttachment: "none"  
                 },
             },
             // image
             {
                 id: null,
+                x: 0,
+                y: 0,
                 title: 'Image',
                 icon: 'image',
                 order: 0,
@@ -82,13 +83,13 @@ export const store = new Vuex.Store({
                     borderColor: "",
                     shadowSize: "0",
                     shadowColor: "",
-                    objectFit: "none",
-                    top: 153,
-                    left: 148  
+                    objectFit: "none"
                 },
             },
             {
                 id: null,
+                x: 0,
+                y: 0,
                 title: 'Text',
                 icon: 'text_fields',
                 order: 0,
@@ -99,42 +100,39 @@ export const store = new Vuex.Store({
                 target_element: null,
                 component: 'text-layer',
                 open: false,
+                content: "Text Layer",
                 attributes: {
-                    width: 100,
-                    height: 100,
-                    fontFamily: "",
-                    fontSize: "16px",
-                    fontWeight: "",
-                    fontStyle: "",
-                    textDecoration: "", // underline or not
-                    textAlignment: "center",
+                    fontFamily: "Lato",
+                    fontSize: "20px",
+                    fontWeight: "normal",
+                    fontStyle: "normal",
+                    textDecoration: "none", // underline or not
+                    textAlign: "left",
                     listStyle: "ol",
                     lineHeight: "1em",
                     color: "#000",
                     backgroundColor: "#fff",
                     borderSize: "",
-                    borderStyle: "solid",
-                    borderColor: "",
+                    borderStyle: "",
+                    borderColor: "#000",
                     shadowSize: "",
-                    shadowColor: "",
-                    top: 153,
-                    left: 148  
+                    shadowColor: ""
                 }
             },
             {
-            id: null,
-            title: 'Video',
-            icon: 'play_arrow',
-            order: 0,
-            visible: true,
-            animation: null,
-            selected: false,
-            type: 'video',
-            attributes: {
-                width: "100",
-                height: "100",
-                src: ""
-            },
+                id: null,
+                title: 'Video',
+                icon: 'play_arrow',
+                order: 0,
+                visible: true,
+                animation: null,
+                selected: false,
+                type: 'video',
+                attributes: {
+                    width: "100",
+                    height: "100",
+                    src: ""
+                },
             },
             {
             id: null,
@@ -155,8 +153,8 @@ export const store = new Vuex.Store({
                 payload.id = appHelper.generateGUID();
             }
             let layers = state.layers
-            // payload.x = 148
-            // payload.y = 153
+            payload.x = 0
+            payload.y = 0
             payload.width = 200
             payload.height = 150
             layers.push(payload)
@@ -176,16 +174,25 @@ export const store = new Vuex.Store({
             }
             Vue.set(state, 'selectedLayerId', _layerId)
         },
-        editLayer: (state, item) => {
-            let layer = _enumerable.from(state.layers).where(l => l.id === item.id)
-                .firstOrDefault()
+        setLayerValue: (state, item) => {
+            let layers = state.layers;
+            // let layer = $.from(state.layers).where(l => l.id === item.id)
+            //     .firstOrDefault()
 
-            var timeStampInMs = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now()
-            let timeChanged = (timeStampInMs, Date.now())
+            // layer.x = item.x;
+            // layer.y = item.y;
+            for (var i = 0; i < layers.length; i++) {
+                if (layers[i].id === item.id) {
+                    layers[i].x = item.x;
+                    layers[i].y = item.y;
+                    break;
+                }
+            }
+            // state.layers = layers;
 
-            Vue.set(state.layers, layer, item)
-            Vue.set(state, 'selectedLayerId', item.id)
-            Vue.set(state, 'lastUpdateTime', timeChanged)
+            Vue.set(state, 'layers', layers);
+            // state.layers = layers;
+            console.log('layers new ', state.layers);
         },
         updateLayers: (state, newLayers) => {
             state.layers = newLayers
@@ -208,6 +215,9 @@ export const store = new Vuex.Store({
         getLayers: state => {
             return state.layers
         },
+        getLayer: (state, id) => {
+            return
+        },
         getRemoveId: state => {
             return state.removableId
         },
@@ -217,7 +227,7 @@ export const store = new Vuex.Store({
         getLastEditTime: state => {
             return {
                 'time': state.lastUpdateTime,
-                'layer': _enumerable.from(state.layers).where(l => l.id === state.selectedLayerId)
+                'layer': $.from(state.layers).where(l => l.id === state.selectedLayerId)
                     .firstOrDefault()
             }
         },
