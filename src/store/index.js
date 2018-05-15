@@ -10,6 +10,13 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
+        // for editor toolbar
+        canvasData: {
+            filename: 'New File 1',
+            width: "508px",
+            height: "423px",
+            zoom: "100%"
+        },
         lastItemAdd: null, // the timestamp to when an item occured
         lastUpdateTime: null,
         selectedLayerId: null,
@@ -205,7 +212,7 @@ export const store = new Vuex.Store({
         },
         isAnimation: (state, item) => {
             Vue.set(state, 'setAnimation', item)
-        }
+        },
     },
     getters: {
         getItems: state => {
@@ -232,7 +239,12 @@ export const store = new Vuex.Store({
         },
         getLastLayerAddTime: state => {
             return state.lastItemAdd
-        }
+        },
+        // canvas related data
+        getCanvasData: state => {
+            console.log(state.canvasData);
+            return state.canvasData;
+        },
     },
     actions: {
         addLayer: ({ commit }, payload) => {

@@ -2,8 +2,8 @@
 <div>
 <headers style="z-index: 999"></headers>
 <side-bar></side-bar>
-    <div class="editor-container">
-      <div class="editor-box">
+    <div class="editor-container" >
+      <div class="editor-box" :style="{width: getCanvasData.width, height: getCanvasData.height}">
         <div class="canvas-wrap">
             <layer :layers="getLayers"></layer>
         </div>
@@ -28,8 +28,9 @@ export default {
     modal: imageModal
     
   },
+ 
   computed: {
-    ...mapGetters(['getLayers'])
+    ...mapGetters(['getLayers', 'getCanvasData'])
   }
 }
 </script>

@@ -38,6 +38,10 @@ export default {
     cloneLayer: function(_layerDetail) {
         return JSON.parse(JSON.stringify(_layerDetail))
     },
+    // returns a new instance of the object
+    cloneObject: function(_objDetail) {
+        return this.cloneLayer(_objDetail);
+    },
     // creates a new layer
     createLayer: function(_layerDetail) {
         let layerDetail = JSON.parse(JSON.stringify(_layerDetail))
