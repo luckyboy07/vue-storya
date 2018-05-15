@@ -1,9 +1,9 @@
 <template>
-<div class="yawaa " :class="panelopen ? 'activeTool': ''">
-    <mu-list-item title="Image Layer" :open="panelopen" @click.stop="open">
+<div class="yawaa " :class="data.selected ? 'activeTool': ''">
+    <mu-list-item title="Image Layer" :open="data.selected" @click.stop="open">
           <mu-icon slot="left" value="image" style="color: #fff"/>
           <mu-icon-button icon="remove_red_eye" slot="right" @click.stop="hideLayer"/>
-          <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.stop="open"/>
+          <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
         <mu-list-item  slot="nested"  class="paddingZero minHytZero"   @click="$modal.show('image-modal')">
              <mu-flexbox>
                   <mu-flexbox-item class="flex-container" > 
@@ -174,15 +174,16 @@ export default {
   },
   methods: {
     open (event) {
-      this.panelopen = !this.panelopen
-      this.$emit('openpanel',this.panelopen)
-      if(this.panelopen){
-        this.expandIcon = 'expand_less'
-      }else{
-        this.expandIcon = 'expand_more'
-      }
-      this.data.open = this.panelopen
-      this.$emit('isOpen',this.data)
+      // this.panelopen = !this.panelopen
+      // this.$emit('openpanel',this.panelopen)
+      this.data.selected = !this.data.selected;
+      // if(this.data.selected){
+      //   this.expandIcon = 'expand_less'
+      // } else{
+      //   this.expandIcon = 'expand_more'
+      // }
+      // this.data.open = this.panelopen
+      // this.$emit('isOpen',this.data)
     },
     hideLayer (){
         console.log('HIDE')
@@ -192,7 +193,7 @@ export default {
     }
   },
   created () {
-      this.panelopen = this.openpanel
+      // this.panelopen = this.openpanel
       // this.detail = this.data
   }
 }

@@ -68,6 +68,7 @@ export default {
     // handling the click event
     handleCanvasClicks(evt) {
       if (this.selectedLayer) {
+        console.log(this.selectedLayer.type);
         // disselect the previous layer
         this.selectedLayer.selected = false;
         this.selectedLayer = null;

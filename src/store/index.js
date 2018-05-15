@@ -46,7 +46,7 @@ export const store = new Vuex.Store({
                     shape: 'Circle',
                     sizeOption: 'Auto',
                     opacity: '1',
-                    rotation: '0',
+                    rotation: 0,
                     color: '',
                     gradientPosition: '',
                     gradientColor: '',
@@ -82,7 +82,7 @@ export const store = new Vuex.Store({
                     src: 'http://via.placeholder.com/140x100',
                     sizeOption: 'Auto',
                     opacity: '1',
-                    rotation: '0',
+                    rotation: 0,
                     borderSize: '0',
                     borderStyle: 'solid',
                     borderColor: '',
@@ -161,11 +161,16 @@ export const store = new Vuex.Store({
         addLayer: (state, payload) => {
             payload = appHelper.createLayer(payload);
             let layers = state.layers
+                //setting the last active layer to in-active
+            for (var i = 0; i < layers.length; i++) {
+                layers[i].selected = false;
+            }
             payload.x = 100
             payload.y = 100
             payload.open = true
-                // payload.width = 200
-                // payload.height = 150
+            payload.selected = true;
+            // payload.width = 200
+            // payload.height = 150
             layers.push(payload)
             Vue.set(state, 'layers', layers)
 
@@ -177,12 +182,12 @@ export const store = new Vuex.Store({
                 Vue.set(state, 'lastItemAdd', appHelper.generateTimestamp())
             }
         },
-        setLayerId: (state, _layerId) => {
-            if (!_layerId) {
-                return
-            }
-            Vue.set(state, 'selectedLayerId', _layerId)
-        },
+        // setLayerId: (state, _layerId) => {
+        //     if (!_layerId) {
+        //         return
+        //     }
+        //     Vue.set(state, 'selectedLayerId', _layerId)
+        // },
         setLayerValue: (state, item) => {
             let layers = state.layers;
             for (var i = 0; i < layers.length; i++) {
@@ -213,6 +218,7 @@ export const store = new Vuex.Store({
         isAnimation: (state, item) => {
             Vue.set(state, 'setAnimation', item)
         },
+        // when exp
     },
     getters: {
         getItems: state => {

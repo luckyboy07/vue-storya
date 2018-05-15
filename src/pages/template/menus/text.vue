@@ -1,9 +1,9 @@
 <template>
-  <div class="yawaa"  :class="openpanel ? 'activeTool': ''">
-   <mu-list-item title="Text Layer" :open="openpanel" @click.stop="open">
+  <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
+   <mu-list-item title="Text Layer" :open="data.selected" @click.stop="open">
         <mu-icon slot="left" value="text_fields" style="color: #fff"/>
         <mu-icon-button icon="remove_red_eye" slot="right" />
-        <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.stop="open"/>
+        <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
         <mu-list-item  slot="nested"  class="paddingZero">
                 <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Font</mu-grid-list>
@@ -151,7 +151,6 @@ export default {
   data () {
       return {
         attrs: null,
-        expandIcon: 'expand_more',
         value: '',
         value1: '',
         value3: '',
@@ -161,16 +160,7 @@ export default {
   methods: {
     ...mapMutations(['setLayerValue']),
     open (event) {
-      this.panelopen = !this.panelopen
-      this.$emit('openpanel',this.panelopen)
-      if(this.panelopen) {
-          this.expandIcon = 'expand_less'
-      } else {
-          this.expandIcon = 'expand_more'
-      }
-    },
-    updateFont() {
-      //console.log(this.data.attributes.fontFamily);
+      this.data.selected = !this.data.selected;
     },
     handleFontWeight() {
       this.data.attributes.fontWeight = this.data.attributes.fontWeight === "bold" ? "normal" : "bold";
@@ -195,7 +185,6 @@ export default {
     },
   },
   created () {
-    this.panelopen = true
     this.availableFonts = fontHelper.getFonts();
   }
 }
