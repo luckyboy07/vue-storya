@@ -56,7 +56,7 @@ export default {
   methods: {
     ...mapMutations(['setLayerValue']),
     activated(elem) {
-      console.log('%c activated ' + elem.id, 'background-color: red; color: white');
+      console.log('%c ' + elem.id, 'background-color: red; color: white');
       //  check if there is a previously assigned layer
       // and if the new layer is not equal to the current selected layer
       if (this.selectedLayer && this.selectedLayer.id !== elem.id) {
