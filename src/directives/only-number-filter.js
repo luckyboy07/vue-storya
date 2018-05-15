@@ -21,7 +21,14 @@ Vue.directive('digitsonly', {
             if (key === 'a' && !evt.ctrlKey) {
                 evt.preventDefault();
             }
-            evt.target.value = evt.target.value.toString();
+            var val = evt.target.value.toString();
+            if (key === 'arrowup') {
+                val = parseFloat(val) + 1;
+            }
+            if (key === 'arrowdown' && parseFloat(val) > 0) {
+                val = parseFloat(val) - 1;
+            }
+            evt.target.value = val;
         };
         var unfocus = function(evt) {
             if (evt.target.value) {

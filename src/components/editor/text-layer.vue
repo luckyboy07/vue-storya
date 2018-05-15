@@ -18,7 +18,7 @@ export default {
       var layerData = this.layerData.attributes;
       return {
         fontFamily: layerData.fontFamily,
-        fontSize: layerData.fontSize && layerData.fontSize.indexOf('px') !== -1 ? layerData.fontSize : layerData.fontSize + 'px',
+        fontSize: layerData.fontSize.indexOf('px') !== -1 ? layerData.fontSize : layerData.fontSize + 'px',
         fontWeight: layerData.fontWeight,
         fontStyle: layerData.fontStyle,
         textDecoration: layerData.textDecoration,
@@ -26,9 +26,7 @@ export default {
         lineHeight: layerData.lineHeight,
         color: layerData.color,
         backgroundColor: layerData.backgroundColor,
-        borderWidth: layerData.borderSize,
-        borderStyle: layerData.borderStyle,
-        borderColor: layerData.borderColor,
+        border: layerData.borderSize + 'px ' + layerData.borderStyle + ' ' + layerData.borderColor,
         textShadow: layerData.shadowColor + " " + layerData.shadowSize + " " + layerData.shadowSize 
       }
     },

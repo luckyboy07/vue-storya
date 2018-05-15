@@ -2,11 +2,11 @@
 <div>
     <rotatable-resizer 
     :id="elem.id"
-    :active="true"
+    :active="elem.selected"
     :disabled="!elem.open" 
     :rotatable="true"
     :draggable="true"
-    :handles="''"
+    :handles="'nw,ne,se,sw'"
     :rotation="elem.attributes.rotation"
     :fixedProportion="false"
     :left="elem.x"
@@ -56,10 +56,28 @@ export default {
       selectedLayer: null,
     };
   },
+  beforeDestroy() {
+    this.$el.parentElement.removeListener('mousedown', this.handleCanvasClicks)
+  },
+  mounted() {
+    // handling layer desselection
+    this.$el.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
+  },
   methods: {
     ...mapMutations(['setLayerValue']),
+    // handling the click event
+    handleCanvasClicks(evt) {
+      if (this.selectedLayer) {
+        console.log(this.selectedLayer.type);
+        // disselect the previous layer
+        this.selectedLayer.selected = false;
+        this.selectedLayer = null;
+
+        console.log("layer deactivated");
+      }
+    },
     activated(elem) {
-      console.log('%c activated ' + elem.id, 'background-color: red; color: white');
+      console.log('%c ' + elem.id, 'background-color: red; color: white');
       //  check if there is a previously assigned layer
       // and if the new layer is not equal to the current selected layer
       if (this.selectedLayer && this.selectedLayer.id !== elem.id) {

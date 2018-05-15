@@ -20,12 +20,12 @@
               <div v-for="(item, i) in getItems"  :key="i" class="content-btn" @click.stop="addLayer(item);toggle($event)">
               <mu-raised-button  ref="iconbtn"  class="raised-btn"  :icon="item.icon" @hover="shapeSelected = i === 0"/>
                <br>
-               <span >{{item.title}}</span> 
+               <span>{{item.title}}</span> 
               </div>
             </div>
               </mu-menu>
             <mu-divider v-show="shapeSelected"/>
-            <mu-menu v-show="shapeSelected" class="pop-content">
+            <mu-menu menuClass="menu-add-layer" v-show="shapeSelected" class="pop-content">
               <div class="">
                 <!-- <mu-icon-button tooltip="top-center" tooltipPosition="top-center"  icon="stop"/> -->
                 <mu-icon-button icon="stop"/>
@@ -39,7 +39,8 @@
         </mu-icon-menu>
       </mu-appbar>
     <mu-list>
-    <component v-for="(t,i) in getLayers" :key="i" :is="t.component"  :openpanel="t.open" :data="t" @isOpen="isOpen"></component>
+    <component v-for="(layer,i) in getLayers" :key="i" :is="layer.component"  
+      :openpanel="layer.selected" :data="layer" @isOpen="isOpen"></component>
      <!-- <image-layer/> -->
      <!-- <shape-layer/> -->
      <!-- <shape-svg-layer/> -->
@@ -168,8 +169,7 @@ export default {
      event.stopPropagation()
     },
     isOpen (val){
-      this.setLayerValue(val)
-
+      //this.setLayerValue(val)
     } 
   }
 }
@@ -215,13 +215,18 @@ export default {
 
 }
 .mu-popover {
-  left: 345px !important;
-    top: 115px !important;
+  // left: 345px !important;
+  //   top: 115px !important;
   background-color: #171616;
 }
 .mu-menu-list{
   width: 330px !important;
   overflow: hidden;
+}
+
+.menu-add-layer {
+   left: 345px !important;
+    top: 115px !important;
 }
 
 .mu-paper{

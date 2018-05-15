@@ -7,7 +7,7 @@
     <!-- start: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
       <div class="tool-item-group-content label-item">File Name</div> 
-      <input @change="filenameChanged" ref="filename" value="The File Name 123232" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
+      <input @change="filenameChanged" ref="filename" v-model="getCanvasData().filename" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
     </div>
     <!-- end: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
@@ -15,7 +15,7 @@
        <div class="tool-item-group-content" style="width: 260px; display: flex">
          <div class="tool-item-group-content" style="width: 106px; display: flex">
             <div class="label-item p-r">W:</div> 
-            <input @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly v-append-unit="'px'" type="text"/>
+            <input v-model="getCanvasData().width" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly v-append-unit="'px'" type="text"/>
            </div>
            <div class="tool-item-group-content">
             <div class="label-item">
@@ -24,27 +24,27 @@
            </div>
            <div class="tool-item-group-content" style="width: 106px; display: flex;">
             <div class="label-item p-r">H:</div> 
-            <input  @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'px'" type="text"/>
+            <input v-model="getCanvasData().height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'px'" type="text"/>
            </div>
        </div>
      </div>
     <div class="tool-item tool-item-group" slot="left">
        <div class="label-item">Zoom</div>
        <div class="tool-item-group-content" style="width: 168px; display: flex">
-         <mu-flat-button  class="s-editor-btn-zoom-ctrl">
+         <mu-flat-button  class="s-editor-btn-zoom-ctrl" @click="zoom('out')">
             <i class="si-zoomout" style="height: 90%"></i>
           </mu-flat-button>
           <div class="tool-item-group-content">
-            <input style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'" type="text"/>
+            <input  v-model="getCanvasData().zoom" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'" type="text"/>
           </div>
-          <mu-flat-button class="s-editor-btn-zoom-ctrl">
+          <mu-flat-button class="s-editor-btn-zoom-ctrl" @click="zoom('in')">
             <i class="si-zoomin" style="height: 90%"></i>
           </mu-flat-button>
        </div>
      </div>
-    <mu-flat-button labelPosition="before" icon="add" style="text-transform: none; background-color: #222222; margin-right: 20px; height: 70%" slot="right" label="Add Canvas" class="demo-flat-button"/>
+    <!-- <mu-flat-button labelPosition="before" icon="add" style="text-transform: none; background-color: #222222; margin-right: 20px; height: 70%" slot="right" label="Add Canvas" class="demo-flat-button"/> -->
   </mu-appbar>
-  <mu-icon-menu icon="" @change="handleChange" :anchorOrigin="rightTop"
+  <mu-icon-menu menuClass="xxx" icon="" @change="handleChange" :anchorOrigin="rightTop"
       :targetOrigin="rightTop"
       :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
       <mu-menu-item value="1" title="Save As" />
@@ -79,6 +79,7 @@
       - occurs when the 'Add Canvas' button was clicked
 */
 import customMenu from '../menus/custom-menu'
+import {mapGetters} from 'vuex'
 export default {
   name: 'editor-tools',
   components: {
@@ -93,6 +94,7 @@ export default {
     }
   },
   methods: {
+    ...mapGetters(['getCanvasData']),
     handleChange(val) {
       this.value = val;
     },
@@ -122,8 +124,14 @@ export default {
     onResize() {
       this.$emit('onResize', {with:  this.$refs.width.value, height:  this.$refs.height.value});
     },
-    onZoom() {
-      
+    zoom(zoomType) {
+      if (zoomType === 'in') {
+        this.getCanvasData().zoom = (parseInt(this.getCanvasData().zoom.replace('%', '')) + 25).toString() + "%";
+      } else {
+        if ((parseInt(this.getCanvasData().zoom.replace('%', '')) - 25) > 0) {
+          this.getCanvasData().zoom = (parseInt(this.getCanvasData().zoom.replace('%', '')) - 25).toString() + "%";
+        }
+      }
     }
   }
 }

@@ -129,6 +129,7 @@ export default {
     value(): Rect {
       const state = this.state;
       return {
+        active: state.active,
         left: state.left,
         top: state.top,
         width: state.width,

@@ -38,16 +38,16 @@ export default {
     cloneLayer: function(_layerDetail) {
         return JSON.parse(JSON.stringify(_layerDetail))
     },
+    // returns a new instance of the object
+    cloneObject: function(_objDetail) {
+        return this.cloneLayer(_objDetail);
+    },
     // creates a new layer
     createLayer: function(_layerDetail) {
         let layerDetail = JSON.parse(JSON.stringify(_layerDetail))
             // assign id for this layer and to its attributes to prevent data errors
         layerDetail.id = this.generateGUID()
-            // layerDetail.attributes =  Vue.util.extend([], _layerDetail.attributes);
-        for (let i = 0; i < layerDetail.attributes.length; i++) {
-            layerDetail.attributes[i].id = this.generateGUID()
-        }
-        // make the newly added layer as the first item when sorting
+            // make the newly added layer as the first item when sorting
         layerDetail.order = 1
 
         return layerDetail

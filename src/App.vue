@@ -21,6 +21,7 @@
 */
 
 import undoRedo from './helpers/undo-redo'
+import fontHelper from './helpers/fonts.helper.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
 export default {
   data () {
@@ -34,6 +35,9 @@ export default {
     }
   },
   name: 'App',
+  beforeCreate() {
+     fontHelper.appendFont();
+  },
   created() {
     if (this.eventWritten) {
       return;
@@ -71,6 +75,7 @@ export default {
           if (redoData) {
            this.$_handleRedo(redoData.layer, redoData.lastAction);
           }
+          this.$_debugLogger("key action: redo");
         } else if (evt.key === 'z') {
           var undoData = undoRedo.undo();
           if (undoData && undoData.lastAction === 'scale') {
@@ -79,6 +84,7 @@ export default {
           if (undoData) {
              this.$_handleUndo(undoData.layer, undoData.lastAction)
           }
+           this.$_debugLogger("key action: undo");
         }
       }
     },
@@ -94,7 +100,7 @@ export default {
          console.log('layers', this.layers);
         if (this.layers.length > 0) {
           // trigger the idle time event
-          this.$_debugLogger('Call auto save here (App.vue:67)');
+          this.$_debugLogger('Call auto save here (App.vue:97)');
         } else {
           console.log('layer is empty');
         }
@@ -102,7 +108,7 @@ export default {
       }
     },
     $_handleUndo(item, action) {
-        console.log('_handleUndoRedo', item, action);
+        // console.log('_handleUndoRedo', item, action);
       if (action === 'create') {
         // if it was created, remove it
         this.updateLayers(this.$_removeFromArray(this.layers, item.id));

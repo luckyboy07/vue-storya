@@ -10,19 +10,24 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
+        // for editor toolbar
+        canvasData: {
+            filename: 'New File 1',
+            width: "508px",
+            height: "423px",
+            zoom: "100%"
+        },
         lastItemAdd: null, // the timestamp to when an item occured
         lastUpdateTime: null,
         selectedLayerId: null,
         removableId: null,
         layers: [],
         selectedImage: {},
-        setAnimation: 
-        {
-        name: null,
-        id: null
+        setAnimation: {
+            name: null,
+            id: null
         },
-        items: [
-            {
+        items: [{
                 id: null,
                 x: 0,
                 y: 0,
@@ -41,7 +46,7 @@ export const store = new Vuex.Store({
                     shape: 'Circle',
                     sizeOption: 'Auto',
                     opacity: '1',
-                    rotation: '0',
+                    rotation: 0,
                     color: '',
                     gradientPosition: '',
                     gradientColor: '',
@@ -77,7 +82,7 @@ export const store = new Vuex.Store({
                     src: 'http://via.placeholder.com/140x100',
                     sizeOption: 'Auto',
                     opacity: '1',
-                    rotation: '0',
+                    rotation: 0,
                     borderSize: '0',
                     borderStyle: 'solid',
                     borderColor: '',
@@ -114,10 +119,10 @@ export const store = new Vuex.Store({
                     textDecoration: "none", // underline or not
                     textAlign: "left",
                     listStyle: "ol",
-                    lineHeight: "1em",
+                    lineHeight: "20px",
                     color: "#000",
                     backgroundColor: "#fff",
-                    borderSize: "",
+                    borderSize: "0px",
                     borderStyle: "",
                     borderColor: "#000",
                     shadowSize: "",
@@ -140,29 +145,32 @@ export const store = new Vuex.Store({
                 }
             },
             {
-            id: null,
-            title: 'Audio',
-            icon: 'volume_down',
-            order: 0,
-            visible: true,
-            animation: null,
-            selected: false,
-            type: 'audio',
-            attributes: {}
+                id: null,
+                title: 'Audio',
+                icon: 'volume_down',
+                order: 0,
+                visible: true,
+                animation: null,
+                selected: false,
+                type: 'audio',
+                attributes: {}
             }
         ]
     },
     mutations: {
         addLayer: (state, payload) => {
-            if (!payload.id) {
-                payload.id = appHelper.generateGUID();
-            }
+            payload = appHelper.createLayer(payload);
             let layers = state.layers
+                //setting the last active layer to in-active
+            for (var i = 0; i < layers.length; i++) {
+                layers[i].selected = false;
+            }
             payload.x = 100
             payload.y = 100
             payload.open = true
-                // payload.width = 200
-                // payload.height = 150
+            payload.selected = true;
+            // payload.width = 200
+            // payload.height = 150
             layers.push(payload)
             Vue.set(state, 'layers', layers)
 
@@ -174,12 +182,12 @@ export const store = new Vuex.Store({
                 Vue.set(state, 'lastItemAdd', appHelper.generateTimestamp())
             }
         },
-        setLayerId: (state, _layerId) => {
-            if (!_layerId) {
-                return
-            }
-            Vue.set(state, 'selectedLayerId', _layerId)
-        },
+        // setLayerId: (state, _layerId) => {
+        //     if (!_layerId) {
+        //         return
+        //     }
+        //     Vue.set(state, 'selectedLayerId', _layerId)
+        // },
         setLayerValue: (state, item) => {
             let layers = state.layers;
             for (var i = 0; i < layers.length; i++) {
@@ -209,7 +217,8 @@ export const store = new Vuex.Store({
         },
         isAnimation: (state, item) => {
             Vue.set(state, 'setAnimation', item)
-        }
+        },
+        // when exp
     },
     getters: {
         getItems: state => {
@@ -236,7 +245,12 @@ export const store = new Vuex.Store({
         },
         getLastLayerAddTime: state => {
             return state.lastItemAdd
-        }
+        },
+        // canvas related data
+        getCanvasData: state => {
+            console.log(state.canvasData);
+            return state.canvasData;
+        },
     },
     actions: {
         addLayer: ({ commit }, payload) => {
