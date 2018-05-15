@@ -4,6 +4,7 @@ declare interface Point {
   }
   
   declare interface Rect {
+    active?: boolean,
     left: number;
     top: number;
     width: number;

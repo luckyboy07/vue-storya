@@ -2,10 +2,11 @@
 <div>
     <rotatable-resizer 
     :id="elem.id"
-    :active="true"
+    :active="elem.selected"
+    :disabled="!elem.open" 
     :rotatable="true"
     :draggable="true"
-    :handles="''"
+    :handles="'nw,ne,se,sw'"
     :rotation="elem.attributes.rotation"
     :fixedProportion="false"
     :left="elem.x"
@@ -25,7 +26,7 @@
     <!-- shape layer -->
 
     <!-- image layer -->
-    <img v-if="elem.type ==='image'" id="image" src="http://via.placeholder.com/140x100" style="width: 100%; height: 100%; pointer-events: none;"/>
+    <img v-if="elem.type ==='image'"  id="image"  src="http://via.placeholder.com/140x100" style="width: 100%; height: 100%; pointer-events: none;"/>
     <!-- image layer -->
     
     <!-- text layer -->
@@ -41,11 +42,13 @@ import undoRedo from '../../helpers/undo-redo.js'
 import textLayer from '../../components/editor/text-layer'
 import shape from "./shapes/shape.vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
+import image from "../../components/editor/image";
 export default {
   name: "selectionBox",
   props: ["layers"],
   components: {
     shape,
+    imageLayer: image,
     'text-layer': textLayer,
   },
   data() {
@@ -53,8 +56,25 @@ export default {
       selectedLayer: null,
     };
   },
+  beforeDestroy() {
+    this.$el.parentElement.removeListener('mousedown', this.handleCanvasClicks)
+  },
+  mounted() {
+    // handling layer desselection
+    this.$el.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
+  },
   methods: {
     ...mapMutations(['setLayerValue']),
+    // handling the click event
+    handleCanvasClicks(evt) {
+      if (this.selectedLayer) {
+        // disselect the previous layer
+        this.selectedLayer.selected = false;
+        this.selectedLayer = null;
+
+        console.log("layer deactivated");
+      }
+    },
     activated(elem) {
       console.log('%c ' + elem.id, 'background-color: red; color: white');
       //  check if there is a previously assigned layer

@@ -20,12 +20,12 @@ export const store = new Vuex.Store({
             name: null,
             id: null
         },
-        items: [
-            // Shape layer
-            {
+        items: [{
                 id: null,
                 x: 0,
                 y: 0,
+                width: 100,
+                height: 100,
                 title: 'Shape',
                 icon: 'landscape',
                 order: 0,
@@ -36,25 +36,23 @@ export const store = new Vuex.Store({
                 type: 'shape',
                 component: 'shape-layer',
                 attributes: {
-                    width: 100,
-                    height: 100,
-                    shape: "Circle",
-                    sizeOption: "Auto",
-                    opacity: "1",
-                    rotation: "0",
-                    color: "",
-                    gradientPosition: "",
-                    gradientColor: "",
-                    gradientRotation: "",
-                    borderSize: "0",
-                    borderStyle: "solid",
-                    borderColor: "black",
-                    shadowSize: "10px",
-                    shadowColor: "red",
-                    backgroundImageUri: "",
-                    backgroundImageRepeat: "none",
-                    backgroundImagePosition: "Left",
-                    backgroundImageAttachment: "none"
+                    shape: 'Circle',
+                    sizeOption: 'Auto',
+                    opacity: '1',
+                    rotation: '0',
+                    color: '',
+                    gradientPosition: '',
+                    gradientColor: '',
+                    gradientRotation: '',
+                    borderSize: '0',
+                    borderStyle: 'none',
+                    borderColor: '',
+                    shadowSize: '',
+                    shadowColor: '',
+                    backgroundImageUri: '',
+                    backgroundImageRepeat: 'none',
+                    backgroundImagePosition: 'Left',
+                    backgroundImageAttachment: 'none'
                 },
             },
             // image
@@ -62,6 +60,8 @@ export const store = new Vuex.Store({
                 id: null,
                 x: 0,
                 y: 0,
+                width: 100,
+                height: 100,
                 title: 'Image',
                 icon: 'image',
                 order: 0,
@@ -72,24 +72,24 @@ export const store = new Vuex.Store({
                 component: 'image-layer',
                 open: false,
                 attributes: {
-                    width: "100",
-                    height: "100",
                     src: 'http://via.placeholder.com/140x100',
-                    sizeOption: "Auto",
-                    opacity: "1",
-                    rotation: "0",
-                    borderSize: "0",
-                    borderStyle: "solid",
-                    borderColor: "",
-                    shadowSize: "0",
-                    shadowColor: "",
-                    objectFit: "Fit"
-                },
+                    sizeOption: 'Auto',
+                    opacity: '1',
+                    rotation: '0',
+                    borderSize: '0',
+                    borderStyle: 'solid',
+                    borderColor: '',
+                    shadowSize: '0',
+                    shadowColor: '',
+                    objectFit: 'none'
+                }
             },
             {
                 id: null,
                 x: 0,
                 y: 0,
+                width: 100,
+                height: 100,
                 title: 'Text',
                 icon: 'text_fields',
                 width: 200,
@@ -102,7 +102,7 @@ export const store = new Vuex.Store({
                 target_element: null,
                 component: 'text-layer',
                 open: false,
-                content: "Text Layer",
+                content: 'Text Layer',
                 attributes: {
                     rotation: 0,
                     fontFamily: "Lato",
@@ -132,10 +132,10 @@ export const store = new Vuex.Store({
                 selected: false,
                 type: 'video',
                 attributes: {
-                    width: "100",
-                    height: "100",
-                    src: ""
-                },
+                    width: '100',
+                    height: '100',
+                    src: ''
+                }
             },
             {
                 id: null,
@@ -156,6 +156,7 @@ export const store = new Vuex.Store({
             let layers = state.layers
             payload.x = 100
             payload.y = 100
+            payload.open = true
                 // payload.width = 200
                 // payload.height = 150
             layers.push(payload)

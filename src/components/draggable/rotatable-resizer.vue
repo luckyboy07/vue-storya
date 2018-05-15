@@ -3,7 +3,7 @@
     :class="[{
       'rr-resizer--active': !disabled && active,
       'rr-drag-border': dragMode === 'border'
-    },'octant' + state.octant]"
+    },'octant' + state.octant, {'dl-inactive': !active}]"
     :style="{
       transform: 'rotateZ(' + state.rotation + 'deg)',
       left: state.left + 'px',
@@ -52,6 +52,9 @@
   position: absolute;
   z-index: -1;
   top: 0;
+}
+.dl-inactive {
+  border: 1px solid #808080;
 }
 </style>
 

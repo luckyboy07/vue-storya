@@ -1,9 +1,9 @@
 <template>
-  <div class="yawaa">
-        <mu-list-item title="Shape Layer" :open="openpanel">
+  <div class="yawaa"  :class="openpanel ? 'activeTool': ''">
+        <mu-list-item title="Shape Layer" :open="openpanel"  @click.stop="open">
              <mu-icon slot="left" value="landscape" style="color: #fff"/>
              <mu-icon-button icon="remove_red_eye" slot="right" />
-             <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.native="open"/>
+             <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.stop="open"/>
         
             <mu-list-item  slot="nested"  class="paddingZero">
                 <div class="gridlist-demo-container">
@@ -182,6 +182,8 @@ export default {
          expandIcon: 'expand_more',
          value: '',
          value1: '',
+         value2: '',
+         value3: '',
          options:['Manual','Automatic','test','TEst 2']
       }
   },

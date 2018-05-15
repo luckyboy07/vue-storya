@@ -39,7 +39,7 @@ $handle-background: #fff;
     position: absolute;
     border-left: $handle-border-active;
     width: 0;
-    top: $handle-size - 2;
+    top: $handle-size - 1;
     transform: translate(-50%, 0);
     height: $rotatable-handle-height - $handle-size / 2;
 }

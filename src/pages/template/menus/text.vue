@@ -1,6 +1,6 @@
 <template>
-  <div class="yawaa">
-   <mu-list-item title="Text Layer" :open="panelopen" @click.stop="open">
+  <div class="yawaa"  :class="openpanel ? 'activeTool': ''">
+   <mu-list-item title="Text Layer" :open="openpanel" @click.stop="open">
         <mu-icon slot="left" value="text_fields" style="color: #fff"/>
         <mu-icon-button icon="remove_red_eye" slot="right" />
         <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.stop="open"/>
