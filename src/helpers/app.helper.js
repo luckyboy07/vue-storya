@@ -43,11 +43,7 @@ export default {
         let layerDetail = JSON.parse(JSON.stringify(_layerDetail))
             // assign id for this layer and to its attributes to prevent data errors
         layerDetail.id = this.generateGUID()
-            // layerDetail.attributes =  Vue.util.extend([], _layerDetail.attributes);
-        for (let i = 0; i < layerDetail.attributes.length; i++) {
-            layerDetail.attributes[i].id = this.generateGUID()
-        }
-        // make the newly added layer as the first item when sorting
+            // make the newly added layer as the first item when sorting
         layerDetail.order = 1
 
         return layerDetail

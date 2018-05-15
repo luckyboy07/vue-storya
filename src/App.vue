@@ -21,6 +21,7 @@
 */
 
 import undoRedo from './helpers/undo-redo'
+import fontHelper from './helpers/fonts.helper.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
 export default {
   data () {
@@ -34,6 +35,9 @@ export default {
     }
   },
   name: 'App',
+  beforeCreate() {
+     fontHelper.appendFont();
+  },
   created() {
     if (this.eventWritten) {
       return;

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@hscmap/vue-window": "^1.8.2",
+    "axios": "^0.18.0",
     "less": "^2.7.2",
     "less-loader": "^2.2.3",
     "linq": "^3.1.0",

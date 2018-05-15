@@ -47,10 +47,10 @@ export const store = new Vuex.Store({
                     gradientColor: "",
                     gradientRotation: "",
                     borderSize: "0",
-                    borderStyle: "",
-                    borderColor: "",
-                    shadowSize: "",
-                    shadowColor: "",
+                    borderStyle: "solid",
+                    borderColor: "black",
+                    shadowSize: "10px",
+                    shadowColor: "red",
                     backgroundImageUri: "",
                     backgroundImageRepeat: "none",
                     backgroundImagePosition: "Left",
@@ -112,10 +112,10 @@ export const store = new Vuex.Store({
                     textDecoration: "none", // underline or not
                     textAlign: "left",
                     listStyle: "ol",
-                    lineHeight: "1em",
+                    lineHeight: "20px",
                     color: "#000",
                     backgroundColor: "#fff",
-                    borderSize: "",
+                    borderSize: "0px",
                     borderStyle: "",
                     borderColor: "#000",
                     shadowSize: "",
@@ -152,9 +152,7 @@ export const store = new Vuex.Store({
     },
     mutations: {
         addLayer: (state, payload) => {
-            if (!payload.id) {
-                payload.id = appHelper.generateGUID();
-            }
+            payload = appHelper.createLayer(payload);
             let layers = state.layers
             payload.x = 100
             payload.y = 100

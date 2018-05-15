@@ -26,9 +26,7 @@ export default {
         lineHeight: layerData.lineHeight,
         color: layerData.color,
         backgroundColor: layerData.backgroundColor,
-        borderWidth: layerData.borderSize,
-        borderStyle: layerData.borderStyle,
-        borderColor: layerData.borderColor,
+        border: layerData.borderSize + 'px ' + layerData.borderStyle + ' ' + layerData.borderColor,
         textShadow: layerData.shadowColor + " " + layerData.shadowSize + " " + layerData.shadowSize 
       }
     },
