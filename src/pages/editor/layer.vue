@@ -20,13 +20,14 @@
     @resizeStarted="resizeStarted" @resizing="resizing" @resizeEnded="resizeEnded">
 
     <!-- shape layer -->
-    <shape id="shape"  v-if="elem.type ==='shape'" :layerId="elem.id" 
+    <!-- <shape id="shape"  v-if="elem.type ==='shape'" :layerId="elem.id" 
       :shape="[elem.attributes[0].value.split(' ')[0].toLowerCase(),elem.attributes]">
-    </shape>
+    </shape> -->
     <!-- shape layer -->
 
     <!-- image layer -->
-    <img v-if="elem.type ==='image'"  id="image"  src="http://via.placeholder.com/140x100" style="width: 100%; height: 100%; pointer-events: none;"/>
+    <image-layer v-if="elem.type ==='image'" id="image" :layerData="elem"></image-layer>
+    <!-- <img v-if="elem.type ==='image'"  id="image"  :layerData="elem" src="http://via.placeholder.com/140x100" style="width: 100%; height: 100%; pointer-events: none;"/> -->
     <!-- image layer -->
     
     <!-- text layer -->
@@ -60,6 +61,7 @@ export default {
     this.$el.parentElement.removeListener('mousedown', this.handleCanvasClicks)
   },
   mounted() {
+    console.log("ASDASDASD")
     // handling layer desselection
     this.$el.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
   },

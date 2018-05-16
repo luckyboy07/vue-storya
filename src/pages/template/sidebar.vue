@@ -169,6 +169,7 @@ export default {
      event.stopPropagation()
     },
     isOpen (val){
+      this.$emit('openWindow',val)
       //this.setLayerValue(val)
     } 
   }

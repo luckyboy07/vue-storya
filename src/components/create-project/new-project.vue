@@ -1,9 +1,9 @@
 <template>
   <div>
     <app-header :hideSecondHeader="true"></app-header>
-    <div class="project-container">
+    <div class="project-container row-scroll">
       <mu-row gutter>
-      <mu-col width="100" class="left-content">
+      <mu-col width="70" class="left-content">
         <mu-tabs :value="activeTab" @change="tabChanged">
             <mu-tab :titleClass="tabStyle" value="1" title="Templates"/>
             <mu-tab value="2" title="Custom"/>
@@ -42,7 +42,7 @@
               :items="$_setAppraiteAvatar($_getItemsFromType('video'))"></tab-detail>
           </div>
       </mu-col>
-      <mu-col width="50" tablet="60" desktop="35" class="right-content">
+      <mu-col width="30" tablet="60" desktop="35" class="right-content">
         <div style="display: table">
           <div class="item inp">
             Project Name
@@ -431,6 +431,8 @@ export default {
     background: #111111;
     height: 69.7vh;
     display: table;
+    overflow-y: scroll !important;
+    overflow-x: scroll !important;
   }
   .tab-item {
     margin-top: 25px;
@@ -497,6 +499,9 @@ export default {
     text-align: left;
     background-color: #333333;
     font-family: Lato;
+  }
+  .row-scroll{ 
+   overflow-y: scroll;
   }
 </style>
 
