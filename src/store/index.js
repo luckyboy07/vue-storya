@@ -17,8 +17,10 @@ export const store = new Vuex.Store({
             height: "423px",
             zoom: "100%"
         },
-        lastItemAdd: null, // the timestamp to when an item occured
+        // the timestamp to when an item occured
+        lastItemAdd: null,
         lastUpdateTime: null,
+        // the selected layer id set by operations such as undo and redo or sidebar item selection
         selectedLayerId: null,
         removableId: null,
         layers: [],
@@ -159,7 +161,12 @@ export const store = new Vuex.Store({
     },
     mutations: {
         addLayer: (state, payload) => {
-            payload = appHelper.createLayer(payload);
+            // check if the item is from undo or redo
+            // if not, assign a new id for this item
+            // indicating that this item is created
+            if (!payload.fromUndoRedo) {
+                payload = appHelper.createLayer(payload);
+            }
             let layers = state.layers
                 //setting the last active layer to in-active
             for (var i = 0; i < layers.length; i++) {
@@ -182,12 +189,13 @@ export const store = new Vuex.Store({
                 Vue.set(state, 'lastItemAdd', appHelper.generateTimestamp())
             }
         },
-        // setLayerId: (state, _layerId) => {
-        //     if (!_layerId) {
-        //         return
-        //     }
-        //     Vue.set(state, 'selectedLayerId', _layerId)
-        // },
+        // to select the layer from other modules
+        // watch this value as it changes
+        setSelectedLayerId: (state, _newSelectedLayerId) => {
+            state.selectedLayerId = { ts: appHelper.generateTimestamp(), id: _newSelectedLayerId };
+        },
+        // updates the layer's data
+        // by setting its value to the payload ('item')
         setLayerValue: (state, item) => {
             let layers = state.layers;
             for (var i = 0; i < layers.length; i++) {
@@ -205,9 +213,9 @@ export const store = new Vuex.Store({
             }
             Vue.set(state, 'layers', layers);
         },
+        // updates the layer list
         updateLayers: (state, newLayers) => {
-            state.layers = newLayers
-            console.log('updateLayers', state.layers)
+            Vue.set(state, 'layers', newLayers)
         },
         removeGlobalLayer: (state, _layerId) => {
             Vue.set(state, 'removableId', _layerId)
@@ -227,28 +235,27 @@ export const store = new Vuex.Store({
         getLayers: state => {
             return state.layers
         },
-        getLayer: (state, id) => {
-            return
-        },
         getRemoveId: state => {
             return state.removableId
         },
-        getSelectedId: state => {
+        // returns the current selected layer id
+        getSelectedLayerId: state => {
             return state.selectedLayerId
         },
-        getLastEditTime: state => {
-            return {
-                'time': state.lastUpdateTime,
-                'layer': $.from(state.layers).where(l => l.id === state.selectedLayerId)
-                    .firstOrDefault()
-            }
-        },
+        // getLastEditTime: state => {
+        //     return {
+        //         'time': state.lastUpdateTime,
+        //         'layer': $.from(state.layers).where(l => l.id === state.selectedLayerId)
+        //             .firstOrDefault()
+        //     }
+        // },
+        // returns the timestamp to when the last item is added
         getLastLayerAddTime: state => {
             return state.lastItemAdd
         },
         // canvas related data
+        // this is the value of the editor's toolbar (zoom, height, width, etc.)
         getCanvasData: state => {
-            console.log(state.canvasData);
             return state.canvasData;
         },
     },

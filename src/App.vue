@@ -55,7 +55,7 @@ export default {
     //this.idleTimer = setInterval(this.handleIdleTimerElapsed, this.idleTimeout)
   },
   methods :{
-    ...mapMutations(['addLayer', 'setLayerValue', 'updateLayers']),
+    ...mapMutations(['addLayer', 'setLayerValue', 'updateLayers', 'setSelectedLayerId']),
     keydownEventHandler(evt) {
       // resetting idle time in key activities
       if (this.idleTime !== 0) {
@@ -109,6 +109,10 @@ export default {
     },
     $_handleUndo(item, action) {
         // console.log('_handleUndoRedo', item, action);
+      // set the selected layer to the item from
+      // undo/redo module
+      this.setSelectedLayerId(item.id);
+
       if (action === 'create') {
         // if it was created, remove it
         this.updateLayers(this.$_removeFromArray(this.layers, item.id));
@@ -118,6 +122,10 @@ export default {
     },
     $_handleRedo(item, action) {
       // console.log('_handleRedo', item, action);
+      // set the selected layer to the item from
+      // undo/redo module
+      this.setSelectedLayerId(item.id);
+
       // for sure 
       // if its redo, the first actin should be undo
       // you can only REDO if the last operation was UNDO
@@ -133,6 +141,7 @@ export default {
       }
     },
     $_removeFromArray(arr, id) {
+      // console.log('_removeFromArray', arr, id)
       for (var i = 0; i < arr.length; i++) {
         if (arr[i].id === id) {
           arr.splice(i, 1);

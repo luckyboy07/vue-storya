@@ -64,16 +64,18 @@ export default {
     this.$el.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
   },
   methods: {
-    ...mapMutations(['setLayerValue']),
+    ...mapMutations(['setLayerValue', 'setSelectedLayerId']),
     // handling the click event
     handleCanvasClicks(evt) {
       if (this.selectedLayer) {
-        console.log(this.selectedLayer.type);
         // deselect the previous layer
         this.selectedLayer.selected = false;
         this.selectedLayer = null;
-
-        console.log("layer deactivated");
+      } else {
+        // reset all layers
+        for (var i = 0; i < this.layers.length; i++) {
+          this.layers[i].selected = false;
+        }
       }
     },
     activated(elem) {
@@ -81,12 +83,18 @@ export default {
       //  check if there is a previously assigned layer
       // and if the new layer is not equal to the current selected layer
       if (this.selectedLayer && this.selectedLayer.id !== elem.id) {
-        // disselect the previous layer
+        // deselect the previous layer
         this.selectedLayer.selected = false;
+        this.setSelectedLayerId(null);
         this.selectedLayer = null;
       }
       this.selectedLayer = elem;
       this.selectedLayer.selected = true;
+
+      // tell other modules that there is a new layer selected
+      if (this.getSelectedLayerId !== this.selectedLayer.id) {
+        this.setSelectedLayerId(this.selectedLayer.id)
+      }
     },
     rotateStarted() {
       // starting point 
@@ -122,11 +130,38 @@ export default {
     // record event to undo/redo module
     $_recordEvent() {
       undoRedo.add(appHelper.cloneLayer(this.selectedLayer), 'scale');
-    }
+    },
+    $_updateSelectedLayer(newSelectedLayerId) {
+      // TODO: change the value of selectedLayer 
+      // related to the specified id
+      var selectLayer = (id) => {
+        for (var i = 0; i < this.layers.length; i++) {
+          if (id === this.layers[i].id) {
+            this.selectedLayer = this.layers[i];
+            this.selectedLayer.selected = true;
+          }
+          else {
+            this.layers[i].selected = false;
+          }
+        }
+      };
+      // check if this.selectedLayer is null or 
+      // the newSelectedLayerId and selectedLayer are the same
+      // if so, just ignore it
+      if (!this.selectedLayer || (this.selectedLayer && this.selectedLayer.id !== newSelectedLayerId)) {
+        selectLayer(newSelectedLayerId);
+      }
+      // etc.
+    },
   },
   computed: {
-    ...mapGetters(["getItems"])
-  }
+    ...mapGetters(["getItems", "getSelectedLayerId"])
+  },
+  watch: {
+    getSelectedLayerId: function(val) {
+      this.$_updateSelectedLayer(val ? val.id : '');
+    }
+  },
 };
 </script>
 
