@@ -54,8 +54,15 @@
   top: 0;
 }
 .dl-inactive {
-  border: 1px solid #808080;
+  // border: 0px dashed #808080;
+  border: none;
 }
+// .rr-resizer:hover {
+//    border: 1px dashed #808080;
+// }
+// .rr-resizer:after {
+//    border: 0px dashed #808080;
+// }
 </style>
 
 <script>

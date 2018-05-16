@@ -19,9 +19,8 @@
     @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
     @resizeStarted="resizeStarted" @resizing="resizing" @resizeEnded="resizeEnded">
 
-    <!-- shape layer -->
-    <shape id="shape"  v-if="elem.type ==='shape'" :layerId="elem.id" 
-      :shape="[elem.attributes[0].value.split(' ')[0].toLowerCase(),elem.attributes]">
+    <!-- shape layer :shape="[elem.attributes[0].value.split(' ')[0].toLowerCase(),elem.attributes]" -->
+    <shape id="shape"  v-if="elem.type ==='shape'" :data="elem">
     </shape>
     <!-- shape layer -->
 
@@ -40,7 +39,7 @@
 import appHelper from '../../helpers/app.helper.js'
 import undoRedo from '../../helpers/undo-redo.js'
 import textLayer from '../../components/editor/text-layer'
-import shape from "./shapes/shape.vue";
+import shape from "../../components/editor/shape.vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import image from "../../components/editor/image";
 export default {

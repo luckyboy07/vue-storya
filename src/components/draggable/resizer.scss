@@ -1,7 +1,7 @@
 $rotatable-handle-height: 30px;
 $handle-size: 10px;
-$handle-border-active: 1px solid #808080;
-$handle-border: 1px solid transparent;
+$handle-border-active: 1px dashed #808080;
+$handle-border: 2px solid transparent;
 $handle-background: #fff;
 .rr-resizer {
     position: absolute;
@@ -23,7 +23,7 @@ $handle-background: #fff;
     text-align: center;
     left: 50%;
     top: -$rotatable-handle-height;
-    border: $handle-border-active;
+    border: 1px solid #808080;
     box-sizing: border-box;
     width: $handle-size;
     height: $handle-size;
@@ -48,7 +48,7 @@ $handle-background: #fff;
     display: none;
     box-sizing: border-box;
     position: absolute;
-    border: $handle-border-active;
+    border: 1px solid #808080;
     width: $handle-size;
     height: $handle-size;
     background: $handle-background;

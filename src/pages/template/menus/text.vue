@@ -186,7 +186,7 @@ export default {
   },
   created () {
     this.availableFonts = fontHelper.getFonts();
-  }
+  },
 }
 </script>
 <style scoped>
