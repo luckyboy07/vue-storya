@@ -8,20 +8,33 @@
           :xlink:href="data.attributes.backgroundImageUri"></image>
       </pattern>
     </defs>
-		<!-- <circle
-      v-if="data.attributes.shape === 'Circle'" :cx="data.width / 2" :cy="data.height / 2" :r="getRadius()" 
+		<circle v-if="data.attributes.shape === 'Circle'" 
+      :cx="(data.attributes.sizeOption === 'Manual' ? data.width : parentW) / 2" 
+      :cy="(data.attributes.sizeOption === 'Manual' ? data.height: parentH) / 2" 
+      :r="getRadius()" 
+
       :stroke-linecap="data.attributes.borderStyle" 
-      :fill="!data.attributes.backgroundImageUri ? data.attributes.color : fill" :stroke="data.attributes.borderColor" 
-      :stroke-width="data.attributes.borderSize" :stroke-dasharray="data.attributes.borderStyle !== 'Solid' ? (data.attributes.borderSize / 6) + ' ' + (data.attributes.borderSize * 2) : 0">
-    </circle> -->
-		 <!-- style="width: 100%; height: 100%; margin: 1px;"  -->
-		<rect  v-if="data.attributes.shape === 'Circle'" width="100%" height="100%" 
       :fill="!data.attributes.backgroundImageUri ? data.attributes.color : fill" 
       :stroke="data.attributes.borderColor" 
-      :stroke-width="data.attributes.borderSize"/>
+      :stroke-width="data.attributes.borderSize" 
+      :stroke-dasharray="data.attributes.borderStyle !== 'Solid' ? (data.attributes.borderSize / 6) + ' ' + (data.attributes.borderSize * 2) : 0">
+    </circle>
+		 <!-- style="width: 100%; height: 100%; margin: 1px;"  -->
+		<rect  v-if="data.attributes.shape === 'Rectangle'" width="100%" height="100%" 
+      :stroke-linecap="data.attributes.borderStyle" 
+      :fill="!data.attributes.backgroundImageUri ? data.attributes.color : fill" 
+      :stroke="data.attributes.borderColor" 
+      :stroke-width="data.attributes.borderSize" 
+      :stroke-dasharray="data.attributes.borderStyle !== 'Solid' ? (data.attributes.borderSize / 6) + ' ' + (data.attributes.borderSize * 2) : 0"/>
 
-		<!-- <polygon style="width: 100%; height: 100%" points="130, 0, 274, 197, 0, 197" fill="red" stroke="black" stroke-width="3"  
-			v-if="shapeSelected === 'triangle'" /> -->
+		<polygon style="width: 100%; height: 100%" 
+      :points="getPolygonPoints()" 
+      :stroke-linecap="data.attributes.borderStyle" 
+      :fill="!data.attributes.backgroundImageUri ? data.attributes.color : fill" 
+      :stroke="data.attributes.borderColor" 
+      :stroke-width="data.attributes.borderSize" 
+      :stroke-dasharray="data.attributes.borderStyle !== 'Solid' ? (data.attributes.borderSize / 6) + ' ' + (data.attributes.borderSize * 2) : 0"
+      v-if="data.attributes.shape === 'Triangle'" />
 	 	<!-- <defs>
               <linearGradient id="Gradient2" :gradientTransform="'rotate('+ findobject('rotate').value + ' .5 .5)'">
 				  <stop v-for="(item, i) in findobject('gradient').value" :key="i" :offset="item +'%'" :stop-color="i === 0 ? 'red':'blue'"> </stop>
@@ -41,14 +54,32 @@ export default {
   data() {
     return {
       shapeSelected: "",
-      fill: "url(#fillImage)"
+      fill: "url(#fillImage)",
+      parentH: 0,
+      parentW: 0,
     };
   },
+  mounted() {
+    var _d = this.getCanvasData();
+    this.parentH = parseInt(_d.height.replace('px', ''));
+    this.parentW = parseInt(_d.width.replace('px', ''));
+  },
   methods: {
+    ...mapGetters(['getCanvasData']),
     getRadius() {
-			var r = ((this.data.width + this.data.height) / 2 - this.data.width / 2 - 1) - (this.data.attributes.borderSize / 2)
+      var h = this.data.attributes.sizeOption === 'Manual' ? this.data.height : this.parentH;
+      var w = this.data.attributes.sizeOption === 'Manual' ? this.data.width : this.parentW;
+			var r = ((w + h) / 2 - w / 2 - 1) - (this.data.attributes.borderSize / 2)
 			return r > 0 ? r : 0;
     },
+    getPolygonPoints() {
+      var h = this.data.attributes.sizeOption === 'Manual' ? this.data.height : this.parentH;
+      var w = this.data.attributes.sizeOption === 'Manual' ? this.data.width : this.parentW;
+       // rotation, margin-top, right side size, left height, right margin, right height
+      return ((w / 2) - 2) + ', ' + (this.data.attributes.borderSize - 2) + ',' + (w - this.data.attributes.borderSize) + ', ' +
+      (h - this.data.attributes.borderSize) + ', ' + this.data.attributes.borderSize + ', ' + (h - this.data.attributes.borderSize)
+            // targetElemShape.setAttribute('points', points)
+    }
   },
 };
 </script>

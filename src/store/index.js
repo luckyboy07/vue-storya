@@ -50,9 +50,44 @@ export const store = new Vuex.Store({
                     opacity: 1,
                     rotation: 0,
                     color: '#333',
-                    gradientPosition: '',
-                    gradientColor: '',
-                    gradientRotation: '',
+                    gradientBackgroundData: {
+                        value: [0, 100],
+                        width: '100%',
+                        height: 2,
+                        dotSize: 15,
+                        min: 0,
+                        max: 100,
+                        realTime: true,
+                        disabled: false,
+                        clickable: true,
+                        show: true,
+                        realTime: true,
+                        piecewise: false,
+                        formatter: '{value}%',
+                        useKeyboard: true,
+                        tooltip: "hover",
+                        tooltipDir: [
+                            "bottom",
+                            "top"
+                        ],
+                        style: {
+                            width: '100%',
+                            marginTop: '9px',
+                            marginBottom: '0px'
+                        },
+                        bgStyle: {
+                            backgroundColor: '#757575',
+                            boxShadow: 'inset 0.5px 0.5px 3px 1px rgba(0,0,0,.36)'
+                        },
+                        sliderStyle: [{
+                            backgroundColor: 'red'
+                        }, {
+                            backgroundColor: 'yellow'
+                        }],
+                        processStyle: {
+                            background: '-webkit-linear-gradient(left, red, yellow)'
+                        }
+                    },
                     borderSize: 0,
                     borderStyle: 'Square',
                     borderColor: 'red',
@@ -257,6 +292,10 @@ export const store = new Vuex.Store({
         // this is the value of the editor's toolbar (zoom, height, width, etc.)
         getCanvasData: state => {
             return state.canvasData;
+        },
+        // returns the default shape layer
+        getShapeLayer: state => {
+            return appHelper.cloneLayer(state.items[0])
         },
     },
     actions: {

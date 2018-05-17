@@ -4,15 +4,15 @@
     :id="elem.id"
     :active="elem.selected"
     :disabled="!elem.open" 
-    :rotatable="true"
-    :draggable="true"
+    :rotatable="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? true : false : true"
+    :draggable="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? true : false : true"
     :handles="'nw,ne,se,sw'"
-    :rotation="elem.attributes.rotation"
+    :rotation="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ?  elem.attributes.rotation : 0 :  elem.attributes.rotation"
     :fixedProportion="false"
-    :left="elem.x"
-    :top="elem.y"
-    :width="elem.width"
-    :height="elem.height"
+    :left="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.x : -7 : elem.x"
+    :top="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.y : -7 : elem.y"
+    :width="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.width : parentW : elem.width"
+    :height="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.height : parentH : elem.height"
     v-for="(elem, i) in layers" :key="i"
     @activated="activated(elem)"
     @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
@@ -53,17 +53,24 @@ export default {
   data() {
     return {
       selectedLayer: null,
+      parentW: 0,
+      parentH: 0,
     };
   },
   beforeDestroy() {
-    this.$el.parentElement.removeListener('mousedown', this.handleCanvasClicks)
+    this.$el.parentElement.removeEventListener('mousedown', this.handleCanvasClicks)
   },
   mounted() {
+    // get the parent's dimension
+    var _d = this.getCanvasData();
+    this.parentH = parseInt(_d.height.replace('px', '')) + 14;
+    this.parentW = parseInt(_d.width.replace('px', '')) + 14;
     // handling layer desselection
     this.$el.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
   },
   methods: {
     ...mapMutations(['setLayerValue', 'setSelectedLayerId']),
+    ...mapGetters(['getCanvasData']),
     // handling the click event
     handleCanvasClicks(evt) {
       if (this.selectedLayer) {
@@ -151,6 +158,9 @@ export default {
         selectLayer(newSelectedLayerId);
       }
       // etc.
+    },
+    $_isShape(layer) {
+      return layer.type === 'shape'
     },
   },
   computed: {

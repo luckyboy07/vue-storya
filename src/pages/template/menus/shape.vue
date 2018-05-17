@@ -5,7 +5,6 @@
              <mu-icon slot="left" value="landscape" style="color: #fff"/>
              <mu-icon-button icon="remove_red_eye" slot="right" />
              <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
-        
             <mu-list-item  slot="nested"  class="paddingZero">
                 <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size Option</mu-grid-list>
@@ -45,8 +44,8 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
                 <mu-grid-list class="right">
-                <mu-slider :min="-90" :max="270" v-model="data.attributes.rotation" class="mmslider" />
-                <input v-digitsonly v-model="data.attributes.rotation" spellcheck="false" class="input-size sliderInput">
+                <mu-slider :disabled="data.attributes.sizeOption === 'Auto'" :min="-90" :max="270" v-model="data.attributes.rotation" class="mmslider" />
+                <input disabled v-digitsonly v-model="data.attributes.rotation" spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -68,19 +67,22 @@
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Position</mu-grid-list>
                 <mu-grid-list class="right">
-                <input spellcheck="false" class="input-size colorPicka" style="pointer-events: none;
-                    background: transparent;">
-                <input spellcheck="false" class="input-size sliderInput">
+                  <vue-slider ref="gradientSlider" @drag-start="setGradientColors($event)" v-bind="data.attributes.gradientBackgroundData" ></vue-slider>
+                  <!-- <input spellcheck="false" class="input-size sliderInput"> -->
                 </mu-grid-list>
               </div>
             </mu-list-item>
-             <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" @click="showPicker('gradientPicker')">
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Colour</mu-grid-list>
                 <mu-grid-list class="right">
-                <input spellcheck="false" class="input-size colorPicka">
-                <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
+                <input disabled spellcheck="false" :value="selectedGradientColor" class="input-size colorPicka">
+                <input style="cursor: pointer" disabled spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:selectedGradientColor}">
                 </mu-grid-list>
+              </div>
+              <div ref="gradientPicker" v-show="selectedPicker === 'gradientPicker'" class="item-color-picker">
+                <color-picker v-model="colors" @input="colorSelected" 
+                  style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
               </div>
             </mu-list-item>
             <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
@@ -189,19 +191,26 @@
 </template>
 <script>
 import { Photoshop, Chrome } from "vue-color";
+import vueSlider from 'vue-slider-component';
 export default {
   name: "ShapeLayer",
   props: ["data", "openpanel"],
   components: {
-     "photoshop-picker": Photoshop,
+    "photoshop-picker": Photoshop,
     "color-picker": Chrome,
+    vueSlider,
   },
   beforeMount() {
     // for the color picker to hide
     document.addEventListener('mousedown', this.hidePicker);
   },
+  beforeDestroy() {
+    document.removeEventListener('mousedown', this.hidePicker);
+  },
   data() {
     return {
+      selectedGradientColor: 'red',
+      selectedHandle: '',
       colors: {
         hex: '#194d33',
         hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
@@ -218,12 +227,39 @@ export default {
     };
   },
   methods: {
+    setGradientColors(evt) {
+      // console.log('naaaaaaaaaaa', evt)
+      var p = evt.$el.children[0];
+      var c1 = p.children[0];
+      var c2 = p.children[1];
+      if (evt.currentSlider === 0) {
+        this.selectedGradientColor = c1.style.backgroundColor;
+      }  if (evt.currentSlider === 1) {
+        this.selectedGradientColor = c2.style.backgroundColor;
+      }
+       this.selectedHandle = evt.currentSlider.toString();
+      // etc...
+    },
     colorSelected(val) {
       if (this.selectedPicker === 'colorPicker') {
         this.data.attributes.color = val.hex;
       } else if (this.selectedPicker === 'borderColor') {
         this.data.attributes.borderColor =  val.hex;
-      }
+      } else if (this.selectedPicker === 'gradientPicker') {
+        this.selectedGradientColor = val.hex
+        var p = this.$refs.gradientSlider.$el.children[0];
+        if (this.selectedHandle === '0') {
+          p.children[0].style.backgroundColor = val.hex;
+          this.data.attributes.gradientBackgroundData.sliderStyle[0].backgroundColor = val.hex;
+        } else if (this.selectedHandle === '1'){
+          p.children[1].style.backgroundColor = val.hex;
+          this.data.attributes.gradientBackgroundData.sliderStyle[1].backgroundColor = val.hex;
+        }
+
+        this.data.attributes.gradientBackgroundData.processStyle.background = 
+          '-webkit-linear-gradient(left, ' +  p.children[0].style.backgroundColor + ', ' + p.children[1].style.backgroundColor + ')';
+        // etc.....
+      } 
     },
     showPicker(picker) {
       this.selectedPicker = picker;
@@ -236,12 +272,14 @@ export default {
         this.selectedPicker = '';
       } else if (this.selectedPicker === 'borderColor' && !this.$refs.borderColor.contains(evt.target)) {
         this.selectedPicker = '';
+      } else if (this.selectedPicker === 'gradientPicker' && !this.$refs.gradientPicker.contains(evt.target)) {
+        this.selectedPicker = '';
       }
     },
     open(event) {
       this.data.selected = !this.data.selected;
     }
-  }
+  },
 };
 </script>
 <style scoped>

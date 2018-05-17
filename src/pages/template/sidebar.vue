@@ -28,12 +28,12 @@
             <mu-menu menuClass="menu-add-layer" v-show="shapeSelected" class="pop-content">
               <div class="">
                 <!-- <mu-icon-button tooltip="top-center" tooltipPosition="top-center"  icon="stop"/> -->
-                <mu-icon-button icon="stop"/>
-                <mu-icon-button icon="crop_square"/>
-                <mu-icon-button icon="network_cell"/>
-                <mu-icon-button icon="signal_cellular_null"/>
-                <mu-icon-button icon="lens"/>
-                <mu-icon-button icon="panorama_fish_eye"/>
+                <mu-icon-button icon="stop" @click="AddShape('Rectangle Filled')"/>
+                <mu-icon-button icon="crop_square" @click="AddShape('Rectangle')"/>
+                <mu-icon-button icon="network_cell" @click="AddShape('Triangle Filled')"/>
+                <mu-icon-button icon="signal_cellular_null" @click="AddShape('Triangle')"/>
+                <mu-icon-button icon="lens" @click="AddShape('Circle Filled')"/>
+                <mu-icon-button icon="panorama_fish_eye" @click="AddShape('Circle')"/>
               </div>
             </mu-menu>
         </mu-icon-menu>
@@ -154,23 +154,37 @@ export default {
   },
   methods: {
     ...mapMutations(['setLayerValue']),
-    ...mapActions([
-      'addLayer'
-      ]),
+    ...mapActions(['addLayer']),
+    ...mapGetters(['getShapeLayer']),
     hoverBtn () {
       this.showhover = true
     },
     closeLayer () {
-      console.log('as')
+      // console.log('as')
       this.showhover = !this.showhover
     },
     toggle (event) {
       this.showhover = !this.showhover
-     event.stopPropagation()
+      event.stopPropagation()
     },
     isOpen (val){
       //this.setLayerValue(val)
-    } 
+    },
+    AddShape(shape) {
+      var _sl = this.getShapeLayer();
+      if (shape.indexOf('Filled') !== -1) {
+         _sl.attributes.color = '#333';
+      } else {
+        _sl.attributes.color = 'transparent';
+      }
+       _sl.attributes.borderSize = 5;
+      _sl.attributes.shape = shape.indexOf(' ') !== -1 ? shape.split(' ')[0].trim()
+        : shape.trim();
+      
+      // console.log('getShapeLayer', _sl)
+      this.addLayer(_sl);
+      this.showhover = this.shapeSelected = false;
+    },
   }
 }
 </script>
