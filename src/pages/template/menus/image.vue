@@ -172,11 +172,11 @@ export default {
     },
     openModalimage () {
         console.log('click',this.$modal)
+         this.$emit('selected',this.data)
+         this.$modal.show('image-modal',{data:this.data})
     },
     toggleLayer() {
       this.data.selected = this.data.visible = !this.data.visible;
-        this.$emit('selected',this.data)
-        this.$modal.show('image-modal',{data:this.data})
     },
     showPicker (event,name) {
        let inputelement = document.getElementById('bordercolour')
