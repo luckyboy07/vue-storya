@@ -89,6 +89,7 @@ export default {
       this.$watch(prop, function(val) {
         if (!this.dragging) {
           this.state[prop] = val;
+          this.setOctantValue(this.state.rotation)
         }
       });
     });
@@ -192,6 +193,26 @@ export default {
       this.$emit('resizeEnded', left, top, width, height);
     },
 
+    setOctantValue(deg) {
+      if(deg >= 31 && deg <= 68) {
+        this.state.octant = 1
+      }else if(deg >= 68 && deg <= 90){
+        this.state.octant = 2
+      }else if(deg >= 95 && deg <= 135) {
+        this.state.octant = 3
+      }else if(deg >= 160 && deg <= 182){
+        this.state.octant = 4
+      }else if(deg >= 215 && deg <= 240){
+        this.state.octant = 5
+      }else if(deg >= 241 && deg <= 270){
+        this.state.octant = 6
+      }else if(deg >= -89 && deg < 0){
+        this.state.octant = 7
+      }else if(deg >= 0 && deg <= 30) {
+        this.state.octant = 0
+      }
+    },
+
     // for vertical lines
     $_getDraggableGuideline() {
       for (var i = 0;i < this.$el.children.length; i++) {
@@ -250,24 +271,7 @@ export default {
             top: bounds.top + bounds.height / 2
           };
           var degree = (Math.atan2(event.clientY - center.top, event.clientX - center.left) * 180 / Math.PI + 90) % 360;
-          if(self.value.rotation >= 31 && self.value.rotation <= 68) {
-            self.state.octant = 1
-          }else if(self.value.rotation >= 68 && self.value.rotation <= 90){
-            self.state.octant = 2
-          }else if(self.value.rotation >= 95 && self.value.rotation <= 135) {
-            self.state.octant = 3
-          }else if(self.value.rotation >= 160 && self.value.rotation <= 182){
-            self.state.octant = 4
-          }else if(self.value.rotation >= 215 && self.value.rotation <= 240){
-            self.state.octant = 5
-          }else if(self.value.rotation >= 241 && self.value.rotation <= 270){
-            self.state.octant = 6
-          }else if(self.value.rotation >= -89 && self.value.rotation < 0){
-            self.state.octant = 7
-          }else if(self.value.rotation >= 0 && self.value.rotation <= 30) {
-            self.state.octant = 0
-          }
-
+          self.setOctantValue(self.value.rotation);
           // added grid lines (same as canva)
           if (degree - 1 >= -5 && degree + 1 <= 5) {
             degree = 0;
