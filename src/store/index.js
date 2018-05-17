@@ -162,7 +162,7 @@ export const store = new Vuex.Store({
                     borderSize: "0px",
                     borderStyle: "",
                     borderColor: "#000",
-                    shadowSize: "",
+                    shadowSize: 0,
                     shadowColor: ""
                 }
             },

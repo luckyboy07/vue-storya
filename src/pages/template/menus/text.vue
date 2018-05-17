@@ -5,15 +5,14 @@
         <mu-icon-button icon="remove_red_eye" slot="right" />
         <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
         <mu-list-item  slot="nested"  class="paddingZero" v-no-ripple>
-                <div class="gridlist-demo-container">
-                <mu-grid-list class="gridlist-demo left">Font</mu-grid-list>
-                <mu-grid-list class="right">
-                <multiselect ref="fontsSelection" v-model="data.attributes.fontFamily" :options="availableFonts" :searchable="false" 
-                  open-direction="bottom" :close-on-select="true" 
-                  :style="{fontFamily: data.attributes.fontFamily}">
-                </multiselect>
-                </mu-grid-list>
-                </div>
+          <div class="gridlist-demo-container">
+            <mu-grid-list class="gridlist-demo left">Font</mu-grid-list>
+            <mu-grid-list class="right">
+              <multiselect id="fontStyle" ref="fontsSelection" v-model="data.attributes.fontFamily" :options="availableFonts" :searchable="false" 
+                open-direction="bottom" :close-on-select="true" :style="{fontFamily: data.attributes.fontFamily}">
+              </multiselect>
+            </mu-grid-list>
+          </div>
         </mu-list-item>
         <mu-list-item slot="nested" class="paddingZero" v-no-ripple>
                 <div class="gridlist-demo-container">
@@ -58,8 +57,10 @@
                 <mu-grid-list class="gridlist-demo left">Line Height</mu-grid-list>
                 <mu-grid-list class="right">
                 <!-- <multiselect v-model="value" :options="options" :searchable="false" open-direction="bottom" :close-on-select="true" placeholder="Pick a value"></multiselect> -->
-                  <input spellcheck="false" class="default-inp inp-ctrl-digits" style="margin-top: 0" v-digitsonly
-                    v-append-unit="'px'" :value="data.attributes.lineHeight" @blur="handleLineHeight($event)" @keyup.enter="handleLineHeight($event)">
+                  <!-- <input spellcheck="false" class="default-inp inp-ctrl-digits" style="margin-top: 0" v-digitsonly
+                    v-append-unit="'px'" v-model="data.attributes.lineHeight" @blur="handleLineHeight($event)" @keyup.enter="handleLineHeight($event)"> -->
+                    <mu-slider :max="50" v-model="data.attributes.lineHeight" class="mmslider" />
+                    <input disabled v-model="data.attributes.lineHeight" spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
                 </div>
         </mu-list-item>
@@ -94,8 +95,8 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
                 <mu-grid-list class="right">
-                <mu-slider v-model="data.attributes.borderSize" class="mmslider" />
-                <input disabled v-model="data.attributes.borderSize" spellcheck="false" class="input-size sliderInput">
+                  <mu-slider v-model="data.attributes.borderSize" class="mmslider" />
+                  <input disabled v-model="data.attributes.borderSize" spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -166,15 +167,10 @@ export default {
     document.removeEventListener('mousedown', this.hidePicker);
   },
   mounted() {
-    // assigning fonts
-    for (var i = 0; i < this.$refs.fontsSelection.$el.children.length; i++) {
-      if (this.$refs.fontsSelection.$el.children[i].className === 'multiselect__content-wrapper') {
-       var ul = this.$refs.fontsSelection.$el.children[i].children[0];
-       for (var j = 0; j < ul.children.length; j++) {
-         ul.children[j].style.fontFamily = this.availableFonts[j];
-       }
-      }
-    }
+    this.$_setFonts()
+  },
+  updated() {
+    this.$_setFonts()
   },
   data () {
       return {
@@ -249,6 +245,22 @@ export default {
       } else if (this.selectedPicker === 'shadowColor' && !this.$refs.shadowColor.contains(evt.target)) {
         this.selectedPicker = '';
       } 
+    },
+    $_setFonts() {
+      // assigning fonts  
+      // if (!this.$el.querySelector('#fontStyle') || !this.$el.querySelector('#fontStyle').parentElement) {
+      //   return;
+      // }
+      var p = this.$el.querySelector('#fontStyle').parentElement.parentElement;
+      for (var i = 0; i < p.children.length; i++) {
+        if (p.children[i].className === 'multiselect__content-wrapper') {
+          var ul = p.children[i].children[0];
+          for (var j = 0; j < ul.children.length; j++) {
+            // console.log(ul.children[j])
+            ul.children[j].style.fontFamily = this.availableFonts[j];
+          }
+        }
+      }
     }
   },
   created () {

@@ -45,7 +45,6 @@ export default {
     },
     getStyle() {
       var layerData = this.layerData.attributes;
-      console.log('' + layerData.shadowSize + 'px' + ' ' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowColor + ',' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowColor);
       return {
         fontFamily: layerData.fontFamily,
         fontSize: layerData.fontSize.indexOf('px') !== -1 ? layerData.fontSize : layerData.fontSize + 'px',
