@@ -2,8 +2,7 @@
 <div>
     <rotatable-resizer 
     :id="elem.id"
-    :active="elem.selected"
-    :disabled="!elem.open" 
+    :disabled="!elem.selected" 
     :rotatable="true"
     :draggable="true"
     :handles="'nw,ne,se,sw'"
@@ -18,7 +17,7 @@
     @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
     @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
     @resizeStarted="resizeStarted" @resizing="resizing" @resizeEnded="resizeEnded">
-
+  
     <!-- shape layer -->
     <!-- <shape id="shape"  v-if="elem.type ==='shape'" :layerId="elem.id" 
       :shape="[elem.attributes[0].value.split(' ')[0].toLowerCase(),elem.attributes]">
@@ -26,7 +25,8 @@
     <!-- shape layer -->
 
     <!-- image layer -->
-    <image-layer v-if="elem.type ==='image'" id="image" :layerData="elem"></image-layer>
+     <!-- <img src="http://via.placeholder.com/140x100" style="width: 100%; height: 100%; pointer-events: none;" /> -->
+    <image-layer v-if="elem.type ==='image'" id="image"  :layerData="elem" :imgstyle="'width: 100%; height: 100%; pointer-events: none;'"></image-layer>
     <!-- <img v-if="elem.type ==='image'"  id="image"  :layerData="elem" src="http://via.placeholder.com/140x100" style="width: 100%; height: 100%; pointer-events: none;"/> -->
     <!-- image layer -->
     

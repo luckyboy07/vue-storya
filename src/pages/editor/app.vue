@@ -3,7 +3,7 @@
 <headers style="z-index: 999"></headers>
 <side-bar @openWindow="openWindow"></side-bar>
     <div class="editor-container" >
-    <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition"/>
+    <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
       <div class="editor-box" :style="{width: getCanvasData.width, height: getCanvasData.height}">
         <div class="canvas-wrap">
             <layer :layers="getLayers"></layer>
@@ -25,7 +25,8 @@ export default {
   data (){
     return {
       isWindowOpen: false,
-      initposition: '360 / -80'
+      initposition: '360 / -80',
+      targetElement: null
     }
   },
   components: {
@@ -40,8 +41,10 @@ export default {
   },
   methods: {
     openWindow (val) {
-        console.log('val:',val)
-        this.isWindowOpen = val
+        this.targetElement = val
+        console.log('openWindow:',val)
+        // this.$emit('target',val)
+        this.isWindowOpen = val[0]
     },
     closepicker(value) {
       console.log('value:',value)

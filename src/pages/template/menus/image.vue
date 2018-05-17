@@ -4,7 +4,7 @@
           <mu-icon slot="left" value="image" style="color: #fff"/>
           <mu-icon-button icon="remove_red_eye" slot="right" @click.stop="hideLayer"/>
           <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
-        <mu-list-item  slot="nested"  class="paddingZero minHytZero"   @click="$modal.show('image-modal')">
+        <mu-list-item  slot="nested"  class="paddingZero minHytZero"   @click="openModalimage">
              <mu-flexbox>
                   <mu-flexbox-item class="flex-container" > 
                       + Drag and Drop
@@ -37,7 +37,7 @@
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Opacity</mu-grid-list>
             <mu-grid-list class="right">
-            <mu-slider v-model="data.attributes.opacity" class="mmslider"/>
+            <mu-slider v-model="data.attributes.opacity" class="mmslider" :max="1"/>
             <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.opacity">
             </mu-grid-list>
           </div>
@@ -73,8 +73,8 @@
           <div class="gridlist-demo-container" style="margin-top: -6px;">
             <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
             <mu-grid-list class="right">
-            <input spellcheck="false" class="input-size colorPicka" v-model="data.attributes.borderColor">
-            <input spellcheck="false" class="input-size sliderInput" style="background-color:white" @click="showPicker($event)">
+            <input spellcheck="false" class="input-size colorPicka" id="bordercolour" v-model="data.attributes.borderColor">
+            <input spellcheck="false" class="input-size sliderInput" style="background-color:white" @click="showPicker($event,'border')">
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -93,7 +93,7 @@
             <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
             <mu-grid-list class="right">
             <input spellcheck="false" class="input-size colorPicka" v-model="data.attributes.shadowColor">
-            <input spellcheck="false" class="input-size sliderInput" style="background-color:white" >
+            <input spellcheck="false" class="input-size sliderInput" style="background-color:white" @click="showPicker($event,'shadow')">
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -174,11 +174,12 @@ export default {
         console.log('HIDE')
     },
     openModalimage () {
-        console.log('click',this.$modal)
+        this.$emit('selected',this.data)
+        this.$modal.show('image-modal',{data:this.data})
     },
-    showPicker (event) {
-       console.log('event:',event)
-       this.$emit('isOpen',true)
+    showPicker (event,name) {
+       let inputelement = document.getElementById('bordercolour')
+       this.$emit('isOpen',[true,event.target,this.data,name])
       // this.colorType = item.name
       // this.currentSelectedIndex = layerIndex
       // this.setSelectedLayer(this.layers[layerIndex], layerIndex)
@@ -186,7 +187,7 @@ export default {
       // this.pickerisShow = !this.pickerisShow
       //   // this.colorPickerOwner = item.value
       // this.colorPickerOwner = this.pickerisShow ? event.srcElement : null
-    }
+    },
   },
   created () {
       // this.panelopen = this.openpanel

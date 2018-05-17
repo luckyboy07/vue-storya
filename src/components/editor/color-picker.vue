@@ -11,7 +11,7 @@
 import {Photoshop, Chrome} from 'vue-color'
 export default {
   name:'Colorpicker',
-  props:['pickerisShow','initialPosition'],
+  props:['pickerisShow','initialPosition','target'],
   data () {
       return {
         colors: {
@@ -23,6 +23,8 @@ export default {
       }
       }
   },
+  created() {
+  },
   components:{
     'photoshop-picker': Photoshop,
     'color-picker': Chrome
@@ -30,6 +32,13 @@ export default {
   methods: {
     updateValue (value) {
         console.log('value:',value)
+        console.log('this.target:',this.target)
+        this.target[1].style.backgroundColor = value.hex
+        if(this.target[3] === 'border'){
+        this.target[2].attributes.borderColor = value.hex
+        }else if (this.target[3] === 'shadow') {
+        this.target[2].attributes.shadowColor = value.hex
+        }
     //   this.pickColor = value.hex
         // let selected = this.currentSelectedLayer.attributes
       if (this.colorPickerOwner) {

@@ -1,5 +1,5 @@
 <template>
-<modal name="image-modal"  transition="pop-out" :width="900" :height="600" >
+<modal name="image-modal"  transition="pop-out" :width="900" :height="600" @before-open="beforeOpen">
   <div class="box">
    <mu-row gutter>
        <mu-col width="70" desktop="70" style="border-right: 1px rgba(255, 255, 255, 0.21) solid;">
@@ -43,7 +43,7 @@
           </div>
          <div class="buttons">
             <mu-raised-button label="Cancel" fullWidth class="btn-buttons"/>
-            <mu-raised-button label="Ok" fullWidth class="btn-buttons"/>
+            <mu-raised-button label="Ok" fullWidth class="btn-buttons" @click="confirm"/>
          </div>
          </mu-grid-list>
          
@@ -80,11 +80,12 @@
 Vue.component('file-upload', FileUpload)
 export default {
     name: 'imageModal',
-    props: [ 'modal', 'dialog','layer'],
+    props: [ 'modal', 'dialog'],
     data () {
       return {
        files: [],
        selectedImage: {},
+      selectedLayer: {},
        images:[{
          id: 1,
          image: 'https://marketplace.canva.com/MACPvCG4Ti4/1/0/thumbnail_large/canva-gray-and-blue-photo-fitness-facebook-post-MACPvCG4Ti4.jpg'
@@ -154,12 +155,19 @@ export default {
         })
       },
       confirm () {
-        this.layer.image = this.selectedImage
-        this.addImage(this.layer)
+        console.log('this.layer:',this.layer)
+        console.log('this.selectedImage:',this.selectedImage)
+        this.selectedLayer.image = this.selectedImage
+        this.$modal.hide('image-modal')
+        // this.addImage(this.layer)
         // this.dialog = false
-        this.$emit('updated-dialog',false)
+        // this.$emit('updated-dialog',false)
         // console.log('files:',this.selectedImage)
         // this.selectedImage = this.selectedImage
+      },
+    beforeOpen(event) {
+      console.log('event:',event)
+      this.selectedLayer = event.params.data
       }
   },
   // upated () {
