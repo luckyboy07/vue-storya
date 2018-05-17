@@ -9,8 +9,8 @@
         </mu-list-item>
       </mu-list>
       <mu-appbar title="Add New Layer">
-        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_down" slot="left"/>
-        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_up" slot="left"/>
+        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_down" slot="left" @click="moveDown"/>
+        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_up" slot="left" @click="moveUp"/>
         <mu-icon-button class="custom-icon-button" icon="delete" slot="left" @click="removeLayer()"/>
         <mu-icon-menu class="custom-icon-button" icon="add"  slot="right" :open="showhover" @open="hoverBtn" @close="closeLayer" desktop :anchorOrigin="leftBot" :targetOrigin="leftBot">
             <span class="pop-title" >Add New Layer</span>
@@ -141,6 +141,7 @@ export default {
   },
   mounted () {
     this.trigger = this.$refs.iconbtn
+    
     // console.log('trigger:', this.$refs)
     // let targetelem = document.getElementsByClassName('mu-item-wrapper')
     // console.log('targetelem',targetelem[0])
@@ -170,6 +171,8 @@ export default {
       event.stopPropagation()
     },
     isOpen (val){
+      console.log('val:',val)
+      this.$emit('openWindow',val)
       //this.setLayerValue(val)
     },
     addShape(shape) {
@@ -194,6 +197,26 @@ export default {
         this.removeSelectedLayer(selectedLayer.id);
       }
     },
+    moveDown () {
+        console.log('this.getLayers:',this.getLayers)
+        let currentLayer = this.getLayers.find((e)=> e.selected)
+        if (currentLayer.order < this.getLayers.length) {
+        let nextItem = this.getLayers.find((e)=> e.order === currentLayer.order + 1)
+        nextItem.order = currentLayer.order
+        currentLayer.order = currentLayer.order + 1
+        this.getLayers = this.getLayers.sort((a, b) => a.order > b.order)
+      }
+    },
+    moveUp () {
+        console.log('getLayers:',this.getLayers)
+        let currentLayer = this.getLayers.find((e)=> e.selected)
+        if(currentLayer.order - 1> -1){
+        let prevItem = this.getLayers.find((e)=> e.order === currentLayer.order - 1)
+        prevItem.order = currentLayer.order
+        currentLayer.order = currentLayer.order - 1
+        this.getLayers = this.getLayers.sort((a, b) => a.order > b.order)
+        }
+    } 
   }
 }
 </script>

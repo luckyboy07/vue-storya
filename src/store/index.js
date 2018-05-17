@@ -115,17 +115,18 @@ export const store = new Vuex.Store({
                 type: 'image',
                 component: 'image-layer',
                 open: false,
+                image: {},
                 attributes: {
                     src: 'http://via.placeholder.com/140x100',
                     sizeOption: 'Auto',
-                    opacity: '1',
+                    opacity: 1,
                     rotation: 0,
-                    borderSize: '0',
+                    borderWidth: '0',
                     borderStyle: 'solid',
                     borderColor: '',
-                    shadowSize: '0',
+                    shadowSize: '1',
                     shadowColor: '',
-                    objectFit: 'none'
+                    objectFit: 'cover'
                 }
             },
             {
@@ -205,15 +206,17 @@ export const store = new Vuex.Store({
             let layers = state.layers
                 //setting the last active layer to in-active
             for (var i = 0; i < layers.length; i++) {
-                layers[i].selected = false;
+                layers[i].selected = false
+                layers[i].order += 1
             }
             payload.x = 100
             payload.y = 100
             payload.open = true
-            payload.selected = true;
-            // payload.width = 200
-            // payload.height = 150
+            payload.selected = true
+                // payload.width = 200
+                // payload.height = 150
             layers.push(payload)
+            layers.sort((a, b) => a.order > b.order)
             Vue.set(state, 'layers', layers)
 
             // this is for the undo manager to
@@ -239,21 +242,21 @@ export const store = new Vuex.Store({
         // updates the layer's data
         // by setting its value to the payload ('item')
         setLayerValue: (state, item) => {
-            let layers = state.layers;
+            let layers = state.layers
             for (var i = 0; i < layers.length; i++) {
                 if (layers[i].id === item.id) {
-                    layers[i].x = item.x;
-                    layers[i].y = item.y;
-                    layers[i].width = item.width;
-                    layers[i].height = item.height;
-                    // attributes
+                    layers[i].x = item.x
+                    layers[i].y = item.y
+                    layers[i].width = item.width
+                    layers[i].height = item.height
+                        // attributes
                     for (var key in layers[i].attributes) {
-                        layers[i].attributes[key] = item.attributes[key];
+                        layers[i].attributes[key] = item.attributes[key]
                     }
                     break;
                 }
             }
-            Vue.set(state, 'layers', layers);
+            Vue.set(state, 'layers', layers)
         },
         // updates the layer list
         updateLayers: (state, newLayers) => {

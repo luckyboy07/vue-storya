@@ -80,7 +80,7 @@ export default {
     getRadius() {
       var h = this.data.attributes.sizeOption === 'Manual' ? this.data.height : this.parentH;
       var w = this.data.attributes.sizeOption === 'Manual' ? this.data.width : this.parentW;
-			var r = ((w + h) / 2 - w / 2 - 1) - (this.data.attributes.borderSize / 2)
+			var r = ((w + h) / 2 - w / 2 - 4) - (this.data.attributes.borderSize / 2)
 			return r > 0 ? r : 0;
     },
     getPolygonPoints() {

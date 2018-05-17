@@ -4,7 +4,7 @@
           <mu-icon slot="left" value="image" style="color: #fff"/>
           <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
           <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
-        <mu-list-item  slot="nested"  class="paddingZero minHytZero"   @click="$modal.show('image-modal')">
+        <mu-list-item  slot="nested"  class="paddingZero minHytZero"   @click="openModalimage">
              <mu-flexbox>
                   <mu-flexbox-item class="flex-container" > 
                       + Drag and Drop
@@ -15,7 +15,7 @@
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Size Option</mu-grid-list>
             <mu-grid-list class="right">
-            <multiselect v-model="value" :open-direction="'bottom'" :options="options" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
+            <multiselect v-model="value" :open-direction="'bottom'" :show-labels="false" :options="options" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
             </mu-grid-list>
           </div>
         </mu-list-item> -->
@@ -37,7 +37,7 @@
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Opacity</mu-grid-list>
             <mu-grid-list class="right">
-            <mu-slider v-model="data.attributes.opacity" class="mmslider"/>
+            <mu-slider v-model="data.attributes.opacity" class="mmslider" :max="1"/>
             <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.opacity">
             </mu-grid-list>
           </div>
@@ -46,7 +46,7 @@
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
             <mu-grid-list class="right">
-            <mu-slider v-model="data.attributes.rotation" class="mmslider" />
+            <mu-slider v-model="data.attributes.rotation" class="mmslider" :max="360"/>
             <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.rotation">
             </mu-grid-list>
           </div>
@@ -56,8 +56,8 @@
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
             <mu-grid-list class="right">
-            <mu-slider v-model="data.attributes.borderSize" class="mmslider" />
-            <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.borderSize">
+            <mu-slider v-model="data.attributes.borderWidth" class="mmslider" />
+            <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.borderWidth">
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -65,7 +65,7 @@
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Style</mu-grid-list>
             <mu-grid-list class="right">
-            <multiselect v-model="data.attributes.borderStyle" :open-direction="'bottom'" :options="borderSizes" label="name" value="value" :searchable="false" :close-on-select="true"></multiselect>
+            <multiselect v-model="data.attributes.borderStyle" :open-direction="'bottom'" :show-labels="false" :options="borderSizes" :searchable="false" :close-on-select="true"></multiselect>
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -73,8 +73,8 @@
           <div class="gridlist-demo-container" style="margin-top: -6px;">
             <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
             <mu-grid-list class="right">
-            <input spellcheck="false" class="input-size colorPicka" v-model="data.attributes.borderColor">
-            <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
+            <input spellcheck="false" class="input-size colorPicka" id="bordercolour" v-model="data.attributes.borderColor">
+            <input spellcheck="false" class="input-size sliderInput" style="background-color:white" @click="showPicker($event,'border')">
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -93,7 +93,7 @@
             <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
             <mu-grid-list class="right">
             <input spellcheck="false" class="input-size colorPicka" v-model="data.attributes.shadowColor">
-            <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
+            <input spellcheck="false" class="input-size sliderInput" style="background-color:white" @click="showPicker($event,'shadow')">
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -101,7 +101,7 @@
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Object-Fit</mu-grid-list>
             <mu-grid-list class="right">
-            <multiselect v-model="data.attributes.objectFit" :options="objFit" label="name" value="value" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
+            <multiselect v-model="data.attributes.objectFit" :options="objFit" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -122,38 +122,23 @@ export default {
         value2: null,
         value3: null,
         options: ['Select option', 'options', 'selected', 'mulitple', 'label', 'searchable', 'clearOnSelect', 'hideSelected', 'maxHeight', 'allowEmpty', 'showLabels', 'onChange', 'touched'],
-        borderSizes: [{
-          name: 'None',
-          value: 'none'
-        },{
-          name:'Dashed',
-          value:'dashed'
-        },{
-          name: 'Solid',
-          value: 'solid'
-        },{
-          name: 'Dotted',
-          value: 'dotted'
-        }],
-        objFit:[{
-          name: 'None',
-          value: 'none'
-        },{
-          name: 'Fill',
-          value: 'fill'
-        },{
-          name: 'Contain',
-          value: 'contain'
-        },{
-          name: 'Cover',
-          value: 'cover'
-        }],
+        borderSizes: [
+          'None',
+          'Dashed',
+          'Solid',
+          'Dotted'
+        ],
+        objFit:[
+          'None',
+          'Fill',
+          'Contain',
+          'Cover',
+        ],
         dialog: '',
         detail: {}
       }
   },
   mounted (){
-    console.log('data:',this.data)
     //    setTimeout(() => {
     // let targetelem = document.getElementsByClassName('mu-popover')
     //     targetelem[0].style.left = '307px'
@@ -190,6 +175,19 @@ export default {
     },
     toggleLayer() {
       this.data.selected = this.data.visible = !this.data.visible;
+        this.$emit('selected',this.data)
+        this.$modal.show('image-modal',{data:this.data})
+    },
+    showPicker (event,name) {
+       let inputelement = document.getElementById('bordercolour')
+       this.$emit('isOpen',[true,event.target,this.data,name])
+      // this.colorType = item.name
+      // this.currentSelectedIndex = layerIndex
+      // this.setSelectedLayer(this.layers[layerIndex], layerIndex)
+      // this.currentSelectedAttributes = item
+      // this.pickerisShow = !this.pickerisShow
+      //   // this.colorPickerOwner = item.value
+      // this.colorPickerOwner = this.pickerisShow ? event.srcElement : null
     },
   },
   created () {
