@@ -1,7 +1,15 @@
 <template>
-  <div class="tl-container" contenteditable="true" spellcheck="false" 
-    :style="getStyle()">
-    {{layerData.content}}
+ <!-- @blur="formatContent()" -->
+  <div ref="editable" class="tl-container" contenteditable="true" spellcheck="false" 
+    :style="getStyle()" @keydown="setContent($event)">
+    <!-- {{layerData.content}} -->
+    <div v-show="layerData.attributes.listStyle === 'block'">{{layerData.content}}</div>
+    <ol v-show="layerData.attributes.listStyle === 'ol'">
+      <li v-for="(text, i) in layerData.content.split(/[\r\n]+/)">{{text}}</li>
+    </ol>
+    <ul v-show="layerData.attributes.listStyle === 'ul'" >
+      <li v-for="(text, i) in layerData.content.split(/[\r\n]+/)">{{text}}</li>
+    </ul>
   </div>
 </template>
 <script>
@@ -13,9 +21,31 @@ export default {
       style: null,
     }
   },
+  mounted() {
+    this.$refs.editable.textContent = this.layerData.content;
+  },
   methods: {
+    setContent(evt) {
+      // this.layerData.content = this.$refs.editable.textContent;
+    },
+    formatContent() {
+      console.log("formatContent", this.$refs.editable.textContent)
+      // if (this.layerData.attributes.listStyle === 'block') {
+      //   // return this.layerData.content;
+      //   // this.$refs.editable.innerText = 
+      // } else {
+      //   var list = '<' + this.layerData.attributes.listStyle + '>';
+      //   var tc = this.layerData.content.split(/[\r\n]+/);
+      //   for (var i = 0; i < tc.length; i++) {
+      //     list += '<li>' + tc[i] + '</li>'
+      //   }
+      //   this.$refs.editable.innerHTML =  list +'</' + this.layerData.attributes.listStyle + '>';
+      // }
+
+    },
     getStyle() {
       var layerData = this.layerData.attributes;
+      console.log('' + layerData.shadowSize + 'px' + ' ' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowColor + ',' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowColor);
       return {
         fontFamily: layerData.fontFamily,
         fontSize: layerData.fontSize.indexOf('px') !== -1 ? layerData.fontSize : layerData.fontSize + 'px',
@@ -27,7 +57,7 @@ export default {
         color: layerData.color,
         backgroundColor: layerData.backgroundColor,
         border: layerData.borderSize + 'px ' + layerData.borderStyle + ' ' + layerData.borderColor,
-        textShadow: layerData.shadowColor + " " + layerData.shadowSize + " " + layerData.shadowSize 
+        textShadow: '' + layerData.shadowSize + 'px' + ' ' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowColor + ',' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowColor
       }
     },
   }

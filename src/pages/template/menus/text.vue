@@ -4,24 +4,24 @@
         <mu-icon slot="left" value="text_fields" style="color: #fff"/>
         <mu-icon-button icon="remove_red_eye" slot="right" />
         <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
-        <mu-list-item  slot="nested"  class="paddingZero">
+        <mu-list-item  slot="nested"  class="paddingZero" v-no-ripple>
                 <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Font</mu-grid-list>
                 <mu-grid-list class="right">
                 <multiselect ref="fontsSelection" v-model="data.attributes.fontFamily" :options="availableFonts" :searchable="false" 
                   open-direction="bottom" :close-on-select="true" 
-                  :style="{fontFamily: data.attributes.fontFamily}" @blur.native="updateFont">
+                  :style="{fontFamily: data.attributes.fontFamily}">
                 </multiselect>
                 </mu-grid-list>
                 </div>
         </mu-list-item>
-        <mu-list-item  slot="nested"  class="paddingZero">
+        <mu-list-item slot="nested" class="paddingZero" v-no-ripple>
                 <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left"></mu-grid-list>
                 <mu-grid-list class="right">
                 <div class="input-container">
                     <input class="input-size optionInput" v-digitsonly v-append-unit="'px'"
-                      v-model="data.attributes.fontSize" @keyup.enter="apply('fontSize', $event)" @blur="apply('fontSize', $event)">
+                      v-model="data.attributes.fontSize">
                     <mu-flat-button class=" csFlatBtn" icon="format_bold" 
                       slot="right" :class="[data.attributes.fontWeight === 'bold' ? 'ctrl-active' : '']"
                       @click.stop="handleFontWeight()"/>
@@ -35,7 +35,7 @@
                 </mu-grid-list>
                 </div>
         </mu-list-item>
-         <mu-list-item  slot="nested" class="paddingZero nestedBtnGroup">
+         <mu-list-item  slot="nested" class="paddingZero nestedBtnGroup" v-no-ripple>
              <div class="input-container limitGroupBtn">
                 <mu-flat-button slot="left" class=" csFlatBtn" icon="format_align_left" 
                   :class="[this.data.attributes.textAlign === 'left' ? 'ctrl-active' : '']" @click="handleTextAlign('left')"/>
@@ -46,12 +46,14 @@
                 <mu-flat-button slot="left" class=" csFlatBtn" icon="format_align_justify" 
                   :class="[this.data.attributes.textAlign === 'justify' ? 'ctrl-active' : '']" @click="handleTextAlign('justify')"/>
                 <span class="groupBtnR">
-                <mu-flat-button class=" csFlatBtn" icon="format_list_numbered" slot="right"/>
-                <mu-flat-button class=" csFlatBtn" icon="format_list_bulleted" slot="right"/>
+                <mu-flat-button class=" csFlatBtn" icon="format_list_numbered" slot="right" 
+                  :class="[this.data.attributes.listStyle === 'ol' ? 'ctrl-active' : '']" @click="data.attributes.listStyle = data.attributes.listStyle === 'ol' ? 'block' : 'ol'"/>
+                <mu-flat-button class=" csFlatBtn" icon="format_list_bulleted" slot="right" 
+                :class="[this.data.attributes.listStyle === 'ul' ? 'ctrl-active' : '']" @click="data.attributes.listStyle = data.attributes.listStyle === 'ul' ? 'block' : 'ul'"/>
               </span>
             </div>
          </mu-list-item>
-        <mu-list-item  slot="nested"  class="paddingZero">
+        <mu-list-item slot="nested" class="paddingZero" v-no-ripple>
                 <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Line Height</mu-grid-list>
                 <mu-grid-list class="right">
@@ -61,26 +63,34 @@
                 </mu-grid-list>
                 </div>
         </mu-list-item>
-        <mu-list-item  slot="nested" class="paddingZero">
-              <div class="gridlist-demo-container" style="margin-top: -6px;">
-                <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
-                <mu-grid-list class="right">
-                <input spellcheck="false" class="input-size colorPicka">
-                <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
-                </mu-grid-list>
-              </div>
+        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple @click="showPicker('foregroundColor')">
+          <div class="gridlist-demo-container" style="margin-top: -6px;">
+            <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
+            <mu-grid-list class="right">
+            <input disabled spellcheck="false" :value="data.attributes.color" class="input-size colorPicka">
+            <input disabled spellcheck="false" class="input-size sliderInput" :style="{backgroundColor: data.attributes.color}">
+            </mu-grid-list>
+          </div>
+          <div ref="foregroundColor" v-show="selectedPicker === 'foregroundColor'" class="item-color-picker">
+            <color-picker v-model="colors" @input="colorSelected" 
+              style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
+          </div>
         </mu-list-item>  
-        <mu-list-item  slot="nested" class="paddingZero">
-              <div class="gridlist-demo-container" style="margin-top: -6px;">
-                <mu-grid-list class="gridlist-demo left">Background</mu-grid-list>
-                <mu-grid-list class="right">
-                <input spellcheck="false" class="input-size colorPicka">
-                <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
-                </mu-grid-list>
-              </div>
+        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple @click="showPicker('backgroundColor')">
+          <div class="gridlist-demo-container" style="margin-top: -6px;">
+            <mu-grid-list class="gridlist-demo left">Background</mu-grid-list>
+            <mu-grid-list class="right">
+            <input disabled spellcheck="false" :value="data.attributes.backgroundColor" class="input-size colorPicka">
+            <input disabled spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.backgroundColor}">
+            </mu-grid-list>
+          </div>
+          <div ref="backgroundColor" v-show="selectedPicker === 'backgroundColor'" class="item-color-picker">
+            <color-picker v-model="colors" @input="colorSelected" 
+              style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
+          </div>
         </mu-list-item>  
         <mu-sub-header slot="nested">Border</mu-sub-header>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
                 <mu-grid-list class="right">
@@ -89,7 +99,7 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-            <mu-list-item  slot="nested"  class="paddingZero demiBlackbg">
+            <mu-list-item  slot="nested"  class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Style</mu-grid-list>
                 <mu-grid-list class="right">
@@ -97,32 +107,40 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-             <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple @click="showPicker('borderColor')">
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
-                <input spellcheck="false" class="input-size colorPicka">
-                <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
+                <input disabled :value="data.attributes.borderColor" spellcheck="false" class="input-size colorPicka">
+                <input disabled spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.borderColor}">
                 </mu-grid-list>
+              </div>
+              <div ref="borderColor" v-show="selectedPicker === 'borderColor'" class="item-color-picker">
+                <color-picker v-model="colors" @input="colorSelected" 
+                  style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
               </div>
             </mu-list-item>
             <mu-sub-header slot="nested">Text Shadow</mu-sub-header>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
                 <mu-grid-list class="right">
-                <mu-slider v-model="value3" class="mmslider" />
-                <input spellcheck="false" class="input-size sliderInput">
+                <mu-slider v-model="data.attributes.shadowSize" :max="100" class="mmslider" />
+                <input disabled :value="data.attributes.shadowSize" spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
             </mu-list-item>
-             <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple @click="showPicker('shadowColor')">
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
-                <input spellcheck="false" class="input-size colorPicka">
-                <input spellcheck="false" class="input-size sliderInput" style="background-color:white">
+                <input disabled :value="data.attributes.shadowColor" spellcheck="false" class="input-size colorPicka">
+                <input disabled spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.shadowColor}">
                 </mu-grid-list>
+              </div>
+              <div ref="shadowColor" v-show="selectedPicker === 'shadowColor'" class="item-color-picker">
+                <color-picker v-model="colors" @input="colorSelected" 
+                  style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
               </div>
             </mu-list-item>
    </mu-list-item>
@@ -131,11 +149,21 @@
 <script>
 import fontHelper from '../../../helpers/fonts.helper.js'
 import {mapMutations} from 'vuex'
+import { Photoshop, Chrome } from "vue-color";
 export default {
   name: 'TextLayer',
   props: ['data', 'openpanel'],
+  components: {
+    "photoshop-picker": Photoshop,
+    "color-picker": Chrome,
+  },
   beforeMount() {
     this.attrs = this.data.attributes;
+    // for the color picker to hide
+    document.addEventListener('mousedown', this.hidePicker);
+  },
+  beforeDestroy() {
+    document.removeEventListener('mousedown', this.hidePicker);
   },
   mounted() {
     // assigning fonts
@@ -150,6 +178,14 @@ export default {
   },
   data () {
       return {
+        selectedPicker: '',
+        colors: {
+          hex: '#194d33',
+          hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
+          hsv: { h: 150, s: 0.66, v: 0.30, a: 1 },
+          rgba: { r: 25, g: 77, b: 51, a: 1 },
+          a: 1
+        },
         attrs: null,
         value: '',
         value1: '',
@@ -183,6 +219,37 @@ export default {
       val = val.indexOf('px') !== -1 ? val : val + 'px';
       this.data.attributes.lineHeight = val;
     },
+    handleListStyle(val) {
+
+    },
+     colorSelected(val) {
+      if (this.selectedPicker === 'foregroundColor') {
+        this.data.attributes.color = val.hex;
+      } else if (this.selectedPicker === 'backgroundColor') {
+        this.data.attributes.backgroundColor = val.hex;
+      } else if (this.selectedPicker === 'borderColor') {
+        this.data.attributes.borderColor = val.hex;
+      } else if (this.selectedPicker === 'shadowColor') {
+        this.data.attributes.shadowColor = val.hex;
+      } 
+    },
+    showPicker(picker) {
+      this.selectedPicker = picker;
+    },
+    hidePicker(evt) {
+      if (!evt) {
+        return;
+      }
+      if (this.selectedPicker === 'foregroundColor' && !this.$refs.foregroundColor.contains(evt.target)) {
+        this.selectedPicker = '';
+      } else if (this.selectedPicker === 'backgroundColor' && !this.$refs.backgroundColor.contains(evt.target)) {
+        this.selectedPicker = '';
+      } else if (this.selectedPicker === 'borderColor' && !this.$refs.borderColor.contains(evt.target)) {
+        this.selectedPicker = '';
+      } else if (this.selectedPicker === 'shadowColor' && !this.$refs.shadowColor.contains(evt.target)) {
+        this.selectedPicker = '';
+      } 
+    }
   },
   created () {
     this.availableFonts = fontHelper.getFonts();
@@ -206,6 +273,13 @@ select {
 }
 .inp-ctrl-digits {
   text-align: right;
+}
+.item-color-picker {
+  right: 15px;
+  top: 0px;
+  position: absolute;
+  z-index: 1;
+  box-shadow: 0 1px 6px rgba(0,0,0,.117647), 0 1px 4px rgba(0,0,0,.117647);
 }
 </style>
 

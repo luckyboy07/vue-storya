@@ -121,9 +121,9 @@
                 </mu-grid-list>
               </div>
               <div ref="borderColor" v-show="selectedPicker === 'borderColor'" class="item-color-picker">
-                  <color-picker v-model="colors" @input="colorSelected" 
-                    style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
-                </div>
+                <color-picker v-model="colors" @input="colorSelected" 
+                  style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
+              </div>
             </mu-list-item>
             <mu-sub-header slot="nested">Shadow</mu-sub-header>
             <mu-list-item  slot="nested" class="paddingZero demiBlackbg">

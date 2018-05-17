@@ -10,6 +10,7 @@ import VTooltip from 'v-tooltip'
 // directives
 import JustDigits from './directives/only-number-filter.js'
 import UnitAppender from './directives/append-unit.js'
+import NoRipple from './directives/ripple-remover.js'
 import Multiselect from 'vue-multiselect'
 import VModal from 'vue-js-modal'
 // import JustDigits from './directives/only-number-filter.js'
