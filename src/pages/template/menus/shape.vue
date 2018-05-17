@@ -67,7 +67,7 @@
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Position</mu-grid-list>
                 <mu-grid-list class="right">
-                  <vue-slider ref="gradientSlider" @drag-start="setGradientColors($event)" v-bind="data.attributes.gradientBackgroundData" ></vue-slider>
+                  <vue-slider ref="gradientSlider" @callback="handleDrag" @drag-start="setGradientColors($event)" v-bind="data.attributes.gradientBackgroundData" ></vue-slider>
                   <!-- <input spellcheck="false" class="input-size sliderInput"> -->
                 </mu-grid-list>
               </div>
@@ -238,7 +238,13 @@ export default {
         this.selectedGradientColor = c2.style.backgroundColor;
       }
        this.selectedHandle = evt.currentSlider.toString();
+
       // etc...
+    },
+    handleDrag(evt) {
+      console.log("evt", evt)
+      this.data.attributes.gradientBackgroundData.value[0] = evt[0];
+      this.data.attributes.gradientBackgroundData.value[1] = evt[1];
     },
     colorSelected(val) {
       if (this.selectedPicker === 'colorPicker') {
