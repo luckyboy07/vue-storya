@@ -130,7 +130,7 @@
 </template>
 <script>
 import fontHelper from '../../../helpers/fonts.helper.js'
-import {mapMutations} from 'vuex'
+import {mapMutations, mapGetters} from 'vuex'
 export default {
   name: 'TextLayer',
   props: ['data', 'openpanel'],
@@ -157,10 +157,20 @@ export default {
         options:['Manual','Automatic','test','TEst 2']
       }
   },
+  computed: {
+    ...mapGetters(['getLayers'])
+    
+  },
   methods: {
     ...mapMutations(['setLayerValue']),
     open (event) {
-      this.data.selected = !this.data.selected;
+       for(let i = 0; i < this.getLayers.length;i++){
+          if (this.getLayers[i].id === this.data.id) {
+            this.data.selected = !this.data.selected;
+          }else {
+              this.getLayers[i].selected = false
+          }
+       }
     },
     handleFontWeight() {
       this.data.attributes.fontWeight = this.data.attributes.fontWeight === "bold" ? "normal" : "bold";

@@ -1,10 +1,9 @@
 <template>
-  <div class="yawaa"  :class="openpanel ? 'activeTool': ''">
-        <mu-list-item title="Shape Layer" :open="openpanel"  @click.stop="open">
+  <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
+        <mu-list-item title="Shape Layer" :open="data.selected"  @click.stop="open">
              <mu-icon slot="left" value="landscape" style="color: #fff"/>
              <mu-icon-button icon="remove_red_eye" slot="right" />
-             <mu-icon-button :icon="expandIcon" class="expand-btn" slot="right" @click.stop="open"/>
-        
+             <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
             <mu-list-item  slot="nested"  class="paddingZero">
                 <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size Option</mu-grid-list>
@@ -174,9 +173,10 @@
   </div>
 </template>
 <script>
+import { mapGetters} from 'vuex'
 export default {
   name: 'ShapeLayer',
-  props:['openpanel'],
+  props:['openpanel','data'],
   data () {
       return {
          expandIcon: 'expand_more',
@@ -187,14 +187,18 @@ export default {
          options:['Manual','Automatic','test','TEst 2']
       }
   },
+   computed: {
+    ...mapGetters(['getLayers'])
+  },
   methods: {
       open (event) {
-        this.openpanel = !this.openpanel
-        if(this.openpanel){
-            this.expandIcon = 'expand_less'
-        }else{
-            this.expandIcon = 'expand_more'
-        }
+        for(let i = 0; i < this.getLayers.length;i++){
+          if (this.getLayers[i].id === this.data.id) {
+            this.data.selected = !this.data.selected;
+          }else {
+              this.getLayers[i].selected = false
+          }
+      }
     }
   }
 }
