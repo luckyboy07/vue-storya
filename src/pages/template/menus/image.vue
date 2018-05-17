@@ -2,7 +2,7 @@
 <div class="yawaa " :class="data.selected ? 'activeTool': ''">
     <mu-list-item title="Image Layer" :open="data.selected" @click.stop="open">
           <mu-icon slot="left" value="image" style="color: #fff"/>
-          <mu-icon-button icon="remove_red_eye" slot="right" @click.stop="hideLayer"/>
+          <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
           <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
         <mu-list-item  slot="nested"  class="paddingZero minHytZero"   @click="$modal.show('image-modal')">
              <mu-flexbox>
@@ -185,12 +185,12 @@ export default {
       // this.data.open = this.panelopen
       // this.$emit('isOpen',this.data)
     },
-    hideLayer (){
-        console.log('HIDE')
-    },
     openModalimage () {
         console.log('click',this.$modal)
-    }
+    },
+    toggleLayer() {
+      this.data.selected = this.data.visible = !this.data.visible;
+    },
   },
   created () {
       // this.panelopen = this.openpanel

@@ -14,6 +14,7 @@
     :width="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.width : parentW : elem.width"
     :height="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.height : parentH : elem.height"
     v-for="(elem, i) in layers" :key="i"
+    v-show="elem.visible"
     @activated="activated(elem)"
     @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
     @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
@@ -155,7 +156,7 @@ export default {
       // the newSelectedLayerId and selectedLayer are the same
       // if so, just ignore it
       if (!this.selectedLayer || (this.selectedLayer && this.selectedLayer.id !== newSelectedLayerId)) {
-        selectLayer(newSelectedLayerId);
+          selectLayer(newSelectedLayerId);
       }
       // etc.
     },
@@ -169,7 +170,7 @@ export default {
   watch: {
     getSelectedLayerId: function(val) {
       this.$_updateSelectedLayer(val ? val.id : '');
-    }
+    },
   },
 };
 </script>

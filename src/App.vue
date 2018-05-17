@@ -118,7 +118,9 @@ export default {
         this.updateLayers(this.$_removeFromArray(this.layers, item.id));
       } else if (action === 'scale') {
         this.setLayerValue(item);
-      }
+      } else if (action === 'delete') {
+        this.addLayer(item);
+      } 
     },
     $_handleRedo(item, action) {
       // console.log('_handleRedo', item, action);
@@ -165,7 +167,9 @@ export default {
     lastLayerAddTime: function() {
       console.log('---------------------- lastLayerAddTime changes');
       if (this.layers.length > 0) {
-        undoRedo.add(this.layers[this.layers.length -1], 'create');
+        var newLayer = this.layers[this.layers.length -1];
+        this.setSelectedLayerId(newLayer.id);
+        undoRedo.add(newLayer, 'create');
       }
     }
   }

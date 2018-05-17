@@ -227,7 +227,14 @@ export const store = new Vuex.Store({
         // to select the layer from other modules
         // watch this value as it changes
         setSelectedLayerId: (state, _newSelectedLayerId) => {
-            state.selectedLayerId = { ts: appHelper.generateTimestamp(), id: _newSelectedLayerId };
+            // added
+            // id is remain the same to avoid conflicts to other modules
+            var srcLayer = $.from(state.layers).firstOrDefault(l => l.id === _newSelectedLayerId);
+            state.selectedLayerId = {
+                ts: appHelper.generateTimestamp(),
+                id: _newSelectedLayerId,
+                sourceLayer: srcLayer
+            };
         },
         // updates the layer's data
         // by setting its value to the payload ('item')
@@ -261,7 +268,19 @@ export const store = new Vuex.Store({
         isAnimation: (state, item) => {
             Vue.set(state, 'setAnimation', item)
         },
-        // when exp
+        // removing a layer
+        // sidebar remove 
+        removeSelectedLayer: (state, layerId) => {
+            if (!layerId) {
+                return;
+            }
+            for (var i = 0; i < state.layers.length; i++) {
+                if (state.layers[i].id === layerId) {
+                    state.layers.splice(i, 1);
+                    break;
+                }
+            }
+        },
     },
     getters: {
         getItems: state => {

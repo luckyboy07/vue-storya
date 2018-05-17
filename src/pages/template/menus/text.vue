@@ -2,7 +2,7 @@
   <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
    <mu-list-item title="Text Layer" :open="data.selected" @click.stop="open">
         <mu-icon slot="left" value="text_fields" style="color: #fff"/>
-        <mu-icon-button icon="remove_red_eye" slot="right" />
+        <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
         <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
         <mu-list-item  slot="nested"  class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container">
@@ -248,9 +248,9 @@ export default {
     },
     $_setFonts() {
       // assigning fonts  
-      // if (!this.$el.querySelector('#fontStyle') || !this.$el.querySelector('#fontStyle').parentElement) {
-      //   return;
-      // }
+      if (!this.$el.querySelector('#fontStyle') ) {
+        return;
+      }
       var p = this.$el.querySelector('#fontStyle').parentElement.parentElement;
       for (var i = 0; i < p.children.length; i++) {
         if (p.children[i].className === 'multiselect__content-wrapper') {
@@ -261,7 +261,10 @@ export default {
           }
         }
       }
-    }
+    },
+    toggleLayer() {
+      this.data.selected = this.data.visible = !this.data.visible;
+    },
   },
   created () {
     this.availableFonts = fontHelper.getFonts();

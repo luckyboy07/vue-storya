@@ -11,7 +11,7 @@
       <mu-appbar title="Add New Layer">
         <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_down" slot="left"/>
         <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_up" slot="left"/>
-        <mu-icon-button class="custom-icon-button" icon="delete" slot="left"/>
+        <mu-icon-button class="custom-icon-button" icon="delete" slot="left" @click="removeLayer()"/>
         <mu-icon-menu class="custom-icon-button" icon="add"  slot="right" :open="showhover" @open="hoverBtn" @close="closeLayer" desktop :anchorOrigin="leftBot" :targetOrigin="leftBot">
             <span class="pop-title" >Add New Layer</span>
             <mu-divider style="margin-left: 10px;width: 315px;" />
@@ -28,12 +28,12 @@
             <mu-menu menuClass="menu-add-layer" v-show="shapeSelected" class="pop-content">
               <div class="">
                 <!-- <mu-icon-button tooltip="top-center" tooltipPosition="top-center"  icon="stop"/> -->
-                <mu-icon-button icon="stop" @click="AddShape('Rectangle Filled')"/>
-                <mu-icon-button icon="crop_square" @click="AddShape('Rectangle')"/>
-                <mu-icon-button icon="network_cell" @click="AddShape('Triangle Filled')"/>
-                <mu-icon-button icon="signal_cellular_null" @click="AddShape('Triangle')"/>
-                <mu-icon-button icon="lens" @click="AddShape('Circle Filled')"/>
-                <mu-icon-button icon="panorama_fish_eye" @click="AddShape('Circle')"/>
+                <mu-icon-button icon="stop" @click="addShape('Rectangle Filled')"/>
+                <mu-icon-button icon="crop_square" @click="addShape('Rectangle')"/>
+                <mu-icon-button icon="network_cell" @click="addShape('Triangle Filled')"/>
+                <mu-icon-button icon="signal_cellular_null" @click="addShape('Triangle')"/>
+                <mu-icon-button icon="lens" @click="addShape('Circle Filled')"/>
+                <mu-icon-button icon="panorama_fish_eye" @click="addShape('Circle')"/>
               </div>
             </mu-menu>
         </mu-icon-menu>
@@ -100,6 +100,8 @@
 import {mapActions, mapGetters, mapMutations} from 'vuex'
 import Expanding from '../../components/Expanding'
 import templateSelection from '../../components/template/select-template'
+import appHelper from '../../helpers/app.helper.js'
+import undoRedo from '../../helpers/undo-redo.js'
 export default {
   name: 'Sidebar',
   data () {
@@ -153,9 +155,9 @@ export default {
     // targetelem[3].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
   },
   methods: {
-    ...mapMutations(['setLayerValue']),
+    ...mapMutations(['setLayerValue', 'removeSelectedLayer',]),
     ...mapActions(['addLayer']),
-    ...mapGetters(['getShapeLayer']),
+    ...mapGetters(['getShapeLayer', 'getSelectedLayerId']),
     hoverBtn () {
       this.showhover = true
     },
@@ -170,7 +172,7 @@ export default {
     isOpen (val){
       //this.setLayerValue(val)
     },
-    AddShape(shape) {
+    addShape(shape) {
       var _sl = this.getShapeLayer();
       if (shape.indexOf('Filled') !== -1) {
          _sl.attributes.color = '#333';
@@ -184,6 +186,13 @@ export default {
       // console.log('getShapeLayer', _sl)
       this.addLayer(_sl);
       this.showhover = this.shapeSelected = false;
+    },
+    removeLayer() {
+      var selectedLayer = this.getSelectedLayerId();
+      if (selectedLayer) {
+        undoRedo.add(appHelper.cloneLayer(selectedLayer.sourceLayer), "delete");
+        this.removeSelectedLayer(selectedLayer.id);
+      }
     },
   }
 }

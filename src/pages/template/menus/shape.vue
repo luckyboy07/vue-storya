@@ -2,9 +2,9 @@
   <div>
      <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
         <mu-list-item title="Shape Layer" :open="data.selected"  @click.stop="open">
-             <mu-icon slot="left" value="landscape" style="color: #fff"/>
-             <mu-icon-button icon="remove_red_eye" slot="right" />
-             <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
+            <mu-icon slot="left" value="landscape" style="color: #fff"/>
+            <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
+            <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
             <mu-list-item  slot="nested"  class="paddingZero">
                 <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size Option</mu-grid-list>
@@ -278,7 +278,10 @@ export default {
     },
     open(event) {
       this.data.selected = !this.data.selected;
-    }
+    },
+    toggleLayer() {
+      this.data.selected = this.data.visible = !this.data.visible;
+    },
   },
 };
 </script>
