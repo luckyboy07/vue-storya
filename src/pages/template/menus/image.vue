@@ -3,7 +3,7 @@
     <mu-list-item title="Image Layer" :open="data.selected" @click.stop="open">
           <mu-icon slot="left" value="image" style="color: #fff"/>
           <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
-          <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
+        <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
         <mu-list-item  slot="nested"  class="paddingZero minHytZero"   @click="openModalimage">
              <mu-flexbox>
                   <mu-flexbox-item class="flex-container" > 
@@ -109,6 +109,7 @@
 </div>
 </template>
 <script>
+import { mapGetters} from 'vuex'
 export default {
   name: 'ImageLayer',
   props:['openpanel','data'],
@@ -157,11 +158,20 @@ export default {
     //   deep: true
     // }
   },
+   computed: {
+    ...mapGetters(['getLayers'])
+  },
   methods: {
     open (event) {
       // this.panelopen = !this.panelopen
       // this.$emit('openpanel',this.panelopen)
-      this.data.selected = !this.data.selected;
+      for(let i = 0; i < this.getLayers.length;i++){
+        if (this.getLayers[i].id === this.data.id) {
+          this.data.selected = !this.data.selected;
+        }else {
+            this.getLayers[i].selected = false
+        }
+      }
       // if(this.data.selected){
       //   this.expandIcon = 'expand_less'
       // } else{

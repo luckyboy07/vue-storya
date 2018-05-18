@@ -190,6 +190,7 @@
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 import { Photoshop, Chrome } from "vue-color";
 import vueSlider from 'vue-slider-component';
 export default {
@@ -225,6 +226,9 @@ export default {
       options: ["Manual", "Automatic", "test", "TEst 2"],
       selectedPicker: '',
     };
+  },
+   computed: {
+    ...mapGetters(['getLayers'])
   },
   methods: {
     setGradientColors(evt) {
@@ -282,14 +286,20 @@ export default {
         this.selectedPicker = '';
       }
     },
-    open(event) {
-      this.data.selected = !this.data.selected;
-    },
     toggleLayer() {
       this.data.selected = this.data.visible = !this.data.visible;
     },
-  },
-};
+    open (event) {
+        for(let i = 0; i < this.getLayers.length;i++){
+          if (this.getLayers[i].id === this.data.id) {
+            this.data.selected = !this.data.selected;
+          }else {
+              this.getLayers[i].selected = false
+          }
+    }
+  }
+}
+}
 </script>
 <style scoped>
 @import "./menu.css";
