@@ -261,13 +261,13 @@ export default {
       if (!evt) {
         return;
       }
-      if (this.selectedPicker === 'foregroundColor' && !this.$refs.foregroundColor.contains(evt.target)) {
+      if (this.selectedPicker === 'foregroundColor' && this.$refs.foregroundColor && !this.$refs.foregroundColor.contains(evt.target)) {
         this.selectedPicker = '';
-      } else if (this.selectedPicker === 'backgroundColor' && !this.$refs.backgroundColor.contains(evt.target)) {
+      } else if (this.selectedPicker === 'backgroundColor' && this.$refs.backgroundColor && !this.$refs.backgroundColor.contains(evt.target)) {
         this.selectedPicker = '';
-      } else if (this.selectedPicker === 'borderColor' && !this.$refs.borderColor.contains(evt.target)) {
+      } else if (this.selectedPicker === 'borderColor' && this.$refs.borderColor && !this.$refs.borderColor.contains(evt.target)) {
         this.selectedPicker = '';
-      } else if (this.selectedPicker === 'shadowColor' && !this.$refs.shadowColor.contains(evt.target)) {
+      } else if (this.selectedPicker === 'shadowColor' && this.$refs.shadowColor && !this.$refs.shadowColor.contains(evt.target)) {
         this.selectedPicker = '';
       } 
     },

@@ -57,7 +57,7 @@ export default {
   },
   methods :{
     ...mapGetters(['getSelectedLayerId']),
-    ...mapMutations(['addLayer', 'setLayerValue', 'updateLayers', 'setSelectedLayerId']),
+    ...mapMutations(['addLayer', 'setLayerValue', 'updateLayers', 'setSelectedLayerId', 'updateUndoRedoAction']),
     keydownEventHandler(evt) {
       // resetting idle time in key activities
       if (this.idleTime !== 0) {
@@ -131,6 +131,8 @@ export default {
       } else if (action === 'delete') {
         this.addLayer(item);
       } 
+
+      this.updateUndoRedoAction();
     },
     $_handleRedo(item, action) {
       // console.log('_handleRedo', item, action);
@@ -151,6 +153,7 @@ export default {
         // console.log('_handleUndoRedo', item, action);
         this.setLayerValue(item);
       }
+      this.updateUndoRedoAction();
     },
     $_removeFromArray(arr, id) {
       // console.log('_removeFromArray', arr, id)
@@ -193,8 +196,5 @@ export default {
   .appBarIcon {
     height: 100%;
     width: 60px;
-  }
-  .content {
-    /* margin-top: 64px; */
   }
 </style>

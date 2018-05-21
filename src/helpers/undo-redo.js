@@ -12,6 +12,8 @@ export default {
             'layer': layerDetail,
             'lastAction': lastAction
         });
+
+        // console.log("layers", this.layers)
     },
     $_removeLayer: function(id) {
         for (var i = 0; i < this.layers.length; i++) {
@@ -20,6 +22,8 @@ export default {
                 break;
             }
         }
+
+        // console.log("layers", this.layers)
     },
     /**
      * Creates a new layer to the undo manager memory

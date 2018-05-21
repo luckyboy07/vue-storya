@@ -14,16 +14,21 @@
 </template>
 <script>
 import {mapGetters} from 'vuex'
+import appHelper from '../../helpers/app.helper.js'
+import undoRedo from '../../helpers/undo-redo.js'
 export default {
   name: "text-layer",
   props: ['layerData', 'dragging_id'],
   data() {
     return {
       style: null,
+      addToUndoRedo: true,
+      oldLayerData: null,
     }
   },
   mounted() {
     this.$refs.editable.textContent = this.layerData.content;
+    this.oldLayerData = appHelper.cloneLayer(this.layerData);
   },
   methods: {
     setContent(evt) {
@@ -62,15 +67,30 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getLastLayerAddTime']),
+    ...mapGetters({
+      addTime: 'getLastLayerAddTime',
+      redoUndoTime: 'getUndoRedoLastAction'
+    }),
   },
   watch: {
-    getLastLayerAddTime: function(val) {
-      console.log('getLastLayerAddTime', val)
+    addTime: function(val) {
+      this.addToUndoRedo = false;
+    },
+    redoUndoTime: function(val) {
+      console.log('undo redo action')
+       this.addToUndoRedo = false;
     },
     "layerData.attributes": {
       handler(val) {
+        if (!this.addToUndoRedo) {
+           this.addToUndoRedo = true;
+           return;
+        }
+        console.log(this.oldLayerData, this.layerData)
+        undoRedo.add(appHelper.cloneLayer(this.oldLayerData), 'scale');
         console.log('layerData.attributes', this.layerData.id);
+        undoRedo.add(appHelper.cloneLayer(this.layerData), 'scale');
+        this.oldLayerData = this.layerData;
       },
       deep: true
     },

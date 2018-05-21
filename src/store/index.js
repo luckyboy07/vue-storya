@@ -10,6 +10,8 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
+        // undo redo
+        isActionCastedByUndoRedo: '',
         // for editor toolbar
         canvasData: {
             filename: 'New File 1',
@@ -298,6 +300,9 @@ export const store = new Vuex.Store({
                 }
             }
         },
+        updateUndoRedoAction: state => {
+            state.isActionCastedByUndoRedo = appHelper.generateTimestamp();
+        },
     },
     getters: {
         getItems: state => {
@@ -336,7 +341,10 @@ export const store = new Vuex.Store({
         sortLayer: state => {
             let sam = state.layers.sort((a, b) => a.order - b.order)
             return state.layers.sort((a, b) => b.order - a.order)
-        }
+        },
+        getUndoRedoLastAction: state => {
+            return state.isActionCastedByUndoRedo;
+        },
     },
     actions: {
         addLayer: ({ commit }, payload) => {
