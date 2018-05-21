@@ -116,7 +116,7 @@ export default {
     },
     rotateStarted() {
       // starting point 
-       this.$_recordEordEvent();
+       this.$_recordEvent();
     },
     rotated(deg) {
       this.selectedLayer.attributes.rotation = deg;

@@ -345,6 +345,17 @@ export const store = new Vuex.Store({
         getUndoRedoLastAction: state => {
             return state.isActionCastedByUndoRedo;
         },
+        getExportContent: state => {
+            /*
+                {
+
+                }
+
+            */
+            var data = state.canvasData;
+            data["layers"] = state.layers;
+            return data;
+        },
     },
     actions: {
         addLayer: ({ commit }, payload) => {
