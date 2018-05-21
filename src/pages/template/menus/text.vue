@@ -9,7 +9,8 @@
             <mu-grid-list class="gridlist-demo left">Font</mu-grid-list>
             <mu-grid-list class="right">
               <multiselect id="fontStyle" ref="fontsSelection" v-model="data.attributes.fontFamily" :options="availableFonts" :searchable="false" 
-                open-direction="bottom" :close-on-select="true" :style="{fontFamily: data.attributes.fontFamily}">
+                open-direction="bottom" :close-on-select="true" :style="{fontFamily: data.attributes.fontFamily}"
+                @blur.native="revertFont">
               </multiselect>
             </mu-grid-list>
           </div>
@@ -165,9 +166,21 @@ export default {
   },
   beforeDestroy() {
     document.removeEventListener('mousedown', this.hidePicker);
+    // destroying font styles hover event
+    var p = this.$el.querySelector('#fontStyle').parentElement.parentElement;
+      for (var i = 0; i < p.children.length; i++) {
+        if (p.children[i].className === 'multiselect__content-wrapper') {
+          var ul = p.children[i].children[0];
+          for (var j = 0; j < ul.children.length; j++) {
+            // ul.children[j].removeEventListener('mouseover', this.previewFont);
+            // ul.children[j].removeEventListener('click', this.setFontSelection);
+          }
+        }
+      }
   },
   mounted() {
-    this.$_setFonts()
+    this.originalFont = this.data.attributes.fontFamily;
+    this.$_setFonts();
   },
   updated() {
     this.$_setFonts()
@@ -175,6 +188,7 @@ export default {
   data () {
       return {
         selectedPicker: '',
+        originalFont: '',
         colors: {
           hex: '#194d33',
           hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
@@ -266,11 +280,23 @@ export default {
         if (p.children[i].className === 'multiselect__content-wrapper') {
           var ul = p.children[i].children[0];
           for (var j = 0; j < ul.children.length; j++) {
-            // console.log(ul.children[j])
+            // ul.children[j].addEventListener('mouseover', this.previewFont);
+            // ul.children[j].addEventListener('mousedown', this.setFontSelection);
             ul.children[j].style.fontFamily = this.availableFonts[j];
           }
         }
       }
+    },
+    revertFont() {
+      // if (this.originalFont !== this.data.attributes.fontFamily) {
+      //    this.data.attributes.fontFamily = this.originalFont;
+      // }
+    },
+    setFontSelection() {
+      this.originalFont = this.data.attributes.fontFamily;
+    },
+    previewFont(evt) {
+      this.data.attributes.fontFamily = evt.target.parentElement.style.fontFamily.replace(/"/g, '')
     },
     toggleLayer() {
       this.data.selected = this.data.visible = !this.data.visible;
@@ -278,7 +304,7 @@ export default {
   },
   created () {
     this.availableFonts = fontHelper.getFonts();
-  },
+  }
 }
 </script>
 <style scoped>
