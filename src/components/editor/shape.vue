@@ -71,8 +71,8 @@ export default {
   },
   mounted() {
     var _d = this.getCanvasData();
-    this.parentH = parseInt(_d.height.replace('px', ''));
-    this.parentW = parseInt(_d.width.replace('px', ''));
+    this.parentH = _d.height; //parseInt(_d.height.replace('px', ''));
+    this.parentW = _d.width; //parseInt(_d.width.replace('px', ''));
     console.log(this.data)
   },
   methods: {

@@ -7,7 +7,7 @@
     <!-- start: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
       <div class="tool-item-group-content label-item">File Name</div> 
-      <input @change="filenameChanged" ref="filename" v-model="getCanvasData().filename" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
+      <input @change="filenameChanged" ref="filename" v-model="editorData.filename" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
     </div>
     <!-- end: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
@@ -15,7 +15,7 @@
        <div class="tool-item-group-content" style="width: 260px; display: flex">
          <div class="tool-item-group-content" style="width: 106px; display: flex">
             <div class="label-item p-r">W:</div> 
-            <input v-model="getCanvasData().width" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly v-append-unit="'px'" type="text"/>
+            <input v-model="editorData.width" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="text"/>
            </div>
            <div class="tool-item-group-content">
             <div class="label-item">
@@ -24,7 +24,7 @@
            </div>
            <div class="tool-item-group-content" style="width: 106px; display: flex;">
             <div class="label-item p-r">H:</div> 
-            <input v-model="getCanvasData().height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'px'" type="text"/>
+            <input v-model="editorData.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="text"/>
            </div>
        </div>
      </div>
@@ -35,7 +35,7 @@
             <i class="si-zoomout" style="height: 90%"></i>
           </mu-flat-button>
           <div class="tool-item-group-content">
-            <input  v-model="getCanvasData().zoom" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'" type="text"/>
+            <input  v-model="editorData.zoom" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly type="text"/>
           </div>
           <mu-flat-button class="s-editor-btn-zoom-ctrl" @click="zoom('in')">
             <i class="si-zoomin" style="height: 90%"></i>
@@ -94,7 +94,6 @@ export default {
     }
   },
   methods: {
-    ...mapGetters(['getCanvasData']),
     handleChange(val) {
       this.value = val;
     },
@@ -126,14 +125,19 @@ export default {
     },
     zoom(zoomType) {
       if (zoomType === 'in') {
-        this.getCanvasData().zoom = (parseInt(this.getCanvasData().zoom.replace('%', '')) + 25).toString() + "%";
+        this.editorData.zoom = parseInt(this.editorData.zoom) + 25;
       } else {
-        if ((parseInt(this.getCanvasData().zoom.replace('%', '')) - 25) > 0) {
-          this.getCanvasData().zoom = (parseInt(this.getCanvasData().zoom.replace('%', '')) - 25).toString() + "%";
+        if ((parseInt(this.editorData.zoom) - 25) > 0) {
+          this.editorData.zoom = parseInt(this.editorData.zoom) - 25;
         }
       }
     }
-  }
+  },
+  computed: {
+    ...mapGetters({
+      editorData: 'getCanvasData'
+    }),
+  },
 }
 </script>
 <style scoped>

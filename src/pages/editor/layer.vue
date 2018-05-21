@@ -5,7 +5,6 @@
     :disabled="!elem.selected" 
     :rotatable="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? true : false : true"
     :draggable="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? true : false : true"
-    :handles="'nw,ne,se,sw'"
     :rotation="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ?  elem.attributes.rotation : 0 :  elem.attributes.rotation"
     :fixedProportion="false"
     :left="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.x : -7 : elem.x"
@@ -66,8 +65,8 @@ export default {
   mounted() {
     // get the parent's dimension
     var _d = this.getCanvasData();
-    this.parentH = parseInt(_d.height.replace('px', '')) + 14;
-    this.parentW = parseInt(_d.width.replace('px', '')) + 14;
+    this.parentH = _d.height// parseInt(_d.height.replace('px', '')) + 14;
+    this.parentW = _d.width;//parseInt(_d.width.replace('px', '')) + 14;
     // handling layer desselection
     this.$el.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
   },

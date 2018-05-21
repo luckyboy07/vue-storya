@@ -15,9 +15,9 @@ export const store = new Vuex.Store({
         // for editor toolbar
         canvasData: {
             filename: 'New File 1',
-            width: "508px",
-            height: "423px",
-            zoom: "100%"
+            width: 508,
+            height: 423,
+            zoom: 100
         },
         // the timestamp to when an item occured
         lastItemAdd: null,
@@ -152,7 +152,7 @@ export const store = new Vuex.Store({
                 component: 'text-layer',
                 zindex: null,
                 open: false,
-                content: 'Text Layer',
+                content: 'Text Layer \n test',
                 attributes: {
                     rotation: 0,
                     fontFamily: "Lato",
