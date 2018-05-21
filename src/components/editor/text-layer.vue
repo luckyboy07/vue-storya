@@ -5,10 +5,10 @@
     <!-- {{layerData.content}} -->
     <div v-show="layerData.attributes.listStyle === 'block'">{{layerData.content}}</div>
     <ol v-show="layerData.attributes.listStyle === 'ol'">
-      <li v-for="(text, i) in layerData.content.split(/[\r\n]+/)">{{text}}</li>
+      <li v-for="(text, i) in layerData.content.split(/[\r\n]+/)" :key="i">{{text}}</li>
     </ol>
     <ul v-show="layerData.attributes.listStyle === 'ul'" >
-      <li v-for="(text, i) in layerData.content.split(/[\r\n]+/)">{{text}}</li>
+      <li v-for="(text, i) in layerData.content.split(/[\r\n]+/)" :key="i">{{text}}</li>
     </ul>
   </div>
 </template>
