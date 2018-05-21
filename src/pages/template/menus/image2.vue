@@ -11,7 +11,7 @@
                   </mu-flexbox-item>
              </mu-flexbox>
         </mu-list-item>
-        <mu-list-item  slot="nested"  class="paddingZero">
+        <mu-list-item  slot="nested"  class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Size Option</mu-grid-list>
             <mu-grid-list class="right">
@@ -19,7 +19,7 @@
             </mu-grid-list>
           </div>
         </mu-list-item>
-        <mu-list-item  slot="nested" class="paddingZero">
+        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container" style="margin-top: -7px;">
             <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
             <mu-grid-list class="right">
@@ -33,7 +33,7 @@
             </mu-grid-list>
           </div>
         </mu-list-item>
-        <mu-list-item  slot="nested" class="paddingZero">
+        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Opacity</mu-grid-list>
             <mu-grid-list class="right">
@@ -42,7 +42,7 @@
             </mu-grid-list>
           </div>
         </mu-list-item>
-        <mu-list-item  slot="nested" class="paddingZero">
+        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
             <mu-grid-list class="right">

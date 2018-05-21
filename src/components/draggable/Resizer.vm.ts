@@ -134,7 +134,6 @@ export default {
 
     value(): Rect {
       const state = this.state;
-      console.log('state:',state)
       return {
         active: state.active,
         left: state.left,

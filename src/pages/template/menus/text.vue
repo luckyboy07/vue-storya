@@ -161,22 +161,23 @@ export default {
   },
   beforeMount() {
     this.attrs = this.data.attributes;
+    this.availableFonts = fontHelper.getFonts();
     // for the color picker to hide
     document.addEventListener('mousedown', this.hidePicker);
   },
   beforeDestroy() {
     document.removeEventListener('mousedown', this.hidePicker);
     // destroying font styles hover event
-    var p = this.$el.querySelector('#fontStyle').parentElement.parentElement;
-      for (var i = 0; i < p.children.length; i++) {
-        if (p.children[i].className === 'multiselect__content-wrapper') {
-          var ul = p.children[i].children[0];
-          for (var j = 0; j < ul.children.length; j++) {
-            // ul.children[j].removeEventListener('mouseover', this.previewFont);
-            // ul.children[j].removeEventListener('click', this.setFontSelection);
-          }
-        }
-      }
+    // var p = this.$el.querySelector('#fontStyle').parentElement.parentElement;
+    //   for (var i = 0; i < p.children.length; i++) {
+    //     if (p.children[i].className === 'multiselect__content-wrapper') {
+    //       var ul = p.children[i].children[0];
+    //       for (var j = 0; j < ul.children.length; j++) {
+    //         // ul.children[j].removeEventListener('mouseover', this.previewFont);
+    //         // ul.children[j].removeEventListener('click', this.setFontSelection);
+    //       }
+    //     }
+    //   }
   },
   mounted() {
     this.originalFont = this.data.attributes.fontFamily;
@@ -301,9 +302,6 @@ export default {
     toggleLayer() {
       this.data.selected = this.data.visible = !this.data.visible;
     },
-  },
-  created () {
-    this.availableFonts = fontHelper.getFonts();
   }
 }
 </script>

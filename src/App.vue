@@ -20,6 +20,7 @@
     @desc: idle event will trigger if inactive for 3 seconds
 */
 
+import appHelper  from './helpers/app.helper.js'
 import undoRedo from './helpers/undo-redo'
 import fontHelper from './helpers/fonts.helper.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
@@ -31,7 +32,7 @@ export default {
       idleTimeout: 3000, // the idle timeout to trigger the 'idleTimer' event. The value is in milliseconds
       idleTime: 0, // the idle time in seconds
       idleTimer: null, // the idle timer function. Assigned to a variable to be able to use it such as stopping the timer
-      allowedKeys: ['y', 'z'], // allowed keys
+      allowedKeys: ['y', 'z', 'Delete'], // allowed keys
     }
   },
   name: 'App',
@@ -55,6 +56,7 @@ export default {
     //this.idleTimer = setInterval(this.handleIdleTimerElapsed, this.idleTimeout)
   },
   methods :{
+    ...mapGetters(['getSelectedLayerId']),
     ...mapMutations(['addLayer', 'setLayerValue', 'updateLayers', 'setSelectedLayerId']),
     keydownEventHandler(evt) {
       // resetting idle time in key activities
@@ -85,6 +87,14 @@ export default {
              this.$_handleUndo(undoData.layer, undoData.lastAction)
           }
            this.$_debugLogger("key action: undo");
+        } 
+      } else {
+        if (evt.key === 'Delete') {
+          var item = this.getSelectedLayerId();
+          if (item) {
+            undoRedo.add(appHelper.cloneLayer(item.sourceLayer), 'delete');
+            this.updateLayers(this.$_removeFromArray(this.layers, item.id));
+          }
         }
       }
     },
@@ -165,7 +175,7 @@ export default {
   },
   watch: {
     lastLayerAddTime: function() {
-      console.log('---------------------- lastLayerAddTime changes');
+      // console.log('---------------------- lastLayerAddTime changes');
       if (this.layers.length > 0) {
         var newLayer = this.layers[this.layers.length -1];
         this.setSelectedLayerId(newLayer.id);

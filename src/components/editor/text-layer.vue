@@ -13,6 +13,7 @@
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 export default {
   name: "text-layer",
   props: ['layerData', 'dragging_id'],
@@ -58,6 +59,20 @@ export default {
         border: layerData.borderSize + 'px ' + layerData.borderStyle + ' ' + layerData.borderColor,
         textShadow: '' + layerData.shadowSize + 'px' + ' ' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowColor + ',' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowColor
       }
+    },
+  },
+  computed: {
+    ...mapGetters(['getLastLayerAddTime']),
+  },
+  watch: {
+    getLastLayerAddTime: function(val) {
+      console.log('getLastLayerAddTime', val)
+    },
+    "layerData.attributes": {
+      handler(val) {
+        console.log('layerData.attributes', this.layerData.id);
+      },
+      deep: true
     },
   }
 }

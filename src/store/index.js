@@ -200,25 +200,25 @@ export const store = new Vuex.Store({
     },
     mutations: {
         addLayer: (state, payload) => {
-            console.log("ADDLAYER")
-            // check if the item is from undo or redo
-            // if not, assign a new id for this item
-            // indicating that this item is created
+            let layers = state.layers
+                // console.log("ADDLAYER")
+                // check if the item is from undo or redo
+                // if not, assign a new id for this item
+                // indicating that this item is created
             if (!payload.fromUndoRedo) {
                 payload = appHelper.createLayer(payload);
+                payload.order = layers.length > 0 ? $.from(layers).max(l => l.order) + 1 : 1;
             }
-            let layers = state.layers
-            console.log('layers:',layers)
-            console.log('layersasasass:',layers.length -1)
-                //setting the last active layer to in-active
+            // console.log('layers:',layers)
+            // console.log('layersasasass:',layers.length -1)
+            //setting the last active layer to in-active
             for (let i = 0; i < layers.length; i++) {
                 layers[i].selected = false
-                // layers[i].order += 1
-                // let last = (i +layers.length) % layers.length
-                // console.log('last:',last)
-                // layers[i].zindex = layers[last].order
+                    // layers[i].order += 1
+                    // let last = (i +layers.length) % layers.length
+                    // console.log('last:',last)
+                    // layers[i].zindex = layers[last].order
             }
-            payload.order = layers.length +1
             payload.x = 100
             payload.y = 100
             payload.open = true
@@ -227,9 +227,9 @@ export const store = new Vuex.Store({
                 // payload.height = 150
             layers.push(payload)
             let sam = layers.sort((a, b) => {
-                    return  b.order - a.order
-            }) 
-            // layers.sort((a, b) => b.order - a.order)
+                    return b.order - a.order
+                })
+                // layers.sort((a, b) => b.order - a.order)
             Vue.set(state, 'layers', sam)
 
             // this is for the undo manager to
@@ -274,7 +274,7 @@ export const store = new Vuex.Store({
         // updates the layer list
         updateLayers: (state) => {
             console.log('newLayers:')
-            // Vue.set(state, 'layers', newLayers)
+                // Vue.set(state, 'layers', newLayers)
         },
         removeGlobalLayer: (state, _layerId) => {
             Vue.set(state, 'removableId', _layerId)
@@ -334,7 +334,7 @@ export const store = new Vuex.Store({
             return appHelper.cloneLayer(state.items[0])
         },
         sortLayer: state => {
-            let sam =state.layers.sort((a, b) => a.order - b.order)
+            let sam = state.layers.sort((a, b) => a.order - b.order)
             return state.layers.sort((a, b) => b.order - a.order)
         }
     },
