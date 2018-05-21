@@ -44,6 +44,7 @@ export const store = new Vuex.Store({
                 open: false,
                 type: 'shape',
                 component: 'shape-layer',
+                zindex: null,
                 attributes: {
                     shape: 'Circle',
                     sizeOption: 'Manual',
@@ -114,6 +115,7 @@ export const store = new Vuex.Store({
                 selected: false,
                 type: 'image',
                 component: 'image-layer',
+                zindex: null,
                 open: false,
                 image: {},
                 attributes: {
@@ -146,6 +148,7 @@ export const store = new Vuex.Store({
                 type: 'text',
                 target_element: null,
                 component: 'text-layer',
+                zindex: null,
                 open: false,
                 content: 'Text Layer',
                 attributes: {
@@ -197,6 +200,7 @@ export const store = new Vuex.Store({
     },
     mutations: {
         addLayer: (state, payload) => {
+            console.log("ADDLAYER")
             // check if the item is from undo or redo
             // if not, assign a new id for this item
             // indicating that this item is created
@@ -204,11 +208,17 @@ export const store = new Vuex.Store({
                 payload = appHelper.createLayer(payload);
             }
             let layers = state.layers
+            console.log('layers:',layers)
+            console.log('layersasasass:',layers.length -1)
                 //setting the last active layer to in-active
-            for (var i = 0; i < layers.length; i++) {
+            for (let i = 0; i < layers.length; i++) {
                 layers[i].selected = false
-                layers[i].order += 1
+                // layers[i].order += 1
+                // let last = (i +layers.length) % layers.length
+                // console.log('last:',last)
+                // layers[i].zindex = layers[last].order
             }
+            payload.order = layers.length +1
             payload.x = 100
             payload.y = 100
             payload.open = true
@@ -216,8 +226,11 @@ export const store = new Vuex.Store({
                 // payload.width = 200
                 // payload.height = 150
             layers.push(payload)
-            layers.sort((a, b) => a.order > b.order)
-            Vue.set(state, 'layers', layers)
+            let sam = layers.sort((a, b) => {
+                    return  b.order - a.order
+            }) 
+            // layers.sort((a, b) => b.order - a.order)
+            Vue.set(state, 'layers', sam)
 
             // this is for the undo manager to
             // watch the changes of the layers
@@ -259,8 +272,9 @@ export const store = new Vuex.Store({
             Vue.set(state, 'layers', layers)
         },
         // updates the layer list
-        updateLayers: (state, newLayers) => {
-            Vue.set(state, 'layers', newLayers)
+        updateLayers: (state) => {
+            console.log('newLayers:')
+            // Vue.set(state, 'layers', newLayers)
         },
         removeGlobalLayer: (state, _layerId) => {
             Vue.set(state, 'removableId', _layerId)
@@ -319,6 +333,10 @@ export const store = new Vuex.Store({
         getShapeLayer: state => {
             return appHelper.cloneLayer(state.items[0])
         },
+        sortLayer: state => {
+            let sam =state.layers.sort((a, b) => a.order - b.order)
+            return state.layers.sort((a, b) => b.order - a.order)
+        }
     },
     actions: {
         addLayer: ({ commit }, payload) => {

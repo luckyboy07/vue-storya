@@ -235,7 +235,7 @@ export default {
       // console.log('naaaaaaaaaaa', evt)
       var p = evt.$el.children[0];
       var c1 = p.children[0];
-      var c2 = p.children[1];
+      var c2 = p.children[1];     
       if (evt.currentSlider === 0) {
         this.selectedGradientColor = c1.style.backgroundColor;
       }  if (evt.currentSlider === 1) {

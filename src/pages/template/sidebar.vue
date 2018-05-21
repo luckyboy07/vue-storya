@@ -156,9 +156,9 @@ export default {
     // targetelem[3].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
   },
   methods: {
-    ...mapMutations(['setLayerValue', 'removeSelectedLayer',]),
+    ...mapMutations(['updateLayers', 'removeSelectedLayer',]),
     ...mapActions(['addLayer']),
-    ...mapGetters(['getShapeLayer', 'getSelectedLayerId']),
+    ...mapGetters(['getShapeLayer', 'getSelectedLayerId','sortLayer']),
     hoverBtn () {
       this.showhover = true
     },
@@ -171,7 +171,6 @@ export default {
       event.stopPropagation()
     },
     isOpen (val){
-      console.log('val:',val)
       this.$emit('openWindow',val)
       //this.setLayerValue(val)
     },
@@ -198,24 +197,34 @@ export default {
       }
     },
     moveDown () {
-        console.log('this.getLayers:',this.getLayers)
         let currentLayer = this.getLayers.find((e)=> e.selected)
-        if (currentLayer.order < this.getLayers.length) {
-        let nextItem = this.getLayers.find((e)=> e.order === currentLayer.order + 1)
-        nextItem.order = currentLayer.order
-        currentLayer.order = currentLayer.order + 1
-        this.getLayers = this.getLayers.sort((a, b) => a.order > b.order)
-      }
+        console.log('currentLayer;',currentLayer)
+        let nextItem = this.getLayers.find((e)=> e.order === currentLayer.order - 1)
+          if(nextItem){
+          nextItem.order = currentLayer.order
+          currentLayer.order = currentLayer.order -1 
+          // let newLayer = this.getLayers.sort((a, b) => b.order - a.order)
+          this.sortLayer()
+        }
+      //   if (currentLayer.order < this.getLayers.length) {
+      //   let nextItem = this.getLayers.find((e)=> e.order === currentLayer.order + 1)
+      //   nextItem.order = currentLayer.order
+      //   currentLayer.order = currentLayer.order + 1
+      //   this.getLayers = this.getLayers.sort((a, b) => b.order - a.order)
+      // }
     },
     moveUp () {
-        console.log('getLayers:',this.getLayers)
         let currentLayer = this.getLayers.find((e)=> e.selected)
-        if(currentLayer.order - 1> -1){
-        let prevItem = this.getLayers.find((e)=> e.order === currentLayer.order - 1)
-        prevItem.order = currentLayer.order
-        currentLayer.order = currentLayer.order - 1
-        this.getLayers = this.getLayers.sort((a, b) => a.order > b.order)
+          let prevItem = this.getLayers.find((e)=> e.order === currentLayer.order + 1)
+        if(prevItem){
+          prevItem.order = currentLayer.order
+          currentLayer.order = currentLayer.order + 1
+          this.sortLayer()
         }
+        //  for(let i = 0; i < this.getLayers.length; i++) {
+        //   let last = (i +this.getLayers.length) % this.getLayers.length
+        //   this.getLayers[i].zindex = this.getLayers[last].order
+        // }
     } 
   }
 }
@@ -224,50 +233,50 @@ export default {
 @import '../../css/tooltip.scss';
 @import '../../css/menu2.scss';
 .custom-drawer{
-  width: 306px;
-  top: 115px;
+  width: 306px !important;
+  top: 115px !important;
 }
 .mu-appbar-title {
-    font-size: 14px;
+    font-size: 14px !important;
 }
 .custom-icon-button{
-  width: 43px;
+  width: 43px !important;
 }
 .pop-title{
-    margin-left: 10px;
-    font-size: 15px;
+    margin-left: 10px !important;
+    font-size: 15px !important;
 }
 .mu-divider{
-  background-color: rgba(255, 245, 245, 0.21);
+  background-color: rgba(255, 245, 245, 0.21) !important;
 }
 
 .pop-content{
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
 }
 
 .raised-btn {
-  min-width: 50px ;
-  height: 50px ;
-  margin: 7px;
-  box-shadow: 0 3px 10px rgba(0,0,0,.156863), 0 3px 10px rgba(0,0,0,.227451);
+  min-width: 50px !important;
+  height: 50px !important;
+  margin: 7px !important;
+  box-shadow: 0 3px 10px rgba(0,0,0,.156863), 0 3px 10px rgba(0,0,0,.227451) !important;
 }
 
 .content-btn{
-  width: 62px;
-  text-align: center;
-  margin-left: 4px;
+  width: 62px !important;
+  text-align: center !important;
+  margin-left: 4px !important;
 
 }
 .mu-popover {
   left: 345px !important;
     top: 115px !important;
-  background-color: #171616;
+  background-color: #171616 !important;
 }
 .mu-menu-list{
   width: 330px !important;
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 .menu-add-layer {
@@ -276,7 +285,7 @@ export default {
 }
 
 .mu-paper{
-  background-color: #111111;
+  background-color: #111111 !important;
 }
 .mu-menu{
   width: 336px !important;

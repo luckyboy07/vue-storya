@@ -57,6 +57,10 @@ export default {
     parent: {
       type: Boolean,
       default: false
+    },
+    z: {
+      type: Number,
+      default: 'auto'
     }
   },
   data() {
@@ -65,11 +69,12 @@ export default {
       top: this.top,
       width: this.width,
       height: this.height,
+      z: this.z
     }, this.rotation, this.fixedProportion);
 
     return {
       state,
-      dragging: false
+      dragging: false,
     };
   },
 
@@ -84,7 +89,7 @@ export default {
       this.$nextTick(() => this.bindResizeEvent());
     });
 
-    const STATE_PROPS = ['width', 'height', 'rotation', 'left', 'top'];
+    const STATE_PROPS = ['width', 'height', 'rotation', 'left', 'top','z'];
     STATE_PROPS.forEach((prop) => {
       this.$watch(prop, function(val) {
         if (!this.dragging) {
@@ -129,6 +134,7 @@ export default {
 
     value(): Rect {
       const state = this.state;
+      console.log('state:',state)
       return {
         active: state.active,
         left: state.left,
@@ -136,11 +142,23 @@ export default {
         width: state.width,
         height: state.height,
         rotation: state.rotation,
-        octant: state.octant
+        octant: state.octant,
+        z: state.z
       };
+    },
+    style: function () {
+      return {
+        zIndex: this.zIndex
+      }
     }
   },
-
+  watch: {
+    z: function (val){
+      if(val >= 0 || val === 'auto') {
+        this.zIndex = val
+      }
+    }
+  },
   methods: {
     emitInputEvent(rect: Rect) {
       this.$emit('input', rect);

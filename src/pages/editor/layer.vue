@@ -14,6 +14,7 @@
     :height="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.height : parentH : elem.height"
     v-for="(elem, i) in layers" :key="i"
     v-show="elem.visible"
+    :z="elem.order"
     @activated="activated(elem)"
     @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
     @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
@@ -41,9 +42,9 @@
 import appHelper from '../../helpers/app.helper.js'
 import undoRedo from '../../helpers/undo-redo.js'
 import textLayer from '../../components/editor/text-layer'
-import shape from "../../components/editor/shape.vue";
-import { mapActions, mapGetters, mapMutations } from "vuex";
-import image from "../../components/editor/image";
+import shape from "../../components/editor/shape.vue"
+import { mapActions, mapGetters, mapMutations } from "vuex"
+import image from "../../components/editor/image"
 export default {
   name: "selectionBox",
   props: ["layers"],
@@ -87,18 +88,28 @@ export default {
       }
     },
     activated(elem) {
-      console.log('%c ' + elem.id, 'background-color: red; color: white');
+      console.log('asdasd')
+      // console.log('%c ' + elem.id, 'background-color: red; color: white');
       //  check if there is a previously assigned layer
       // and if the new layer is not equal to the current selected layer
       if (this.selectedLayer && this.selectedLayer.id !== elem.id) {
+        console.log('DIRI')
         // deselect the previous layer
-        this.selectedLayer.selected = false;
-        this.setSelectedLayerId(null);
-        this.selectedLayer = null;
+        this.selectedLayer.selected = false
+        this.setSelectedLayerId(null)
+        this.selectedLayer = null
       }
-      this.selectedLayer = elem;
-      this.selectedLayer.selected = true;
-
+      this.selectedLayer = elem
+      this.selectedLayer.selected = true
+        //global layers deselect previous layer
+        for (var i = 0; i < this.layers.length; i++) {
+          this.layers[i].selected = false;
+          if(this.layers[i].id === elem.id){
+              this.layers[i].selected = true
+          }else {
+             this.layers[i].selected = false
+          }
+        }
       // tell other modules that there is a new layer selected
       if (this.getSelectedLayerId !== this.selectedLayer.id) {
         this.setSelectedLayerId(this.selectedLayer.id)
@@ -106,7 +117,7 @@ export default {
     },
     rotateStarted() {
       // starting point 
-       this.$_recordEvent();
+       this.$_recordEordEvent();
     },
     rotated(deg) {
       this.selectedLayer.attributes.rotation = deg;

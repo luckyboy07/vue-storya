@@ -181,7 +181,6 @@ export default {
       // this.$emit('isOpen',this.data)
     },
     openModalimage () {
-        console.log('click',this.$modal)
          this.$emit('selected',this.data)
          this.$modal.show('image-modal',{data:this.data})
     },

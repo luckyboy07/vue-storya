@@ -9,7 +9,8 @@
       left: state.left + 'px',
       top: state.top + 'px',
       width: state.width + 'px',
-      height: state.height + 'px'
+      height: state.height + 'px',
+      zIndex: state.z
      }">
     <div class="rr-bar rr-ord-n" key="bar-n"></div>
     <div class="rr-bar rr-ord-s" key="bar-s"></div>

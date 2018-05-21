@@ -142,16 +142,18 @@ const toRadians = function(degree: number): number {
     public rotation: number = 0;
     public octant: number = 0;
     public fixedProportion: boolean;
+    public z: number;
   
-    constructor(rect?: Rect, rotation?: number, fixedProportion?: boolean) {
+    constructor(rect?: Rect, rotation?: number, fixedProportion?: boolean,z?: number) {
       this.rotation = rotation;
       this.fixedProportion = fixedProportion;
       if (rect) {
-        const { left, top, width, height, octant } = rect;
+        const { left, top, width, height, octant,z } = rect;
         this.left = left;
         this.top = top;
         this.width = width;
         this.height = height;
+        this.z = z
       }
     }
   
