@@ -86,7 +86,7 @@ export default {
       return {
         // position: 'absolute',
         fontFamily: layerData.fontFamily,
-        fontSize: layerData.fontSize.indexOf('px') !== -1 ? layerData.fontSize : layerData.fontSize + 'px',
+        fontSize: layerData.fontSize + 'px',
         fontWeight: layerData.fontWeight,
         fontStyle: layerData.fontStyle,
         textDecoration: layerData.textDecoration,

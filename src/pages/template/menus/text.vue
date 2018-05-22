@@ -20,7 +20,7 @@
                 <mu-grid-list class="gridlist-demo left"></mu-grid-list>
                 <mu-grid-list class="right">
                 <div class="input-container">
-                    <input class="input-size optionInput" v-digitsonly v-append-unit="'px'"
+                    <input class="input-size optionInput" v-digitsonly
                       v-model="data.attributes.fontSize">
                     <mu-flat-button class="csFlatBtn" icon="format_bold" 
                       slot="right" :class="[data.attributes.fontWeight === 'bold' ? 'ctrl-active' : '']"

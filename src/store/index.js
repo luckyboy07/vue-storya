@@ -154,7 +154,7 @@ export const store = new Vuex.Store({
                 attributes: {
                     rotation: 0,
                     fontFamily: "Lato",
-                    fontSize: "20px",
+                    fontSize: 20,
                     fontWeight: "normal",
                     fontStyle: "normal",
                     textDecoration: "none", // underline or not
@@ -163,7 +163,7 @@ export const store = new Vuex.Store({
                     lineHeight: 1.2,
                     color: "#000",
                     backgroundColor: "transparent",
-                    borderSize: "0px",
+                    borderSize: 0,
                     borderStyle: "",
                     borderColor: "#000",
                     shadowSize: 0,
