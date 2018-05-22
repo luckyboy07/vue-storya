@@ -16,9 +16,9 @@ export const store = new Vuex.Store({
         canvasData: {
             file_name: 'New File 1',
             project_name: 'New File 1',
-            width: "508px",
-            height: "423px",
-            zoom: "100%"
+            width: 508,
+            height: 423,
+            zoom: 100
         },
         // the timestamp to when an item occured
         lastItemAdd: null,
@@ -307,9 +307,10 @@ export const store = new Vuex.Store({
             state.isActionCastedByUndoRedo = appHelper.generateTimestamp();
         },
         selectTemplate: (state, payload) => {
+            console.log('payload', payload);
             let template = state.canvasData
             template = payload
-            template.zoom = '100%'
+            template.zoom = 100
             Vue.set(state, 'canvasData', template)
         }
     },
