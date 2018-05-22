@@ -39,6 +39,7 @@ export default {
   },
   methods: {
     onItemSelected(item, index) {
+      console.log('item;',item)
       if (!item) {
         return;
       }

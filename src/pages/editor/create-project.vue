@@ -5,7 +5,7 @@
       <div class="s-create-content">
         <div class="s-create-left-content s-create-f">
           <div class="s-create-t">CREATE</div>
-          <mu-raised-button label="CREATE NEW" class="s-primary-btn s-scaled-f" @click="createButtonClicked"/>
+          <!-- <mu-raised-button label="CREATE NEW" class="s-primary-btn s-scaled-f" @click="createButtonClicked"/> -->
           <mu-raised-button label="Close" class="s-default-btn" @click="closeButtonClicked"/>
           <div class="s-create-desc">
             Create a new project by selecting any of the templates here or you can start with a blank template.

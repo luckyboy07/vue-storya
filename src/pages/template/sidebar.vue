@@ -171,6 +171,7 @@ export default {
       event.stopPropagation()
     },
     isOpen (val){
+      console.log('val;',val)
       this.$emit('openWindow',val)
       //this.setLayerValue(val)
     },
@@ -233,62 +234,62 @@ export default {
 @import '../../css/tooltip.scss';
 @import '../../css/menu2.scss';
 .custom-drawer{
-  width: 306px !important;
-  top: 115px !important;
+  width: 306px;
+  top: 115px;
 }
 .mu-appbar-title {
-    font-size: 14px !important;
+    font-size: 14px;
 }
 .custom-icon-button{
-  width: 43px !important;
+  width: 43px;
 }
 .pop-title{
-    margin-left: 10px !important;
-    font-size: 15px !important;
+    margin-left: 10px;
+    font-size: 15px;
 }
 .mu-divider{
-  background-color: rgba(255, 245, 245, 0.21) !important;
+  background-color: rgba(255, 245, 245, 0.21);
 }
 
 .pop-content{
-  display: flex !important;
-  align-items: center !important;
-  flex-wrap: wrap !important;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .raised-btn {
-  min-width: 50px !important;
-  height: 50px !important;
-  margin: 7px !important;
-  box-shadow: 0 3px 10px rgba(0,0,0,.156863), 0 3px 10px rgba(0,0,0,.227451) !important;
+  min-width: 50px;
+  height: 50px;
+  margin: 7px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.156863), 0 3px 10px rgba(0,0,0,.227451);
 }
 
 .content-btn{
-  width: 62px !important;
-  text-align: center !important;
-  margin-left: 4px !important;
+  width: 62px;
+  text-align: center;
+  margin-left: 4px;
 
 }
 .mu-popover {
   left: 345px !important;
-    top: 115px !important;
-  background-color: #171616 !important;
+  top: 115px !important;
+  background-color: #171616;
 }
 .mu-menu-list{
-  width: 330px !important;
-  overflow: hidden !important;
+  width: 330px;
+  overflow: hidden;
 }
 
 .menu-add-layer {
-   left: 345px !important;
-    top: 115px !important;
+   left: 345px;
+    top: 115px;
 }
 
 .mu-paper{
-  background-color: #111111 !important;
+  background-color: #111111;
 }
 .mu-menu{
-  width: 336px !important;
+  width: 336px;
 }
 
 </style>

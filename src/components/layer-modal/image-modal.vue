@@ -155,9 +155,13 @@ export default {
         })
       },
       confirm () {
-        console.log('this.layer:',this.layer)
+        console.log('this.layer:',this.selectedLayer)
         console.log('this.selectedImage:',this.selectedImage)
-        this.selectedLayer.image = this.selectedImage
+        if(this.selectedLayer.type === 'shape'){
+          this.selectedLayer.attributes.backgroundImageUri = this.selectedImage
+        }else{
+          this.selectedLayer.image = this.selectedImage
+        }
         this.$modal.hide('image-modal')
         // this.addImage(this.layer)
         // this.dialog = false

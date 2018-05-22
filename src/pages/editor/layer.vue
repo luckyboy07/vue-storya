@@ -93,7 +93,6 @@ export default {
       //  check if there is a previously assigned layer
       // and if the new layer is not equal to the current selected layer
       if (this.selectedLayer && this.selectedLayer.id !== elem.id) {
-        console.log('DIRI')
         // deselect the previous layer
         this.selectedLayer.selected = false
         this.setSelectedLayerId(null)
@@ -103,7 +102,6 @@ export default {
       this.selectedLayer.selected = true
         //global layers deselect previous layer
         for (var i = 0; i < this.layers.length; i++) {
-          this.layers[i].selected = false;
           if(this.layers[i].id === elem.id){
               this.layers[i].selected = true
           }else {
