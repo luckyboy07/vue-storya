@@ -4,11 +4,11 @@
 <side-bar @openWindow="openWindow"></side-bar>
     <div class="editor-container" >
     <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
-      <div class="editor-box" :style="{width: getCanvasData.width + 'px', 
-          height: getCanvasData.height + 'px', zoom: (getCanvasData.zoom / 100),
-          '-moz-transform': 'scale(' + (getCanvasData.zoom / 100) + ')'}">
+      <div class="editor-box" :style="{width: canvasData.width + 'px', 
+          height: canvasData.height + 'px', zoom: (canvasData.zoom / 100),
+          '-moz-transform': 'scale(' + (canvasData.zoom / 100) + ')'}">
         <div class="canvas-wrap">
-            <layer :layers="getLayers"></layer>
+            <layer :layers="layers"></layer>
         </div>
       </div>
     </div>
@@ -39,7 +39,10 @@ export default {
     colorPicker: colorpicker
   },
   computed: {
-    ...mapGetters(['getLayers', 'getCanvasData'])
+    ...mapGetters({
+      layers: 'getLayers', 
+      canvasData: 'getCanvasData'
+    })
   },
   methods: {
     openWindow (val) {
