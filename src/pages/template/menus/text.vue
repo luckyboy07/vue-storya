@@ -22,13 +22,13 @@
                 <div class="input-container">
                     <input class="input-size optionInput" v-digitsonly v-append-unit="'px'"
                       v-model="data.attributes.fontSize">
-                    <mu-flat-button class=" csFlatBtn" icon="format_bold" 
+                    <mu-flat-button class="csFlatBtn" icon="format_bold" 
                       slot="right" :class="[data.attributes.fontWeight === 'bold' ? 'ctrl-active' : '']"
                       @click.stop="handleFontWeight()"/>
-                    <mu-flat-button class=" csFlatBtn" icon="format_italic" 
+                    <mu-flat-button class="csFlatBtn" icon="format_italic" 
                       slot="right" :class="[data.attributes.fontStyle === 'italic' ? 'ctrl-active' : '']"
                       @click.stop="handleFontStyle()"/>
-                    <mu-flat-button class=" csFlatBtn" icon="format_underlined" 
+                    <mu-flat-button class="csFlatBtn" icon="format_underlined" 
                       slot="right" :class="[data.attributes.textDecoration === 'underline' ? 'ctrl-active' : '']"
                       @click="handleTextDecoration()"/>
                </div>
@@ -37,18 +37,18 @@
         </mu-list-item>
          <mu-list-item  slot="nested" class="paddingZero nestedBtnGroup" v-no-ripple>
              <div class="input-container limitGroupBtn">
-                <mu-flat-button slot="left" class=" csFlatBtn" icon="format_align_left" 
+                <mu-flat-button slot="left" class="csFlatBtn" icon="format_align_left" 
                   :class="[this.data.attributes.textAlign === 'left' ? 'ctrl-active' : '']" @click="handleTextAlign('left')"/>
-                <mu-flat-button slot="left" class=" csFlatBtn" icon="format_align_center" 
+                <mu-flat-button slot="left" class="csFlatBtn" icon="format_align_center" 
                   :class="[this.data.attributes.textAlign === 'center' ? 'ctrl-active' : '']" @click="handleTextAlign('center')"/>
-                <mu-flat-button slot="left" class=" csFlatBtn" icon="format_align_right" 
+                <mu-flat-button slot="left" class="csFlatBtn" icon="format_align_right" 
                   :class="[this.data.attributes.textAlign === 'right' ? 'ctrl-active' : '']" @click="handleTextAlign('right')"/>
-                <mu-flat-button slot="left" class=" csFlatBtn" icon="format_align_justify" 
+                <mu-flat-button slot="left" class="csFlatBtn" icon="format_align_justify" 
                   :class="[this.data.attributes.textAlign === 'justify' ? 'ctrl-active' : '']" @click="handleTextAlign('justify')"/>
                 <span class="groupBtnR">
-                <mu-flat-button class=" csFlatBtn" icon="format_list_numbered" slot="right" 
+                <mu-flat-button class="csFlatBtn" icon="format_list_numbered" slot="right" 
                   :class="[this.data.attributes.listStyle === 'ol' ? 'ctrl-active' : '']" @click="data.attributes.listStyle = data.attributes.listStyle === 'ol' ? 'block' : 'ol'"/>
-                <mu-flat-button class=" csFlatBtn" icon="format_list_bulleted" slot="right" 
+                <mu-flat-button class="csFlatBtn" icon="format_list_bulleted" slot="right" 
                 :class="[this.data.attributes.listStyle === 'ul' ? 'ctrl-active' : '']" @click="data.attributes.listStyle = data.attributes.listStyle === 'ul' ? 'block' : 'ul'"/>
               </span>
             </div>

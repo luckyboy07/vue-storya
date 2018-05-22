@@ -152,7 +152,7 @@ export const store = new Vuex.Store({
                 component: 'text-layer',
                 zindex: null,
                 open: false,
-                content: 'Text Layer \n test',
+                content: '<div>Text Layer</div>',
                 attributes: {
                     rotation: 0,
                     fontFamily: "Lato",
