@@ -148,6 +148,12 @@ export default {
       },
       deep: true
     },
+    "data.content": {
+      handler(val) {
+        undoRedo.add(appHelper.cloneLayer(this.data), 'scale');
+      },
+      deep: true
+    },
   }
 }
 </script>
