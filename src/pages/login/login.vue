@@ -25,7 +25,7 @@ export default {
   methods: {
     login () {
       this.$router.push({
-        name: 'EditorApp'
+        name: 'New Storya'
       })
     }
   }

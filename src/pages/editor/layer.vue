@@ -102,7 +102,6 @@ export default {
       this.selectedLayer.selected = true
         //global layers deselect previous layer
         for (var i = 0; i < this.layers.length; i++) {
-          this.layers[i].selected = false;
           if(this.layers[i].id === elem.id){
               this.layers[i].selected = true
           }else {

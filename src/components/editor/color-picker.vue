@@ -31,13 +31,21 @@ export default {
   },
   methods: {
     updateValue (value) {
-        console.log('value:',value)
-        console.log('this.target:',this.target)
+      console.log('value:',value)
         this.target[1].style.backgroundColor = value.hex
         if(this.target[3] === 'border'){
         this.target[2].attributes.borderColor = value.hex
         }else if (this.target[3] === 'shadow') {
         this.target[2].attributes.shadowColor = value.hex
+        }else if (this.target[3] === 'gradient') {
+          if(this.target[4] === '0') {
+            this.target[2].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor = value.hex;
+          }else if (this.target[4] === '1'){
+            this.target[2].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor = value.hex;
+          }
+        // this.target[2].attributes.shadowColor = value.hex
+        }else{
+          this.target[2].attributes.color = value.hex
         }
     //   this.pickColor = value.hex
         // let selected = this.currentSelectedLayer.attributes

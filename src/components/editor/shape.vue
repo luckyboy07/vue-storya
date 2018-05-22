@@ -1,5 +1,8 @@
 <template>
-	<svg class="shape-container" :style="{opacity: data.attributes.opacity}">
+<div>
+    <div v-if="data.attributes.shape === 'Circle'" :style="getAttributes()" class="circle" ></div>
+    <div v-if="data.attributes.shape === 'Rectangle'" :style="getAttributes()" class="square" ></div>
+	<svg v-else class="shape-container" :style="{opacity: data.attributes.opacity}">
 		<!-- v-if="shapeSelected === 'square'" -->
     <defs>
       <pattern id="fillImage" 
@@ -18,7 +21,7 @@
           :stop-color="data.attributes.gradientBackgroundData.sliderStyle[1].backgroundColor"/>
       </linearGradient>
     </defs>
-		<circle v-if="data.attributes.shape === 'Circle'" 
+		<!-- <circle v-if="data.attributes.shape === 'Circle'" 
       :cx="(data.attributes.sizeOption === 'Manual' ? data.width : parentW) / 2" 
       :cy="(data.attributes.sizeOption === 'Manual' ? data.height: parentH) / 2" 
       :r="getRadius()" 
@@ -27,7 +30,7 @@
       :stroke="data.attributes.borderColor" 
       :stroke-width="data.attributes.borderSize" 
       :stroke-dasharray="data.attributes.borderStyle !== 'Solid' ? (data.attributes.borderSize / 6) + ' ' + (data.attributes.borderSize * 2) : 0">
-    </circle>
+    </circle> -->
 		 <!-- style="width: 100%; height: 100%; margin: 1px;"  -->
 		<rect  v-if="data.attributes.shape === 'Rectangle'" width="100%" height="100%" 
       :stroke-linecap="data.attributes.borderStyle" 
@@ -52,6 +55,7 @@
           	</linearGradient>
           </defs> -->
 	</svg> 
+</div>
 </template>
 
 <script>
@@ -90,6 +94,52 @@ export default {
       return ((w / 2) - 2) + ', ' + (this.data.attributes.borderSize - 2) + ',' + (w - this.data.attributes.borderSize) + ', ' +
       (h - this.data.attributes.borderSize) + ', ' + this.data.attributes.borderSize + ', ' + (h - this.data.attributes.borderSize)
             // targetElemShape.setAttribute('points', points)
+    },
+    getAttributes () {
+      let linearGrad = 'linear-gradient('+this.data.attributes.gradientBackgroundData.rotation+'deg,'+this.data.attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+this.data.attributes.gradientBackgroundData.value[0]+'%,'+this.data.attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+this.data.attributes.gradientBackgroundData.value[1]+'%)'
+      if(this.data.attributes.backgroundImageUri.url) {
+        if(this.data.attributes.isGradient) {
+          return {
+            'height': this.data.height+'px',
+            'width': this.data.width+'px',
+            'border-width': this.data.attributes.borderSize+'px',
+            'border-style': this.data.attributes.borderStyle,
+            'border-color':this.data.attributes.borderColor,
+            'boxShadow': this.data.attributes.shadowColor ? '1px 12px '+this.data.attributes.shadowSize+'px '+this.data.attributes.shadowColor : '',
+            'background':  linearGrad+', url('+this.data.attributes.backgroundImageUri.url+')',
+            'background-size':'cover',
+            'background-blend-mode': 'multiply',
+            'opacity': this.data.attributes.opacity
+          }
+        }else {
+          return {
+            'height': this.data.height+'px',
+            'width': this.data.width+'px',
+            'border-width': this.data.attributes.borderSize+'px',
+            'border-style': this.data.attributes.borderStyle,
+            'border-color':this.data.attributes.borderColor,
+            'boxShadow': this.data.attributes.shadowColor ? '1px 12px '+this.data.attributes.shadowSize+'px '+this.data.attributes.shadowColor : '',
+            'background-image': 'url('+this.data.attributes.backgroundImageUri.url+')',
+            'background-color': this.data.attributes.color,
+            'background-blend-mode': 'multiply',
+            'opacity': this.data.attributes.opacity
+          }
+        }
+      }else {
+        return {
+          'height': this.data.height+'px',
+          'width': this.data.width+'px',
+          // 'background': 'linear-gradient('+ this.data.attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+','+this.data.attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+')'
+          'background': this.data.attributes.isGradient ? linearGrad : this.data.attributes.color,
+          // 'background': this.data.attributes.borderSize+'px',
+          'border-width': this.data.attributes.borderSize+'px',
+          'border-style': this.data.attributes.borderStyle,
+          'border-color':this.data.attributes.borderColor,
+          'boxShadow': this.data.attributes.shadowColor ? '1px 12px '+this.data.attributes.shadowSize+'px '+this.data.attributes.shadowColor : '',
+            'opacity': this.data.attributes.opacity
+        }
+      }
+      
     }
   },
 };
@@ -115,5 +165,25 @@ svg {
   width: 100%;
   height: 100%;
   overflow:visible;
+}
+.circle {
+  /* width: 200px; */
+  /* height: 200px; */
+  line-height: 200px;
+  border-radius: 50%; /* the magic */
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  text-align: center;
+  color: white;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 0 auto 40px;
+}
+.square {
+
+}
+.blue {
+  background-color: #3498db;  
 }
 </style>

@@ -203,14 +203,19 @@ export default {
       this.menuType = "";
     },
     handleItemClick(item, type, evnt, isProjectDetail) {
+      console.log('item:',item)
+      console.log('type:',type)
+      console.log('evnt:',evnt)
+      console.log('isProjectDetail:',isProjectDetail)
       if (item.id === "-1") {
-        return;
+         this.$router.push({ name: "New Project" });
       }
       this.tabType = type;
       // set a delay to make sure the menu is rendered
-      setTimeout(() => {
-        this.$_showMenu(evnt, type);
-      }, 50);
+      // setTimeout(() => {
+      //   this.$_showMenu(evnt, type);
+      // }, 50);
+      this.$_showMenu(evnt, type);
     },
     $_getMenu(type) {
       if (this.tabType === "template") {

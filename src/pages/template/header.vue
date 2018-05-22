@@ -8,7 +8,7 @@
       <mu-flat-button label="Create" slot="left" class="btn-file h-60-p" style="margin-left: 10px"/>
       <mu-flat-button label="Help" slot="left" class="btn-file h-60-p"/>
       <div v-if="currentPage === 'editor'" slot="left" class="s-header-prj-name s-f-14" style="margin-left: 10px">Project Name:</div>
-      <input v-if="currentPage === 'editor'" spellcheck="false" slot="left" class="default-inp" style="margin-left: 10px"/>
+      <input v-if="currentPage === 'editor'" v-model="getCanvasData.project_name" spellcheck="false" slot="left" class="default-inp" style="margin-left: 10px"/>
       <div slot="right" class="s-header-acct-sett-container">
         <div class="s-header-acct-owner"><div>Hi Storjak</div></div>
         <div class="acct-settings">
@@ -21,7 +21,7 @@
       </div>
   </mu-appbar>
   <mu-divider/>
-  <editor-tools v-if="!hideSecondHeader"></editor-tools>
+  <editor-tools v-if="!hideSecondHeader" :selectedtemplate="getCanvasData"></editor-tools>
   <!-- alert modal -->
   <mu-dialog :open="confirmOpen" title="Leave Page?">
     <div style="font-family: Lato; font-size: 17px; color: #fff">Are you sure you want to leave this page?</div> 
@@ -37,6 +37,7 @@
     hideSecondHeader: show or hide the toolbar/editing tools
 */
 import editorTools from '../../components/toolbar/editor-tools'
+import {mapGetters} from 'vuex'
 export default {
   name: 'Header',
   props: ['hideSecondHeader'],
@@ -51,6 +52,9 @@ export default {
       currentPage: '',
       confirmOpen: false,
     }
+  },
+  computed: {
+    ...mapGetters(['getCanvasData'])
   },
   methods: {
     backButtonClicked() {

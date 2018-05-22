@@ -14,10 +14,11 @@ export const store = new Vuex.Store({
         isActionCastedByUndoRedo: '',
         // for editor toolbar
         canvasData: {
-            filename: 'New File 1',
-            width: 508,
-            height: 423,
-            zoom: 100
+            file_name: 'New File 1',
+            project_name: 'New File 1',
+            width: "508px",
+            height: "423px",
+            zoom: "100%"
         },
         // the timestamp to when an item occured
         lastItemAdd: null,
@@ -26,6 +27,7 @@ export const store = new Vuex.Store({
         selectedLayerId: null,
         removableId: null,
         layers: [],
+        selectedTemplate: {},
         selectedImage: {},
         setAnimation: {
             name: null,
@@ -53,6 +55,7 @@ export const store = new Vuex.Store({
                     opacity: 1,
                     rotation: 0,
                     color: '#333',
+                    isGradient: false,
                     gradientBackgroundData: {
                         value: [0, 100],
                         width: '100%',
@@ -69,6 +72,7 @@ export const store = new Vuex.Store({
                         formatter: '{value}%',
                         useKeyboard: true,
                         tooltip: "hover",
+                        rotation: 0,
                         tooltipDir: [
                             "bottom",
                             "top"
@@ -91,8 +95,8 @@ export const store = new Vuex.Store({
                             background: '-webkit-linear-gradient(left, red, yellow)'
                         }
                     },
-                    borderSize: 0,
-                    borderStyle: 'Square',
+                    borderWidth: 0,
+                    borderStyle: 'none',
                     borderColor: 'red',
                     shadowSize: '',
                     shadowColor: '',
@@ -100,7 +104,7 @@ export const store = new Vuex.Store({
                     backgroundImageRepeat: 'none',
                     backgroundImagePosition: 'Left',
                     backgroundImageAttachment: 'none'
-                },
+                }
             },
             // image
             {
@@ -126,7 +130,7 @@ export const store = new Vuex.Store({
                     opacity: 1,
                     rotation: 0,
                     borderWidth: '0',
-                    borderStyle: 'solid',
+                    borderStyle: 'None',
                     borderColor: '',
                     shadowSize: '1',
                     shadowColor: '',
@@ -302,6 +306,12 @@ export const store = new Vuex.Store({
         updateUndoRedoAction: state => {
             state.isActionCastedByUndoRedo = appHelper.generateTimestamp();
         },
+        selectTemplate: (state, payload) => {
+            let template = state.canvasData
+            template = payload
+            template.zoom = '100%'
+            Vue.set(state, 'canvasData', template)
+        }
     },
     getters: {
         getItems: state => {
@@ -358,6 +368,9 @@ export const store = new Vuex.Store({
         },
         editLayer: ({ commit }, payload) => {
             commit('editLayer', payload)
+        },
+        selectTemplate: ({ commit }, payload) => {
+            commit('selectTemplate', payload)
         }
     }
     //   strict: process.env.NODE_ENV !== 'production'
