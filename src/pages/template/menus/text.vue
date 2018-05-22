@@ -9,7 +9,8 @@
             <mu-grid-list class="gridlist-demo left">Font</mu-grid-list>
             <mu-grid-list class="right">
               <multiselect id="fontStyle" ref="fontsSelection" v-model="data.attributes.fontFamily" :options="availableFonts" :searchable="false" 
-                open-direction="bottom" :close-on-select="true" :style="{fontFamily: data.attributes.fontFamily}">
+                open-direction="bottom" :close-on-select="true" :style="{fontFamily: data.attributes.fontFamily}"
+                @blur.native="revertFont">
               </multiselect>
             </mu-grid-list>
           </div>
@@ -19,15 +20,15 @@
                 <mu-grid-list class="gridlist-demo left"></mu-grid-list>
                 <mu-grid-list class="right">
                 <div class="input-container">
-                    <input class="input-size optionInput" v-digitsonly v-append-unit="'px'"
+                    <input class="input-size optionInput" v-digitsonly
                       v-model="data.attributes.fontSize">
-                    <mu-flat-button class=" csFlatBtn" icon="format_bold" 
+                    <mu-flat-button class="csFlatBtn" icon="format_bold" 
                       slot="right" :class="[data.attributes.fontWeight === 'bold' ? 'ctrl-active' : '']"
                       @click.stop="handleFontWeight()"/>
-                    <mu-flat-button class=" csFlatBtn" icon="format_italic" 
+                    <mu-flat-button class="csFlatBtn" icon="format_italic" 
                       slot="right" :class="[data.attributes.fontStyle === 'italic' ? 'ctrl-active' : '']"
                       @click.stop="handleFontStyle()"/>
-                    <mu-flat-button class=" csFlatBtn" icon="format_underlined" 
+                    <mu-flat-button class="csFlatBtn" icon="format_underlined" 
                       slot="right" :class="[data.attributes.textDecoration === 'underline' ? 'ctrl-active' : '']"
                       @click="handleTextDecoration()"/>
                </div>
@@ -36,18 +37,18 @@
         </mu-list-item>
          <mu-list-item  slot="nested" class="paddingZero nestedBtnGroup" v-no-ripple>
              <div class="input-container limitGroupBtn">
-                <mu-flat-button slot="left" class=" csFlatBtn" icon="format_align_left" 
+                <mu-flat-button slot="left" class="csFlatBtn" icon="format_align_left" 
                   :class="[this.data.attributes.textAlign === 'left' ? 'ctrl-active' : '']" @click="handleTextAlign('left')"/>
-                <mu-flat-button slot="left" class=" csFlatBtn" icon="format_align_center" 
+                <mu-flat-button slot="left" class="csFlatBtn" icon="format_align_center" 
                   :class="[this.data.attributes.textAlign === 'center' ? 'ctrl-active' : '']" @click="handleTextAlign('center')"/>
-                <mu-flat-button slot="left" class=" csFlatBtn" icon="format_align_right" 
+                <mu-flat-button slot="left" class="csFlatBtn" icon="format_align_right" 
                   :class="[this.data.attributes.textAlign === 'right' ? 'ctrl-active' : '']" @click="handleTextAlign('right')"/>
-                <mu-flat-button slot="left" class=" csFlatBtn" icon="format_align_justify" 
+                <mu-flat-button slot="left" class="csFlatBtn" icon="format_align_justify" 
                   :class="[this.data.attributes.textAlign === 'justify' ? 'ctrl-active' : '']" @click="handleTextAlign('justify')"/>
                 <span class="groupBtnR">
-                <mu-flat-button class=" csFlatBtn" icon="format_list_numbered" slot="right" 
+                <mu-flat-button class="csFlatBtn" icon="format_list_numbered" slot="right" 
                   :class="[this.data.attributes.listStyle === 'ol' ? 'ctrl-active' : '']" @click="data.attributes.listStyle = data.attributes.listStyle === 'ol' ? 'block' : 'ol'"/>
-                <mu-flat-button class=" csFlatBtn" icon="format_list_bulleted" slot="right" 
+                <mu-flat-button class="csFlatBtn" icon="format_list_bulleted" slot="right" 
                 :class="[this.data.attributes.listStyle === 'ul' ? 'ctrl-active' : '']" @click="data.attributes.listStyle = data.attributes.listStyle === 'ul' ? 'block' : 'ul'"/>
               </span>
             </div>
@@ -160,14 +161,27 @@ export default {
   },
   beforeMount() {
     this.attrs = this.data.attributes;
+    this.availableFonts = fontHelper.getFonts();
     // for the color picker to hide
     document.addEventListener('mousedown', this.hidePicker);
   },
   beforeDestroy() {
     document.removeEventListener('mousedown', this.hidePicker);
+    // destroying font styles hover event
+    // var p = this.$el.querySelector('#fontStyle').parentElement.parentElement;
+    //   for (var i = 0; i < p.children.length; i++) {
+    //     if (p.children[i].className === 'multiselect__content-wrapper') {
+    //       var ul = p.children[i].children[0];
+    //       for (var j = 0; j < ul.children.length; j++) {
+    //         // ul.children[j].removeEventListener('mouseover', this.previewFont);
+    //         // ul.children[j].removeEventListener('click', this.setFontSelection);
+    //       }
+    //     }
+    //   }
   },
   mounted() {
-    this.$_setFonts()
+    this.originalFont = this.data.attributes.fontFamily;
+    this.$_setFonts();
   },
   updated() {
     this.$_setFonts()
@@ -175,6 +189,7 @@ export default {
   data () {
       return {
         selectedPicker: '',
+        originalFont: '',
         colors: {
           hex: '#194d33',
           hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
@@ -246,13 +261,13 @@ export default {
       if (!evt) {
         return;
       }
-      if (this.selectedPicker === 'foregroundColor' && !this.$refs.foregroundColor.contains(evt.target)) {
+      if (this.selectedPicker === 'foregroundColor' && this.$refs.foregroundColor && !this.$refs.foregroundColor.contains(evt.target)) {
         this.selectedPicker = '';
-      } else if (this.selectedPicker === 'backgroundColor' && !this.$refs.backgroundColor.contains(evt.target)) {
+      } else if (this.selectedPicker === 'backgroundColor' && this.$refs.backgroundColor && !this.$refs.backgroundColor.contains(evt.target)) {
         this.selectedPicker = '';
-      } else if (this.selectedPicker === 'borderColor' && !this.$refs.borderColor.contains(evt.target)) {
+      } else if (this.selectedPicker === 'borderColor' && this.$refs.borderColor && !this.$refs.borderColor.contains(evt.target)) {
         this.selectedPicker = '';
-      } else if (this.selectedPicker === 'shadowColor' && !this.$refs.shadowColor.contains(evt.target)) {
+      } else if (this.selectedPicker === 'shadowColor' && this.$refs.shadowColor && !this.$refs.shadowColor.contains(evt.target)) {
         this.selectedPicker = '';
       } 
     },
@@ -266,19 +281,28 @@ export default {
         if (p.children[i].className === 'multiselect__content-wrapper') {
           var ul = p.children[i].children[0];
           for (var j = 0; j < ul.children.length; j++) {
-            // console.log(ul.children[j])
+            // ul.children[j].addEventListener('mouseover', this.previewFont);
+            // ul.children[j].addEventListener('mousedown', this.setFontSelection);
             ul.children[j].style.fontFamily = this.availableFonts[j];
           }
         }
       }
     },
+    revertFont() {
+      // if (this.originalFont !== this.data.attributes.fontFamily) {
+      //    this.data.attributes.fontFamily = this.originalFont;
+      // }
+    },
+    setFontSelection() {
+      this.originalFont = this.data.attributes.fontFamily;
+    },
+    previewFont(evt) {
+      this.data.attributes.fontFamily = evt.target.parentElement.style.fontFamily.replace(/"/g, '')
+    },
     toggleLayer() {
       this.data.selected = this.data.visible = !this.data.visible;
     },
-  },
-  created () {
-    this.availableFonts = fontHelper.getFonts();
-  },
+  }
 }
 </script>
 <style scoped>

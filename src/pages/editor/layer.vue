@@ -5,7 +5,6 @@
     :disabled="!elem.selected" 
     :rotatable="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? true : false : true"
     :draggable="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? true : false : true"
-    :handles="'nw,ne,se,sw'"
     :rotation="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ?  elem.attributes.rotation : 0 :  elem.attributes.rotation"
     :fixedProportion="false"
     :left="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.x : -7 : elem.x"
@@ -32,7 +31,7 @@
     <!-- image layer -->
     
     <!-- text layer -->
-    <text-layer v-if="elem.type ==='text'" :layerData="elem" :dragging_id="selectedLayer ? selectedLayer.id : ''"></text-layer>
+    <text-layer v-if="elem.type ==='text'" :data="elem" v-model="elem.id" :dragging="isDragging"></text-layer>
     <!-- text layer -->
 
     </rotatable-resizer>
@@ -58,6 +57,7 @@ export default {
       selectedLayer: null,
       parentW: 0,
       parentH: 0,
+      isDragging: false,
     };
   },
   beforeDestroy() {
@@ -66,8 +66,8 @@ export default {
   mounted() {
     // get the parent's dimension
     var _d = this.getCanvasData();
-    this.parentH = parseInt(_d.height.replace('px', '')) + 14;
-    this.parentW = parseInt(_d.width.replace('px', '')) + 14;
+    this.parentH = _d.height// parseInt(_d.height.replace('px', '')) + 14;
+    this.parentW = _d.width;//parseInt(_d.width.replace('px', '')) + 14;
     // handling layer desselection
     this.$el.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
   },
@@ -88,11 +88,11 @@ export default {
       }
     },
     activated(elem) {
-      console.log('asdasd')
-      // console.log('%c ' + elem.id, 'background-color: red; color: white');
+      console.log('%c Selected: ' + elem.id, 'background-color: red; color: white');
       //  check if there is a previously assigned layer
       // and if the new layer is not equal to the current selected layer
       if (this.selectedLayer && this.selectedLayer.id !== elem.id) {
+        // console.log('DIRI')
         // deselect the previous layer
         this.selectedLayer.selected = false
         this.setSelectedLayerId(null)
@@ -115,7 +115,7 @@ export default {
     },
     rotateStarted() {
       // starting point 
-       this.$_recordEordEvent();
+       this.$_recordEvent();
     },
     rotated(deg) {
       this.selectedLayer.attributes.rotation = deg;
@@ -124,6 +124,7 @@ export default {
        this.$_recordEvent();
     },
     dragStarted() {
+      this.isDragging = true;
       this.$_recordEvent();
     },
     dragging(left,  top) {
@@ -131,6 +132,7 @@ export default {
       this.selectedLayer.y = top;
     },
     dragEnded() {
+      this.isDragging = false;
       // record for undoo redo event
       this.$_recordEvent();
     },
@@ -184,4 +186,5 @@ export default {
   },
 };
 </script>
+
 

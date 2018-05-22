@@ -19,7 +19,7 @@
             </mu-grid-list>
           </div>
         </mu-list-item> -->
-        <mu-list-item  slot="nested" class="paddingZero">
+        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container" style="margin-top: -7px;">
             <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
             <mu-grid-list class="right">
@@ -33,7 +33,7 @@
             </mu-grid-list>
           </div>
         </mu-list-item>
-        <mu-list-item  slot="nested" class="paddingZero">
+        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Opacity</mu-grid-list>
             <mu-grid-list class="right">
@@ -42,7 +42,7 @@
             </mu-grid-list>
           </div>
         </mu-list-item>
-        <mu-list-item  slot="nested" class="paddingZero">
+        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
             <mu-grid-list class="right">
@@ -52,7 +52,7 @@
           </div>
         </mu-list-item>
         <mu-sub-header slot="nested">Border</mu-sub-header>
-        <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+        <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
             <mu-grid-list class="right">
@@ -61,7 +61,7 @@
             </mu-grid-list>
           </div>
         </mu-list-item>
-        <mu-list-item  slot="nested"  class="paddingZero demiBlackbg">
+        <mu-list-item  slot="nested"  class="paddingZero demiBlackbg" v-no-ripple>
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Style</mu-grid-list>
             <mu-grid-list class="right">
@@ -69,7 +69,7 @@
             </mu-grid-list>
           </div>
         </mu-list-item>
-         <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+         <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
           <div class="gridlist-demo-container" style="margin-top: -6px;">
             <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
             <mu-grid-list class="right">
@@ -79,7 +79,7 @@
           </div>
         </mu-list-item>
         <mu-sub-header slot="nested">Shadow</mu-sub-header>
-         <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+         <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
             <mu-grid-list class="right">
@@ -88,7 +88,7 @@
             </mu-grid-list >
           </div>
         </mu-list-item>
-         <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+         <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
           <div class="gridlist-demo-container" style="margin-top: -6px;">
             <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
             <mu-grid-list class="right">
@@ -97,7 +97,7 @@
             </mu-grid-list>
           </div>
         </mu-list-item>
-        <mu-list-item  slot="nested"  class="paddingZero">
+        <mu-list-item  slot="nested"  class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Object-Fit</mu-grid-list>
             <mu-grid-list class="right">

@@ -75,9 +75,9 @@ export default {
   },
   mounted() {
     var _d = this.getCanvasData();
-    this.parentH = parseInt(_d.height.replace('px', ''));
-    this.parentW = parseInt(_d.width.replace('px', ''));
-    // console.log( 'linear-gradient('+this.data.attributes.gradientBackgroundData.rotation+'deg,'+this.data.attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+this.data.attributes.gradientBackgroundData.value[0]+'%,'+this.data.attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+this.data.attributes.gradientBackgroundData.value[1]+'%)')
+    this.parentH = _d.height; //parseInt(_d.height.replace('px', ''));
+    this.parentW = _d.width; //parseInt(_d.width.replace('px', ''));
+    console.log(this.data)
   },
   methods: {
     ...mapGetters(['getCanvasData']),

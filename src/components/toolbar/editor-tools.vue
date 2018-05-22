@@ -47,11 +47,11 @@
   <mu-icon-menu menuClass="xxx" icon="" @change="handleChange" :anchorOrigin="rightTop"
       :targetOrigin="rightTop"
       :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
-      <mu-menu-item value="1" title="Save As" />
-      <mu-divider inset class="temp-action-item-divider"/>
-      <mu-menu-item value="1" title="Save As Template" />
-        <mu-divider inset class="temp-action-item-divider"/>
-      <mu-menu-item value="1" title="Export As" />
+      <mu-menu-item value="1" title="Save As" @click="exportContent()"/>
+      <mu-divider inset class="temp-action-item-divider" @click="exportContent()"/>
+      <mu-menu-item value="1" title="Save As Template" @click="exportContent()"/>
+        <mu-divider inset class="temp-action-item-divider" @click="exportContent()"/>
+      <mu-menu-item value="1" title="Export As" @click="exportContent()"/>
     </mu-icon-menu>
 </div>
 </template>
@@ -98,7 +98,7 @@ export default {
     console.log('selectedtemplate:',this.selectedtemplate)
   },
   methods: {
-    ...mapGetters(['template']),
+     ...mapGetters(['getExportContent', 'template']),
     handleChange(val) {
       this.value = val;
     },
@@ -136,8 +136,33 @@ export default {
           this.selectedtemplate.zoom = (parseInt(this.selectedtemplate.zoom.replace('%', '')) - 25).toString() + "%";
         }
       }
-    }
-  }
+      // console.log(this.editorData.zoom)
+      // for (var i = 0; i < this.layers.length; i++) {
+      //     console.log(this.layers[i], i);
+      //     this.layers[i].width =  this.layers[i].width * this.editorData.zoom / 100;
+      //      this.layers[i].height =  this.layers[i].height * this.editorData.zoom / 100;
+      // }
+    },
+    exportContent() {
+      console.log('Exporting....')
+      console.log(JSON.stringify( this.getExportContent()));
+      console.log('Export finished')
+    },
+  },
+  computed: {
+    ...mapGetters({
+      editorData: 'getCanvasData',
+      layers: 'getLayers'
+    }),
+  },
+  // watch: {
+  //   "editorData.zoom": {
+  //     handler(val) {
+  //       console.log("c data chan ");
+  //     },
+  //     deep: true
+  //   }
+  // }
 }
 </script>
 <style scoped>

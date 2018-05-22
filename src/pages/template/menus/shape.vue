@@ -324,7 +324,7 @@ export default {
   right: 15px;
   top: 0px;
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   box-shadow: 0 1px 6px rgba(0,0,0,.117647), 0 1px 4px rgba(0,0,0,.117647);
 }
 .subheader-chckbox{

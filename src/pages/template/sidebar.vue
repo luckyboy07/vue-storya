@@ -17,7 +17,7 @@
             <mu-divider style="margin-left: 10px;width: 315px;" />
               <mu-menu value="" title="">
             <div class="pop-content">
-              <div v-for="(item, i) in getItems"  :key="i" class="content-btn" @click.stop="addLayer(item);toggle($event)">
+              <div v-for="(item, i) in items"  :key="i" class="content-btn" @click.stop="addLayer(item);toggle($event)">
               <mu-raised-button  ref="iconbtn"  class="raised-btn"  :icon="item.icon" @hover="shapeSelected = i === 0"/>
                <br>
                <span>{{item.title}}</span> 
@@ -39,7 +39,7 @@
         </mu-icon-menu>
       </mu-appbar>
     <mu-list>
-    <component v-for="(layer,i) in getLayers" :key="i" :is="layer.component"  
+    <component v-for="(layer,i) in layers" :key="i" :is="layer.component"  
       :openpanel="layer.selected" :data="layer" @isOpen="isOpen"></component>
      <!-- <image-layer/> -->
      <!-- <shape-layer/> -->
@@ -137,7 +137,10 @@ export default {
     'select-template': templateSelection
   },
   computed: {
-    ...mapGetters(['getItems','getLayers'])
+    ...mapGetters( {
+      items: 'getItems',
+      layers: 'getLayers'
+    })
   },
   mounted () {
     this.trigger = this.$refs.iconbtn
@@ -198,34 +201,28 @@ export default {
       }
     },
     moveDown () {
-        let currentLayer = this.getLayers.find((e)=> e.selected)
+        let currentLayer = this.layers.find((e)=> e.selected)
         console.log('currentLayer;',currentLayer)
-        let nextItem = this.getLayers.find((e)=> e.order === currentLayer.order - 1)
+        let nextItem = this.layers.find((e)=> e.order === currentLayer.order - 1)
           if(nextItem){
           nextItem.order = currentLayer.order
           currentLayer.order = currentLayer.order -1 
           // let newLayer = this.getLayers.sort((a, b) => b.order - a.order)
+          
           this.sortLayer()
         }
-      //   if (currentLayer.order < this.getLayers.length) {
-      //   let nextItem = this.getLayers.find((e)=> e.order === currentLayer.order + 1)
-      //   nextItem.order = currentLayer.order
-      //   currentLayer.order = currentLayer.order + 1
-      //   this.getLayers = this.getLayers.sort((a, b) => b.order - a.order)
-      // }
+    },
+    sortLayer() {
+      this.layers.sort((a, b) => a.order - b.order)
     },
     moveUp () {
-        let currentLayer = this.getLayers.find((e)=> e.selected)
-          let prevItem = this.getLayers.find((e)=> e.order === currentLayer.order + 1)
+        let currentLayer = this.layers.find((e)=> e.selected)
+          let prevItem = this.layers.find((e)=> e.order === currentLayer.order + 1)
         if(prevItem){
           prevItem.order = currentLayer.order
           currentLayer.order = currentLayer.order + 1
           this.sortLayer()
         }
-        //  for(let i = 0; i < this.getLayers.length; i++) {
-        //   let last = (i +this.getLayers.length) % this.getLayers.length
-        //   this.getLayers[i].zindex = this.getLayers[last].order
-        // }
     } 
   }
 }
@@ -271,8 +268,8 @@ export default {
 
 }
 .mu-popover {
-  left: 345px !important;
-  top: 115px !important;
+  left: 345px!important;
+  top: 115px!important;
   background-color: #171616;
 }
 .mu-menu-list{

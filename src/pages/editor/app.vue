@@ -4,7 +4,9 @@
 <side-bar @openWindow="openWindow"></side-bar>
     <div class="editor-container" >
     <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
-      <div class="editor-box" :style="{width: getCanvasData.width, height: getCanvasData.height}">
+      <div class="editor-box" :style="{width: getCanvasData.width + 'px', 
+          height: getCanvasData.height + 'px', zoom: (getCanvasData.zoom / 100),
+          '-moz-transform': 'scale(' + (getCanvasData.zoom / 100) + ')'}">
         <div class="canvas-wrap">
             <layer :layers="getLayers"></layer>
         </div>
