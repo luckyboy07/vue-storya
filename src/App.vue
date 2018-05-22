@@ -57,7 +57,7 @@ export default {
   },
   methods :{
     ...mapGetters(['getSelectedLayerId']),
-    ...mapMutations(['addLayer', 'setLayerValue', 'updateLayers', 'setSelectedLayerId', 'updateUndoRedoAction']),
+    ...mapMutations(['addLayer', 'setLayerValue', 'setSelectedLayerId', 'updateUndoRedoAction']),
     keydownEventHandler(evt) {
       // resetting idle time in key activities
       if (this.idleTime !== 0) {
@@ -93,7 +93,7 @@ export default {
           var item = this.getSelectedLayerId();
           if (item) {
             undoRedo.add(appHelper.cloneLayer(item.sourceLayer), 'delete');
-            this.updateLayers(this.$_removeFromArray(this.layers, item.id));
+            this.$_removeFromArray(this.layers, item.id)
           }
         }
       }
@@ -125,7 +125,7 @@ export default {
 
       if (action === 'create') {
         // if it was created, remove it
-        this.updateLayers(this.$_removeFromArray(this.layers, item.id));
+        this.$_removeFromArray(this.layers, item.id)
       } else if (action === 'scale') {
         this.setLayerValue(item);
       } else if (action === 'delete') {

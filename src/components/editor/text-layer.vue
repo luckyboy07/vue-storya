@@ -1,6 +1,6 @@
 <template>
   <div ref="editable" class="tl-container" contenteditable="true" spellcheck="false" 
-    :style="getStyle()" @keydown="setContent($event)">
+    :style="getStyle()" @keydown="setContent($event)" @keyup="_sc()">
   </div>
 </template>
 <script>
@@ -9,7 +9,8 @@ import appHelper from '../../helpers/app.helper.js'
 import undoRedo from '../../helpers/undo-redo.js'
 export default {
   name: "text-layer",
-  props: ['layerData', 'dragging_id'],
+
+  props: ['data', 'dragging_id'],
   data() {
     return {
       style: null,
@@ -19,27 +20,34 @@ export default {
     }
   },
   mounted() {
-    this.$refs.editable.innerHTML = this.layerData.content;
-    this.currentListType = this.layerData.attributes.listStyle;
-    this.oldLayerData = appHelper.cloneLayer(this.layerData);
-    this.formatContent();
+    this.currentListType = this.data.attributes.listStyle;
+    this.oldLayerData = appHelper.cloneLayer(this.data);
+    this.$nextTick(() => this.formatContent(this.data.content))
+  },
+  beforeUpdate() {
   },
   methods: {
+    _sc() {
+      this.data.content = this.$refs.editable.innerHTML;
+    },
     setContent(evt) {
-      if (this.layerData.attributes.listStyle !== 'block' && (evt.key === 'Delete' || evt.key === 'Backspace')) {
+      if (this.data.attributes.listStyle !== 'block' && (evt.key === 'Delete' || evt.key === 'Backspace')) {
         if (!this.canDelete()) {
           evt.preventDefault();
         }
       }
       if (this.$refs.editable.innerHTML.toString().replace(/<br>/g, '').replace(/<div>/g, '').replace(/<\/div>/g, '').length <= 0) {
-        this.layerData.attributes.listStyle = 'block'
+        this.data.attributes.listStyle = 'block'
       }
-
-      this.layerData.content = this.$refs.editable.innerHTML.toString();
     },
-    formatContent() {
-      if (this.layerData.attributes.listStyle === 'block') {
+    formatContent(val) {
+      if (this.data.attributes.listStyle === 'block') {
+        if (val) {
+          this.$refs.editable.innerHTML = this.data.content;
+          return;
+        }
         var html = this.$refs.editable.innerHTML.toString().trim();
+        console.log('block', this.$refs.editable.innerHTML);
         html= html.replace(/<ul>/g, '');
         html = html.replace(/<\/ul>/g, '');
         html= html.replace(/<ol>/g, '');
@@ -53,17 +61,19 @@ export default {
           }
           newHtml += '<div>' + c[i] + '</div>';
         }
-         this.$refs.editable.innerHTML = newHtml;
+        this.$refs.editable.innerHTML = newHtml;
       } else {
         var text = this.$refs.editable.innerHTML.toString();
         if (text && text.indexOf('ol') !== -1 || text.indexOf('ul') !== -1) {
           if (text && text.indexOf('ol') !== -1) {
-            if (this.layerData.attributes.listStyle === 'ol') {
+            // console.log('ol');
+            if (this.data.attributes.listStyle === 'ol') {
               return;
             }
             text = text.replace('ol', 'ul');
           } else {
-            if (this.layerData.attributes.listStyle === 'ul') {
+            // console.log('ul');
+            if (this.data.attributes.listStyle === 'ul') {
               return;
             }
             text = text.replace('ul', 'ol');
@@ -73,18 +83,18 @@ export default {
           text = text.replace(/<div>/g, '\n');
           text = text.trim().replace(/<\/div>/g, '');
           var c = text.split('\n')
-          var list = '<' + this.layerData.attributes.listStyle + '>';
+          var list = '<' + this.data.attributes.listStyle + '>';
           for (var i = 0; i < c.length; i++) {
             list += '<li>' + c[i] + '</li>'
           }
-          this.$refs.editable.innerHTML =  list +'</' + this.layerData.attributes.listStyle + '>';
+          this.$refs.editable.innerHTML =  list +'</' + this.data.attributes.listStyle + '>';
         }
       }
     },
     getStyle() {
-      var layerData = this.layerData.attributes;
+      var layerData = this.data.attributes;
       return {
-        position: 'absolute',
+        // position: 'absolute',
         fontFamily: layerData.fontFamily,
         fontSize: layerData.fontSize.indexOf('px') !== -1 ? layerData.fontSize : layerData.fontSize + 'px',
         fontWeight: layerData.fontWeight,
@@ -101,10 +111,10 @@ export default {
     canDelete() {
       // check for list type
       var html = this.$refs.editable.innerHTML.toString();
-      if (this.layerData.attributes.listStyle === 'ul') {
+      if (this.data.attributes.listStyle === 'ul') {
         html= html.replace(/<ul>/g, '');
         html = html.replace(/<\/ul>/g, '');
-      } else if (this.layerData.attributes.listStyle === 'ol') {
+      } else if (this.data.attributes.listStyle === 'ol') {
         html= html.replace(/<ol>/g, '');
         html = html.replace(/<\/ol>/g, '');
       }
@@ -128,11 +138,11 @@ export default {
     redoUndoTime: function(val) {
        this.addToUndoRedo = false;
     },
-    "layerData.attributes": {
+    "data.attributes": {
       handler(val) {
         // list style
         this.formatContent();
-        this.currentListType = this.layerData.attributes.listStyle;
+        this.currentListType = this.data.attributes.listStyle;
 
         // undo/redo
         if (!this.addToUndoRedo) {
@@ -140,8 +150,8 @@ export default {
            return;
         }
         undoRedo.add(appHelper.cloneLayer(this.oldLayerData), 'scale');
-        undoRedo.add(appHelper.cloneLayer(this.layerData), 'scale');
-        this.oldLayerData = this.layerData;
+        undoRedo.add(appHelper.cloneLayer(this.data), 'scale');
+        this.oldLayerData = this.data;
       },
       deep: true
     },
