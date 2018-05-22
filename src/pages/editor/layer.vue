@@ -31,7 +31,7 @@
     <!-- image layer -->
     
     <!-- text layer -->
-    <text-layer v-if="elem.type ==='text'" :data="elem" v-model="elem.id"></text-layer>
+    <text-layer v-if="elem.type ==='text'" :data="elem" v-model="elem.id" :dragging="isDragging"></text-layer>
     <!-- text layer -->
 
     </rotatable-resizer>
@@ -57,6 +57,7 @@ export default {
       selectedLayer: null,
       parentW: 0,
       parentH: 0,
+      isDragging: false,
     };
   },
   beforeDestroy() {
@@ -87,8 +88,7 @@ export default {
       }
     },
     activated(elem) {
-      console.log('asdasd')
-      // console.log('%c ' + elem.id, 'background-color: red; color: white');
+      console.log('%c Selected: ' + elem.id, 'background-color: red; color: white');
       //  check if there is a previously assigned layer
       // and if the new layer is not equal to the current selected layer
       if (this.selectedLayer && this.selectedLayer.id !== elem.id) {
@@ -125,6 +125,7 @@ export default {
        this.$_recordEvent();
     },
     dragStarted() {
+      this.isDragging = true;
       this.$_recordEvent();
     },
     dragging(left,  top) {
@@ -132,6 +133,7 @@ export default {
       this.selectedLayer.y = top;
     },
     dragEnded() {
+      this.isDragging = false;
       // record for undoo redo event
       this.$_recordEvent();
     },
@@ -185,4 +187,5 @@ export default {
   },
 };
 </script>
+
 

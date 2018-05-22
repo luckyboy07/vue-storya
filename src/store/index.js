@@ -160,7 +160,7 @@ export const store = new Vuex.Store({
                     textDecoration: "none", // underline or not
                     textAlign: "left",
                     listStyle: "block",
-                    lineHeight: "20px",
+                    lineHeight: 1.2,
                     color: "#000",
                     backgroundColor: "transparent",
                     borderSize: "0px",

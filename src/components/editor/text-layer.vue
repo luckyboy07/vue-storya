@@ -1,6 +1,6 @@
 <template>
-  <div ref="editable" class="tl-container" contenteditable="true" spellcheck="false" 
-    :style="getStyle()" @keydown="setContent($event)" @keyup="_sc()">
+  <div :class="{'noselect':isDragging}" ref="editable" class="tl-container" contenteditable="true" spellcheck="false" 
+    :style="getStyle()" @keyup="_sc()">
   </div>
 </template>
 <script>
@@ -10,7 +10,7 @@ import undoRedo from '../../helpers/undo-redo.js'
 export default {
   name: "text-layer",
 
-  props: ['data', 'dragging_id'],
+  props: ['data', 'dragging'],
   data() {
     return {
       style: null,
@@ -29,13 +29,6 @@ export default {
   methods: {
     _sc() {
       this.data.content = this.$refs.editable.innerHTML;
-    },
-    setContent(evt) {
-      if (this.data.attributes.listStyle !== 'block' && (evt.key === 'Delete' || evt.key === 'Backspace')) {
-        if (!this.canDelete()) {
-          evt.preventDefault();
-        }
-      }
       if (this.$refs.editable.innerHTML.toString().replace(/<br>/g, '').replace(/<div>/g, '').replace(/<\/div>/g, '').length <= 0) {
         this.data.attributes.listStyle = 'block'
       }
@@ -47,7 +40,6 @@ export default {
           return;
         }
         var html = this.$refs.editable.innerHTML.toString().trim();
-        console.log('block', this.$refs.editable.innerHTML);
         html= html.replace(/<ul>/g, '');
         html = html.replace(/<\/ul>/g, '');
         html= html.replace(/<ol>/g, '');
@@ -66,13 +58,11 @@ export default {
         var text = this.$refs.editable.innerHTML.toString();
         if (text && text.indexOf('ol') !== -1 || text.indexOf('ul') !== -1) {
           if (text && text.indexOf('ol') !== -1) {
-            // console.log('ol');
             if (this.data.attributes.listStyle === 'ol') {
               return;
             }
             text = text.replace('ol', 'ul');
           } else {
-            // console.log('ul');
             if (this.data.attributes.listStyle === 'ul') {
               return;
             }
@@ -128,8 +118,11 @@ export default {
   computed: {
     ...mapGetters({
       addTime: 'getLastLayerAddTime',
-      redoUndoTime: 'getUndoRedoLastAction'
+      redoUndoTime: 'getUndoRedoLastAction',
     }),
+    isDragging: function() {
+      return this.dragging
+    }
   },
   watch: {
     addTime: function(val) {
@@ -163,15 +156,16 @@ export default {
   width: 100%;
   height: 100%;
 }
-.no-user-select {
-  user-select: none!important;
-  -moz-user-select: none!important;
-  -webkit-user-select: none!important;
-  -ms-user-select: none!important;
+.noselect {
+  -webkit-user-select: none;  
+  -moz-user-select: none;    
+  -ms-user-select: none;      
+  user-select: none;
 }
 
 [contenteditable]:focus {
     outline: 0px solid transparent;
 }
+
 </style>
 
