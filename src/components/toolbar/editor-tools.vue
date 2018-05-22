@@ -132,18 +132,33 @@ export default {
           this.editorData.zoom = parseInt(this.editorData.zoom) - 25;
         }
       }
+      // console.log(this.editorData.zoom)
+      // for (var i = 0; i < this.layers.length; i++) {
+      //     console.log(this.layers[i], i);
+      //     this.layers[i].width =  this.layers[i].width * this.editorData.zoom / 100;
+      //      this.layers[i].height =  this.layers[i].height * this.editorData.zoom / 100;
+      // }
     },
     exportContent() {
       console.log('Exporting....')
-      console.log(this.getExportContent());
+      console.log(JSON.stringify( this.getExportContent()));
       console.log('Export finished')
     },
   },
   computed: {
     ...mapGetters({
-      editorData: 'getCanvasData'
+      editorData: 'getCanvasData',
+      layers: 'getLayers'
     }),
   },
+  // watch: {
+  //   "editorData.zoom": {
+  //     handler(val) {
+  //       console.log("c data chan ");
+  //     },
+  //     deep: true
+  //   }
+  // }
 }
 </script>
 <style scoped>
