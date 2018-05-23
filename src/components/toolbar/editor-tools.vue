@@ -135,7 +135,7 @@ export default {
         this.editorData.zoom = this.editorData.zoom + this.zoomIncrease;
         zoomHelper.zoomIn('in', this.editorData, this.layers, this.editorData.zoom, this.zoomIncrease)
       } else {
-        if ((this.editorData.zoom - (this.zoomIncrease * 4) ) > 0) {
+        if ((this.editorData.zoom - 100 ) > 0) {
           this.editorData.zoom = this.editorData.zoom - this.zoomIncrease;
           zoomHelper.zoomIn('out', this.editorData, this.layers, this.editorData.zoom, this.zoomIncrease)
         }

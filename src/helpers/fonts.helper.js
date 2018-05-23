@@ -38,7 +38,12 @@ export default {
         let head = document.head;
         let styleElem = document.createElement('style');
 
-        axios.get(this._getFontsUri())
+        var req_url = this._getFontsUri();
+        if (!req_url.split('=')[1]) {
+            // fixes: Failed to load http://fonts.googleapis.com/css?family=: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+            return;
+        }
+        axios.get(req_url)
             .then(response => {
                 styleElem.innerHTML = response.data;
                 this.fonts = [];

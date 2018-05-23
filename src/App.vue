@@ -118,13 +118,14 @@ export default {
           // trigger the idle time event
           this.$_debugLogger('Call auto save here (App.vue:113)');
           this.setAutosaveData("2");
-        } else {
-          this.$_debugLogger('Auto save: No data to save');
-        }
+        } 
+        // else {
+        //   this.$_debugLogger('Auto save: No data to save');
+        // }
         this.idleTime = 0;
       }
-      // handling the save info 
-      // hide the info if time reaches 2 seconds
+      // handling save info 
+      // hide info if time reaches 2 seconds
       if (this.getAutosaveStatusData() === '2') {
         this.autoSaveInfoDisplayDuration += 1000;
         // if save info is shown in 2 seconds

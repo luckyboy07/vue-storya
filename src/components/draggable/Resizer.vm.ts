@@ -179,6 +179,7 @@ export default {
 
     emitActivated() {
       this.$emit("activated");
+      this.$emit("focused", this.$el);
     },
 
     emitRotateStated() {
