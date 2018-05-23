@@ -65,7 +65,7 @@ export default {
     };
   },
   beforeDestroy() {
-    document.removeEventListener('mousedown', this.handleCanvasClicks)
+    this.$el.parentElement.parentElement.parentElement.removeEventListener('mousedown', this.handleCanvasClicks)
   },
   mounted() {
     // get the parent's dimension
@@ -73,7 +73,7 @@ export default {
     this.parentH = _d.height// parseInt(_d.height.replace('px', '')) + 14;
     this.parentW = _d.width;//parseInt(_d.width.replace('px', '')) + 14;
     // handling layer desselection
-    document.addEventListener('mousedown', this.handleCanvasClicks)
+    this.$el.parentElement.parentElement.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
   },
   methods: {
     ...mapMutations(['setLayerValue', 'setSelectedLayerId']),
@@ -90,7 +90,7 @@ export default {
           this.layers[i].selected = false;
         }
       }
-
+      
       this.resetFocus();
     },
     resetFocus() {
@@ -102,6 +102,7 @@ export default {
     // focusing on item neglecting its order
     focused(elem) {
       if (this.previousElem) {
+        console.log("focused", this.previousElem);
         this.previousElem.elem.style.zIndex = this.previousElem.z;
         this.previousElem = null;
       }
@@ -184,6 +185,7 @@ export default {
             this.layers[i].selected = false;
           }
         }
+         this.resetFocus();
       };
       // check if this.selectedLayer is null or 
       // the newSelectedLayerId and selectedLayer are the same
