@@ -9,6 +9,7 @@
       <mu-flat-button label="Help" slot="left" class="btn-file h-60-p"/>
       <div v-if="currentPage === 'editor'" slot="left" class="s-header-prj-name s-f-14" style="margin-left: 10px">Project Name:</div>
       <input v-if="currentPage === 'editor'" v-model="getCanvasData.project_name" spellcheck="false" slot="left" class="default-inp" style="margin-left: 10px"/>
+      <div slot="left" class="s-unsave-info" :class="[autoData === '1' || autoData === '2' ? 'info-shown' : 'info-hidden']">{{getInfo()}}</div>
       <div slot="right" class="s-header-acct-sett-container">
         <div class="s-header-acct-owner"><div>Hi Storjak</div></div>
         <div class="acct-settings">
@@ -54,7 +55,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getCanvasData'])
+    ...mapGetters(['getCanvasData']),
+    ...mapGetters({
+      autoData: 'getAutosaveStatusData'
+    }),
   },
   methods: {
     backButtonClicked() {
@@ -67,11 +71,37 @@ export default {
     confirm() {
       this.confirmOpen = false;
        this.$router.go(-1);
-    }
+    },
+    getInfo() {
+      if (this.autoData === '0') {
+        return '';
+      } else if (this.autoData === '1') {
+        return 'Unsaved Changes';
+      } else {
+        return 'All Changes Saved'
+      }
+    },
   }
 }
 </script>
 <style scoped>
+.s-unsave-info {
+  color: #7D7D7D;
+  font-style: italic;
+  margin-left: 20px;
+  width: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+.info-hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+.info-shown {
+  visibility: visible;
+  opacity: 1;
+}
 .s-header-acct-owner {
   height: 100%;
   font-weight: bold;
@@ -88,7 +118,7 @@ export default {
   color: #7D7D7D;
 }
 .s-header-prj-name {
-  width: 60%;
+  width: 100%;
   color: #7D7D7D;
 }
 .s-f-14 {

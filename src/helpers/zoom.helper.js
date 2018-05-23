@@ -11,7 +11,7 @@ export default {
             // layers
             for (var i = 0; i < layers.length; i++) {
                 // dimensions
-                console.log(layers[i].id, layers[i].width, layers[i].height)
+                // console.log(layers[i].id, layers[i].width, layers[i].height)
                 layers[i].width = layers[i].width + delta;
                 layers[i].height = layers[i].height + delta;
                 // position
@@ -20,9 +20,10 @@ export default {
                 switch (layers[i].type) {
                     case "shape":
                         // change border size of shape layer when zooming
-                        // layers[i].attributes.borderWidth = layers[i].attributes.borderWidth + (delta / 100)
+                        layers[i].attributes.borderWidth = layers[i].attributes.borderWidth + (delta / 100)
                         break;
                     case "image":
+                        layers[i].attributes.borderWidth = layers[i].attributes.borderWidth + (delta / 100)
                         break;
                     case "text":
                         // change font size
@@ -48,9 +49,10 @@ export default {
                 switch (layers[i].type) {
                     case "shape":
                         // change border size of shape layer when zooming
-                        // layers[i].attributes.borderWidth = layers[i].attributes.borderWidth - (delta / 100)
+                        layers[i].attributes.borderWidth = layers[i].attributes.borderWidth - (delta / 100)
                         break;
                     case "image":
+                        layers[i].attributes.borderWidth = layers[i].attributes.borderWidth - (delta / 100)
                         break;
                     case "text":
                         // change font size

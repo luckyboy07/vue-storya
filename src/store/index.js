@@ -21,6 +21,11 @@ export const store = new Vuex.Store({
             height: 423,
             zoom: 100
         },
+        // auto save status
+        // 0: no changes
+        // 1: data changes
+        // 2: changes handled
+        autoSaveStatus: '0',
         // the timestamp to when an item occured
         lastItemAdd: null,
         lastUpdateTime: null,
@@ -130,7 +135,7 @@ export const store = new Vuex.Store({
                     sizeOption: 'Auto',
                     opacity: 1,
                     rotation: 0,
-                    borderWidth: '0',
+                    borderWidth: 0,
                     borderStyle: 'None',
                     borderColor: '',
                     shadowSize: '1',
@@ -313,7 +318,13 @@ export const store = new Vuex.Store({
             template = payload
             template.zoom = 100
             Vue.set(state, 'canvasData', template)
-        }
+        },
+        setAutosaveData: (state, data) => {
+            if (data !== '0' && data !== '1' && data !== '2') {
+                throw new Error("Invalid status data");
+            }
+            state.autoSaveStatus = data;
+        },
     },
     getters: {
         getItems: state => {
@@ -362,6 +373,10 @@ export const store = new Vuex.Store({
             var data = state.canvasData;
             data["layers"] = state.layers;
             return data;
+        },
+        // returns the auto save status data
+        getAutosaveStatusData: state => {
+            return state.autoSaveStatus;
         },
     },
     actions: {
