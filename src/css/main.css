@@ -3,17 +3,14 @@ body {
     width: 100%;
     overflow: hidden;
 }
+
 .custom-drawer {
     width: 340px !important;
 }
 
-.activeTool{
+.activeTool {
     border: 1px solid #1da675 !important;
 }
-
-
-
-
 
 .mu-appbar {
     background-color: #222222;
@@ -322,7 +319,6 @@ a {
 .mu-item-wrapper.hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
-
 
 .mu-item {
     color: #ffffff;
@@ -853,4 +849,14 @@ a {
 
 .temp-action-item-divider {
     background-color: #77c589;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    appearance: none;
+    -moz-appearance: none;
+    margin: 0;
+    /* <-- Apparently some margin are still there even though it's hidden */
 }
