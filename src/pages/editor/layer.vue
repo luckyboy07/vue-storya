@@ -14,6 +14,7 @@
     v-for="(elem, i) in layers" :key="i"
     v-show="elem.visible"
     :z="elem.order"
+    :zoom="zoom"
     @activated="activated(elem)"
     @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
     @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
@@ -177,7 +178,10 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["getItems", "getSelectedLayerId"])
+    ...mapGetters(["getItems", "getSelectedLayerId"]),
+    zoom: function() {
+      return this.getCanvasData().zoom;
+    }
   },
   watch: {
     getSelectedLayerId: function(val) {

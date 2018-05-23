@@ -13,6 +13,7 @@ export const store = new Vuex.Store({
         // undo redo
         isActionCastedByUndoRedo: '',
         // for editor toolbar
+        zoomIncrease: 20,
         canvasData: {
             file_name: 'New File 1',
             project_name: 'New File 1',
