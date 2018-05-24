@@ -110,7 +110,7 @@
             <mu-raised-button @click="onCancel" label="Cancel" class="demo-raised-button create-action-buttons-item"
               style="background-color: transparent; border: 1px solid #4B4B4B; text-transform: none"/>
             <br/>
-            <mu-raised-button @click="onSubmit" label="Create" class="demo-raised-button create-action-buttons-item" 
+            <mu-raised-button @click="onConfirm" label="Create" class="demo-raised-button create-action-buttons-item" 
             style="margin-top: 10px; background-color: #009D70; text-transform: none"/>
           </div>
         </mu-col>
@@ -232,12 +232,10 @@ export default {
       this.$router.go(-1)
     },
     onConfirm() {
-      console.log('setup:',this.setupData)
       this.selectTemplate(this.setupData)
       this.$router.push({name: 'EditorApp'})
     },
     onSubmit() {
-      console.log('onSubmit', this.setupData);
       this.$emit('onSubmit', this.setupData);
       this.confirmDialogOpen = true;
     },
@@ -262,7 +260,6 @@ export default {
       this.activeTab = val;
     },
     onItemSelected(item) {
-      console.log('onItemSelected:',item)
       this.setupData.orientation = item
       this.setupData.width = item.w
       this.setupData.height = item.h
@@ -473,11 +470,11 @@ export default {
     /* height: 69.7vh; */
   }
   .right-content {
-    width: 30%;
-    padding: 10px;
-    background: #111111;
-    height: 69.7vh;
-    display: table;
+    width: 30% !important;
+    padding: 10px !important;
+    background: #111111 !important;
+    height: 69.7vh !important;
+    display: table !important;
     overflow-y: scroll !important;
     overflow-x: scroll !important;
   }

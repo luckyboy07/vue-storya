@@ -45,11 +45,12 @@ export default {
     openWindow (val) {
         this.targetElement = val
         console.log('openWindow:',val)
-        // this.$emit('target',val)
+        setTimeout(()=>{
         this.isWindowOpen = val[0]
+        },100)
+        // this.$emit('isOpen',true)
     },
     closepicker(value) {
-      console.log('value:',value)
       this.isWindowOpen = value
     }
   }

@@ -10,8 +10,6 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
-        // undo redo
-        isActionCastedByUndoRedo: '',
         // for editor toolbar
         canvasData: {
             file_name: 'New File 1',
@@ -51,6 +49,7 @@ export const store = new Vuex.Store({
                 zindex: null,
                 attributes: {
                     shape: 'Circle',
+                    shape_type: '',
                     sizeOption: 'Manual',
                     opacity: 1,
                     rotation: 0,
@@ -145,6 +144,8 @@ export const store = new Vuex.Store({
                 height: 100,
                 title: 'Text',
                 icon: 'text_fields',
+                width: 200,
+                height: 150,
                 order: 0,
                 visible: true,
                 animation: null,
@@ -154,20 +155,20 @@ export const store = new Vuex.Store({
                 component: 'text-layer',
                 zindex: null,
                 open: false,
-                content: '<div>Text Layer</div>',
+                content: 'Text Layer',
                 attributes: {
                     rotation: 0,
                     fontFamily: "Lato",
-                    fontSize: 20,
+                    fontSize: "20px",
                     fontWeight: "normal",
                     fontStyle: "normal",
                     textDecoration: "none", // underline or not
                     textAlign: "left",
                     listStyle: "block",
-                    lineHeight: 1.2,
+                    lineHeight: "20px",
                     color: "#000",
                     backgroundColor: "transparent",
-                    borderSize: 0,
+                    borderSize: "0px",
                     borderStyle: "",
                     borderColor: "#000",
                     shadowSize: 0,
@@ -204,26 +205,23 @@ export const store = new Vuex.Store({
     },
     mutations: {
         addLayer: (state, payload) => {
-            let layers = state.layers
-                // console.log("ADDLAYER")
-                // check if the item is from undo or redo
-                // if not, assign a new id for this item
-                // indicating that this item is created
+            console.log("ADDLAYER")
+            // check if the item is from undo or redo
+            // if not, assign a new id for this item
+            // indicating that this item is created
             if (!payload.fromUndoRedo) {
-                // console.log('cloning...', payload)
                 payload = appHelper.createLayer(payload);
-                payload.order = layers.length > 0 ? $.from(layers).max(l => l.order) + 1 : 1;
             }
-            // console.log('layers:',layers)
-            // console.log('layersasasass:',layers.length -1)
-            //setting the last active layer to in-active
+            let layers = state.layers
+                //setting the last active layer to in-active
             for (let i = 0; i < layers.length; i++) {
                 layers[i].selected = false
-                    // layers[i].order += 1
-                    // let last = (i +layers.length) % layers.length
-                    // console.log('last:',last)
-                    // layers[i].zindex = layers[last].order
+                // layers[i].order += 1
+                // let last = (i +layers.length) % layers.length
+                // console.log('last:',last)
+                // layers[i].zindex = layers[last].order
             }
+            payload.order = layers.length +1
             payload.x = 100
             payload.y = 100
             payload.open = true
@@ -231,11 +229,11 @@ export const store = new Vuex.Store({
                 // payload.width = 200
                 // payload.height = 150
             layers.push(payload)
-                // let sam = layers.sort((a, b) => {
-                //         return b.order - a.order
-                //     })
-                // layers.sort((a, b) => b.order - a.order)
-            Vue.set(state, 'layers', layers)
+            let sam = layers.sort((a, b) => {
+                    return  b.order - a.order
+            }) 
+            // layers.sort((a, b) => b.order - a.order)
+            Vue.set(state, 'layers', sam)
 
             // this is for the undo manager to
             // watch the changes of the layers
@@ -279,7 +277,7 @@ export const store = new Vuex.Store({
         // updates the layer list
         updateLayers: (state) => {
             console.log('newLayers:')
-                // Vue.set(state, 'layers', newLayers)
+            // Vue.set(state, 'layers', newLayers)
         },
         removeGlobalLayer: (state, _layerId) => {
             Vue.set(state, 'removableId', _layerId)
@@ -302,9 +300,6 @@ export const store = new Vuex.Store({
                     break;
                 }
             }
-        },
-        updateUndoRedoAction: state => {
-            state.isActionCastedByUndoRedo = appHelper.generateTimestamp();
         },
         selectTemplate: (state, payload) => {
             let template = state.canvasData
@@ -347,20 +342,10 @@ export const store = new Vuex.Store({
         getShapeLayer: state => {
             return appHelper.cloneLayer(state.items[0])
         },
-        getUndoRedoLastAction: state => {
-            return state.isActionCastedByUndoRedo;
-        },
-        getExportContent: state => {
-            /*
-                {
-
-                }
-
-            */
-            var data = state.canvasData;
-            data["layers"] = state.layers;
-            return data;
-        },
+        sortLayer: state => {
+            let sam =state.layers.sort((a, b) => a.order - b.order)
+            return state.layers.sort((a, b) => b.order - a.order)
+        }
     },
     actions: {
         addLayer: ({ commit }, payload) => {
@@ -369,8 +354,8 @@ export const store = new Vuex.Store({
         editLayer: ({ commit }, payload) => {
             commit('editLayer', payload)
         },
-        selectTemplate: ({ commit }, payload) => {
-            commit('selectTemplate', payload)
+        selectTemplate: ({commit}, payload) => {
+            commit('selectTemplate',payload)
         }
     }
     //   strict: process.env.NODE_ENV !== 'production'

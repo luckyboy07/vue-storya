@@ -65,18 +65,18 @@
                 </mu-grid-list>
                 </div>
         </mu-list-item>
-        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple @click="showPicker('foregroundColor')">
+        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple >
           <div class="gridlist-demo-container" style="margin-top: -6px;">
             <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
             <mu-grid-list class="right">
             <input disabled spellcheck="false" :value="data.attributes.color" class="input-size colorPicka">
-            <input disabled spellcheck="false" class="input-size sliderInput" :style="{backgroundColor: data.attributes.color}">
+            <input  spellcheck="false" class="input-size sliderInput" :style="{backgroundColor: data.attributes.color}" @click="showPicker($event, '')">
             </mu-grid-list>
           </div>
-          <div ref="foregroundColor" v-show="selectedPicker === 'foregroundColor'" class="item-color-picker">
+          <!-- <div ref="foregroundColor" v-show="selectedPicker === 'foregroundColor'" class="item-color-picker">
             <color-picker v-model="colors" @input="colorSelected" 
               style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
-          </div>
+          </div> -->
         </mu-list-item>  
         <mu-list-item  slot="nested" class="paddingZero" v-no-ripple @click="showPicker('backgroundColor')">
           <div class="gridlist-demo-container" style="margin-top: -6px;">
@@ -109,12 +109,12 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple @click="showPicker('borderColor')">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
                 <input disabled :value="data.attributes.borderColor" spellcheck="false" class="input-size colorPicka">
-                <input disabled spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.borderColor}">
+                <input  spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.borderColor}"  @click="showPicker($event,'border')">
                 </mu-grid-list>
               </div>
               <div ref="borderColor" v-show="selectedPicker === 'borderColor'" class="item-color-picker">
@@ -132,12 +132,12 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple @click="showPicker('shadowColor')">
+             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
                 <input disabled :value="data.attributes.shadowColor" spellcheck="false" class="input-size colorPicka">
-                <input disabled spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.shadowColor}">
+                <input  spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.shadowColor}"  @click="showPicker($event,'shadow')">
                 </mu-grid-list>
               </div>
               <div ref="shadowColor" v-show="selectedPicker === 'shadowColor'" class="item-color-picker">
@@ -254,10 +254,14 @@ export default {
         this.data.attributes.shadowColor = val.hex;
       } 
     },
-    showPicker(picker) {
-      this.selectedPicker = picker;
+    showPicker(picker, name) {
+      console.log('picker,', picker)
+      console.log('this.data,', this.data)
+       this.$emit('isOpen',[true,picker.target,this.data,name])
+      // this.selectedPicker = picker;
     },
     hidePicker(evt) {
+      console.log('ASDASDASD',evt)
       if (!evt) {
         return;
       }
