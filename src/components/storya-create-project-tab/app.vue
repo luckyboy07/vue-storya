@@ -203,10 +203,6 @@ export default {
       this.menuType = "";
     },
     handleItemClick(item, type, evnt, isProjectDetail) {
-      console.log('item:',item)
-      console.log('type:',type)
-      console.log('evnt:',evnt)
-      console.log('isProjectDetail:',isProjectDetail)
       if (item.id === "-1") {
          this.$router.push({ name: "New Project" });
       }

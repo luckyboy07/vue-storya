@@ -18,7 +18,7 @@
               <mu-menu value="" title="">
             <div class="pop-content">
               <div v-for="(item, i) in items"  :key="i" class="content-btn" @click.stop="addLayer(item);toggle($event)">
-              <mu-raised-button  ref="iconbtn"  class="raised-btn"  :icon="item.icon" @hover="shapeSelected = i === 0"/>
+              <mu-raised-button  ref="iconbtn"  class="raised-btn"  :icon="item.icon" @hover="hoverLayer(i)"/>
                <br>
                <span>{{item.title}}</span> 
               </div>
@@ -27,13 +27,14 @@
             <mu-divider v-show="shapeSelected"/>
             <mu-menu menuClass="menu-add-layer" v-show="shapeSelected" class="pop-content">
               <div class="">
+                <mu-icon-button v-for="(item, i) in shapeTypes" :key="i" :icon="item.icon" @click="addShape(item.name)" :icon-class="item.selected ? 'activeIcon': ''" @hover="hoverShape(item)"/>
                 <!-- <mu-icon-button tooltip="top-center" tooltipPosition="top-center"  icon="stop"/> -->
-                <mu-icon-button icon="stop" @click="addShape('Rectangle Filled')"/>
-                <mu-icon-button icon="crop_square" @click="addShape('Rectangle')"/>
-                <mu-icon-button icon="network_cell" @click="addShape('Triangle Filled')"/>
-                <mu-icon-button icon="signal_cellular_null" @click="addShape('Triangle')"/>
-                <mu-icon-button icon="lens" @click="addShape('Circle Filled')"/>
-                <mu-icon-button icon="panorama_fish_eye" @click="addShape('Circle')"/>
+                <!-- <mu-icon-button icon="stop" @click="addShape('Rectangle Filled')" icon-class="activeIcon" @hover="hoverShape()"/>
+                <mu-icon-button icon="crop_square" @click="addShape('Rectangle')" icon-class="activeIcon" @hover="hoverShape()"/>
+                <mu-icon-button icon="network_cell" @click="addShape('Triangle Filled')" icon-class="activeIcon" @hover="hoverShape()"/>
+                <mu-icon-button icon="signal_cellular_null" @click="addShape('Triangle')" icon-class="activeIcon" @hover="hoverShape()"/>
+                <mu-icon-button icon="lens" @click="addShape('Circle Filled')" icon-class="activeIcon" @hover="hoverShape()"/>
+                <mu-icon-button icon="panorama_fish_eye" @click="addShape('Circle')" icon-class="activeIcon" @hover="hoverShape()"/> -->
               </div>
             </mu-menu>
         </mu-icon-menu>
@@ -130,7 +131,57 @@ export default {
         {name: 'Audio', icon: 'volume_up'}
       ],
       verticalPosition: 'top',
-      horizontalPosition: 'center'
+      horizontalPosition: 'center',
+      shapeTypes: [
+        {
+          id: 1,
+          name: 'Rectangle Filled',
+          shape: 'square',
+          type: 'filled',
+          icon: 'stop',
+          selected: false
+        },
+         {
+          id: 2,
+          name: 'Rectangle',
+          shape: 'square',
+          type: 'line',
+          icon: 'crop_square',
+          selected: false
+         },
+         {
+          id: 3,
+          name: 'Triangle Filled',
+          shape: 'triangle',
+          type: 'filled',
+          icon: 'network_cell',
+          selected: false
+         },
+         {
+          id: 4,
+          name: 'Triangle',
+          shape: 'triangle',
+          type: 'line',
+          icon: 'signal_cellular_null',
+          selected: false
+         },
+         {
+          id: 5,
+          name: 'Circle Filled',
+          shape: 'circle',
+          type: 'filled',
+          icon: 'lens',
+          selected: false
+         },
+         {
+          id: 6,
+          name: 'Circle',
+          shape: 'circle',
+          type: 'line',
+          icon: 'panorama_fish_eye',
+          selected: false
+         }
+      ]
     }
   },
   components: {
@@ -187,14 +238,16 @@ export default {
       var _sl = this.getShapeLayer();
       if (shape.indexOf('Filled') !== -1) {
          _sl.attributes.color = '#333';
+         _sl.attributes.borderSize = 0;
+         _sl.attributes.shape_type = 'filled'
       } else {
         _sl.attributes.color = 'transparent';
-      }
        _sl.attributes.borderSize = 5;
-      _sl.attributes.shape = shape.indexOf(' ') !== -1 ? shape.split(' ')[0].trim()
-        : shape.trim();
-      
-      // console.log('getShapeLayer', _sl)
+         _sl.attributes.shape_type = ' '
+      }
+      _sl.attributes.shape = shape.indexOf(' ') !== -1 ? shape.split(' ')[0].trim() : shape.trim();
+      _sl.attributes.borderStyle = 'solid'
+      console.log('getShapeLayer', _sl)
       this.addLayer(_sl);
       this.showhover = this.shapeSelected = false;
     },
@@ -207,7 +260,6 @@ export default {
     },
     moveDown () {
         let currentLayer = this.layers.find((e)=> e.selected)
-        console.log('currentLayer;',currentLayer)
         let nextItem = this.layers.find((e)=> e.order === currentLayer.order - 1)
           if(nextItem){
           nextItem.order = currentLayer.order
@@ -228,7 +280,22 @@ export default {
           currentLayer.order = currentLayer.order + 1
           this.sortLayer()
         }
-    } 
+    },
+    hoverShape (value) {
+      for (let i =0;i<this.shapeTypes.length; i++) {
+          if(this.shapeTypes[i].id === value.id) {
+            this.shapeTypes[i].selected = true
+          }else {
+            this.shapeTypes[i].selected = false
+          }
+      } 
+    },
+    hoverLayer (index) {
+        this.shapeSelected = index === 0
+        if(this.shapeSelected){
+            this.hoverShape(this.shapeTypes[4])
+        }
+    }
   }
 }
 </script>
@@ -275,7 +342,7 @@ export default {
 .mu-popover {
   left: 345px!important;
   top: 115px!important;
-  background-color: #171616;
+  background-color: #171616 !important;
 }
 .mu-menu-list{
   width: 330px;
@@ -293,5 +360,7 @@ export default {
 .mu-menu{
   width: 336px;
 }
-
+.activeIcon {
+    border: 1px solid #1da675 ;
+}
 </style>

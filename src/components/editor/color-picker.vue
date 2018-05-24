@@ -23,7 +23,12 @@ export default {
       }
       }
   },
-  created() {
+   beforeMount () {
+    document.addEventListener('click', this.hidePicker)
+  },
+  mounted: function() {
+    
+     console.log('pickerisShow:',this.pickerisShow)
   },
   components:{
     'photoshop-picker': Photoshop,
@@ -31,7 +36,6 @@ export default {
   },
   methods: {
     updateValue (value) {
-      console.log('value:',value)
         this.target[1].style.backgroundColor = value.hex
         if(this.target[3] === 'border'){
         this.target[2].attributes.borderColor = value.hex
@@ -57,6 +61,10 @@ export default {
         //   this.applyProperty(this.currentSelectedIndex, this.colorType, this.pickColor)
         }
       }
+    },hidePicker(evt) {
+        if(this.pickerisShow && !document.getElementById('colorPicker').contains(window.event.target)){
+            this.close()
+        }
     },
     close() {
         this.$emit('closepicker',false)

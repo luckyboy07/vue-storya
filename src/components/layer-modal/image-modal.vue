@@ -42,7 +42,7 @@
             <span class="sub-title">1080x1920, 287KB</span>
           </div>
          <div class="buttons">
-            <mu-raised-button label="Cancel" fullWidth class="btn-buttons"/>
+            <mu-raised-button label="Cancel" fullWidth class="btn-buttons" @click="closeModal"/>
             <mu-raised-button label="Ok" fullWidth class="btn-buttons" @click="confirm"/>
          </div>
          </mu-grid-list>
@@ -146,6 +146,7 @@ export default {
       closeModal () {
         // console.log('files"',this.files)
           // this.$emit('')
+           this.$modal.hide('image-modal')
       },
       selectImage (image) {
         console.log('image:', image)

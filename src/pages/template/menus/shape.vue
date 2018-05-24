@@ -1,18 +1,18 @@
 <template>
   <div>
      <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
-        <mu-list-item title="Shape Layer" :open="data.selected"  @click.stop="open">
+        <mu-list-item :title="data.attributes.shape === 'Triangle' ? 'Shape Layer (SVG)' : 'Shape Layer'" :open="data.selected"  @click.stop="open">
             <mu-icon slot="left" value="landscape" style="color: #fff"/>
             <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
             <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
-            <mu-list-item  slot="nested"  class="paddingZero" v-no-ripple>
+            <!-- <mu-list-item  slot="nested"  class="paddingZero">
                 <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size Option</mu-grid-list>
                 <mu-grid-list class="right">
                 <multiselect v-model="data.attributes.sizeOption" :options="['Auto','Manual']" :searchable="false" open-direction="bottom" :close-on-select="true"></multiselect>
                 </mu-grid-list>
                 </div>
-            </mu-list-item>
+            </mu-list-item> -->
             <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
                 <div class="gridlist-demo-container" style="margin-top: -7px;">
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
@@ -44,17 +44,17 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
                 <mu-grid-list class="right">
-                <mu-slider :disabled="data.attributes.sizeOption === 'Auto'" :min="-90" :max="270" v-model="data.attributes.rotation" class="mmslider" />
+                <mu-slider :disabled="data.attributes.sizeOption === 'Auto'" :step="1" :min="-90" :max="270" v-model="data.attributes.rotation" class="mmslider" />
                 <input disabled v-digitsonly v-model="data.attributes.rotation" spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
             </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
+            <mu-list-item  slot="nested" class="paddingZero" :disabled="data.attributes.shape_type === 'filled'">
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
                   <input disabled spellcheck="false" class="input-size colorPicka" v-model="data.attributes.color">
-                  <input spellcheck="false" id="colour" class="input-size sliderInput" :style="{backgroundColor:data.attributes.color}"  @click="showPicker($event,'')">
+                  <input :disabled="data.attributes.shape_type === ' '" spellcheck="false" id="colour" class="input-size sliderInput" :style="{backgroundColor:data.attributes.color}"  @click="showPicker($event,'')">
                 </mu-grid-list>
                 <!-- <div ref="colorPicker" v-show="selectedPicker === 'colorPicker'" class="item-color-picker">
                   <color-picker v-model="colors" @input="colorSelected" 
@@ -62,8 +62,9 @@
                 </div> -->
               </div>
             </mu-list-item>
-            <mu-sub-header slot="nested">Gradient Background <mu-checkbox v-model="data.attributes.isGradient" class="subheader-chckbox"/></mu-sub-header>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+            <!--  v-if="data.attributes.shape_type !== 'filled'" -->
+            <mu-sub-header v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'" slot="nested">Gradient Background <mu-checkbox v-model="data.attributes.isGradient" class="subheader-chckbox"/></mu-sub-header>
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'">
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Position</mu-grid-list>
                 <mu-grid-list class="right">
@@ -72,7 +73,7 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Colour</mu-grid-list>
                 <mu-grid-list class="right">
@@ -85,7 +86,7 @@
                   style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
               </div>
             </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
                 <mu-grid-list class="right">
@@ -145,15 +146,15 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-            <mu-sub-header slot="nested">Background Image</mu-sub-header>
-            <mu-list-item  slot="nested" class="paddingZero minHytZero"  @click="openModalimage">
+            <mu-sub-header slot="nested" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'">Background Image</mu-sub-header>
+            <mu-list-item  slot="nested" class="paddingZero minHytZero"  @click="openModalimage" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'">
              <mu-flexbox>
                   <mu-flexbox-item class="flex-container"> 
                       + Drag and Drop
                   </mu-flexbox-item>
              </mu-flexbox>
             </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'">
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">URL</mu-grid-list>
                 <mu-grid-list class="right">
