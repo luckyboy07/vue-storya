@@ -5,15 +5,19 @@
     <div class="editor-container" >
       <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
       <div class="zoom-container">
-         <div class="editor-box" :style="{width: canvasData.width + 'px', 
-          height: canvasData.height + 'px'}">
+         <div class="editor-box" 
+         :style="{width: canvasData.width + 'px', 
+          height: canvasData.height + 'px', 
+          zoom: (canvasData.zoom / 100),
+          '-moz-transform': 'scale(' + (canvasData.zoom / 100) +')',
+          }">
           <div class="canvas-wrap">
               <layer :layers="layers"></layer>
           </div>
         </div>
       </div>
     </div>
-     <modal></modal>
+    <modal></modal>
 </div>
 </template>
 <script>

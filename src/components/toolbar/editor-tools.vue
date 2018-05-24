@@ -132,11 +132,9 @@ export default {
     zoom(zoomType) {
       if (zoomType === 'in') {
         this.editorData.zoom = this.editorData.zoom + this.editorData.zoomIncrease;
-        zoomHelper.zoomIn('in', this.editorData, this.layers, this.editorData.zoom, this.editorData.zoomIncrease)
       } else {
-        if ((this.editorData.zoom - this.editorData.zoomIncrease * 3) > 0) {
+        if ((this.editorData.zoom - this.editorData.zoomIncrease) > 0) {
           this.editorData.zoom = this.editorData.zoom - this.editorData.zoomIncrease;
-          zoomHelper.zoomIn('out', this.editorData, this.layers, this.editorData.zoom, this.editorData.zoomIncrease)
         }
       }
     },
@@ -152,14 +150,6 @@ export default {
       layers: 'getLayers'
     }),
   },
-  // watch: {
-  //   "editorData.zoom": {
-  //     handler(val) {
-  //       console.log("c data chan ");
-  //     },
-  //     deep: true
-  //   }
-  // }
 }
 </script>
 <style scoped>

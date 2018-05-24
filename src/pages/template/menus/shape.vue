@@ -109,7 +109,7 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Style</mu-grid-list>
                 <mu-grid-list class="right">
-                <multiselect v-model="data.attributes.borderStyle" :options="['None','Dashed','Solid','Dotted']" :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
+                <multiselect v-model="data.attributes.borderStyle" :options="['None','Square','Solid','Round']" :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
                 </mu-grid-list>
               </div>
             </mu-list-item>
