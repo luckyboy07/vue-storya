@@ -228,7 +228,7 @@ export const store = new Vuex.Store({
             // check zoom value
             // width and height must corresponds to the current editor's zoom value
             if (state.canvasData.zoom !== 100) {
-                zoomHelper.adjustLayerDimension(state.canvasData.zoom, state.canvasData.zoomIncrease, payload);
+                zoomHelper.adjustCanvasAndLayerDimension(state.canvasData, payload);
             }
             //setting the last active layer to in-active
             for (let i = 0; i < layers.length; i++) {

@@ -95,6 +95,9 @@ export default {
       rightTop: {horizontal: 'left', vertical: 'top'},
     }
   },
+  beforeMount() {
+    zoomHelper.adjustCanvasAndLayerDimension(this.editorData);
+  },
   methods: {
      ...mapGetters(['getExportContent', 'template']),
     handleChange(val) {

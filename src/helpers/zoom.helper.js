@@ -7,20 +7,16 @@ export default {
     zoomIn(type, canvas, layers, val, zoomIncrease) {
         var delta = val + this.deltaAllowance;
         if (type === 'in') {
-            // delta = val > 100 ? delta : delta - this.deltaAllowance;
             delta = val > 100 ? delta : ((delta - this.deltaAllowance) - zoomIncrease * 2) - zoomIncrease;
             delta /= 2;
-            console.log('delta', delta)
             canvas.width = canvas.width + delta;
             canvas.height = canvas.height + delta;
             // layers
             for (var i = 0; i < layers.length; i++) {
                 // dimensions
-                // console.log(layers[i].id, layers[i].width, layers[i].height)
                 layers[i].width = layers[i].width + delta;
                 layers[i].height = layers[i].height + delta;
                 // position
-                // layers[i].x = layers[i].x + (val - zoomIncrease);
 
                 switch (layers[i].type) {
                     case "shape":
@@ -43,17 +39,13 @@ export default {
                 }
             }
         } else {
-            console.log(val, zoomIncrease)
-            console.log('d bfore', delta + zoomIncrease)
             delta = val + zoomIncrease > 100 ? delta + zoomIncrease : delta - this.deltaAllowance - zoomIncrease * 2;
             delta /= 2;
-            console.log('delta', delta)
             canvas.width = canvas.width - delta;
             canvas.height = canvas.height - delta;
             for (var i = 0; i < layers.length; i++) {
                 layers[i].width = layers[i].width - delta;
                 layers[i].height = layers[i].height - delta;
-                // layers[i].x = layers[i].x - (val);
 
                 switch (layers[i].type) {
                     case "shape":
@@ -77,39 +69,33 @@ export default {
             }
         }
     },
-    adjustCanvasDimension(canvasData) {
-        if (!canvasData) {
-            throw new Error("Invalid Data");
-        }
+    // use this whenn creating layer
+    adjustCanvasAndLayerDimension(canvasData, layer) {
         if (canvasData.zoom === 100) {
             return;
         }
         var delta = canvasData.zoom + this.deltaAllowance;
-        // increase and decrease dimension
+        // increase and decrease dimension base on canvasData.zoom
         if (canvasData.zoom > 100) {
-            canvasData
-        } else {
+            delta = canvasData.zoom > 100 ? delta : ((delta - this.deltaAllowance) - canvasData.zoomIncrease * 2) - canvasData.zoomIncrease;
+            delta /= 2;
+            canvasData.width = canvasData.width + delta;
+            canvasData.height = canvasData.height + delta;
 
-        }
-    },
-    // use this whenn creating layer
-    adjustLayerDimension(zoomLevel, increaseValue, layer) {
-        console.log(zoomLevel, increaseValue, layer)
-        if (!layer) {
-            throw new Error("Invalid Layer");
-        }
-        if (zoomLevel === 100) {
-            return;
-        }
-        var delta = zoomLevel + this.deltaAllowance;
-        // increase and decrease dimension base on zoomLevel
-        if (zoomLevel > 100) {
-            layer.width = layer.width + delta;
-            layer.height = layer.height + delta;
+            if (layer) {
+                layer.width = layer.width + delta;
+                layer.height = layer.height + delta;
+            }
         } else {
-            delta += increaseValue;
-            layer.width = layer.width - delta;
-            layer.height = layer.height - delta;
+            delta = canvasData.zoom + canvasData.zoomIncrease > 100 ? delta + canvasData.zoomIncrease : delta - this.deltaAllowance - canvasData.zoomIncrease * 2;
+            delta /= 2;
+            canvasData.width = canvasData.width - delta;
+            canvasData.height = canvasData.height - delta;
+
+            if (layer) {
+                layer.width = layer.width - delta;
+                layer.height = layer.height - delta;
+            }
         }
     },
 }
