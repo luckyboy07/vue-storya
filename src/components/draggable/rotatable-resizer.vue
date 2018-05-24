@@ -16,7 +16,7 @@
     <div class="rr-bar rr-ord-s" key="bar-s"></div>
     <div class="rr-bar rr-ord-e" key="bar-e"></div>
     <div class="rr-bar rr-ord-w" key="bar-w"></div>
-    <div class="rr-rotate-handle" v-if="rotatable" ref="rotateHandle"></div>
+    <div v-show="zoom > 60" class="rr-rotate-handle" v-if="rotatable" ref="rotateHandle"></div>
     <div class="rr-handle rr-ord-n" v-if="hasHandle('n')" key="ord-n"></div>
     <div class="rr-handle rr-ord-s" v-if="hasHandle('s')" key="ord-s"></div>
     <div class="rr-handle rr-ord-e" v-if="hasHandle('e')" key="ord-e"></div>

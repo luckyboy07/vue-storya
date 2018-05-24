@@ -102,7 +102,6 @@ export default {
     // focusing on item neglecting its order
     focused(elem) {
       if (this.previousElem) {
-        console.log("focused", this.previousElem);
         this.previousElem.elem.style.zIndex = this.previousElem.z;
         this.previousElem = null;
       }

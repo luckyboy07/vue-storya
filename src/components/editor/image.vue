@@ -53,7 +53,6 @@ export default {
     },
     "layerData.attributes": {
       handler(val) {
-        console.log("imaged data changes", this.oldLayerData);
         // undo/redo
         if (!this.addToUndoRedo) {
            this.addToUndoRedo = true;

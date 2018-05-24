@@ -103,7 +103,7 @@ export const store = new Vuex.Store({
                         }
                     },
                     borderWidth: 0,
-                    borderStyle: 'none',
+                    borderStyle: 'Solid',
                     borderColor: 'red',
                     shadowSize: '',
                     shadowColor: '',
@@ -224,11 +224,6 @@ export const store = new Vuex.Store({
                 payload.y = 100;
                 payload.open = true;
                 payload.selected = true;
-            }
-            // check zoom value
-            // width and height must corresponds to the current editor's zoom value
-            if (state.canvasData.zoom !== 100) {
-                zoomHelper.adjustCanvasAndLayerDimension(state.canvasData, payload);
             }
             //setting the last active layer to in-active
             for (let i = 0; i < layers.length; i++) {

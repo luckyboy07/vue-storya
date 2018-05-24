@@ -1,6 +1,6 @@
 <template>
   <div :class="{'noselect':isDragging}" ref="editable" class="tl-container" contenteditable="true" spellcheck="false" 
-    :style="getStyle()" @keyup="_sc()">
+    :style="getStyle()" @keydown="_p" @keyup="_sc()">
   </div>
 </template>
 <script>
@@ -27,6 +27,11 @@ export default {
   beforeUpdate() {
   },
   methods: {
+    _p(e) {
+      // stop the event from bubling
+      // to prevent tihs layer be deleted
+      e.stopPropagation();
+    },
     _sc() {
       this.data.content = this.$refs.editable.innerHTML;
       if (this.$refs.editable.innerHTML.toString().replace(/<br>/g, '').replace(/<div>/g, '').replace(/<\/div>/g, '').length <= 0) {
