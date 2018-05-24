@@ -19,31 +19,31 @@
     <div class="rr-bar rr-ord-e" key="bar-e"></div>
     <div class="rr-bar rr-ord-w" key="bar-w"></div>
     <div v-show="zoom > 60" class="rr-rotate-handle" v-if="rotatable" ref="rotateHandle">
-      <div class="handle-tt" :style="{transform:'rotate(-' + state.rotation + 'deg)'}">Rotate</div>
+      <div class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Rotate</div>
     </div>
     <div class="rr-handle rr-ord-n" v-if="hasHandle('n')" key="ord-n">
-      <div class="handle-tt" :style="{transform:'rotate(-' + state.rotation + 'deg)'}">Resize</div>
+      <div class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
     <div class="rr-handle rr-ord-s" v-if="hasHandle('s')" key="ord-s">
-      <div class="handle-tt" :style="{transform:'rotate(-' + state.rotation + 'deg)'}">Resize</div>
+      <div class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
     <div class="rr-handle rr-ord-e" v-if="hasHandle('e')" key="ord-e">
-      <div class="handle-tt" :style="{transform:'rotate(-' + state.rotation + 'deg)'}">Resize</div>
+      <div class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
     <div class="rr-handle rr-ord-w" v-if="hasHandle('w')" key="ord-w">
-      <div class="handle-tt" :style="{transform:'rotate(-' + state.rotation + 'deg)'}">Resize</div>
+      <div class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
     <div class="rr-handle rr-ord-nw" v-if="hasHandle('nw')" key="ord-nw">
-      <div class="handle-tt" :style="{transform:'rotate(-' + state.rotation + 'deg)'}">Resize</div>
+      <div class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
     <div class="rr-handle rr-ord-ne" v-if="hasHandle('ne')" key="ord-ne">
-      <div class="handle-tt" :style="{transform:'rotate(-' + state.rotation + 'deg)'}">Resize</div>
+      <div class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
     <div class="rr-handle rr-ord-se" v-if="hasHandle('se')" key="ord-se">
-      <div class="handle-tt" :style="{transform:'rotate(-' + state.rotation + 'deg)'}">Resize</div>
+      <div class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
     <div class="rr-handle rr-ord-sw" v-if="hasHandle('sw')" key="ord-sw">
-      <div class="handle-tt" :style="{transform:'rotate(-' + state.rotation + 'deg)'}">Resize</div>
+      <div class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
     <div class="p-d-g">
       <div id="hGLine" class="h-l-g" style="display: none"></div>
