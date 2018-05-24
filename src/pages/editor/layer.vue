@@ -14,6 +14,8 @@
     v-for="(elem, i) in layers" :key="i"
     v-show="elem.visible"
     :z="elem.order"
+    :zoom="zoom"
+    @focused="focused"
     @activated="activated(elem)"
     @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
     @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
@@ -55,13 +57,15 @@ export default {
   data() {
     return {
       selectedLayer: null,
+      previousElem: null,
+      
       parentW: 0,
       parentH: 0,
       isDragging: false,
     };
   },
   beforeDestroy() {
-    this.$el.parentElement.removeEventListener('mousedown', this.handleCanvasClicks)
+    this.$el.parentElement.parentElement.parentElement.removeEventListener('mousedown', this.handleCanvasClicks)
   },
   mounted() {
     // get the parent's dimension
@@ -69,7 +73,7 @@ export default {
     this.parentH = _d.height// parseInt(_d.height.replace('px', '')) + 14;
     this.parentW = _d.width;//parseInt(_d.width.replace('px', '')) + 14;
     // handling layer desselection
-    this.$el.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
+    this.$el.parentElement.parentElement.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
   },
   methods: {
     ...mapMutations(['setLayerValue', 'setSelectedLayerId']),
@@ -86,6 +90,24 @@ export default {
           this.layers[i].selected = false;
         }
       }
+      
+      this.resetFocus();
+    },
+    resetFocus() {
+       if (this.previousElem) {
+        this.previousElem.elem.style.zIndex = this.previousElem.z;
+        this.previousElem = null;
+       }
+    },
+    // focusing on item neglecting its order
+    focused(elem) {
+      if (this.previousElem) {
+        console.log("focused", this.previousElem);
+        this.previousElem.elem.style.zIndex = this.previousElem.z;
+        this.previousElem = null;
+      }
+      elem.style.zIndex = '999';
+      this.previousElem = {elem: elem, z: this.selectedLayer.order};
     },
     activated(elem) {
       console.log('%c Selected: ' + elem.id, 'background-color: red; color: white');
@@ -163,6 +185,7 @@ export default {
             this.layers[i].selected = false;
           }
         }
+         this.resetFocus();
       };
       // check if this.selectedLayer is null or 
       // the newSelectedLayerId and selectedLayer are the same
@@ -177,7 +200,10 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["getItems", "getSelectedLayerId"])
+    ...mapGetters(["getItems", "getSelectedLayerId"]),
+    zoom: function() {
+      return this.getCanvasData().zoom;
+    }
   },
   watch: {
     getSelectedLayerId: function(val) {

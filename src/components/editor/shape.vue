@@ -1,5 +1,5 @@
 <template>
-<div>
+<div style="width: 100%; height: 100%">
     <div v-if="data.attributes.shape === 'Circle'" :style="getAttributes()" class="circle" ></div>
     <div v-if="data.attributes.shape === 'Rectangle'" :style="getAttributes()" class="square" ></div>
 	<svg v-else class="shape-container" :style="{opacity: data.attributes.opacity}">
@@ -167,8 +167,8 @@ svg {
   overflow:visible;
 }
 .circle {
-  /* width: 200px; */
-  /* height: 200px; */
+  width: 100%!important;
+  height: 100%!important;
   line-height: 200px;
   border-radius: 50%; /* the magic */
   -moz-border-radius: 50%;
@@ -179,9 +179,12 @@ svg {
   text-transform: uppercase;
   font-weight: 700;
   margin: 0 auto 40px;
+  position: absolute;
 }
 .square {
-
+  width: 100%!important;
+  height: 100%!important;
+  position: absolute;
 }
 .blue {
   background-color: #3498db;  

@@ -35,7 +35,7 @@
             <i class="si-zoomout" style="height: 90%"></i>
           </mu-flat-button>
           <div class="tool-item-group-content">
-            <input  v-model="editorData.zoom" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly type="text"/>
+            <input disabled="true" v-model="editorData.zoom" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
           </div>
           <mu-flat-button class="s-editor-btn-zoom-ctrl" @click="zoom('in')">
             <i class="si-zoomin" style="height: 90%"></i>
@@ -80,6 +80,7 @@
 */
 import customMenu from '../menus/custom-menu'
 import {mapGetters} from 'vuex'
+import zoomHelper from '../../helpers/zoom.helper.js'
 export default {
   name: 'editor-tools',
   props:['selectedtemplate'],
@@ -94,8 +95,8 @@ export default {
       rightTop: {horizontal: 'left', vertical: 'top'},
     }
   },
-  mounted () {
-    // console.log('editorData:',this.editorData)
+  beforeMount() {
+    zoomHelper.adjustCanvasAndLayerDimension(this.editorData);
   },
   methods: {
      ...mapGetters(['getExportContent', 'template']),
@@ -130,18 +131,14 @@ export default {
     },
     zoom(zoomType) {
       if (zoomType === 'in') {
-        this.editorData.zoom = (parseInt(this.editorData.zoom.replace('%', '')) + 25).toString() + "%";
+        this.editorData.zoom = this.editorData.zoom + this.editorData.zoomIncrease;
+        zoomHelper.zoomIn('in', this.editorData, this.layers, this.editorData.zoom, this.editorData.zoomIncrease)
       } else {
-        if ((parseInt(this.editorData.zoom.replace('%', '')) - 25) > 0) {
-          this.editorData.zoom = (parseInt(this.editorData.zoom.replace('%', '')) - 25).toString() + "%";
+        if ((this.editorData.zoom - this.editorData.zoomIncrease * 3) > 0) {
+          this.editorData.zoom = this.editorData.zoom - this.editorData.zoomIncrease;
+          zoomHelper.zoomIn('out', this.editorData, this.layers, this.editorData.zoom, this.editorData.zoomIncrease)
         }
       }
-      // console.log(this.editorData.zoom)
-      // for (var i = 0; i < this.layers.length; i++) {
-      //     console.log(this.layers[i], i);
-      //     this.layers[i].width =  this.layers[i].width * this.editorData.zoom / 100;
-      //      this.layers[i].height =  this.layers[i].height * this.editorData.zoom / 100;
-      // }
     },
     exportContent() {
       console.log('Exporting....')

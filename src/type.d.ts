@@ -12,6 +12,7 @@ declare interface Point {
     rotation?: number;
     octant?: number;
     z?: number;
+    zoom?: Number;
   }
   
   declare type PointType = 'nw' | 'ne' | 'se' | 'sw' | 'n' | 'e' | 's' | 'w';

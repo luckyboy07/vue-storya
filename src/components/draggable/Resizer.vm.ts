@@ -61,6 +61,10 @@ export default {
     z: {
       type: Number,
       default: 'auto'
+    },
+    zoom: {
+      type: Number,
+      default: 100
     }
   },
   data() {
@@ -69,7 +73,8 @@ export default {
       top: this.top,
       width: this.width,
       height: this.height,
-      z: this.z
+      z: this.z, 
+      zoom: this.zoom
     }, this.rotation, this.fixedProportion);
 
     return {
@@ -89,7 +94,7 @@ export default {
       this.$nextTick(() => this.bindResizeEvent());
     });
 
-    const STATE_PROPS = ['width', 'height', 'rotation', 'left', 'top','z'];
+    const STATE_PROPS = ['width', 'height', 'rotation', 'left', 'top','z', 'zoom'];
     STATE_PROPS.forEach((prop) => {
       this.$watch(prop, function(val) {
         if (!this.dragging) {
@@ -142,7 +147,8 @@ export default {
         height: state.height,
         rotation: state.rotation,
         octant: state.octant,
-        z: state.z
+        z: state.z,
+        zoom: state.zoom
       };
     },
     style: function () {
@@ -173,6 +179,7 @@ export default {
 
     emitActivated() {
       this.$emit("activated");
+      this.$emit("focused", this.$el);
     },
 
     emitRotateStated() {

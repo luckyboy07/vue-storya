@@ -2,18 +2,20 @@
    <img :src="layerData.image.url ? layerData.image.url : 'http://via.placeholder.com/140x100'"  :style="getStyle()"/>
 </template>
 <script>
+import {mapGetters} from 'vuex'
+import appHelper from '../../helpers/app.helper.js'
+import undoRedo from '../../helpers/undo-redo.js'
 export default {
   name: 'ImageLayer',
   props:['layerData','imgstyle'],
   data () {
       return {
-
+        addToUndoRedo: true,
+        oldLayerData: null,
       }
   },
   mounted () {
-          console.log('layerDatasss:',this.layerData);
-          console.log('imgstyle:',this.imgstyle);
-        //   
+    this.oldLayerData = appHelper.cloneLayer(this.layerData);
   },
   methods: {
       getStyle () {
@@ -35,8 +37,35 @@ export default {
         //   return this.layer
         //   return this.layerData 
       },
-        
-  }
+  },
+  computed: {
+    ...mapGetters({
+        addTime: 'getLastLayerAddTime',
+        redoUndoTime: 'getUndoRedoLastAction',
+    }),
+  },
+  watch: {
+    addTime: function(val) {
+      this.addToUndoRedo = false;
+    },
+    redoUndoTime: function(val) {
+       this.addToUndoRedo = false;
+    },
+    "layerData.attributes": {
+      handler(val) {
+        console.log("imaged data changes", this.oldLayerData);
+        // undo/redo
+        if (!this.addToUndoRedo) {
+           this.addToUndoRedo = true;
+           return;
+        }
+        undoRedo.add(appHelper.cloneLayer(this.oldLayerData), 'scale');
+        undoRedo.add(appHelper.cloneLayer(this.layerData), 'scale');
+        this.oldLayerData = this.layerData;
+      },
+      deep: true
+    },
+  },
 }
 </script>
 <style>
