@@ -179,7 +179,8 @@ export const store = new Vuex.Store({
                     borderStyle: "",
                     borderColor: "#000",
                     shadowSize: 0,
-                    shadowColor: ""
+                    shadowColor: "",
+                    opacity: 1,
                 }
             },
             {

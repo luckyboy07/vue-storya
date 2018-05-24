@@ -47,10 +47,10 @@
   <mu-icon-menu menuClass="xxx" icon="" @change="handleChange" :anchorOrigin="rightTop"
       :targetOrigin="rightTop"
       :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
-      <mu-menu-item value="1" title="Save As" @click="exportContent()"/>
-      <mu-divider inset class="temp-action-item-divider" @click="exportContent()"/>
-      <mu-menu-item value="1" title="Save As Template" @click="exportContent()"/>
-        <mu-divider inset class="temp-action-item-divider" @click="exportContent()"/>
+      <mu-menu-item value="1" title="Save As" @click="SaveContent()"/>
+      <mu-divider inset class="temp-action-item-divider"/>
+      <mu-menu-item value="1" title="Save As Template" @click="SaveTemplate()"/>
+      <mu-divider inset class="temp-action-item-divider"/>
       <mu-menu-item value="1" title="Export As" @click="exportContent()"/>
     </mu-icon-menu>
 </div>
@@ -81,6 +81,7 @@
 import customMenu from '../menus/custom-menu'
 import {mapGetters} from 'vuex'
 import zoomHelper from '../../helpers/zoom.helper.js'
+import exportHelper from '../../helpers/import-export.helper.js'
 export default {
   name: 'editor-tools',
   props:['selectedtemplate'],
@@ -138,9 +139,16 @@ export default {
         }
       }
     },
+    SaveContent() {
+      alert('Save As');
+    },
+    SaveTemplate() {
+       alert('Save As Template');
+    },
     exportContent() {
       console.log('Exporting....')
-      console.log(JSON.stringify( this.getExportContent()));
+      // console.log(JSON.stringify( this.getExportContent()));
+      exportHelper.exportTemplate();
       console.log('Export finished')
     },
   },
