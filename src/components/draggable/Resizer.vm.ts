@@ -297,7 +297,7 @@ export default {
             top: bounds.top + bounds.height / 2
           };
 
-           // add zoom value to left and top if > 100
+          // add zoom value to left and top if > 100
           // decrease  left and top to zoom if < 100
           if (self.zoom > 100) {
             if (browserHelper.isChrome()) {

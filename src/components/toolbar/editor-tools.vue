@@ -81,6 +81,7 @@
 import customMenu from '../menus/custom-menu'
 import {mapGetters} from 'vuex'
 import zoomHelper from '../../helpers/zoom.helper.js'
+import exportHelper from '../../helpers/import-export.helper.js'
 export default {
   name: 'editor-tools',
   props:['selectedtemplate'],
@@ -140,7 +141,8 @@ export default {
     },
     exportContent() {
       console.log('Exporting....')
-      console.log(JSON.stringify( this.getExportContent()));
+      // console.log(JSON.stringify( this.getExportContent()));
+      exportHelper.exportTemplate();
       console.log('Export finished')
     },
   },
