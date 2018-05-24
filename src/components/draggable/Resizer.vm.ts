@@ -1,7 +1,7 @@
 import ResizerState from './resizer-state.ts';
 import draggable from './draggable.ts';
 import * as $ from 'linq'
-import browserHelper from './helper/browser.js'
+import browserHelper from '../../helpers/browser.js'
 const TYPE_PREFIX = 'rr-ord-';
 const HANDLE_SELECTOR = '.rr-handle';
 

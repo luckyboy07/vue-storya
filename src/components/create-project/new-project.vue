@@ -237,6 +237,8 @@ export default {
       selected.width = parseInt(this.setupData.width);
       selected.height = parseInt(this.setupData.height);
       selected.templateSelected = this.setupData.templateSelected;
+      selected.zoom = 100;
+      selected.zoomIncrease = 20;
 
       this.selectTemplate(selected)
       this.$router.push({name: 'EditorApp'})

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <mu-drawer left :open="true" @close="toggle()" :zDepth="0" class="custom-drawer">
+  <mu-drawer id="sidenavpropertydrawer" left :open="true" @close="toggle()" :zDepth="0" class="custom-drawer">
       <mu-list style="padding-top: 0;">
         <mu-list-item afterText="(None)" title="Template Selected" :open="false" :toggleNested="true">
           <mu-list-item slot="nested" :disableRipple="true">
@@ -102,6 +102,7 @@ import Expanding from '../../components/Expanding'
 import templateSelection from '../../components/template/select-template'
 import appHelper from '../../helpers/app.helper.js'
 import undoRedo from '../../helpers/undo-redo.js'
+import browserHelper from '../../helpers/browser.js'
 export default {
   name: 'Sidebar',
   data () {
@@ -144,6 +145,10 @@ export default {
   },
   mounted () {
     this.trigger = this.$refs.iconbtn
+    // resizing sidenav if firefox
+    if (browserHelper.isFirefox()) {
+      document.head.innerHTML += '<style> .custom-drawer { width: 360px!important; } </style>';
+    }
     
     // console.log('trigger:', this.$refs)
     // let targetelem = document.getElementsByClassName('mu-item-wrapper')
