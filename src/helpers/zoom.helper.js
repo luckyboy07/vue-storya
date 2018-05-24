@@ -2,10 +2,15 @@
   Helper for Zooming XD
 */
 export default {
+    deltaAllowance: 0,
     // Zooming-in to a a specific value
     zoomIn(type, canvas, layers, val, zoomIncrease) {
-        var delta = val + 100;
+        var delta = val + this.deltaAllowance;
         if (type === 'in') {
+            // delta = val > 100 ? delta : delta - this.deltaAllowance;
+            delta = val > 100 ? delta : ((delta - this.deltaAllowance) - zoomIncrease * 2) - zoomIncrease;
+            delta /= 2;
+            console.log('delta', delta)
             canvas.width = canvas.width + delta;
             canvas.height = canvas.height + delta;
             // layers
@@ -38,7 +43,11 @@ export default {
                 }
             }
         } else {
-            delta += zoomIncrease;
+            console.log(val, zoomIncrease)
+            console.log('d bfore', delta + zoomIncrease)
+            delta = val + zoomIncrease > 100 ? delta + zoomIncrease : delta - this.deltaAllowance - zoomIncrease * 2;
+            delta /= 2;
+            console.log('delta', delta)
             canvas.width = canvas.width - delta;
             canvas.height = canvas.height - delta;
             for (var i = 0; i < layers.length; i++) {
@@ -67,5 +76,40 @@ export default {
                 }
             }
         }
-    }
+    },
+    adjustCanvasDimension(canvasData) {
+        if (!canvasData) {
+            throw new Error("Invalid Data");
+        }
+        if (canvasData.zoom === 100) {
+            return;
+        }
+        var delta = canvasData.zoom + this.deltaAllowance;
+        // increase and decrease dimension
+        if (canvasData.zoom > 100) {
+            canvasData
+        } else {
+
+        }
+    },
+    // use this whenn creating layer
+    adjustLayerDimension(zoomLevel, increaseValue, layer) {
+        console.log(zoomLevel, increaseValue, layer)
+        if (!layer) {
+            throw new Error("Invalid Layer");
+        }
+        if (zoomLevel === 100) {
+            return;
+        }
+        var delta = zoomLevel + this.deltaAllowance;
+        // increase and decrease dimension base on zoomLevel
+        if (zoomLevel > 100) {
+            layer.width = layer.width + delta;
+            layer.height = layer.height + delta;
+        } else {
+            delta += increaseValue;
+            layer.width = layer.width - delta;
+            layer.height = layer.height - delta;
+        }
+    },
 }

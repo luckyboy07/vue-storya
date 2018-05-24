@@ -35,7 +35,7 @@
             <i class="si-zoomout" style="height: 90%"></i>
           </mu-flat-button>
           <div class="tool-item-group-content">
-            <input disabled v-model="editorData.zoom" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly type="text"/>
+            <input disabled="true" v-model="editorData.zoom" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
           </div>
           <mu-flat-button class="s-editor-btn-zoom-ctrl" @click="zoom('in')">
             <i class="si-zoomin" style="height: 90%"></i>
@@ -93,11 +93,7 @@ export default {
       saveMenu: null,
       menuOpen: false,
       rightTop: {horizontal: 'left', vertical: 'top'},
-      zoomIncrease: 20,
     }
-  },
-  mounted () {
-    // console.log('editorData:',this.editorData)
   },
   methods: {
      ...mapGetters(['getExportContent', 'template']),
@@ -132,21 +128,14 @@ export default {
     },
     zoom(zoomType) {
       if (zoomType === 'in') {
-        this.editorData.zoom = this.editorData.zoom + this.zoomIncrease;
-        zoomHelper.zoomIn('in', this.editorData, this.layers, this.editorData.zoom, this.zoomIncrease)
+        this.editorData.zoom = this.editorData.zoom + this.editorData.zoomIncrease;
+        zoomHelper.zoomIn('in', this.editorData, this.layers, this.editorData.zoom, this.editorData.zoomIncrease)
       } else {
-        if ((this.editorData.zoom - 100 ) > 0) {
-          this.editorData.zoom = this.editorData.zoom - this.zoomIncrease;
-          zoomHelper.zoomIn('out', this.editorData, this.layers, this.editorData.zoom, this.zoomIncrease)
+        if ((this.editorData.zoom - this.editorData.zoomIncrease * 3) > 0) {
+          this.editorData.zoom = this.editorData.zoom - this.editorData.zoomIncrease;
+          zoomHelper.zoomIn('out', this.editorData, this.layers, this.editorData.zoom, this.editorData.zoomIncrease)
         }
       }
-      // console.log(this.editorData.zoom)
-      // for (var i = 0; i < this.layers.length; i++) {
-      //     console.log(this.layers[i], i);
-      //     this.layers[i].width =  this.layers[i].width * this.editorData.zoom / 100;
-      //      this.layers[i].height =  this.layers[i].height * this.editorData.zoom / 100;
-      // }
-
     },
     exportContent() {
       console.log('Exporting....')
