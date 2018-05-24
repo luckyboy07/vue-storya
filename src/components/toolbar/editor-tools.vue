@@ -47,10 +47,10 @@
   <mu-icon-menu menuClass="xxx" icon="" @change="handleChange" :anchorOrigin="rightTop"
       :targetOrigin="rightTop"
       :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
-      <mu-menu-item value="1" title="Save As" @click="exportContent()"/>
-      <mu-divider inset class="temp-action-item-divider" @click="exportContent()"/>
-      <mu-menu-item value="1" title="Save As Template" @click="exportContent()"/>
-        <mu-divider inset class="temp-action-item-divider" @click="exportContent()"/>
+      <mu-menu-item value="1" title="Save As" @click="SaveContent()"/>
+      <mu-divider inset class="temp-action-item-divider"/>
+      <mu-menu-item value="1" title="Save As Template" @click="SaveTemplate()"/>
+      <mu-divider inset class="temp-action-item-divider"/>
       <mu-menu-item value="1" title="Export As" @click="exportContent()"/>
     </mu-icon-menu>
 </div>
@@ -138,6 +138,12 @@ export default {
           this.editorData.zoom = this.editorData.zoom - this.editorData.zoomIncrease;
         }
       }
+    },
+    SaveContent() {
+      alert('Save As');
+    },
+    SaveTemplate() {
+       alert('Save As Template');
     },
     exportContent() {
       console.log('Exporting....')
