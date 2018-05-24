@@ -4,6 +4,15 @@
         <mu-icon slot="left" value="text_fields" style="color: #fff"/>
         <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
         <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
+        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
+          <div class="gridlist-demo-container">
+            <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
+            <mu-grid-list class="right">
+            <mu-slider v-model="data.attributes.rotation" class="mmslider" :max="360"/>
+            <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.rotation" v-digitsonly>
+            </mu-grid-list>
+          </div>
+        </mu-list-item>
         <mu-list-item  slot="nested"  class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Font</mu-grid-list>

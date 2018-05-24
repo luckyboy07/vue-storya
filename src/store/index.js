@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 // import modules from './modules'
 
 import appHelper from '../helpers/app.helper'
+import zoomHelper from '../helpers/zoom.helper'
 import * as $ from 'linq'
 
 Vue.use(Vuex)
@@ -14,10 +15,16 @@ export const store = new Vuex.Store({
         canvasData: {
             file_name: 'New File 1',
             project_name: 'New File 1',
-            width: "508px",
-            height: "423px",
-            zoom: "100%"
+            width: 508,
+            height: 423,
+            zoom: 100,
+            zoomIncrease: 20,
         },
+        // auto save status
+        // 0: no changes
+        // 1: data changes
+        // 2: changes handled
+        autoSaveStatus: '0',
         // the timestamp to when an item occured
         lastItemAdd: null,
         lastUpdateTime: null,
@@ -95,7 +102,7 @@ export const store = new Vuex.Store({
                         }
                     },
                     borderWidth: 0,
-                    borderStyle: 'none',
+                    borderStyle: 'Solid',
                     borderColor: 'red',
                     shadowSize: '',
                     shadowColor: '',
@@ -128,7 +135,7 @@ export const store = new Vuex.Store({
                     sizeOption: 'Auto',
                     opacity: 1,
                     rotation: 0,
-                    borderWidth: '0',
+                    borderWidth: 0,
                     borderStyle: 'None',
                     borderColor: '',
                     shadowSize: '1',
@@ -209,36 +216,25 @@ export const store = new Vuex.Store({
             // check if the item is from undo or redo
             // if not, assign a new id for this item
             // indicating that this item is created
+            let layers = state.layers
             if (!payload.fromUndoRedo) {
                 payload = appHelper.createLayer(payload);
+                payload.order = layers.length > 0 ? $.from(layers).max(l => l.order) + 1 : 1;
+                payload.x = 100;
+                payload.y = 100;
+                payload.open = true;
+                payload.selected = true;
             }
-            let layers = state.layers
-                //setting the last active layer to in-active
+            //setting the last active layer to in-active
             for (let i = 0; i < layers.length; i++) {
                 layers[i].selected = false
-                // layers[i].order += 1
-                // let last = (i +layers.length) % layers.length
-                // console.log('last:',last)
-                // layers[i].zindex = layers[last].order
             }
-            payload.order = layers.length +1
-            payload.x = 100
-            payload.y = 100
-            payload.open = true
-            payload.selected = true
-                // payload.width = 200
-                // payload.height = 150
             layers.push(payload)
-            let sam = layers.sort((a, b) => {
-                    return  b.order - a.order
-            }) 
-            // layers.sort((a, b) => b.order - a.order)
-            Vue.set(state, 'layers', sam)
-
-            // this is for the undo manager to
-            // watch the changes of the layers
-            // check if the source of the data
-            // is not from redo/undo module
+            Vue.set(state, 'layers', layers)
+                // this is for the undo manager to
+                // watch the changes of the layers
+                // check if the source of the data
+                // is not from redo/undo module
             if (!payload.fromUndoRedo) {
                 Vue.set(state, 'lastItemAdd', appHelper.generateTimestamp())
             }
@@ -302,11 +298,18 @@ export const store = new Vuex.Store({
             }
         },
         selectTemplate: (state, payload) => {
+            console.log('payload', payload);
             let template = state.canvasData
             template = payload
-            template.zoom = '100%'
+            template.zoom = 100
             Vue.set(state, 'canvasData', template)
-        }
+        },
+        setAutosaveData: (state, data) => {
+            if (data !== '0' && data !== '1' && data !== '2') {
+                throw new Error("Invalid status data");
+            }
+            state.autoSaveStatus = data;
+        },
     },
     getters: {
         getItems: state => {
@@ -342,10 +345,24 @@ export const store = new Vuex.Store({
         getShapeLayer: state => {
             return appHelper.cloneLayer(state.items[0])
         },
-        sortLayer: state => {
-            let sam =state.layers.sort((a, b) => a.order - b.order)
-            return state.layers.sort((a, b) => b.order - a.order)
-        }
+        getUndoRedoLastAction: state => {
+            return state.isActionCastedByUndoRedo;
+        },
+        getExportContent: state => {
+            /*
+                {
+
+                }
+
+            */
+            var data = state.canvasData;
+            data["layers"] = state.layers;
+            return data;
+        },
+        // returns the auto save status data
+        getAutosaveStatusData: state => {
+            return state.autoSaveStatus;
+        },
     },
     actions: {
         addLayer: ({ commit }, payload) => {

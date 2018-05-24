@@ -3,16 +3,21 @@
 <headers style="z-index: 999"></headers>
 <side-bar @openWindow="openWindow"></side-bar>
     <div class="editor-container" >
-    <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
-      <div class="editor-box" :style="{width: getCanvasData.width + 'px', 
-          height: getCanvasData.height + 'px', zoom: (getCanvasData.zoom / 100),
-          '-moz-transform': 'scale(' + (getCanvasData.zoom / 100) + ')'}">
-        <div class="canvas-wrap">
-            <layer :layers="getLayers"></layer>
+      <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
+      <div class="zoom-container">
+         <div class="editor-box" 
+         :style="{width: canvasData.width + 'px', 
+          height: canvasData.height + 'px', 
+          zoom: (canvasData.zoom / 100),
+          '-moz-transform': 'scale(' + (canvasData.zoom / 100) +')',
+          }">
+          <div class="canvas-wrap">
+              <layer :layers="layers"></layer>
+          </div>
         </div>
       </div>
     </div>
-     <modal></modal>
+    <modal></modal>
 </div>
 </template>
 <script>
@@ -39,7 +44,10 @@ export default {
     colorPicker: colorpicker
   },
   computed: {
-    ...mapGetters(['getLayers', 'getCanvasData'])
+    ...mapGetters({
+      layers: 'getLayers', 
+      canvasData: 'getCanvasData'
+    })
   },
   methods: {
     openWindow (val) {
@@ -82,6 +90,14 @@ export default {
     width: 100%;
     outline: rgb(102, 102, 102) solid 1px;
     overflow: hidden;
+}
+.zoom-container {
+    width: 100%;
+    height: 80vh;
+    overflow: auto;
+    margin-bottom: 20px;
+    /* background: red;
+    border: 2px solid blue; */
 }
 </style>
 

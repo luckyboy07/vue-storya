@@ -1,5 +1,5 @@
 <template>
-<div class="yawaa " :class="data.selected ? 'activeTool': ''">
+<div class="yawaa" :class="data.selected ? 'activeTool': ''">
     <mu-list-item title="Image Layer" :open="data.selected" @click.stop="open">
           <mu-icon slot="left" value="image" style="color: #fff"/>
           <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
@@ -11,14 +11,14 @@
                   </mu-flexbox-item>
              </mu-flexbox>
         </mu-list-item>
-        <!-- <mu-list-item  slot="nested"  class="paddingZero">
-          <div class="gridlist-demo-container">
+         <!-- <mu-list-item  slot="nested"  class="paddingZero" v-no-ripple>
+            <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Size Option</mu-grid-list>
             <mu-grid-list class="right">
-            <multiselect v-model="value" :open-direction="'bottom'" :show-labels="false" :options="options" :searchable="false" :close-on-select="true" placeholder="Pick a value"></multiselect>
+            <multiselect v-model="data.attributes.sizeOption" :options="['Auto','Manual']" :searchable="false" open-direction="bottom" :close-on-select="true"></multiselect>
             </mu-grid-list>
-          </div>
-        </mu-list-item> -->
+            </div>
+          </mu-list-item> -->
         <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container" style="margin-top: -7px;">
             <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>

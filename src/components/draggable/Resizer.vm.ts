@@ -1,6 +1,7 @@
 import ResizerState from './resizer-state.ts';
 import draggable from './draggable.ts';
 import * as $ from 'linq'
+import browserHelper from './helper/browser.js'
 const TYPE_PREFIX = 'rr-ord-';
 const HANDLE_SELECTOR = '.rr-handle';
 
@@ -61,6 +62,10 @@ export default {
     z: {
       type: Number,
       default: 'auto'
+    },
+    zoom: {
+      type: Number,
+      default: 100
     }
   },
   data() {
@@ -69,7 +74,8 @@ export default {
       top: this.top,
       width: this.width,
       height: this.height,
-      z: this.z
+      z: this.z, 
+      zoom: this.zoom
     }, this.rotation, this.fixedProportion);
 
     return {
@@ -89,7 +95,7 @@ export default {
       this.$nextTick(() => this.bindResizeEvent());
     });
 
-    const STATE_PROPS = ['width', 'height', 'rotation', 'left', 'top','z'];
+    const STATE_PROPS = ['width', 'height', 'rotation', 'left', 'top','z', 'zoom'];
     STATE_PROPS.forEach((prop) => {
       this.$watch(prop, function(val) {
         if (!this.dragging) {
@@ -142,7 +148,8 @@ export default {
         height: state.height,
         rotation: state.rotation,
         octant: state.octant,
-        z: state.z
+        z: state.z,
+        zoom: state.zoom
       };
     },
     style: function () {
@@ -173,6 +180,7 @@ export default {
 
     emitActivated() {
       this.$emit("activated");
+      this.$emit("focused", this.$el);
     },
 
     emitRotateStated() {
@@ -283,10 +291,30 @@ export default {
         },
         drag(event: MouseEvent) {
           const bounds = el.getBoundingClientRect();
-          const center = {
+         
+          var center = {
             left: bounds.left + bounds.width / 2,
             top: bounds.top + bounds.height / 2
           };
+
+           // add zoom value to left and top if > 100
+          // decrease  left and top to zoom if < 100
+          if (self.zoom > 100) {
+            if (browserHelper.isChrome()) {
+              center.left += self.zoom * 2;
+              center.top += self.zoom;
+            } else if (browserHelper.isFirefox()) {
+               // TODO: handle firefox
+            }
+          } else if (self.zoom < 100) {
+            if (browserHelper.isChrome()) {
+              center.left -= self.zoom * 2;
+              center.top -= self.zoom;
+            } else if (browserHelper.isFirefox()) {
+               // TODO: handle firefox
+            }
+          }
+
           var degree = (Math.atan2(event.clientY - center.top, event.clientX - center.left) * 180 / Math.PI + 90) % 360;
           self.setOctantValue(self.value.rotation);
           // added grid lines (same as canva)

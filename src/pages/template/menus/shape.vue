@@ -13,7 +13,7 @@
                 </mu-grid-list>
                 </div>
             </mu-list-item> -->
-            <mu-list-item  slot="nested" class="paddingZero">
+            <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
                 <div class="gridlist-demo-container" style="margin-top: -7px;">
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
                 <mu-grid-list class="right" style="margin-left: 2px;">
@@ -31,7 +31,7 @@
                 </mu-grid-list>
                 </div>
             </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero">
+            <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Opacity</mu-grid-list>
                 <mu-grid-list class="right">
@@ -40,7 +40,7 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero">
+            <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
                 <mu-grid-list class="right">
@@ -73,7 +73,7 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'">
+             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Colour</mu-grid-list>
                 <mu-grid-list class="right">
@@ -86,7 +86,7 @@
                   style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
               </div>
             </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
                 <mu-grid-list class="right">
@@ -97,7 +97,7 @@
             </mu-list-item>
             <mu-sub-header slot="nested">Border</mu-sub-header>
             <!-- <mu-sub-header> <mu-icon slot="right" value="image" style="color: #fff"/></mu-sub-header> -->
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
                 <mu-grid-list class="right">
@@ -106,15 +106,15 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-            <mu-list-item  slot="nested"  class="paddingZero demiBlackbg">
+            <mu-list-item  slot="nested"  class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Style</mu-grid-list>
                 <mu-grid-list class="right">
-                <multiselect v-model="data.attributes.borderStyle" :options="['None','Dashed','Solid','Dotted']" :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
+                <multiselect v-model="data.attributes.borderStyle" :options="['None','Square','Solid','Round']" :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
                 </mu-grid-list>
               </div>
             </mu-list-item>
-             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" >
+             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
@@ -128,7 +128,7 @@
               </div>
             </mu-list-item>
             <mu-sub-header slot="nested">Shadow</mu-sub-header>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
                 <mu-grid-list class="right">
@@ -137,7 +137,7 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-             <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">

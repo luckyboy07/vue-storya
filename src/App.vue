@@ -29,10 +29,11 @@ export default {
     return {
       show: false,
       eventWritten: false, // a flag to check if event listeners are written or attached
-      idleTimeout: 3000, // the idle timeout to trigger the 'idleTimer' event. The value is in milliseconds
+      idleTimeout: 1000, // the idle timeout to trigger the 'idleTimer' event. The value is in milliseconds
       idleTime: 0, // the idle time in seconds
       idleTimer: null, // the idle timer function. Assigned to a variable to be able to use it such as stopping the timer
       allowedKeys: ['y', 'z', 'Delete'], // allowed keys
+      autoSaveInfoDisplayDuration: 0,
     }
   },
   name: 'App',
@@ -53,11 +54,17 @@ export default {
   },
   mounted() {
     // on loaded, start the timer
-    //this.idleTimer = setInterval(this.handleIdleTimerElapsed, this.idleTimeout)
+    this.idleTimer = setInterval(this.handleIdleTimerElapsed, this.idleTimeout)
   },
   methods :{
-    ...mapGetters(['getSelectedLayerId']),
-    ...mapMutations(['addLayer', 'setLayerValue', 'setSelectedLayerId', 'updateUndoRedoAction']),
+    ...mapGetters(['getSelectedLayerId', 'getAutosaveStatusData']),
+    ...mapMutations([
+      'addLayer', 
+      'setLayerValue', 
+      'setSelectedLayerId', 
+      'updateUndoRedoAction', 
+      'setAutosaveData',
+      ]),
     keydownEventHandler(evt) {
       // resetting idle time in key activities
       if (this.idleTime !== 0) {
@@ -90,6 +97,7 @@ export default {
         } 
       } else {
         if (evt.key === 'Delete') {
+          console.log('Delete app');
           var item = this.getSelectedLayerId();
           if (item) {
             undoRedo.add(appHelper.cloneLayer(item.sourceLayer), 'delete');
@@ -107,14 +115,26 @@ export default {
       this.idleTime += 1;
       if (this.idleTime >= 3) {
          // check if the main layer array has items
-         console.log('layers', this.layers);
-        if (this.layers.length > 0) {
+        if (this.layers.length > 0 && this.getAutosaveStatusData() === '1') {
           // trigger the idle time event
-          this.$_debugLogger('Call auto save here (App.vue:97)');
-        } else {
-          console.log('layer is empty');
-        }
+          this.$_debugLogger('Call auto save here (App.vue:113)');
+          this.setAutosaveData("2");
+        } 
+        // else {
+        //   this.$_debugLogger('Auto save: No data to save');
+        // }
         this.idleTime = 0;
+      }
+      // handling save info 
+      // hide info if time reaches 2 seconds
+      if (this.getAutosaveStatusData() === '2') {
+        this.autoSaveInfoDisplayDuration += 1000;
+        // if save info is shown in 2 seconds
+        // hide it
+        if (this.autoSaveInfoDisplayDuration >= 2000) {
+           this.setAutosaveData("0");
+          this.autoSaveInfoDisplayDuration = 0;
+        }
       }
     },
     $_handleUndo(item, action) {
@@ -184,6 +204,12 @@ export default {
         this.setSelectedLayerId(newLayer.id);
         undoRedo.add(newLayer, 'create');
       }
+    },
+    layers: {
+      handler() {
+        this.setAutosaveData("1");
+      },
+      deep: true
     }
   }
 }

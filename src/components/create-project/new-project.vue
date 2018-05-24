@@ -232,7 +232,13 @@ export default {
       this.$router.go(-1)
     },
     onConfirm() {
-      this.selectTemplate(this.setupData)
+      console.log('setup:',this.setupData)
+      var selected = {};
+      selected.width = parseInt(this.setupData.width);
+      selected.height = parseInt(this.setupData.height);
+      selected.templateSelected = this.setupData.templateSelected;
+
+      this.selectTemplate(selected)
       this.$router.push({name: 'EditorApp'})
     },
     onSubmit() {
