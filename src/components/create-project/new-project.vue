@@ -246,6 +246,8 @@ export default {
       selected.width = parseInt(this.setupData.width)
       selected.height = parseInt(this.setupData.height)
       selected.templateSelected = this.setupData.templateSelected
+      selected.zoom = 100;
+      selected.zoomIncrease = 20;
       selected.file_name = this.setupData.file_name
       selected.project_name = this.setupData.project_name
       if(this.setupData.file_name && this.setupData.project_name){
@@ -262,7 +264,6 @@ export default {
         }
         this.handleviewScroll()
       }
-     
     },
     onSubmit() {
       this.$emit('onSubmit', this.setupData);

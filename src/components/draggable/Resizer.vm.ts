@@ -1,7 +1,7 @@
 import ResizerState from './resizer-state.ts';
 import draggable from './draggable.ts';
 import * as $ from 'linq'
-import browserHelper from './helper/browser.js'
+import browserHelper from '../../helpers/browser.js'
 const TYPE_PREFIX = 'rr-ord-';
 const HANDLE_SELECTOR = '.rr-handle';
 
@@ -297,7 +297,7 @@ export default {
             top: bounds.top + bounds.height / 2
           };
 
-           // add zoom value to left and top if > 100
+          // add zoom value to left and top if > 100
           // decrease  left and top to zoom if < 100
           if (self.zoom > 100) {
             if (browserHelper.isChrome()) {

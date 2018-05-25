@@ -179,7 +179,8 @@ export const store = new Vuex.Store({
                     borderStyle: "",
                     borderColor: "#000",
                     shadowSize: 0,
-                    shadowColor: ""
+                    shadowColor: "",
+                    opacity: 1,
                 }
             },
             {
@@ -213,9 +214,9 @@ export const store = new Vuex.Store({
     mutations: {
         addLayer: (state, payload) => {
             console.log("ADDLAYER")
-            // check if the item is from undo or redo
-            // if not, assign a new id for this item
-            // indicating that this item is created
+                // check if the item is from undo or redo
+                // if not, assign a new id for this item
+                // indicating that this item is created
             let layers = state.layers
             if (!payload.fromUndoRedo) {
                 payload = appHelper.createLayer(payload);
@@ -273,7 +274,7 @@ export const store = new Vuex.Store({
         // updates the layer list
         updateLayers: (state) => {
             console.log('newLayers:')
-            // Vue.set(state, 'layers', newLayers)
+                // Vue.set(state, 'layers', newLayers)
         },
         removeGlobalLayer: (state, _layerId) => {
             Vue.set(state, 'removableId', _layerId)
@@ -309,6 +310,9 @@ export const store = new Vuex.Store({
                 throw new Error("Invalid status data");
             }
             state.autoSaveStatus = data;
+        },
+        updateUndoRedoAction: state => {
+            state.isActionCastedByUndoRedo = appHelper.generateTimestamp();
         },
     },
     getters: {
@@ -371,8 +375,8 @@ export const store = new Vuex.Store({
         editLayer: ({ commit }, payload) => {
             commit('editLayer', payload)
         },
-        selectTemplate: ({commit}, payload) => {
-            commit('selectTemplate',payload)
+        selectTemplate: ({ commit }, payload) => {
+            commit('selectTemplate', payload)
         }
     }
     //   strict: process.env.NODE_ENV !== 'production'
