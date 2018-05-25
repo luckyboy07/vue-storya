@@ -19,7 +19,9 @@
            </div>
            <div class="tool-item-group-content">
             <div class="label-item">
-              <i class="si-link"></i>
+              <mu-flat-button class="s-editor-btn-zoom-ctrl">
+                <i class="si-link" style="height: 90%"></i>
+              </mu-flat-button>
             </div>
            </div>
            <div class="tool-item-group-content" style="width: 106px; display: flex;">
@@ -162,8 +164,7 @@ export default {
 </script>
 <style scoped>
 .s-editor-btn-zoom-ctrl {
-  padding: 3px 3px;
-  
+  padding: 0;
 }
 .temp-action-item-divider {
   background-color: #77c589;

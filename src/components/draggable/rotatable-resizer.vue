@@ -10,7 +10,8 @@
       top: state.top + 'px',
       width: state.width + 'px',
       height: state.height + 'px',
-      zIndex: state.z
+      zIndex: state.z,
+      '-webkit-transform-origin':'50% 53%',
      }">
     <div class="rr-bar rr-ord-n" key="bar-n">
     </div>
@@ -54,7 +55,7 @@
         {{parseInt(this.width) + ' x ' + parseInt(this.height)}}
       </div>
     <div v-show="isDragging" class="layer-action-info info-top" :style="{transform: 'rotateZ(' + (this.rotation * -1) + 'deg)',}">
-      {{parseInt(this.left) + ',' + parseInt(this.top)}}
+      {{parseInt(this.left) + ', ' + parseInt(this.top)}}
     </div>
     <div class="rr-content">
       <slot></slot>
