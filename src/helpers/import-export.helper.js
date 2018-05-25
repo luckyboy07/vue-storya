@@ -516,6 +516,18 @@ export default {
             height: 100%;
             z-index: 1;
         }
+
+        .loading-ui {
+          z-index: 99999;
+          position: absolute;
+          width: 100%;
+          height:100%;
+          top: 0;
+        }
+        .loading-ui-img {
+          width: 100%;
+          height:100%;
+        }
       </style>
     </head>
     <body onload="_p()">
@@ -526,23 +538,49 @@ export default {
       <!-- DO NOT REMOVE ME -->
       <script type="text/javascript">
         function _p() {
-          var editable_elements = document.querySelectorAll("[contenteditable=true]");
-          for (var i = 0; i < editable_elements.length; i++) {
-            editable_elements[i].setAttribute("contenteditable", false);
-          }
+          window.setTimeout(function() {
+            var editable_elements = document.querySelectorAll("[contenteditable=true]");
+            for (var i = 0; i < editable_elements.length; i++) {
+              editable_elements[i].setAttribute("contenteditable", false);
+            }
+            // removing editor's data
+            var tohide = document.getElementsByClassName('handle-tt');
+            for (var i = 0; i < tohide.length; i++) {
+              tohide[i].style.display="none"
+            } 
+            document.getElementById('loader').style.display = 'none';
+          }, 1000);
         }
       </script>
       <!-- DO NOT REMOVE ME -->
     </body>
     </html>
   `,
+    loaderTemplate: `
+    <img class="loading-ui-img" src="https://media.giphy.com/media/xTk9ZvMnbIiIew7IpW/giphy.gif">
+  `,
     /**
      * Exports the current editor content into a packed html file (.html)
      */
     exportTemplate() {
-        var htmlContent = document.getElementsByClassName('editor-box')[0].outerHTML;
-        console.log("downloading");
-        this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
+        var editorElem = document.getElementsByClassName('editor-box')[0]
+        var htmlContent = editorElem.outerHTML;
+
+        var newParent = document.createElement('div');
+        newParent.className = 'editor-box';
+        console.log('newParent', newParent)
+        newParent.style.cssTex = editorElem.style.cssText;
+        newParent.innerHTML = htmlContent;
+
+        // adding the loader too the newParent div
+        // creating the loading chuchu
+        var div = document.createElement('div');
+        div.className = 'loading-ui';
+        div.id = 'loader';
+        div.innerHTML = this.loaderTemplate;
+        newParent.appendChild(div);
+
+        this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + newParent.outerHTML + this.exportHtmlTemplatePart2);
     },
     $_download(filename, htmlContent) {
         var element = document.createElement('a');

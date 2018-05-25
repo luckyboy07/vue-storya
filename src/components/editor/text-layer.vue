@@ -137,12 +137,16 @@ export default {
     redoUndoTime: function(val) {
        this.addToUndoRedo = false;
     },
-    "data.attributes": {
-      handler(val) {
-        // list style
+    "data.attributes.listStyle": {
+      handler() {
+         // list style
         this.formatContent();
         this.currentListType = this.data.attributes.listStyle;
-
+      },
+      deep: true
+    },
+    "data.attributes": {
+      handler(val) {
         // undo/redo
         if (!this.addToUndoRedo) {
            this.addToUndoRedo = true;
