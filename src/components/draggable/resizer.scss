@@ -1,7 +1,7 @@
 $rotatable-handle-height: 30px;
 $handle-size: 10px;
-$handle-border-active: 1px dashed #808080;
-$handle-border: 2px solid transparent;
+$handle-border-active: thin dashed #808080;
+$handle-border: thin solid transparent;
 $handle-background: #fff;
 .rr-resizer {
     position: absolute;
