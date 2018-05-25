@@ -145,6 +145,13 @@ export default {
       },
       deep: true
     },
+    "data.attributes.rotation": {
+      handler() {
+        // do not add to undo redo if rotation 
+        this.addToUndoRedo = false;
+      },
+      deep: true
+    },
     "data.attributes": {
       handler(val) {
         // undo/redo

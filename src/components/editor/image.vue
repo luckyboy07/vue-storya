@@ -54,6 +54,13 @@ export default {
     redoUndoTime: function(val) {
        this.addToUndoRedo = false;
     },
+    "layerData.attributes.rotation": {
+      handler() {
+        // do not add to undo redo if rotation 
+        this.addToUndoRedo = false;
+      },
+      deep: true
+    },
     "layerData.attributes": {
       handler(val) {
         // undo/redo
