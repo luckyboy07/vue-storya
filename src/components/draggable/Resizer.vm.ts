@@ -253,21 +253,22 @@ export default {
       line.style.display = show ? 'block' : 'none';
     },
     showGridLine(deg) {
-      if (!this.id) {
-        return;
-      }
-      var line = this.$_getDraggableGuideline();
-      this.$_toggleDraggableLines(false, line);
-      // 0 degree & 180
-      // show the horizontal ruler line
-      // 90 degrees and 270
-      // show the vertical ruler line 
-      if ((deg - 1 >= -2 && deg + 1 <= 2) ||
-          (deg - 1 >= 178 && deg + 1 <= 182) ||
-          (deg - 1 >= 88 && deg + 1 <= 91) ||
-          (deg - 1 >= 268 && deg + 1 >= -88)) {
-          this.$_toggleDraggableLines(true, line);
-      }
+      return;
+      // if (!this.id) {
+      //   return;
+      // }
+      // var line = this.$_getDraggableGuideline();
+      // this.$_toggleDraggableLines(false, line);
+      // // 0 degree & 180
+      // // show the horizontal ruler line
+      // // 90 degrees and 270
+      // // show the vertical ruler line 
+      // if ((deg - 1 >= -2 && deg + 1 <= 2) ||
+      //     (deg - 1 >= 178 && deg + 1 <= 182) ||
+      //     (deg - 1 >= 88 && deg + 1 <= 91) ||
+      //     (deg - 1 >= 268 && deg + 1 >= -88)) {
+      //     this.$_toggleDraggableLines(true, line);
+      // }
     },
 
     hideDraggableLines: function() {
@@ -325,14 +326,26 @@ export default {
           if (degree - 1 >= -5 && degree + 1 <= 5) {
             degree = 0;
           }
-          if (degree - 1 >= 175 && degree + 1 <= 185) {
-            degree = 180;
+          if (degree - 1 >= 40 && degree + 1 <= 50) {
+            degree = 45;
           }
           if (degree - 1 >= 85 && degree + 1 <= 95) {
             degree = 90;
           }
+          if (degree - 1 >= 130 && degree + 1 <= 140) {
+            degree = 135;
+          }
+          if (degree - 1 >= 175 && degree + 1 <= 185) {
+            degree = 180;
+          }
+          if (degree - 1 >= 220 && degree + 1 <= 230) {
+            degree = 225;
+          }
           if (degree - 1 >= 265 && degree + 1 >= -85) {
             degree = 270;
+          }
+          if (degree - 1 <= -40 && degree + 1 >= -50) {
+            degree = -45;
           }
           
           self.state.rotation = degree;

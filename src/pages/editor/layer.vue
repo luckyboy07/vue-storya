@@ -7,7 +7,7 @@
     :draggable="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? true : false : true"
     :rotation="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ?  elem.attributes.rotation : 0 :  elem.attributes.rotation"
     :fixedProportion="false"
-    :handles="'n,s,e,w,nw,ne,se,sw'"
+    :handles="'nw,ne,se,sw'"
     :left="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.x : -7 : elem.x"
     :top="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.y : -7 : elem.y"
     :width="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.width : parentW : elem.width"

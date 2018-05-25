@@ -1,6 +1,6 @@
 $rotatable-handle-height: 30px;
 $handle-size: 10px;
-$handle-border-active: thin dashed #808080;
+$handle-border-active: thin dashed rgba(0, 0, 0, .5);
 $handle-border: thin solid transparent;
 $handle-background: #fff;
 .rr-resizer {
@@ -35,6 +35,14 @@ $handle-background: #fff;
     z-index: 1;
 }
 
+.rr-rotate-handle:active,
+.rr-rotate-handle:hover {
+    background: #009D70;
+    width: 12px;
+    height: 12px;
+    border: thin solid white;
+}
+
 .rr-rotate-handle::after {
     content: "";
     position: absolute;
@@ -56,6 +64,14 @@ $handle-background: #fff;
     border-radius: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
+}
+
+.rr-handle:active,
+.rr-handle:hover {
+    background: #009D70;
+    width: 12px;
+    height: 12px;
+    border: thin solid white;
 }
 
 .rr-drag-border .rr-bar {

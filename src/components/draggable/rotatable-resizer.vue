@@ -130,38 +130,47 @@
 .rr-ord-n:hover .handle-tt {
   visibility: visible;
   animation: 1s fadeIn;
+  top: 20px;
 }
 .rr-ord-s:hover .handle-tt {
   visibility: visible;
-  animation: 1s fadeIn;
+  animation: 0.5s fadeIn;
+  top: 20px;
 }
 .rr-ord-e:hover .handle-tt {
   visibility: visible;
   animation: 1s fadeIn;
+  left: 20px;
 }
 .rr-ord-w:hover .handle-tt {
   visibility: visible;
   animation: 1s fadeIn;
+  right: 20px;
 }
 .rr-ord-nw:hover .handle-tt {
   visibility: visible;
   animation: 1s fadeIn;
+  top: 20px;
 }
 .rr-ord-ne:hover .handle-tt {
   visibility: visible;
   animation: 1s fadeIn;
+  top: 20px;
 }
 .rr-ord-se:hover .handle-tt {
   visibility: visible;
   animation: 1s fadeIn;
+  top: 20px;
 }
 .rr-ord-sw:hover .handle-tt {
   visibility: visible;
   animation: 1s fadeIn;
+  top: 20px;
 }
 .rr-rotate-handle:hover .handle-tt {
    visibility: visible;
    animation: 1s fadeIn;
+   left: 20px;
 }
 </style>
 
