@@ -1,6 +1,5 @@
+import * as $ from 'linq'
 export default {
-    Enumerable: require('linq'),
-
     /**
      * Generates a unique Global Unique Identifier
      */
@@ -11,17 +10,20 @@ export default {
 
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
     },
-    // Checks if the given Uniform Resource Identifier (URI) is valid
+    /**
+     * Checks if the given Uniform Resource Identifier (URI) is valid
+     */
     isValidURI: function(uri) {
-        return true;
-        // if (uri) {
-        //   if (uri.match(/\.(jpeg|jpg|gif|png)$/) === null) {
-        //     return false
-        //   }
-        // }
-        // return true
+        if (uri) {
+            if (uri.match(/\.(jpeg|jpg|gif|png)$/) === null) {
+                return false
+            }
+        }
+        return true
     },
-    // Checks if the inputted data is digit
+    /**
+     * Checks if the inputted data is digit
+     */
     isDigit: function(charCode, val, checkDecimal) {
         // only allow one (1) period (.) in
         if (charCode === 110 && checkDecimal) {
@@ -38,11 +40,15 @@ export default {
     cloneLayer: function(_layerDetail) {
         return JSON.parse(JSON.stringify(_layerDetail))
     },
-    // returns a new instance of the object
+    /**
+     * returns a new instance of the object
+     */
     cloneObject: function(_objDetail) {
         return this.cloneLayer(_objDetail);
     },
-    // creates a new layer
+    /**
+     * creates a new layer
+     */
     createLayer: function(_layerDetail) {
         let layerDetail = JSON.parse(JSON.stringify(_layerDetail))
             // assign id for this layer and to its attributes to prevent data errors
@@ -52,7 +58,9 @@ export default {
 
         return layerDetail
     },
-    // Sorts app layers ascending base on order property
+    /**
+     * Sorts app layers ascending base on order property
+     */
     sortLayersAscending: function(_array) {
         return _array.sort((a, b) => a.order > b.order)
     },
@@ -74,7 +82,7 @@ export default {
         // change this for more optimized solution ;)
         let prop = null
         if (_prop === 'width' || _prop === 'height') {
-            prop = this.Enumerable.from(_layerDetail.attributes)
+            prop = $.from(_layerDetail.attributes)
                 .firstOrDefault(x => x.name === 'area')
             if (prop) {
                 // bang: attribute found
@@ -92,7 +100,7 @@ export default {
         } else {
             // get the attribute and change its value
             // check if the _layerDetail has the attribute
-            prop = this.Enumerable.from(_layerDetail.attributes)
+            prop = $.from(_layerDetail.attributes)
                 .firstOrDefault(x => x.name === _prop)
                 // console.log('prop', prop);
             if (prop) {
@@ -106,7 +114,9 @@ export default {
             }
         }
     },
-    // Removes a layer
+    /**
+     * Removes a layer
+     */
     removeLayer(_sourceLayers, _defaultIndex, _layerId) {
         let removeIndex = _defaultIndex
         if (_layerId) {

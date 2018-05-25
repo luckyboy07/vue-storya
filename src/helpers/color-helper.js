@@ -1,4 +1,7 @@
 export default {
+    /**
+     * Returns the opposite contrast of color
+     */
     invertColor: function(hex) {
         var padZero = function(str, len) {
             len = len || 2;

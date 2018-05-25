@@ -536,6 +536,9 @@ export default {
     </body>
     </html>
   `,
+    /**
+     * Exports the current editor content into a packed html file (.html)
+     */
     exportTemplate() {
         var htmlContent = document.getElementsByClassName('editor-box')[0].outerHTML;
         console.log("downloading");
