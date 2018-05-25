@@ -1,6 +1,7 @@
 import ResizerState from './resizer-state.ts';
 import draggable from './draggable.ts';
 import * as $ from 'linq'
+import colorHelper from '../../helpers/color-helper.js'
 import browserHelper from '../../helpers/browser.js'
 const TYPE_PREFIX = 'rr-ord-';
 const HANDLE_SELECTOR = '.rr-handle';
@@ -81,6 +82,9 @@ export default {
     return {
       state,
       dragging: false,
+      isRotating: false,
+      isResizing: false,
+      isDragging: false,
     };
   },
 
@@ -249,21 +253,22 @@ export default {
       line.style.display = show ? 'block' : 'none';
     },
     showGridLine(deg) {
-      if (!this.id) {
-        return;
-      }
-      var line = this.$_getDraggableGuideline();
-      this.$_toggleDraggableLines(false, line);
-      // 0 degree & 180
-      // show the horizontal ruler line
-      // 90 degrees and 270
-      // show the vertical ruler line 
-      if ((deg - 1 >= -2 && deg + 1 <= 2) ||
-          (deg - 1 >= 178 && deg + 1 <= 182) ||
-          (deg - 1 >= 88 && deg + 1 <= 91) ||
-          (deg - 1 >= 268 && deg + 1 >= -88)) {
-          this.$_toggleDraggableLines(true, line);
-      }
+      return;
+      // if (!this.id) {
+      //   return;
+      // }
+      // var line = this.$_getDraggableGuideline();
+      // this.$_toggleDraggableLines(false, line);
+      // // 0 degree & 180
+      // // show the horizontal ruler line
+      // // 90 degrees and 270
+      // // show the vertical ruler line 
+      // if ((deg - 1 >= -2 && deg + 1 <= 2) ||
+      //     (deg - 1 >= 178 && deg + 1 <= 182) ||
+      //     (deg - 1 >= 88 && deg + 1 <= 91) ||
+      //     (deg - 1 >= 268 && deg + 1 >= -88)) {
+      //     this.$_toggleDraggableLines(true, line);
+      // }
     },
 
     hideDraggableLines: function() {
@@ -321,26 +326,40 @@ export default {
           if (degree - 1 >= -5 && degree + 1 <= 5) {
             degree = 0;
           }
-          if (degree - 1 >= 175 && degree + 1 <= 185) {
-            degree = 180;
+          if (degree - 1 >= 40 && degree + 1 <= 50) {
+            degree = 45;
           }
           if (degree - 1 >= 85 && degree + 1 <= 95) {
             degree = 90;
           }
+          if (degree - 1 >= 130 && degree + 1 <= 140) {
+            degree = 135;
+          }
+          if (degree - 1 >= 175 && degree + 1 <= 185) {
+            degree = 180;
+          }
+          if (degree - 1 >= 220 && degree + 1 <= 230) {
+            degree = 225;
+          }
           if (degree - 1 >= 265 && degree + 1 >= -85) {
             degree = 270;
+          }
+          if (degree - 1 <= -40 && degree + 1 >= -50) {
+            degree = -45;
           }
           
           self.state.rotation = degree;
           self.showGridLine(self.state.rotation);
           self.emitInputEvent(self.value);
           self.emitRotated(self.state.rotation);
+          self.isRotating = true;
         },
         end() {
           self.emitChangeEvent();
           self.dragging = false;
           self.emitRotateEnded();
           self.hideDraggableLines();
+          self.isRotating = false;
         }
       });
     },
@@ -403,6 +422,7 @@ export default {
 
           // emit dragging event
           self.emitDragging(rect.left,  rect.top);
+          self.isDragging = true;
         },
         end() {
           if (dragState.rect) {
@@ -412,6 +432,7 @@ export default {
           self.dragging = false;
           // throw drag-ended event
           self.emitDragEnd();
+          self.isDragging = false;
         }
       });
     },
@@ -478,6 +499,7 @@ export default {
 
           // throw the resizing event
           self.emitResizing(rect.left, rect.top, rect.width, rect.height)
+          self.isResizing = true;
         },
         end() {
           if (resizeState.rect) {
@@ -487,6 +509,7 @@ export default {
           self.dragging = false;
           // throw the resize-ended event
           self.emitEndResize(el.style.left, el.style.top, el.style.width, el.style.height);
+          self.isResizing = false;
         }
       });
     }

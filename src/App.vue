@@ -78,18 +78,18 @@ export default {
       if (evt.ctrlKey) {
         if (evt.key === 'y') {
            var redoData = undoRedo.redo();
-           if (redoData && redoData.lastAction === 'scale') {
-            redoData = undoRedo.redo();
-          }
+          //  if (redoData && redoData.lastAction === 'scale') {
+          //   redoData = undoRedo.redo();
+          // }
           if (redoData) {
            this.$_handleRedo(redoData.layer, redoData.lastAction);
           }
           this.$_debugLogger("key action: redo");
         } else if (evt.key === 'z') {
           var undoData = undoRedo.undo();
-          if (undoData && undoData.lastAction === 'scale') {
-            undoData = undoRedo.undo();
-          }
+          // if (undoData && undoData.lastAction === 'scale') {
+          //   undoData = undoRedo.undo();
+          // }
           if (undoData) {
              this.$_handleUndo(undoData.layer, undoData.lastAction)
           }

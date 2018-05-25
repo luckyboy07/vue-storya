@@ -137,12 +137,23 @@ export default {
     redoUndoTime: function(val) {
        this.addToUndoRedo = false;
     },
-    "data.attributes": {
-      handler(val) {
-        // list style
+    "data.attributes.listStyle": {
+      handler() {
+         // list style
         this.formatContent();
         this.currentListType = this.data.attributes.listStyle;
-
+      },
+      deep: true
+    },
+    "data.attributes.rotation": {
+      handler() {
+        // do not add to undo redo if rotation 
+        this.addToUndoRedo = false;
+      },
+      deep: true
+    },
+    "data.attributes": {
+      handler(val) {
         // undo/redo
         if (!this.addToUndoRedo) {
            this.addToUndoRedo = true;
@@ -166,7 +177,7 @@ export default {
 <style scoped>
 .tl-container {
   width: 100%;
-  height: 100%;
+  cursor: auto;
 }
 .noselect {
   -webkit-user-select: none;  
