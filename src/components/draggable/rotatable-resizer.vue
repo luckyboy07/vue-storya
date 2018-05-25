@@ -85,14 +85,15 @@
   padding: 0 8px;
   color: #fff;
   border-radius: 2px;
-  font-size: 11px;
+  font-size: 10px;
   overflow: hidden;
   line-height: 22px;
   user-select: none;
-  opacity: 0.5;
+  opacity: 0.7;
   /* Position the tooltip */
   position: absolute;
   z-index: 999;
+  box-shadow: 0 1px 2px black, 0 1px 2px black;
 }
 .rr-ord-n:hover .handle-tt {
   visibility: visible;
