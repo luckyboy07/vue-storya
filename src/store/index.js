@@ -117,7 +117,7 @@ export const store = new Vuex.Store({
                 id: null,
                 x: 0,
                 y: 0,
-                width: 100,
+                width: 140,
                 height: 100,
                 title: 'Image',
                 icon: 'image',
@@ -140,7 +140,7 @@ export const store = new Vuex.Store({
                     borderColor: '',
                     shadowSize: '1',
                     shadowColor: '',
-                    objectFit: 'cover'
+                    objectFit: 'fill'
                 }
             },
             {

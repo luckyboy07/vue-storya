@@ -39,7 +39,7 @@
              </mu-grid-tile>
               <div class="selected-title">
             {{selectedImage.name}}<br>
-            <span class="sub-title">1080x1920, 287KB</span>
+            <span class="sub-title">{{selectedImage.originalWidth}}x{{selectedImage.originalHeight}}, 287KB</span>
           </div>
          <div class="buttons">
             <mu-raised-button label="Cancel" fullWidth class="btn-buttons" @click="closeModal"/>
@@ -108,7 +108,7 @@ export default {
     methods:{
       ...mapMutations(['addImage']),
         inputFilter(newFile, oldFile, prevent) {
-            console.log("DIRI")
+            console.log("DIRI",newFile)
           if (newFile && !oldFile) {
           if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
             this.alert('Your choice is not a picture')
@@ -121,11 +121,16 @@ export default {
           let URL = window.URL || window.webkitURL
           console.log(URL)
           if (URL && URL.createObjectURL) {
+            console.log('DIRI nasad')
             newFile.url = URL.createObjectURL(newFile.file)
-            // img.onload = function(){
-            //   console.log('width', img.naturalWidth)
-            //   console.log('width', img.naturalHeight)
-            // }
+            let reader = new Image()
+            reader.src = newFile.url
+            reader.onload = function(){
+              console.log('height', reader.naturalWidth)
+              console.log('width', reader.naturalHeight)
+              newFile.originalWidth = reader.naturalWidth
+              newFile.originalHeight = reader.naturalHeight
+            }
           }
         }
       },
@@ -149,7 +154,6 @@ export default {
            this.$modal.hide('image-modal')
       },
       selectImage (image) {
-        console.log('image:', image)
         this.selectedImage = image
         this.files.forEach(row => {
             row.selected = row.id === image.id
@@ -162,6 +166,8 @@ export default {
           this.selectedLayer.attributes.backgroundImageUri = this.selectedImage
         }else{
           this.selectedLayer.image = this.selectedImage
+          this.selectedLayer.width = this.selectedImage.originalWidth
+          this.selectedLayer.height = this.selectedImage.originalHeight
         }
         this.$modal.hide('image-modal')
         // this.addImage(this.layer)
