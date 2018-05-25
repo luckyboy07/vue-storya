@@ -31,7 +31,7 @@ $handle-background: #fff;
     background: $handle-background;
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    cursor: crosshair;
+    cursor: pointer;
     z-index: 1;
 }
 

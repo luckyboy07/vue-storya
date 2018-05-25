@@ -1,6 +1,7 @@
 import ResizerState from './resizer-state.ts';
 import draggable from './draggable.ts';
 import * as $ from 'linq'
+import colorHelper from '../../helpers/color-helper.js'
 import browserHelper from '../../helpers/browser.js'
 const TYPE_PREFIX = 'rr-ord-';
 const HANDLE_SELECTOR = '.rr-handle';
@@ -81,6 +82,9 @@ export default {
     return {
       state,
       dragging: false,
+      isRotating: false,
+      isResizing: false,
+      isDragging: false,
     };
   },
 
@@ -335,12 +339,14 @@ export default {
           self.showGridLine(self.state.rotation);
           self.emitInputEvent(self.value);
           self.emitRotated(self.state.rotation);
+          self.isRotating = true;
         },
         end() {
           self.emitChangeEvent();
           self.dragging = false;
           self.emitRotateEnded();
           self.hideDraggableLines();
+          self.isRotating = false;
         }
       });
     },
@@ -403,6 +409,7 @@ export default {
 
           // emit dragging event
           self.emitDragging(rect.left,  rect.top);
+          self.isDragging = true;
         },
         end() {
           if (dragState.rect) {
@@ -412,6 +419,7 @@ export default {
           self.dragging = false;
           // throw drag-ended event
           self.emitDragEnd();
+          self.isDragging = false;
         }
       });
     },
@@ -478,6 +486,7 @@ export default {
 
           // throw the resizing event
           self.emitResizing(rect.left, rect.top, rect.width, rect.height)
+          self.isResizing = true;
         },
         end() {
           if (resizeState.rect) {
@@ -487,6 +496,7 @@ export default {
           self.dragging = false;
           // throw the resize-ended event
           self.emitEndResize(el.style.left, el.style.top, el.style.width, el.style.height);
+          self.isResizing = false;
         }
       });
     }

@@ -166,7 +166,7 @@ export default {
 <style scoped>
 .tl-container {
   width: 100%;
-  height: 100%;
+  cursor: auto;
 }
 .noselect {
   -webkit-user-select: none;  
