@@ -568,7 +568,8 @@ export default {
 
         var newParent = document.createElement('div');
         newParent.className = 'editor-box';
-        console.log('newParent', newParent)
+        newParent.style.width = editorElem.style.width;
+        newParent.style.height = editorElem.style.height;
         newParent.style.cssTex = editorElem.style.cssText;
         newParent.innerHTML = htmlContent;
 

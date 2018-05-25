@@ -33,7 +33,7 @@
     <div class="tool-item tool-item-group" slot="left">
        <div class="label-item">Zoom</div>
        <div class="tool-item-group-content" style="width: 168px; display: flex">
-         <mu-flat-button  class="s-editor-btn-zoom-ctrl" @click="zoom('out')">
+         <mu-flat-button class="s-editor-btn-zoom-ctrl" @click="zoom('out')">
             <i class="si-zoomout" style="height: 90%"></i>
           </mu-flat-button>
           <div class="tool-item-group-content">
