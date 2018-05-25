@@ -45,9 +45,9 @@
            </div>
         </mu-col>
         <mu-col width="70" tablet="70" desktop="70" class="right-content">
-          <div style="display: table">
+          <div style="display: table" id="info">
             <div class="item inp">
-              Project Name
+              Project Name <span class="error-msg" v-if="isProject">*Required</span>
               <div class="np-g-inp" ref="menuContainer">
                 <input style="margin: 0;" class="default-inp" type="text" v-model="setupData.project_name"/>
                 <mu-flat-button class="np-g-more-btn" @click="showMore">
@@ -65,7 +65,7 @@
               </div>
             </div>
             <div class="item inp">
-              File Name
+              File Name <span class="error-msg" v-if="isFile">*Required</span>
               <input class="default-inp" type="text" v-model="setupData.file_name"/>
             </div>
             <div class="item inp" style="display: flex;">
@@ -170,7 +170,15 @@ export default {
       confirmDialogOpen: false,
       activeTab: '1',
       tabStyle: {'color': '#fff'},
-      setupData: {},
+      setupData: {
+        height: '',
+        width: '',
+        project_name: '',
+        file_name: '',
+        canvasBackground: ''
+      },
+      isProject: false,
+      isFile: false, 
       pickerisShow: false,
       width: '',
       height: '',
@@ -232,22 +240,43 @@ export default {
       this.$router.go(-1)
     },
     onConfirm() {
-      console.log('setup:',this.setupData)
       var selected = {};
-      selected.width = parseInt(this.setupData.width);
-      selected.height = parseInt(this.setupData.height);
-      selected.templateSelected = this.setupData.templateSelected;
+      console.log('selected:',selected)
+      console.log('this.setupData:',this.setupData)
+      selected.width = parseInt(this.setupData.width)
+      selected.height = parseInt(this.setupData.height)
+      selected.templateSelected = this.setupData.templateSelected
       selected.zoom = 100;
       selected.zoomIncrease = 20;
-
-      this.selectTemplate(selected)
-      this.$router.push({name: 'EditorApp'})
+      selected.file_name = this.setupData.file_name
+      selected.project_name = this.setupData.project_name
+      if(this.setupData.file_name && this.setupData.project_name){
+          this.isFile = false
+          this.isProject = false
+          this.selectTemplate(selected)
+          this.$router.push({name: 'EditorApp'})
+      }else {
+        if(this.setupData.project_name === '' ){
+          this.isProject = true
+        }
+        if (this.setupData.file_name === ''){
+          this.isFile = true
+        }
+        this.handleviewScroll()
+      }
     },
     onSubmit() {
       this.$emit('onSubmit', this.setupData);
       this.confirmDialogOpen = true;
     },
     orientSelected(val, index) {
+      if(val.name === 'vertical'){
+          this.setupData.height = this.setupData.template.h
+          this.setupData.width = this.setupData.template.w
+      }else if (val.name === 'horizontal'){
+        this.setupData.height = this.setupData.template.w
+        this.setupData.width = this.setupData.template.h
+      }
       this.setupData.templateSelected = val
       if(this.orientations.length - (index+1) === 0 ){
         this.orientations[index].selected = true
@@ -271,14 +300,14 @@ export default {
       this.setupData.orientation = item
       this.setupData.width = item.w
       this.setupData.height = item.h
-      if(item.w <= 400){
+      this.width = item.w;
+      this.height = item.h;
+      this.$set(this.setupData, 'template', item);
+       if(item.w <= 400){
         this.orientSelected(this.orientations[0],0)
       }else if (item.w > 400){
         this.orientSelected(this.orientations[1],1)
       }
-      this.width = item.w;
-      this.height = item.h;
-      this.$set(this.setupData, 'template', item);
     },
     colorSelected(val) {
       this.setupData.canvasBackground = val.hex;
@@ -399,6 +428,10 @@ export default {
       this.setupData.project_name = item.name;
        this.showMoreItems = false;
     },
+    handleviewScroll () {
+      let view = document.getElementById('info')
+      view.scrollIntoView()
+    }
   }
 }
 </script>
@@ -572,6 +605,13 @@ export default {
   height: 70%;
   /* position: absolute; */
   /* text-align: center; */
+}
+.error-msg{
+  color: #ff0a0a;
+    font-size: 12px;
+    position: relative;
+    /* top: -8px; */
+    bottom: 5px;
 }
 </style>
 

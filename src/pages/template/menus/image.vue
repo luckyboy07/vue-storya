@@ -56,7 +56,7 @@
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
             <mu-grid-list class="right">
-            <mu-slider v-model="data.attributes.borderWidth" class="mmslider" />
+            <mu-slider v-model="data.attributes.borderWidth" class="mmslider" :step="1"/>
             <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.borderWidth">
             </mu-grid-list>
           </div>
@@ -83,7 +83,7 @@
           <div class="gridlist-demo-container">
             <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
             <mu-grid-list class="right">
-            <mu-slider v-model="data.attributes.shadowSize" class="mmslider" />
+            <mu-slider v-model="data.attributes.shadowSize" class="mmslider" :step="1"/>
             <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.shadowSize">
             </mu-grid-list >
           </div>
