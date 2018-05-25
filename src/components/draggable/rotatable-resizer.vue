@@ -51,7 +51,7 @@
         {{parseInt(this.rotation)}}°
       </div>
     <div v-show="isResizing" class="layer-action-info info-top" :style="{top: '-65px', transform: 'rotateZ(' + (this.rotation * -1) + 'deg)',}">
-        {{parseInt(this.width) + 'x' + parseInt(this.height)}}
+        {{parseInt(this.width) + ' x ' + parseInt(this.height)}}
       </div>
     <div v-show="isDragging" class="layer-action-info info-top" :style="{transform: 'rotateZ(' + (this.rotation * -1) + 'deg)',}">
       {{parseInt(this.left) + ',' + parseInt(this.top)}}

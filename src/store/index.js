@@ -140,7 +140,7 @@ export const store = new Vuex.Store({
                     borderColor: '',
                     shadowSize: '1',
                     shadowColor: '',
-                    objectFit: 'cover'
+                    objectFit: 'fill'
                 }
             },
             {
