@@ -499,8 +499,7 @@ export default {
           border-style: solid;
           border-color: rgb(255, 255, 255);
           border-image: initial;
-            outline: rgb(102, 102, 102) solid 1px;
-            overflow: hidden;
+          overflow: hidden;
         }
         .rr-resizer {
           position: absolute;
