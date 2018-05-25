@@ -1,5 +1,8 @@
 <template>
-   <img :src="layerData.image.url ? layerData.image.url : 'http://via.placeholder.com/140x100'"  :style="getStyle()"/>
+  <div style="width: 100%; height: 100%;position: absolute;">
+    <img :src="layerData.image.url ? layerData.image.url : 'http://via.placeholder.com/140x100'"  :style="getStyle()"/>
+    <div class="img-layer-cover"></div>
+  </div>
 </template>
 <script>
 import {mapGetters} from 'vuex'
@@ -68,7 +71,14 @@ export default {
 }
 </script>
 <style>
-
+.img-layer-cover {
+  width: 100%; 
+  height: 100%; 
+  position: absolute; 
+  top: 0;
+  user-select: none;
+  -moz-user-select: none;
+}
 </style>
 
 
