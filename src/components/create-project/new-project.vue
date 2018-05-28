@@ -241,15 +241,16 @@ export default {
     },
     onConfirm() {
       var selected = {};
-      console.log('selected:',selected)
-      console.log('this.setupData:',this.setupData)
+      // console.log('selected:',selected)
+      // console.log('this.setupData:',this.setupData)
       selected.width = parseInt(this.setupData.width)
       selected.height = parseInt(this.setupData.height)
       selected.templateSelected = this.setupData.templateSelected
       selected.zoom = 100;
       selected.zoomIncrease = 20;
-      selected.file_name = this.setupData.file_name
-      selected.project_name = this.setupData.project_name
+      selected.file_name = this.setupData.file_name;
+      selected.project_name = this.setupData.project_name;
+      selected.bgColor = this.setupData.canvasBackground || '#fff';
       if(this.setupData.file_name && this.setupData.project_name){
           this.isFile = false
           this.isProject = false
@@ -602,7 +603,7 @@ export default {
   }
   .img-container {
   width: 100%;
-  height: 70%;
+  height: 60%;
   /* position: absolute; */
   /* text-align: center; */
 }

@@ -1,6 +1,8 @@
 <template>
-  <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
-   <mu-list-item title="Text Layer" :open="data.selected" @click.stop="open">
+  <div class="yawaa" :class="data.selected ? 'activeTool': ''">
+   <mu-list-item :title="getTextContent() || 'Text Layer'" 
+    :open="data.selected"
+     @click.stop="open">
         <mu-icon slot="left" value="text_fields" style="color: #fff"/>
         <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
         <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
@@ -200,6 +202,9 @@ export default {
   mounted() {
     this.originalFont = this.data.attributes.fontFamily;
     this.$_setFonts();
+
+    // for the context menu to show only on the title part
+    this.$el.querySelector(".mu-item-wrapper").addEventListener('contextmenu', this.showMenu)
   },
   updated() {
     this.$_setFonts()
@@ -279,7 +284,6 @@ export default {
       // this.selectedPicker = picker;
     },
     hidePicker(evt) {
-      console.log('ASDASDASD',evt)
       if (!evt) {
         return;
       }
@@ -324,11 +328,35 @@ export default {
     toggleLayer() {
       this.data.selected = this.data.visible = !this.data.visible;
     },
-  }
+    getTextContent() {
+      var data = this.data.content.replace(/<(?:.|\n)*?>/gm, ' ').replace(/&(?:.|\n)*?;/gm, ' ').trim();
+      if (data && data.length >= 20) {
+        return data.slice(0, 20) + '...';
+      } 
+
+      return data;
+    },
+    showMenu(e) {
+      e.preventDefault();
+      this.$emit("onRenameOrDelete", this.data, e)
+    },
+  },
+  watch: {
+    "data.attributes.fontFamily": {
+      handler() {
+        this.$el.querySelector(".mu-item-title").style.fontFamily = this.data.attributes.fontFamily;
+      },
+      deep: true
+    }
+  },
 }
 </script>
 <style scoped>
 @import './menu.css';
+.tl-title {
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
 .mu-item{
     background-color: rgba(197, 194, 194, 0.09) !important;
 }

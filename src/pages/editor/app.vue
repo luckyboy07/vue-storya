@@ -2,22 +2,26 @@
 <div>
 <headers style="z-index: 999"></headers>
 <side-bar @openWindow="openWindow"></side-bar>
-    <div class="editor-container" >
-      <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
-      <div class="zoom-container">
-         <div class="editor-box" 
-         :style="{width: canvasData.width + 'px', 
+  <div class="editor-container" >
+    <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
+    <div class="zoom-container">
+        <div class="editor-box" 
+          :style="{width: canvasData.width + 'px', 
           height: canvasData.height + 'px', 
           zoom: (canvasData.zoom / 100),
           '-moz-transform': 'scale(' + (canvasData.zoom / 100) +')',
-          }">
-          <div class="canvas-wrap">
-              <layer :layers="layers"></layer>
-          </div>
+          backgroundColor:canvasData.bgColor,}">
+        <div class="canvas-wrap">
+            <layer :layers="layers"></layer>
         </div>
       </div>
     </div>
-    <modal></modal>
+  </div>
+  <modal></modal>
+  <!-- <div class="editor-ruler-lines" 
+    :style="{width: canvasData.width + 'px', height: canvasData.height + 'px'}">
+
+  </div> -->
 </div>
 </template>
 <script>
@@ -65,6 +69,9 @@ export default {
 }
 </script>
 <style scoped>
+.editor-ruler-lines {
+  position: absolute;
+}
 .editor-container {
     padding-top: 22px;
     padding-left: 345px;
@@ -84,11 +91,11 @@ export default {
     border-image: initial;
 }
 .canvas-wrap {
-   background-color: white;
+   /* background-color: white; */
     position: absolute;
     height: 100%;
     width: 100%;
-    outline: rgb(102, 102, 102) solid 1px;
+    /* outline: rgb(102, 102, 102) solid 1px; */
     overflow: hidden;
 }
 .zoom-container {

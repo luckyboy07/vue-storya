@@ -19,6 +19,7 @@ export const store = new Vuex.Store({
             height: 500,
             zoom: 100,
             zoomIncrease: 20,
+            bgColor: '#fff',
         },
         // auto save status
         // 0: no changes
@@ -54,6 +55,7 @@ export const store = new Vuex.Store({
                 type: 'shape',
                 component: 'shape-layer',
                 zindex: null,
+                content: 'Shape Layer',
                 attributes: {
                     shape: 'Circle',
                     shape_type: '',
@@ -130,6 +132,7 @@ export const store = new Vuex.Store({
                 zindex: null,
                 open: false,
                 image: {},
+                content: 'Image Layer',
                 attributes: {
                     src: 'http://via.placeholder.com/140x100',
                     sizeOption: 'Auto',
@@ -166,13 +169,13 @@ export const store = new Vuex.Store({
                 attributes: {
                     rotation: 0,
                     fontFamily: "Lato",
-                    fontSize: "20px",
+                    fontSize: 20,
                     fontWeight: "normal",
                     fontStyle: "normal",
                     textDecoration: "none", // underline or not
                     textAlign: "left",
                     listStyle: "block",
-                    lineHeight: "20px",
+                    lineHeight: 1.5,
                     color: "#000",
                     backgroundColor: "transparent",
                     borderSize: "0px",

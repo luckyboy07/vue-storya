@@ -140,23 +140,8 @@ export default {
       }
   },
   mounted (){
-    //    setTimeout(() => {
-    // let targetelem = document.getElementsByClassName('mu-popover')
-    //     targetelem[0].style.left = '307px'
-    //     targetelem[0].style.top = '116px'
-    //     targetelem[0].style.width = '350px'
-    //     targetelem[0].style.backgroundColor = '#171616'
-    //     targetelem[0].firstElementChild.children[0].style.overflow = 'hidden'
-    //     targetelem[0].firstElementChild.children[0].style.width = '350px'
-    // },50)
-  },
-  watch: {
-    // detail: {
-    //   handler(val){
-    //   console.log('val:',val)
-    //   },
-    //   deep: true
-    // }
+     // for the context menu to show only on the title part
+    this.$el.querySelector(".mu-item-wrapper").addEventListener('contextmenu', this.showMenu)
   },
    computed: {
     ...mapGetters(['getLayers'])
@@ -168,7 +153,7 @@ export default {
       for(let i = 0; i < this.getLayers.length;i++){
         if (this.getLayers[i].id === this.data.id) {
           this.data.selected = !this.data.selected;
-        }else {
+        } else {
             this.getLayers[i].selected = false
         }
       }
@@ -181,8 +166,8 @@ export default {
       // this.$emit('isOpen',this.data)
     },
     openModalimage () {
-         this.$emit('selected',this.data)
-         this.$modal.show('image-modal',{data:this.data})
+      this.$emit('selected',this.data)
+      this.$modal.show('image-modal',{data:this.data})
     },
     toggleLayer() {
       this.data.selected = this.data.visible = !this.data.visible;
@@ -197,6 +182,10 @@ export default {
       // this.pickerisShow = !this.pickerisShow
       //   // this.colorPickerOwner = item.value
       // this.colorPickerOwner = this.pickerisShow ? event.srcElement : null
+    },
+    showMenu(e) {
+      e.preventDefault();
+      this.$emit("onRenameOrDelete", this.data, e)
     },
   },
   created () {

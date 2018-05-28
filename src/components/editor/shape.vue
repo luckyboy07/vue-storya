@@ -1,7 +1,7 @@
 <template>
 <div style="width: 100%; height: 100%">
-    <div v-if="data.attributes.shape === 'Circle'" :style="getAttributes()" class="circle" ></div>
-    <div v-if="data.attributes.shape === 'Rectangle'" :style="getAttributes()" class="square" ></div>
+    <div v-if="data.attributes.shape === 'Circle'" :style="getAttributes()" class="circle el-inner-size" ></div>
+    <div v-if="data.attributes.shape === 'Rectangle'" :style="getAttributes()" class="square el-inner-size" ></div>
     <!-- <div v-if="data.attributes.shape === 'Triangle'" :style="getAttributes()" class="triangle" ></div> -->
     <!-- <svg  :width="data.width" :height="data.height" v-if="data.attributes.shape === 'Triangle'">
     <path d="M 50,5 95,97.5 5,97.5 z"/>

@@ -10,8 +10,7 @@
       top: state.top + 'px',
       width: state.width + 'px',
       height: state.height + 'px',
-      zIndex: state.z,
-      '-webkit-transform-origin':'50% 53%',
+      zIndex: state.z
      }">
     <div class="rr-bar rr-ord-n" key="bar-n">
     </div>
@@ -71,9 +70,10 @@
   position: absolute;
   z-index: 999;
   overflow:hidden;
-  text-shadow: #7F7F7F;
+  // text-shadow: 1px 0px #7F7F7F;
   user-select: none;
   -moz-user-select: none;
+  min-width: 10px;
 }
 .info-top {
   top: -60px;
