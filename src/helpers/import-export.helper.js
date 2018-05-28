@@ -503,11 +503,10 @@ export default {
         }
         .rr-resizer {
           position: absolute;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            left: 0;
-            top: 0;
-            border: 2px solid transparent;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          left: 0;
+          top: 0;
         }
   
         .rr-content {
