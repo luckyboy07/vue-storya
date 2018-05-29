@@ -83,6 +83,8 @@ export default {
       this.isWindowOpen = value
     },
     layerScaling(layerData) {
+      if (this.canvasData.zoom !== 100) return;
+
       var bounds1 = this.$refs.editorContainer.getBoundingClientRect();
       var bounds2 = this.$refs.editorBox.getBoundingClientRect();
       setTimeout(() => {

@@ -45,10 +45,10 @@
   </mu-drawer>
   <div class="layer-menu" ref="layerMenu" v-show="menuVisible">
     <mu-list>
-      <mu-list-item titleClass="command-item" title="Rename" @click="rename"
+      <!-- <mu-list-item titleClass="command-item" title="Rename" @click="rename"
         v-show="menuLayerData ? menuLayerData.type === 'text' ? false : true : false"> 
         <mu-icon slot="left" value="border_color" style="color: white; font-size: 17px;"/>
-      </mu-list-item>
+      </mu-list-item> -->
       <mu-list-item titleClass="command-item" :title="getTitle('visibility')" @click="toggleVisibility">
         <mu-icon slot="left" value="visibility" style="color: white; font-size: 17px;"/>
       </mu-list-item>
