@@ -5,6 +5,7 @@ export default {
   <html>
     <head>
       <title></title>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.0/TweenMax.min.js"></script>
       <style type="text/css">
       @font-face {
         font-family: 'Domine';
@@ -526,31 +527,36 @@ export default {
       <!-- DO NOT REMOVE ME -->
       <script type="text/javascript">
         function _p() {
+          var gsap = new TimelineMax(); 
           var editable_elements = document.querySelectorAll("[contenteditable=true]");
           for (var i = 0; i < editable_elements.length; i++) {
             editable_elements[i].setAttribute("contenteditable", false);
           }
+          var elem1 = document.getElementsByClassName('rr-resizer');
+          gsap.from(elem1[0],1,{left:100,opacity:0,repeat: -1, yoyo: true});
         }
       </script>
       <!-- DO NOT REMOVE ME -->
     </body>
     </html>
   `,
-    exportTemplate() {
-        var htmlContent = document.getElementsByClassName('editor-box')[0].outerHTML;
-        console.log("downloading");
-        this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
+    exportTemplate () {
+      var htmlContent = document.getElementsByClassName('editor-box')[0].outerHTML
+      console.log('downloading')
+        this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2)
     },
-    $_download(filename, htmlContent) {
-        var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(htmlContent));
-        element.setAttribute('download', filename);
+    $_download (filename, htmlContent) {
+      console.log('filename:', filename)
+      console.log('htmlContent:', htmlContent)
+        var element = document.createElement('a')
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(htmlContent))
+        element.setAttribute('download', filename)
 
-        element.style.display = 'none';
-        document.body.appendChild(element);
+        element.style.display = 'none'
+        document.body.appendChild(element)
 
-        element.click();
+        element.click()
 
-        document.body.removeChild(element);
+        document.body.removeChild(element)
     }
 }

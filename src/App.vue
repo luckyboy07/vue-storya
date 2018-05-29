@@ -53,8 +53,13 @@ export default {
     this.eventWritten = true;
   },
   mounted() {
+     this.setLayer()
     // on loaded, start the timer
     this.idleTimer = setInterval(this.handleIdleTimerElapsed, this.idleTimeout)
+         this.$store.watch(this.$store.getters.altGetlayer, v =>{
+      console.log('v:',v)
+    })
+   
   },
   methods :{
     ...mapGetters(['getSelectedLayerId', 'getAutosaveStatusData']),
@@ -64,6 +69,7 @@ export default {
       'setSelectedLayerId', 
       'updateUndoRedoAction', 
       'setAutosaveData',
+      'setLayer'
       ]),
     keydownEventHandler(evt) {
       // resetting idle time in key activities
@@ -117,6 +123,7 @@ export default {
          // check if the main layer array has items
         if (this.layers.length > 0 && this.getAutosaveStatusData() === '1') {
           // trigger the idle time event
+          console.log('ASDASDASDASD')
           this.$_debugLogger('Call auto save here (App.vue:113)');
           this.setAutosaveData("2");
         } 
@@ -136,6 +143,7 @@ export default {
           this.autoSaveInfoDisplayDuration = 0;
         }
       }
+        this.$localStorage.set('layers',JSON.stringify(this.layers))
     },
     $_handleUndo(item, action) {
         // console.log('_handleUndoRedo', item, action);

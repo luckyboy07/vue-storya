@@ -45,7 +45,7 @@
                 <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
                 <mu-grid-list class="right">
                 <mu-slider :disabled="data.attributes.sizeOption === 'Auto'" :step="1" :min="-90" :max="270" v-model="data.attributes.rotation" class="mmslider" />
-                <input disabled v-digitsonly v-model="data.attributes.rotation" spellcheck="false" class="input-size sliderInput">
+                <input  v-digitsonly v-model="data.attributes.rotation" spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -101,8 +101,8 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
                 <mu-grid-list class="right">
-                <mu-slider v-model="data.attributes.borderSize" class="mmslider" />
-                <input v-digitsonly v-model="data.attributes.borderSize" spellcheck="false" class="input-size sliderInput">
+                <mu-slider v-model="data.attributes.borderWidth" class="mmslider" :step="1"/>
+                <input v-digitsonly v-model="data.attributes.borderWidth" spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -192,7 +192,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters,mapMutations} from 'vuex'
 import { Photoshop, Chrome } from "vue-color";
 import vueSlider from 'vue-slider-component';
 export default {
@@ -235,6 +235,7 @@ export default {
     ...mapGetters(['getLayers'])
   },
   methods: {
+    ...mapMutations(['setSelectedLayerId']),
     setGradientColors(evt) {
       console.log('setGradientColors:',evt)
       // var p = evt.$el.children[0];
@@ -304,6 +305,7 @@ export default {
         for(let i = 0; i < this.getLayers.length;i++){
           if (this.getLayers[i].id === this.data.id) {
             this.data.selected = !this.data.selected;
+          this.setSelectedLayerId(this.data.id)
           }else {
               this.getLayers[i].selected = false
           }

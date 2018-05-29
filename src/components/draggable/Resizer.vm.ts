@@ -8,9 +8,9 @@ const HANDLE_SELECTOR = '.rr-handle';
 export default {
   name: 'rotatable-resizer',
   props: {
-    id: {
-      type: String
-    },
+    // id: {
+    //   type: String
+    // },
     disabled: {
       type: Boolean
     },
@@ -249,9 +249,9 @@ export default {
       line.style.display = show ? 'block' : 'none';
     },
     showGridLine(deg) {
-      if (!this.id) {
-        return;
-      }
+      // if (!this.id) {
+      //   return;
+      // }
       var line = this.$_getDraggableGuideline();
       this.$_toggleDraggableLines(false, line);
       // 0 degree & 180
@@ -267,8 +267,8 @@ export default {
     },
 
     hideDraggableLines: function() {
-      var line = this.$_getDraggableGuideline(this.id);
-      this.$_toggleDraggableLines(false, line);
+      // var line = this.$_getDraggableGuideline(this.id);
+      // this.$_toggleDraggableLines(false, line);
     },
 
     hasHandle(ord) {

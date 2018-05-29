@@ -28,13 +28,6 @@
             <mu-menu menuClass="menu-add-layer" v-show="shapeSelected" class="pop-content">
               <div class="">
                 <mu-icon-button v-for="(item, i) in shapeTypes" :key="i" :icon="item.icon" @click="addShape(item.name)" :icon-class="item.selected ? 'activeIcon': ''" @hover="hoverShape(item)"/>
-                <!-- <mu-icon-button tooltip="top-center" tooltipPosition="top-center"  icon="stop"/> -->
-                <!-- <mu-icon-button icon="stop" @click="addShape('Rectangle Filled')" icon-class="activeIcon" @hover="hoverShape()"/>
-                <mu-icon-button icon="crop_square" @click="addShape('Rectangle')" icon-class="activeIcon" @hover="hoverShape()"/>
-                <mu-icon-button icon="network_cell" @click="addShape('Triangle Filled')" icon-class="activeIcon" @hover="hoverShape()"/>
-                <mu-icon-button icon="signal_cellular_null" @click="addShape('Triangle')" icon-class="activeIcon" @hover="hoverShape()"/>
-                <mu-icon-button icon="lens" @click="addShape('Circle Filled')" icon-class="activeIcon" @hover="hoverShape()"/>
-                <mu-icon-button icon="panorama_fish_eye" @click="addShape('Circle')" icon-class="activeIcon" @hover="hoverShape()"/> -->
               </div>
             </mu-menu>
         </mu-icon-menu>
@@ -42,57 +35,6 @@
     <mu-list>
     <component v-for="(layer,i) in layers" :key="i" :is="layer.component"  
       :openpanel="layer.selected" :data="layer" @isOpen="isOpen"></component>
-     <!-- <image-layer/> -->
-     <!-- <shape-layer/> -->
-     <!-- <shape-svg-layer/> -->
-     <!-- <text-layer/> -->
-      <!-- <ul class="expansion-panel">
-        <li class="ep-container">
-
-        </li>
-      </ul>
-      <router-link to="" aria-expanded="show" @click.native="show = !show">
-        <span class="icon is-small"><i class="fa fa-bar-chart-o"></i></span>
-        Charts
-        <span class="icon is-small is-angle"><i class="fa fa-angle-down"></i></span>
-      </router-link>
-      <expanding>
-        <ul v-show="show">
-          <li>
-              ChartJs
-          </li>
-          <li>
-          Chartist
-          </li>
-          <li>
-        Peity
-          </li>
-          <li>
-            Plotly
-          </li>
-        </ul>
-      </expanding>
-      <router-link to=""  aria-expanded="show1" @click.native="show1 = !show1">
-        <span class="icon is-small"><i class="fa fa-bar-chart-o"></i></span>
-        asdasdasdasd
-        <span class="icon is-small is-angle"><i class="fa fa-angle-down"></i></span>
-      </router-link>
-      <expanding>
-        <ul v-show="show1">
-          <li>
-          ChartJs
-          </li>
-          <li>
-            Chartist
-          </li>
-          <li>
-              Peity
-          </li>
-          <li>
-            Plotly
-          </li>
-        </ul>
-      </expanding> -->
     </mu-list>
   </mu-drawer>
 </div>
@@ -215,7 +157,7 @@ export default {
     // targetelem[3].style.borderTop = '1px solid hsla(0,0%,100%,.12)'
   },
   methods: {
-    ...mapMutations(['updateLayers', 'removeSelectedLayer',]),
+    ...mapMutations(['updateLayers', 'removeSelectedLayer']),
     ...mapActions(['addLayer']),
     ...mapGetters(['getShapeLayer', 'getSelectedLayerId','sortLayer']),
     hoverBtn () {
@@ -253,6 +195,7 @@ export default {
     },
     removeLayer() {
       var selectedLayer = this.getSelectedLayerId();
+        console.log('selectedLayer:',selectedLayer)
       if (selectedLayer) {
         undoRedo.add(appHelper.cloneLayer(selectedLayer.sourceLayer), "delete");
         this.removeSelectedLayer(selectedLayer.id);
@@ -303,7 +246,7 @@ export default {
 @import '../../css/tooltip.scss';
 @import '../../css/menu2.scss';
 .custom-drawer{
-  width: 306px;
+  width: 306px ;
   top: 115px;
 }
 .mu-appbar-title {
@@ -340,8 +283,8 @@ export default {
 
 }
 .mu-popover {
-  left: 345px!important;
-  top: 115px!important;
+  left: 345px !important;
+  top: 115px !important;
   background-color: #171616 !important;
 }
 .mu-menu-list{
