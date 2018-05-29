@@ -13,8 +13,8 @@ export const store = new Vuex.Store({
         canvasData: {
             file_name: 'New File 1',
             project_name: 'New File 1',
-            width: 508,
-            height: 423,
+            width: 900,
+            height: 500,
             zoom: 100,
             zoomIncrease: 20,
         },

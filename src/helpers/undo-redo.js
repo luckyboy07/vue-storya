@@ -55,8 +55,9 @@ export default {
      * Undo the last action
      */
     undo() {
-        // appply the last item to the layer
-        // specified by id
+        console.log('undoManager.hasUndo()', this.undoManager.hasUndo())
+            // appply the last item to the layer
+            // specified by id
         if (this.layers.length > 0) {
             // get the last layer before the undo action
             let layer = this.layers[this.layers.length - 1];

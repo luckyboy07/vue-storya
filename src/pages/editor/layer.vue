@@ -117,6 +117,7 @@ export default {
       elem.style.zIndex = '999';
       this.previousElem = {elem: elem, z: this.selectedLayer.order};
 
+      // deleting previous timeout
       if (this.focusTimeout) {
         window.clearTimeout(this.focusTimeout);
         this.focusTimeout = null;
@@ -124,7 +125,7 @@ export default {
       // starting a timer to switch between z-indexes
       this.focusTimeout = window.setTimeout(() => {
         this.resetFocus();
-      }, 2000);
+      }, 1000);
     },
     activated(elem) {
       console.log('%c Selected: ' + elem.id, 'background-color: red; color: white');

@@ -40,7 +40,8 @@ export default {
 
         var req_url = this._getFontsUri();
         if (!req_url.split('=')[1]) {
-            // fixes: Failed to load http://fonts.googleapis.com/css?family=: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+            // fixes: Failed to load http://fonts.googleapis.com/css?family=: 
+            // No 'Access-Control-Allow-Origin' header is present on the requested resource.
             return;
         }
         axios.get(req_url)
