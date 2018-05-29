@@ -20,6 +20,7 @@ export const store = new Vuex.Store({
             zoom: 100,
             zoomIncrease: 20,
             bgColor: '#fff',
+            gridLines: true,
         },
         // auto save status
         // 0: no changes

@@ -178,6 +178,7 @@ export default {
 .tl-container {
   width: 100%;
   cursor: auto;
+  word-wrap: break-word;
 }
 .noselect {
   -webkit-user-select: none;  

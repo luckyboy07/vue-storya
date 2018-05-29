@@ -44,7 +44,12 @@
           </mu-flat-button>
        </div>
      </div>
-    <!-- <mu-flat-button labelPosition="before" icon="add" style="text-transform: none; background-color: #222222; margin-right: 20px; height: 70%" slot="right" label="Add Canvas" class="demo-flat-button"/> -->
+    <!-- <mu-flat-button 
+      slot="right"
+      style="padding: 0 5px; text-transform: none; background-color: #222222; margin-right: 20px; height: 70%" 
+      @click="editorData.gridLines = !editorData.gridLines">
+      <i class="material-icons">{{editorData.gridLines ? 'grid_on' :  'grid_off'}}</i>
+    </mu-flat-button> -->
   </mu-appbar>
   <mu-icon-menu menuClass="xxx" icon="" @change="handleChange" :anchorOrigin="rightTop"
       :targetOrigin="rightTop"

@@ -164,11 +164,15 @@ export default {
     dragging(left,  top) {
       this.selectedLayer.x = left;
       this.selectedLayer.y = top;
+
+      // to be able to show a ruler guideline
+      this.$emit('scaling', this.selectedLayer)
     },
     dragEnded() {
       this.isDragging = false;
       // record for undoo redo event
       this.$_recordEvent();
+      this.$emit('scaling', null)
     },
     resizeStarted() {
       this.$_recordEvent();
