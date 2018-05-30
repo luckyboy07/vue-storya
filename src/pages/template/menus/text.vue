@@ -232,11 +232,12 @@ export default {
     
   },
   methods: {
-    ...mapMutations(['setLayerValue']),
+    ...mapMutations(['setLayerValue','setSelectedLayerId']),
     open (event) {
        for(let i = 0; i < this.getLayers.length;i++){
           if (this.getLayers[i].id === this.data.id) {
             this.data.selected = !this.data.selected;
+          this.setSelectedLayerId(this.data.id)
           }else {
               this.getLayers[i].selected = false
           }

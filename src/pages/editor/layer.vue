@@ -47,6 +47,7 @@ import textLayer from '../../components/editor/text-layer'
 import shape from "../../components/editor/shape.vue"
 import { mapActions, mapGetters, mapMutations } from "vuex"
 import image from "../../components/editor/image"
+import {TimelineMax} from 'gsap'
 export default {
   name: "selectionBox",
   props: ["layers"],
@@ -65,6 +66,7 @@ export default {
       parentW: 0,
       parentH: 0,
       isDragging: false,
+      GSAP: new TimelineMax()
     };
   },
   beforeDestroy() {
@@ -72,6 +74,10 @@ export default {
   },
   mounted() {
     // get the parent's dimension
+    // var elem1 = document.getElementsByClassName('rr-resizer')
+    // console.log('elem1,',elem1)
+    // var elem = document.getElementById(this.layers[0].id)
+    // this.GSAP.from(elem,1,{left:100,opacity:0,repeat: -1, yoyo: true});
     var _d = this.getCanvasData();
     this.parentH = _d.height// parseInt(_d.height.replace('px', '')) + 14;
     this.parentW = _d.width;//parseInt(_d.width.replace('px', '')) + 14;
@@ -171,6 +177,7 @@ export default {
     dragEnded() {
       this.isDragging = false;
       // record for undoo redo event
+      // this.$localStorage.set('layers',JSON.stringify(this.layers))
       this.$_recordEvent();
       this.$emit('scaling', null)
     },

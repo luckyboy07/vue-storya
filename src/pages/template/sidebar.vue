@@ -185,7 +185,7 @@ export default {
     document.addEventListener('mousedown', this.handleMousedown);
   },
   methods: {
-    ...mapMutations(['updateLayers', 'removeSelectedLayer',]),
+    ...mapMutations(['updateLayers', 'removeSelectedLayer']),
     ...mapActions(['addLayer']),
     ...mapGetters(['getShapeLayer', 'getSelectedLayerId','sortLayer']),
     hoverBtn () {
@@ -223,6 +223,7 @@ export default {
     },
     removeLayer() {
       var selectedLayer = this.getSelectedLayerId();
+        console.log('selectedLayer:',selectedLayer)
       if (selectedLayer) {
         undoRedo.add(appHelper.cloneLayer(selectedLayer.sourceLayer), "delete");
         this.removeSelectedLayer(selectedLayer.id);
@@ -353,7 +354,7 @@ export default {
   // overflow-y: auto
 }
 .custom-drawer{
-  width: 306px;
+  width: 306px ;
   top: 115px;
 }
 .mu-appbar-title {
@@ -390,8 +391,8 @@ export default {
 
 }
 .mu-popover {
-  left: 345px!important;
-  top: 115px!important;
+  left: 345px !important;
+  top: 115px !important;
   background-color: #171616 !important;
 }
 .mu-menu-list{

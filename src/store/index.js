@@ -6,9 +6,7 @@ import Vuex from 'vuex'
 import appHelper from '../helpers/app.helper'
 import zoomHelper from '../helpers/zoom.helper'
 import * as $ from 'linq'
-
 Vue.use(Vuex)
-
 export const store = new Vuex.Store({
     state: {
         // for editor toolbar
@@ -34,6 +32,7 @@ export const store = new Vuex.Store({
         selectedLayerId: null,
         removableId: null,
         layers: [],
+        // layers: JSON.parse(this.$localStorage.get('layers')) === null || undefined ? [] : JSON.parse(this.$localStorage.get('layers')),
         selectedTemplate: {},
         selectedImage: {},
         setAnimation: {
@@ -217,7 +216,7 @@ export const store = new Vuex.Store({
     },
     mutations: {
         addLayer: (state, payload) => {
-            console.log("ADDLAYER")
+                console.log('this.$autoStorage:',Vue.localStorage)
                 // check if the item is from undo or redo
                 // if not, assign a new id for this item
                 // indicating that this item is created
@@ -235,6 +234,7 @@ export const store = new Vuex.Store({
                 layers[i].selected = false
             }
             layers.push(payload)
+            Vue.localStorage.set('layers', JSON.stringify(layers))
             Vue.set(state, 'layers', layers)
                 // this is for the undo manager to
                 // watch the changes of the layers
@@ -273,6 +273,7 @@ export const store = new Vuex.Store({
                     break;
                 }
             }
+            Vue.localStorage.set('layers', JSON.stringify(layers))
             Vue.set(state, 'layers', layers)
         },
         // updates the layer list
@@ -301,6 +302,8 @@ export const store = new Vuex.Store({
                     break;
                 }
             }
+            console.log('state.layers:',state.layers)
+            Vue.localStorage.set('layers',JSON.stringify(state.layers))
         },
         selectTemplate: (state, payload) => {
             console.log('payload', payload);
@@ -318,14 +321,24 @@ export const store = new Vuex.Store({
         updateUndoRedoAction: state => {
             state.isActionCastedByUndoRedo = appHelper.generateTimestamp();
         },
+        setLayer: state => {
+            console.log('asdads:',Vue.localStorage)
+            let storaged = JSON.parse(Vue.localStorage.get('layers'))
+            Vue.set(state,'layers', storaged === null || undefined ? [] : storaged)
+        }
     },
     getters: {
         getItems: state => {
             return state.items
         },
         getLayers: state => {
+            // let saveLayer = Vue.localStorage.get('layers')
+            // console.log('saveLayer:',saveLayer)
+            let storaged = JSON.parse(Vue.localStorage.get('layers'))
+            Vue.set(state,'layers', storaged === null || undefined ? [] : storaged)
             return state.layers
         },
+        altGetlayer: state => () => state.layers,
         getRemoveId: state => {
             return state.removableId
         },

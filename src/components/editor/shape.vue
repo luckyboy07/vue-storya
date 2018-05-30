@@ -107,10 +107,11 @@ export default {
       let linearGrad = 'linear-gradient('+this.data.attributes.gradientBackgroundData.rotation+'deg,'+this.data.attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+this.data.attributes.gradientBackgroundData.value[0]+'%,'+this.data.attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+this.data.attributes.gradientBackgroundData.value[1]+'%)'
       if(this.data.attributes.backgroundImageUri.url) {
         if(this.data.attributes.isGradient) {
+          console.log('1')
           return {
             'height': this.data.height+'px',
             'width': this.data.width+'px',
-            'border-width': this.data.attributes.borderSize+'px',
+            'border-width': this.data.attributes.borderWidth+'px',
             'border-style': this.data.attributes.borderStyle,
             'border-color':this.data.attributes.borderColor,
             'boxShadow': this.data.attributes.shadowColor ? '1px 12px '+this.data.attributes.shadowSize+'px '+this.data.attributes.shadowColor : '',
@@ -120,27 +121,30 @@ export default {
             'opacity': this.data.attributes.opacity
           }
         }else {
+          console.log('2')
           return {
             'height': this.data.height+'px',
             'width': this.data.width+'px',
-            'border-width': this.data.attributes.borderSize+'px',
+            'border-width': this.data.attributes.borderWidth+'px',
             'border-style': this.data.attributes.borderStyle,
             'border-color':this.data.attributes.borderColor,
             'boxShadow': this.data.attributes.shadowColor ? '1px 12px '+this.data.attributes.shadowSize+'px '+this.data.attributes.shadowColor : '',
             'background-image': 'url('+this.data.attributes.backgroundImageUri.url+')',
             'background-color': this.data.attributes.color,
+            'background-size':'cover',
             'background-blend-mode': 'multiply',
             'opacity': this.data.attributes.opacity
           }
         }
       }else {
+          console.log('3')
         return {
           'height': this.data.height+'px',
           'width': this.data.width+'px',
           // 'background': 'linear-gradient('+ this.data.attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+','+this.data.attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+')'
           'background': this.data.attributes.isGradient ? linearGrad : this.data.attributes.color,
           // 'background': this.data.attributes.borderSize+'px',
-          'border-width': this.data.attributes.borderSize+'px',
+          'border-width': this.data.attributes.borderWidth+'px',
           'border-style': this.data.attributes.borderStyle,
           'border-color':this.data.attributes.borderColor,
           'boxShadow': this.data.attributes.shadowColor ? '1px 12px '+this.data.attributes.shadowSize+'px '+this.data.attributes.shadowColor : '',

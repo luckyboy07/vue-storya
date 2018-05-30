@@ -47,7 +47,7 @@
             <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
             <mu-grid-list class="right">
             <mu-slider v-model="data.attributes.rotation" class="mmslider" :max="360"/>
-            <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.rotation">
+            <input v-digitsonly spellcheck="false" class="input-size sliderInput" v-model="data.attributes.rotation">
             </mu-grid-list>
           </div>
         </mu-list-item>
@@ -109,7 +109,7 @@
 </div>
 </template>
 <script>
-import { mapGetters} from 'vuex'
+import { mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'ImageLayer',
   props:['openpanel','data'],
@@ -147,13 +147,15 @@ export default {
     ...mapGetters(['getLayers'])
   },
   methods: {
+    ...mapMutations(['setSelectedLayerId']),
     open (event) {
       // this.panelopen = !this.panelopen
       // this.$emit('openpanel',this.panelopen)
       for(let i = 0; i < this.getLayers.length;i++){
         if (this.getLayers[i].id === this.data.id) {
           this.data.selected = !this.data.selected;
-        } else {
+          this.setSelectedLayerId(this.data.id)
+        }else {
             this.getLayers[i].selected = false
         }
       }
