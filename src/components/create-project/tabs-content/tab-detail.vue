@@ -124,7 +124,7 @@ export default {
 }
 .img-container {
   width: 100%;
-  height: 70%;
+  height: 50%;
   position: absolute;
   text-align: center;
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
      <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
-        <mu-list-item :title="data.attributes.shape === 'Triangle' ? 'Shape Layer (SVG)' : 'Shape Layer'" :open="data.selected"  @click.stop="open">
+        <mu-list-item :title="data.attributes.shape === 'Triangle' ? 'Shape Layer (SVG)' : data.content" :open="data.selected"  @click.stop="open">
             <mu-icon slot="left" value="landscape" style="color: #fff"/>
             <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
             <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
@@ -209,6 +209,10 @@ export default {
     // for the color picker to hide
     document.addEventListener('mousedown', this.hidePicker);
   },
+  mounted() {
+     // for the context menu to show only on the title part
+    this.$el.querySelector(".mu-item-wrapper").addEventListener('contextmenu', this.showMenu)
+  },
   beforeDestroy() {
     document.removeEventListener('mousedown', this.hidePicker);
   },
@@ -314,7 +318,11 @@ export default {
     openModalimage() {
         this.$emit('selected',this.data)
          this.$modal.show('image-modal',{data:this.data})
-    }
+    },
+     showMenu(e) {
+      e.preventDefault();
+      this.$emit("onRenameOrDelete", this.data, e)
+    },
   }
 }
 </script>
