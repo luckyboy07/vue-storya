@@ -231,6 +231,7 @@ export default {
     },
     moveDown () {
         let currentLayer = this.layers.find((e)=> e.selected)
+        if (!currentLayer) return;
         let nextItem = this.layers.find((e)=> e.order === currentLayer.order - 1)
           if(nextItem){
           nextItem.order = currentLayer.order
@@ -246,7 +247,8 @@ export default {
     },
     moveUp () {
         let currentLayer = this.layers.find((e)=> e.selected)
-          let prevItem = this.layers.find((e)=> e.order === currentLayer.order + 1)
+        if (!currentLayer) return;
+        let prevItem = this.layers.find((e)=> e.order === currentLayer.order + 1)
         if(prevItem){
           prevItem.order = currentLayer.order
           currentLayer.order = currentLayer.order + 1
