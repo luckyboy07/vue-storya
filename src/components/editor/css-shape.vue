@@ -5,6 +5,7 @@
     <div v-if="data.attributes.shape === 'Triangle'" class="shape" :style="getTriangleStyle()"></div>
     <div v-if="data.attributes.shape === 'Trapezoid'" :style="getTrapeziodStyle()"></div>
     <div v-if="data.attributes.shape === 'Parallelogram'" :style="getParallelogramStyle()"></div>
+    <div v-if="data.attributes.shape === 'Diamond'" :style="getDiamondStyle()"></div>
   </div>
 </template>
 <script>
@@ -66,6 +67,19 @@ export default {
         '-o-transform': 'skew(20deg)',
         'background': bg,
         'margin-left': '20px',
+      }
+    },
+    getDiamondStyle() {
+      var att = this.data.attributes;
+      var bg = !att.isGradient ? att.color : 'linear-gradient('+att.gradientBackgroundData.rotation+'deg,'+att.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+att.gradientBackgroundData.value[0]+'%,'+att.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+att.gradientBackgroundData.value[1]+'%)';
+      return {
+        width: Math.max(this.data.height, this.data.width)+ 'px',
+        height: Math.max(this.data.height, this.data.width)  + 'px',
+        'background-color':bg,
+        'transform': 'rotateZ(45deg)',
+        marginTop:  Math.max(this.data.height, this.data.width) / 2 + 'px',
+        marginBottom:  Math.max(this.data.height, this.data.width) / 2 + 'px',
+        // marginLeft: Math.min(this.data.height, this.data.width) / 2 + 'px',
       }
     },
   }

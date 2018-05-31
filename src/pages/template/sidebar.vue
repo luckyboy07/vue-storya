@@ -39,7 +39,7 @@
                   @hover="hoverShape(item)">
                   <div>
                    <mu-tooltip style="z-index: 999; top: -20px; color: white; " :label="item.name" :show="item.selected" :verticalPosition="'bottom'" :horizontalPosition="'vertical position'"/>
-                   <i class="material-icons">{{item.icon}}</i>
+                   <i :class="item.class"></i>
                   </div>
                 </mu-icon-button>
               </div>
@@ -133,7 +133,7 @@ export default {
           name: 'Rectangle',
           shape: 'square',
           type: 'filled',
-          icon: 'stop',
+          class: 'storya-shape-rectangle',
           selected: false
         },
         {
@@ -141,7 +141,7 @@ export default {
           name: 'Circle',
           shape: 'circle',
           type: 'filled',
-          icon: 'fiber_manual_record',
+          class: 'storya-shape-circle',
           selected: false
         },
         {
@@ -149,7 +149,7 @@ export default {
           name: 'Triangle',
           shape: 'triangle ',
           type: 'filled',
-          icon: 'network_cell',
+          class: 'storya-shape-triangle',
           selected: false
         },
         {
@@ -157,7 +157,7 @@ export default {
           name: 'Trapezoid',
           shape: 'trapezoid ',
           type: 'filled',
-          icon: 'network_cell',
+          class: 'storya-shape-trapeziod',
           selected: false
         },
         {
@@ -165,9 +165,17 @@ export default {
           name: 'Parallelogram',
           shape: 'parallelogram ',
           type: 'filled',
-          icon: 'network_cell',
+          class: 'storya-shape-parallelogram',
           selected: false
         },
+        // {
+        //   id: 6,
+        //   name: 'Diamond',
+        //   shape: 'fiamond ',
+        //   type: 'filled',
+        //   class: 'storya-shape-diamond',
+        //   selected: false
+        // },
         // {
         //   id: 1,
         //   name: 'Rectangle Filled',
