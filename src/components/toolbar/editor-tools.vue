@@ -7,7 +7,7 @@
     <!-- start: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
       <div class="tool-item-group-content label-item">File Name</div> 
-      <input @change="filenameChanged" ref="filename" v-model="editorData.file_name" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
+      <input @change="filenameChanged" ref="filename" v-model="selectedtemplate.file_name" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
     </div>
     <!-- end: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
@@ -15,7 +15,7 @@
        <div class="tool-item-group-content" style="width: 260px; display: flex">
          <div class="tool-item-group-content" style="width: 106px; display: flex">
             <div class="label-item p-r">W:</div> 
-            <input v-model="editorData.width" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="text"/>
+            <input v-model="selectedtemplate.width"  @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
            </div>
            <div class="tool-item-group-content">
             <div class="label-item">
@@ -26,7 +26,7 @@
            </div>
            <div class="tool-item-group-content" style="width: 106px; display: flex;">
             <div class="label-item p-r">H:</div> 
-            <input v-model="editorData.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="text"/>
+            <input v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
            </div>
        </div>
      </div>
@@ -37,7 +37,7 @@
             <i class="si-zoomout" style="height: 90%"></i>
           </mu-flat-button>
           <div class="tool-item-group-content">
-            <input disabled="true" v-model="editorData.zoom" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
+            <input disabled="true" v-model="selectedtemplate.zoom" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
           </div>
           <mu-flat-button class="s-editor-btn-zoom-ctrl" @click="zoom('in')">
             <i class="si-zoomin" style="height: 90%"></i>
@@ -47,8 +47,8 @@
     <!-- <mu-flat-button 
       slot="right"
       style="padding: 0 5px; text-transform: none; background-color: #222222; margin-right: 20px; height: 70%" 
-      @click="editorData.gridLines = !editorData.gridLines">
-      <i class="material-icons">{{editorData.gridLines ? 'grid_on' :  'grid_off'}}</i>
+      @click="selectedtemplate.gridLines = !selectedtemplate.gridLines">
+      <i class="material-icons">{{selectedtemplate.gridLines ? 'grid_on' :  'grid_off'}}</i>
     </mu-flat-button> -->
   </mu-appbar>
   <mu-icon-menu menuClass="xxx" icon="" @change="handleChange" :anchorOrigin="rightTop"
@@ -104,7 +104,7 @@ export default {
     }
   },
   beforeMount() {
-    zoomHelper.adjustCanvasAndLayerDimension(this.editorData);
+    zoomHelper.adjustCanvasAndLayerDimension(this.selectedtemplate);
   },
   methods: {
      ...mapGetters(['getExportContent', 'template']),
@@ -132,6 +132,8 @@ export default {
       }
     },
     filenameChanged() {
+      console.log('this.selectedtemplate:',this.selectedtemplate)
+      this.savetoLocalstorage()
       this.$emit('filenameChanged' , this.$refs.filename.value)
     },
     onResize() {
@@ -139,12 +141,13 @@ export default {
     },
     zoom(zoomType) {
       if (zoomType === 'in') {
-        this.editorData.zoom = this.editorData.zoom + this.editorData.zoomIncrease;
+        this.selectedtemplate.zoom = this.selectedtemplate.zoom + this.selectedtemplate.zoomIncrease;
       } else {
-        if ((this.editorData.zoom - this.editorData.zoomIncrease) > 0) {
-          this.editorData.zoom = this.editorData.zoom - this.editorData.zoomIncrease;
+        if ((this.selectedtemplate.zoom - this.selectedtemplate.zoomIncrease) > 0) {
+          this.selectedtemplate.zoom = this.selectedtemplate.zoom - this.selectedtemplate.zoomIncrease;
         }
       }
+      this.savetoLocalstorage()
     },
     SaveContent() {
       alert('Save As');
@@ -158,6 +161,9 @@ export default {
       exportHelper.exportTemplate();
       console.log('Export finished')
     },
+    savetoLocalstorage () {
+      this.$localStorage.set('canvas',JSON.stringify(this.selectedtemplate))
+    }
   },
   computed: {
     ...mapGetters({

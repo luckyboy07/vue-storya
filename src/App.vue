@@ -56,10 +56,7 @@ export default {
      this.setLayer()
     // on loaded, start the timer
     this.idleTimer = setInterval(this.handleIdleTimerElapsed, this.idleTimeout)
-    this.$store.watch(this.$store.getters.altGetlayer, v =>{
-      console.log('v:',v)
-    })
-   
+    this.$store.watch(this.$store.getters.altGetlayer, v =>{})
   },
   methods :{
     ...mapGetters(['getSelectedLayerId', 'getAutosaveStatusData']),
@@ -121,13 +118,12 @@ export default {
       this.idleTime += 1;
       if (this.idleTime >= 3) {
          // check if the main layer array has items
-        if (this.layers.length > 0 && this.getAutosaveStatusData() === '1') {
+        if (this.getAutosaveStatusData() === '1') {
           // trigger the idle time event
-          console.log('ASDASDASDASD')
           this.$_debugLogger('Call auto save here (App.vue:113)');
           this.setAutosaveData("2");
           // move to save only at every 3 seconds idle
-          // this.$localStorage.set('layers',JSON.stringify(this.layers))
+          this.$localStorage.set('layers',JSON.stringify(this.layers))
         } 
         // else {
         //   this.$_debugLogger('Auto save: No data to save');
