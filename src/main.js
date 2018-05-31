@@ -19,6 +19,7 @@ import LayerComponent from './pages/template/menus'
 import RotatableResizer from './components/draggable/rotatable-resizer'
 import { store } from './store/index.js'
 import VueLocalStorage from 'vue-localstorage'
+import ToggleButton from './components/switchButton/button'
 // import 'muse-components/styles/base.less'
 Vue.use(MuseUI)
 Vue.use(VueWindow)
@@ -26,6 +27,7 @@ Vue.config.productionTip = false
 Vue.use(VTooltip)
 Vue.use(VModal)
 Vue.use(VueLocalStorage)
+Vue.use(ToggleButton)
     /* eslint-disable no-new */
 Vue.use(LayerComponent)
 Vue.component('multiselect', Multiselect)

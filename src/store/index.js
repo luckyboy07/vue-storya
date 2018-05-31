@@ -325,6 +325,11 @@ export const store = new Vuex.Store({
         setLayer: state => {
             let storaged = JSON.parse(Vue.localStorage.get('layers'))
             Vue.set(state,'layers', storaged === null || undefined ? [] : storaged)
+        },
+        applyTemplate: (state,payload) => {
+            let layers = state.layers
+            layers = payload.item
+            Vue.set(state, 'layers', layers)
         }
     },
     getters: {

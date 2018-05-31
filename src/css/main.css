@@ -651,6 +651,7 @@ a {
 
 .mu-tab-link-highlight {
     background-color: #ff4081;
+    display: none;
 }
 
 .mu-tab-link {
