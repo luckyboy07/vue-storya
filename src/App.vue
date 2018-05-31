@@ -56,7 +56,7 @@ export default {
      this.setLayer()
     // on loaded, start the timer
     this.idleTimer = setInterval(this.handleIdleTimerElapsed, this.idleTimeout)
-         this.$store.watch(this.$store.getters.altGetlayer, v =>{
+    this.$store.watch(this.$store.getters.altGetlayer, v =>{
       console.log('v:',v)
     })
    
@@ -126,6 +126,8 @@ export default {
           console.log('ASDASDASDASD')
           this.$_debugLogger('Call auto save here (App.vue:113)');
           this.setAutosaveData("2");
+          // move to save only at every 3 seconds idle
+          // this.$localStorage.set('layers',JSON.stringify(this.layers))
         } 
         // else {
         //   this.$_debugLogger('Auto save: No data to save');
@@ -143,7 +145,6 @@ export default {
           this.autoSaveInfoDisplayDuration = 0;
         }
       }
-        this.$localStorage.set('layers',JSON.stringify(this.layers))
     },
     $_handleUndo(item, action) {
         // console.log('_handleUndoRedo', item, action);

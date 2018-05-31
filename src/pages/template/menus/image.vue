@@ -134,6 +134,7 @@ export default {
           'Fill',
           'Contain',
           'Cover',
+          'Scale-Down',
         ],
         dialog: '',
         detail: {}

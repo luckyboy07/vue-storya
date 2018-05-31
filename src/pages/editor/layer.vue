@@ -34,7 +34,7 @@
     <!-- image layer -->
     
     <!-- text layer -->
-    <text-layer v-if="elem.type ==='text'" :data="elem" v-model="elem.id" :dragging="isDragging"></text-layer>
+    <text-layer v-if="elem.type ==='text'" id="text" :data="elem" v-model="elem.id" :dragging="isDragging"></text-layer>
     <!-- text layer -->
 
     </rotatable-resizer>

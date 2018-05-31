@@ -143,7 +143,7 @@ export const store = new Vuex.Store({
                     borderColor: '',
                     shadowSize: '1',
                     shadowColor: '',
-                    objectFit: 'fill'
+                    objectFit: 'Scale-Down'
                 }
             },
             {
@@ -216,7 +216,7 @@ export const store = new Vuex.Store({
     },
     mutations: {
         addLayer: (state, payload) => {
-                console.log('this.$autoStorage:',Vue.localStorage)
+            console.log('this.$autoStorage:', Vue.localStorage)
                 // check if the item is from undo or redo
                 // if not, assign a new id for this item
                 // indicating that this item is created
@@ -302,8 +302,8 @@ export const store = new Vuex.Store({
                     break;
                 }
             }
-            console.log('state.layers:',state.layers)
-            Vue.localStorage.set('layers',JSON.stringify(state.layers))
+            console.log('state.layers:', state.layers)
+            Vue.localStorage.set('layers', JSON.stringify(state.layers))
         },
         selectTemplate: (state, payload) => {
             console.log('payload', payload);
@@ -322,9 +322,9 @@ export const store = new Vuex.Store({
             state.isActionCastedByUndoRedo = appHelper.generateTimestamp();
         },
         setLayer: state => {
-            console.log('asdads:',Vue.localStorage)
+            console.log('asdads:', Vue.localStorage)
             let storaged = JSON.parse(Vue.localStorage.get('layers'))
-            Vue.set(state,'layers', storaged === null || undefined ? [] : storaged)
+            Vue.set(state, 'layers', storaged === null || undefined ? [] : storaged)
         }
     },
     getters: {
@@ -335,7 +335,7 @@ export const store = new Vuex.Store({
             // let saveLayer = Vue.localStorage.get('layers')
             // console.log('saveLayer:',saveLayer)
             let storaged = JSON.parse(Vue.localStorage.get('layers'))
-            Vue.set(state,'layers', storaged === null || undefined ? [] : storaged)
+            Vue.set(state, 'layers', storaged === null || undefined ? [] : storaged)
             return state.layers
         },
         altGetlayer: state => () => state.layers,

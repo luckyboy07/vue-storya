@@ -109,8 +109,8 @@ export default {
         if(this.data.attributes.isGradient) {
           console.log('1')
           return {
-            'height': this.data.height+'px',
-            'width': this.data.width+'px',
+            // 'height': this.data.height+'px',
+            // 'width': this.data.width+'px',
             'border-width': this.data.attributes.borderWidth+'px',
             'border-style': this.data.attributes.borderStyle,
             'border-color':this.data.attributes.borderColor,
