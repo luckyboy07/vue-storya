@@ -33,7 +33,6 @@ export default {
   },
   methods: {
     createButtonClicked() {
-      console.log("CLICK")
       this.$router.push({ name: "New Project" });
     },
     closeButtonClicked() {

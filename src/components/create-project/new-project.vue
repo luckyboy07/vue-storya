@@ -489,6 +489,7 @@ export default {
     margin-right: 20%;
     margin-top: 5%;
     border: #323232 solid 1px;
+    background: #111111;
     height: 70vh;
   }
   .mu-tabs {
@@ -508,13 +509,13 @@ export default {
   .left-content {
     width: 70%;
     border-right: 1px solid #323232;
-    background-color: #181818;
+    /* background-color: #181818; */
     /* height: 69.7vh; */
   }
   .right-content {
     width: 30% !important;
     padding: 10px !important;
-    background: #111111 !important;
+    /* background: #111111 !important; */
     height: 69.7vh !important;
     display: table !important;
     overflow-y: scroll !important;

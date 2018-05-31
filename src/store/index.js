@@ -216,7 +216,6 @@ export const store = new Vuex.Store({
     },
     mutations: {
         addLayer: (state, payload) => {
-                console.log('this.$autoStorage:',Vue.localStorage)
                 // check if the item is from undo or redo
                 // if not, assign a new id for this item
                 // indicating that this item is created
@@ -233,9 +232,13 @@ export const store = new Vuex.Store({
             for (let i = 0; i < layers.length; i++) {
                 layers[i].selected = false
             }
+            
             layers.push(payload)
-            Vue.localStorage.set('layers', JSON.stringify(layers))
-            Vue.set(state, 'layers', layers)
+            let sam = layers.sort((a, b) => {
+                return  b.order - a.order
+            })
+            Vue.localStorage.set('layers', JSON.stringify(sam))
+            Vue.set(state, 'layers', sam)
                 // this is for the undo manager to
                 // watch the changes of the layers
                 // check if the source of the data
@@ -278,7 +281,6 @@ export const store = new Vuex.Store({
         },
         // updates the layer list
         updateLayers: (state) => {
-            console.log('newLayers:')
                 // Vue.set(state, 'layers', newLayers)
         },
         removeGlobalLayer: (state, _layerId) => {
@@ -302,14 +304,13 @@ export const store = new Vuex.Store({
                     break;
                 }
             }
-            console.log('state.layers:',state.layers)
             Vue.localStorage.set('layers',JSON.stringify(state.layers))
         },
         selectTemplate: (state, payload) => {
-            console.log('payload', payload);
             let template = state.canvasData
             template = payload
             template.zoom = 100
+            Vue.localStorage.set('canvas',JSON.stringify(template))
             Vue.set(state, 'canvasData', template)
         },
         setAutosaveData: (state, data) => {
@@ -322,7 +323,6 @@ export const store = new Vuex.Store({
             state.isActionCastedByUndoRedo = appHelper.generateTimestamp();
         },
         setLayer: state => {
-            console.log('asdads:',Vue.localStorage)
             let storaged = JSON.parse(Vue.localStorage.get('layers'))
             Vue.set(state,'layers', storaged === null || undefined ? [] : storaged)
         }
@@ -334,8 +334,9 @@ export const store = new Vuex.Store({
         getLayers: state => {
             // let saveLayer = Vue.localStorage.get('layers')
             // console.log('saveLayer:',saveLayer)
-            let storaged = JSON.parse(Vue.localStorage.get('layers'))
-            Vue.set(state,'layers', storaged === null || undefined ? [] : storaged)
+            let sam = state.layers.sort((a, b) => {
+                return  b.order - a.order
+            })
             return state.layers
         },
         altGetlayer: state => () => state.layers,
@@ -360,6 +361,8 @@ export const store = new Vuex.Store({
         // canvas related data
         // this is the value of the editor's toolbar (zoom, height, width, etc.)
         getCanvasData: state => {
+            let storaged = JSON.parse(Vue.localStorage.get('canvas'))
+            state.canvasData = storaged !== null ? storaged : state.canvasData
             return state.canvasData;
         },
         // returns the default shape layer

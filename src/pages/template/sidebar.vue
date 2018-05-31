@@ -244,7 +244,8 @@ export default {
        this.menuVisible = false;
     },
     sortLayer() {
-      this.layers.sort((a, b) => a.order - b.order)
+      // this.layers.sort((a, b) => a.order - b.order)
+      console.log('this.layers:',this.layers)
     },
     moveUp () {
         let currentLayer = this.layers.find((e)=> e.selected)
@@ -253,7 +254,19 @@ export default {
         if(prevItem){
           prevItem.order = currentLayer.order
           currentLayer.order = currentLayer.order + 1
+          for(let i = 0;i < this.layers.length; i++) {
+            // this.layers[i].order = this.layers[i].id === prevItem.id ? prevItem.order : 1
+            // this.layers[i].order = this.layers[i].id === currentLayer.id ? currentLayer.order : 1
+            if(this.layers[i].id === prevItem.id) {
+              this.layers[i].order = prevItem.order
+            }else if (this.layers[i].id === currentLayer.id) {
+              this.layers[i].order = currentLayer.order
+            }
+          }
+          console.log('sad:',this.layers)
+          setTimeout(()=>{
           this.sortLayer()
+          },50)
         }
         this.menuVisible = false;
     },
@@ -337,13 +350,13 @@ export default {
 @import '../../css/tooltip.scss';
 @import '../../css/menu2.scss';
 .rename-inp {
-  position: absolute;
+  position: absolute !important;
   top: -20px;
   width: 150px;
   z-index: 9999;
 }
 .command-item {
-  font-size: 13px
+  font-size: 13px;
 }
 .layer-menu {
   position: absolute;
@@ -354,7 +367,7 @@ export default {
   // overflow-y: auto
 }
 .custom-drawer{
-  width: 306px ;
+  width: 306px;
   top: 115px;
 }
 .mu-appbar-title {

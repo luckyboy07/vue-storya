@@ -22,6 +22,10 @@ export default {
       password: ''
     }
   },
+  mounted () {
+    this.$localStorage.remove('layers')
+    this.$localStorage.remove('canvas')
+  },
   methods: {
     login () {
       this.$router.push({
