@@ -2,6 +2,7 @@
 <div>
     <rotatable-resizer 
       :id="elem.id"
+      :islocked="elem.islocked"
       :disabled="!elem.selected" 
       :rotatable="!elem.islocked"
       :draggable="!elem.islocked"
@@ -113,8 +114,8 @@ export default {
        }
     },
     // focusing on item neglecting its order
-    focused(elem) {
-      if (!this.selectedLayer || !this.previousElem || this.previousElem.islocked) return;
+    focused(elem, islocked) {
+      if (!this.selectedLayer || islocked) return;
 
       if (this.previousElem) {
         this.previousElem.elem.style.zIndex = this.previousElem.z;

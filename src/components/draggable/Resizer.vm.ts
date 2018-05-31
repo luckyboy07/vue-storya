@@ -67,6 +67,10 @@ export default {
     zoom: {
       type: Number,
       default: 100
+    },
+    islocked: {
+      type: Boolean,
+      default: false,
     }
   },
   data() {
@@ -188,7 +192,7 @@ export default {
 
     emitActivated() {
       this.$emit("activated");
-      this.$emit("focused", this.$el);
+      this.$emit("focused", this.$el, this.islocked);
     },
 
     emitRotateStated() {
