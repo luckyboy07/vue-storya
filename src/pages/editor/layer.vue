@@ -1,43 +1,45 @@
 <template>
 <div>
     <rotatable-resizer 
-    :id="elem.id"
-    :disabled="!elem.selected" 
-    :rotatable="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? true : false : true"
-    :draggable="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? true : false : true"
-    :rotation="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ?  elem.attributes.rotation : 0 :  elem.attributes.rotation"
-    :fixedProportion="false"
-    :handles="'nw,ne,se,sw'"
-    :left="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.x : -7 : elem.x"
-    :top="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.y : -7 : elem.y"
-    :width="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.width : parentW : elem.width"
-    :height="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.height : parentH : elem.height"
-    v-for="(elem, i) in layers" :key="i"
-    v-show="elem.visible"
-    :z="elem.order"
-    :zoom="zoom"
-    @focused="focused"
-    @activated="activated(elem)"
-    @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
-    @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
-    @resizeStarted="resizeStarted" @resizing="resizing" @resizeEnded="resizeEnded">
+      :id="elem.id"
+      :disabled="!elem.selected" 
+      :rotatable="!elem.islocked"
+      :draggable="!elem.islocked"
+      :rotation="elem.attributes.rotation"
+      :fixedProportion="false"
+      :handles="'nw,ne,se,sw'"
+      :left="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.x : -7 : elem.x"
+      :top="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.y : -7 : elem.y"
+      :width="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.width : parentW : elem.width"
+      :height="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.height : parentH : elem.height"
+      v-for="(elem, i) in layers" :key="i"
+      v-show="elem.visible"
+      :z="elem.order"
+      :zoom="zoom"
+      @focused="focused"
+      @activated="activated(elem)"
+      @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
+      @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
+      @resizeStarted="resizeStarted" @resizing="resizing" @resizeEnded="resizeEnded">
 
-    <!-- shape layer :shape="[elem.attributes[0].value.split(' ')[0].toLowerCase(),elem.attributes]" -->
-    <shape id="shape"  v-if="elem.type ==='shape'" :data="elem">
-    </shape>
-    <!-- shape layer -->
+      <!-- shape layer :shape="[elem.attributes[0].value.split(' ')[0].toLowerCase(),elem.attributes]" -->
+      <!-- <shape id="shape"  v-if="elem.type ==='shape'" :data="elem">
+      </shape> -->
+      <c-shape id="shape"  v-if="elem.type ==='shape'" :data="elem"></c-shape>
+      <!-- shape layer -->
 
-    <!-- image layer -->
-     <!-- <img src="http://via.placeholder.com/140x100" style="width: 100%; height: 100%; pointer-events: none;" /> -->
-    <image-layer v-if="elem.type ==='image'" id="image"  :layerData="elem" :imgstyle="'width: 100%; height: 100%; pointer-events: none;'"></image-layer>
-    <!-- <img v-if="elem.type ==='image'"  id="image"  :layerData="elem" src="http://via.placeholder.com/140x100" style="width: 100%; height: 100%; pointer-events: none;"/> -->
-    <!-- image layer -->
-    
-    <!-- text layer -->
-    <text-layer v-if="elem.type ==='text'" id="text" :data="elem" v-model="elem.id" :dragging="isDragging"></text-layer>
-    <!-- text layer -->
-
+      <!-- image layer -->
+      <!-- <img src="http://via.placeholder.com/140x100" style="width: 100%; height: 100%; pointer-events: none;" /> -->
+      <image-layer v-if="elem.type ==='image'" id="image"  :layerData="elem" :imgstyle="'width: 100%; height: 100%; pointer-events: none;'"></image-layer>
+      <!-- <img v-if="elem.type ==='image'"  id="image"  :layerData="elem" src="http://via.placeholder.com/140x100" style="width: 100%; height: 100%; pointer-events: none;"/> -->
+      <!-- image layer -->
+      
+      <!-- text layer -->
+      <text-layer v-if="elem.type ==='text'" id="text" :data="elem" v-model="elem.id" :dragging="isDragging"></text-layer>
+      <!-- text layer -->
+      
     </rotatable-resizer>
+
 </div>
 </template>
 <script>
@@ -45,6 +47,7 @@ import appHelper from '../../helpers/app.helper.js'
 import undoRedo from '../../helpers/undo-redo.js'
 import textLayer from '../../components/editor/text-layer'
 import shape from "../../components/editor/shape.vue"
+import cssShape from '../../components/editor/css-shape.vue'
 import { mapActions, mapGetters, mapMutations } from "vuex"
 import image from "../../components/editor/image"
 import {TimelineMax} from 'gsap'
@@ -55,6 +58,7 @@ export default {
     shape,
     imageLayer: image,
     'text-layer': textLayer,
+    'c-shape': cssShape,
   },
   data() {
     return {
@@ -110,6 +114,8 @@ export default {
     },
     // focusing on item neglecting its order
     focused(elem) {
+      if (!this.selectedLayer || !this.previousElem || this.previousElem.islocked) return;
+
       if (this.previousElem) {
         this.previousElem.elem.style.zIndex = this.previousElem.z;
         this.previousElem = null;
@@ -128,6 +134,8 @@ export default {
       }, 1000);
     },
     activated(elem) {
+      if (elem.islocked) return;
+
       console.log('%c Selected: ' + elem.id, 'background-color: red; color: white');
       //  check if there is a previously assigned layer
       // and if the new layer is not equal to the current selected layer

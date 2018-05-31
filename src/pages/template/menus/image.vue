@@ -2,6 +2,7 @@
 <div class="yawaa" :class="data.selected ? 'activeTool': ''">
     <mu-list-item title="Image Layer" :open="data.selected" @click.stop="open">
           <mu-icon slot="left" value="image" style="color: #fff"/>
+          <mu-icon-button :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
           <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
         <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
         <mu-list-item  slot="nested"  class="paddingZero minHytZero"   @click="openModalimage">
@@ -150,6 +151,7 @@ export default {
   methods: {
     ...mapMutations(['setSelectedLayerId']),
     open (event) {
+       if (this.data.islocked)return;
       // this.panelopen = !this.panelopen
       // this.$emit('openpanel',this.panelopen)
       for(let i = 0; i < this.getLayers.length;i++){
@@ -173,6 +175,7 @@ export default {
       this.$modal.show('image-modal',{data:this.data})
     },
     toggleLayer() {
+      if (this.data.islocked)return;
       this.data.selected = this.data.visible = !this.data.visible;
     },
     showPicker (event,name) {
@@ -189,6 +192,13 @@ export default {
     showMenu(e) {
       e.preventDefault();
       this.$emit("onRenameOrDelete", this.data, e)
+    },
+    lockLayer(e) {
+      e.stopPropagation();
+      if (this.data.selected) {
+        this.data.selected = false;
+      }
+      this.data.islocked = ! this.data.islocked;
     },
   },
   created () {

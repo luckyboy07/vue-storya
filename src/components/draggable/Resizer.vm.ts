@@ -117,7 +117,9 @@ export default {
 
     // to trigegr activated event
     this.$el.addEventListener('mousedown', this.emitActivated)
-    this.$refs.rotateHandle.addEventListener('mousedown', this.emitActivated)
+    if (this.$refs.rotateHandle) {
+      this.$refs.rotateHandle.addEventListener('mousedown', this.emitActivated)
+    }
 
     // when resizing
     const handles = this.$el.querySelectorAll(HANDLE_SELECTOR);
@@ -127,7 +129,9 @@ export default {
   },
   beforeDestroy() {
     this.$el.removeEventListener('mousedown', this.emitActivated)
-    this.$refs.rotateHandle.removeEventListener('mousedown', this.emitActivated)
+    if (this.$refs.rotateHandle) {
+      this.$refs.rotateHandle.removeEventListener('mousedown', this.emitActivated)
+    }
 
     // removing event listeners on handles
     const handles = this.$el.querySelectorAll(HANDLE_SELECTOR);

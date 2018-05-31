@@ -100,7 +100,6 @@ export default {
         } 
       } else {
         if (evt.key === 'Delete') {
-          console.log('Delete app');
           var item = this.getSelectedLayerId();
           if (item) {
             undoRedo.add(appHelper.cloneLayer(item.sourceLayer), 'delete');

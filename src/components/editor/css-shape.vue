@@ -1,6 +1,10 @@
 <template>
-  <div>
-
+  <div class="shape-container">
+    <div v-if="data.attributes.shape === 'Rectangle'" class="shape" :style="getRectangleStyle()"></div>
+    <div v-if="data.attributes.shape === 'Circle'" class="shape" :style="getCircleStyle()"></div>
+    <div v-if="data.attributes.shape === 'Triangle'" class="shape" :style="getTriangleStyle()"></div>
+    <div v-if="data.attributes.shape === 'Trapezoid'" :style="getTrapeziodStyle()"></div>
+    <div v-if="data.attributes.shape === 'Parallelogram'" :style="getParallelogramStyle()"></div>
   </div>
 </template>
 <script>
@@ -8,20 +12,68 @@ export default {
   name: 'c-shape',
   props: ['data'],
   methods: {
-    getSquareStyle() {
+    getRectangleStyle() {
       var att = this.data.attributes;
       return {
-        width: '100%',
-        height: '100%',
-        background: att.color,
+        background: !att.isGradient ? att.color : 'linear-gradient('+att.gradientBackgroundData.rotation+'deg,'+att.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+att.gradientBackgroundData.value[0]+'%,'+att.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+att.gradientBackgroundData.value[1]+'%)' +', url('+this.data.attributes.backgroundImageUri.url+')',
+        'background-blend-mode': 'multiply',
+        'boxShadow': att.shadowColor ? '1px 12px '+att.shadowSize+'px '+att.shadowColor : '',
+        'opacity': this.data.attributes.opacity,
       }
     },
     getCircleStyle() {
-
-    }
+      var att = this.data.attributes;
+      return {
+        'border-radius': '50%',
+        background: !att.isGradient ? att.color : 'linear-gradient('+att.gradientBackgroundData.rotation+'deg,'+att.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+att.gradientBackgroundData.value[0]+'%,'+att.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+att.gradientBackgroundData.value[1]+'%)' +', url('+this.data.attributes.backgroundImageUri.url+')',
+        'background-blend-mode': 'multiply',
+        'boxShadow': att.shadowColor ? '1px 12px '+att.shadowSize+'px '+att.shadowColor : '',
+        'opacity': this.data.attributes.opacity,
+      }
+    },
+    getTriangleStyle() {
+      var att = this.data.attributes;
+      var bg = !att.isGradient ? att.color : 'linear-gradient('+att.gradientBackgroundData.rotation+'deg,'+att.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+att.gradientBackgroundData.value[0]+'%,'+att.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+att.gradientBackgroundData.value[1]+'%)';
+      return {
+        width: 0,
+	      height: 0,
+        'border-left': (this.data.width / 2) - .5 + 'px solid transparent',
+        'border-right': this.data.width / 2 + 'px solid transparent',
+        'border-bottom': this.data.height - 1 + 'px solid ' + bg,
+        'opacity': this.data.attributes.opacity,
+      }
+    },
+    getTrapeziodStyle() {
+      var att = this.data.attributes;
+      var bg = !att.isGradient ? att.color : 'linear-gradient('+att.gradientBackgroundData.rotation+'deg,'+att.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+att.gradientBackgroundData.value[0]+'%,'+att.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+att.gradientBackgroundData.value[1]+'%)';
+      return {
+        'border-bottom': this.data.height - 1 + 'px solid ' + bg,
+        'border-left': this.data.width / 3 + 'px solid transparent',
+        'border-right': this.data.width / 3 + 'px solid transparent',
+        'height': '0',
+        'width': this.data.width + 'px',
+        'opacity': this.data.attributes.opacity,
+      }
+    },
+    getParallelogramStyle() {
+      var att = this.data.attributes;
+      var bg = !att.isGradient ? att.color : 'linear-gradient('+att.gradientBackgroundData.rotation+'deg,'+att.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+att.gradientBackgroundData.value[0]+'%,'+att.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+att.gradientBackgroundData.value[1]+'%)';
+      return {
+        'width': this.data.width - 40 + 'px',
+        'height': this.data.height - 1 + 'px',
+        '-webkit-transform': 'skew(20deg)',
+        '-moz-transform': 'skew(20deg)',
+        '-o-transform': 'skew(20deg)',
+        'background': bg,
+        'margin-left': '20px',
+      }
+    },
   }
 }
 </script>
 <style scoped>
-
+  .shape-container, .shape {
+    width: 100%;
+    height: 100%;
+  }
 </style>

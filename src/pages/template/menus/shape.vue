@@ -1,8 +1,10 @@
 <template>
   <div>
      <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
-        <mu-list-item :title="data.attributes.shape === 'Triangle' ? 'Shape Layer (SVG)' : data.content" :open="data.selected"  @click.stop="open">
+       <!-- :title="data.attributes.shape === 'Triangle' ? 'Shape Layer (SVG)' : data.content" -->
+        <mu-list-item :title="'Shape - ' + data.attributes.shape" :open="data.selected"  @click.stop="open">
             <mu-icon slot="left" value="landscape" style="color: #fff"/>
+            <mu-icon-button :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
             <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
             <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
             <!-- <mu-list-item  slot="nested"  class="paddingZero">
@@ -54,7 +56,7 @@
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
                   <input disabled spellcheck="false" class="input-size colorPicka" v-model="data.attributes.color">
-                  <input :disabled="data.attributes.shape_type === ' '" spellcheck="false" id="colour" class="input-size sliderInput" :style="{backgroundColor:data.attributes.color}"  @click="showPicker($event,'')">
+                  <input spellcheck="false" id="colour" class="input-size sliderInput" :style="{backgroundColor:data.attributes.color}"  @click="showPicker($event,'')">
                 </mu-grid-list>
                 <!-- <div ref="colorPicker" v-show="selectedPicker === 'colorPicker'" class="item-color-picker">
                   <color-picker v-model="colors" @input="colorSelected" 
@@ -63,22 +65,22 @@
               </div>
             </mu-list-item>
             <!--  v-if="data.attributes.shape_type !== 'filled'" -->
-            <mu-sub-header v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'" slot="nested">Gradient Background <mu-checkbox v-model="data.attributes.isGradient" class="subheader-chckbox"/></mu-sub-header>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'">
+            <mu-sub-header v-if="hasGradient()" slot="nested">Gradient Background <mu-checkbox v-model="data.attributes.isGradient" class="subheader-chckbox"/></mu-sub-header>
+            <mu-list-item v-if="hasGradient()" slot="nested" class="paddingZero demiBlackbg">
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Position</mu-grid-list>
                 <mu-grid-list class="right">
-                  <vue-slider ref="gradientSlider" v-model="data.attributes.gradientBackgroundData.value" @callback="handleDrag" @drag-start="setGradientColors($event)" v-bind="data.attributes.gradientBackgroundData" ></vue-slider>
+                  <vue-slider :disabled="!data.attributes.isGradient" ref="gradientSlider" v-model="data.attributes.gradientBackgroundData.value" @callback="handleDrag" @drag-start="setGradientColors($event)" v-bind="data.attributes.gradientBackgroundData" ></vue-slider>
                   <!-- <input spellcheck="false" class="input-size sliderInput"> -->
                 </mu-grid-list>
               </div>
             </mu-list-item>
-             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'" v-no-ripple>
+             <mu-list-item v-if="hasGradient()" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Colour</mu-grid-list>
                 <mu-grid-list class="right">
                 <input disabled spellcheck="false" v-model="data.attributes.gradientBackgroundData.sliderStyle[selectedHandle].backgroundColor" class="input-size colorPicka">
-                <input style="cursor: pointer" id="gradcolour" @click="showPicker($event,'gradient')" spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:selectedGradientColor}" >
+                <input :disabled="!data.attributes.isGradient" style="cursor: pointer" id="gradcolour" @click="showPicker($event,'gradient')" spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:selectedGradientColor}" >
                 </mu-grid-list>
               </div>
               <div ref="gradientPicker" v-show="selectedPicker === 'gradientPicker'" class="item-color-picker">
@@ -86,18 +88,18 @@
                   style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
               </div>
             </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'" v-no-ripple>
+            <mu-list-item v-if="hasGradient()" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
                 <mu-grid-list class="right">
-                <mu-slider v-model="data.attributes.gradientBackgroundData.rotation" class="mmslider" :step="1" :max="360"/>
-                <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.gradientBackgroundData.rotation">
+                <mu-slider :disabled="!data.attributes.isGradient" v-model="data.attributes.gradientBackgroundData.rotation" class="mmslider" :step="1" :max="360"/>
+                <input :disabled="!data.attributes.isGradient" spellcheck="false" class="input-size sliderInput" v-model="data.attributes.gradientBackgroundData.rotation">
                 </mu-grid-list>
               </div>
             </mu-list-item>
-            <mu-sub-header slot="nested">Border</mu-sub-header>
+            <!-- <mu-sub-header slot="nested">Border</mu-sub-header> -->
             <!-- <mu-sub-header> <mu-icon slot="right" value="image" style="color: #fff"/></mu-sub-header> -->
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+            <!-- <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
                 <mu-grid-list class="right">
@@ -105,16 +107,16 @@
                 <input v-digitsonly v-model="data.attributes.borderWidth" spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
-            </mu-list-item>
-            <mu-list-item  slot="nested"  class="paddingZero demiBlackbg" v-no-ripple>
+            </mu-list-item> -->
+            <!-- <mu-list-item  slot="nested"  class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Style</mu-grid-list>
                 <mu-grid-list class="right">
                 <multiselect v-model="data.attributes.borderStyle" :options="['None','Square','Solid','Round']" :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
                 </mu-grid-list>
               </div>
-            </mu-list-item>
-             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+            </mu-list-item> -->
+             <!-- <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
@@ -126,9 +128,9 @@
                 <color-picker v-model="colors" @input="colorSelected" 
                   style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
               </div>
-            </mu-list-item>
-            <mu-sub-header slot="nested">Shadow</mu-sub-header>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+            </mu-list-item> -->
+            <mu-sub-header v-if="hasGradient()" slot="nested">Shadow</mu-sub-header>
+            <mu-list-item v-if="hasGradient()" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
                 <mu-grid-list class="right">
@@ -137,7 +139,7 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+             <mu-list-item v-if="hasGradient()" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
@@ -154,7 +156,7 @@
                   </mu-flexbox-item>
              </mu-flexbox>
             </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'">
+            <mu-list-item v-no-ripple slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'">
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">URL</mu-grid-list>
                 <mu-grid-list class="right">
@@ -303,9 +305,13 @@ export default {
       }
     },
     toggleLayer() {
+      if (this.data.islocked)return;
+
       this.data.selected = this.data.visible = !this.data.visible;
     },
     open (event) {
+       if (this.data.islocked)return;
+
         for(let i = 0; i < this.getLayers.length;i++){
           if (this.getLayers[i].id === this.data.id) {
             this.data.selected = !this.data.selected;
@@ -322,6 +328,18 @@ export default {
      showMenu(e) {
       e.preventDefault();
       this.$emit("onRenameOrDelete", this.data, e)
+    },
+    hasGradient() {
+      if (this.data.attributes.shape === 'Circle' || this.data.attributes.shape === 'Rectangle') return true;
+
+      return false;
+    },
+    lockLayer(e) {
+      e.stopPropagation();
+      if (this.data.selected) {
+        this.data.selected = false;
+      }
+      this.data.islocked = ! this.data.islocked;
     },
   }
 }

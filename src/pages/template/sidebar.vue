@@ -13,21 +13,35 @@
         <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_up" slot="left" @click="moveUp"/>
         <mu-icon-button class="custom-icon-button" icon="delete" slot="left" @click="removeLayer()"/>
         <mu-icon-menu class="custom-icon-button" icon="add"  slot="right" :open="showhover" @open="hoverBtn" @close="closeLayer" desktop :anchorOrigin="leftBot" :targetOrigin="leftBot">
-            <span class="pop-title" >Add New Layer</span>
+            <span class="pop-title" slot="right">Add New Layer</span>
             <mu-divider style="margin-left: 10px;width: 315px;" />
-              <mu-menu value="" title="">
-            <div class="pop-content">
-              <div v-for="(item, i) in items"  :key="i" class="content-btn" @click.stop="addLayer(item);toggle($event)">
-              <mu-raised-button  ref="iconbtn"  class="raised-btn"  :icon="item.icon" @hover="hoverLayer(i)"/>
-               <br>
-               <span>{{item.title}}</span> 
+            <mu-menu value="" title="">
+              <div class="pop-content">
+                <div v-for="(item, i) in items"  :key="i" class="content-btn" @click.stop="addLayer(item);toggle($event)">
+                <mu-raised-button  ref="iconbtn"  class="raised-btn"  :icon="item.icon" @hover="hoverLayer(i)"/>
+                <br>
+                <span>{{item.title}}</span> 
+                </div>
               </div>
-            </div>
-              </mu-menu>
+            </mu-menu>
             <mu-divider v-show="shapeSelected"/>
             <mu-menu menuClass="menu-add-layer" v-show="shapeSelected" class="pop-content">
               <div class="">
-                <mu-icon-button v-for="(item, i) in shapeTypes" :key="i" :icon="item.icon" @click="addShape(item.name)" :icon-class="item.selected ? 'activeIcon': ''" @hover="hoverShape(item)"/>
+                <!-- <mu-flat-button v-for="(item, i) in shapeTypes"  :key="i" 
+                  @click="addShape(item.name)" 
+                  @hover="hoverShape(item)">
+                  <i class="material-icons">{{item.icon}}</i>
+                </mu-flat-button> -->
+                <mu-icon-button 
+                  v-for="(item, i) in shapeTypes" 
+                  :key="i" :class="{'activeIcon':item.selected}"
+                  @click="addShape(item.name)" 
+                  @hover="hoverShape(item)">
+                  <div>
+                   <mu-tooltip style="z-index: 999; top: -20px; color: white; " :label="item.name" :show="item.selected" :verticalPosition="'bottom'" :horizontalPosition="'vertical position'"/>
+                   <i class="material-icons">{{item.icon}}</i>
+                  </div>
+                </mu-icon-button>
               </div>
             </mu-menu>
         </mu-icon-menu>
@@ -49,10 +63,13 @@
         v-show="menuLayerData ? menuLayerData.type === 'text' ? false : true : false"> 
         <mu-icon slot="left" value="border_color" style="color: white; font-size: 17px;"/>
       </mu-list-item> -->
-      <mu-list-item titleClass="command-item" :title="getTitle('visibility')" @click="toggleVisibility">
+      <mu-list-item :disabled="itemIsLocked" titleClass="command-item" :title="getTitle('visibility')" @click="toggleVisibility">
         <mu-icon slot="left" value="visibility" style="color: white; font-size: 17px;"/>
       </mu-list-item>
-      <mu-list-item titleClass="command-item" :title="getTitle('list')" @click="toggleList">
+       <mu-list-item titleClass="command-item" :title="menuLayerData && menuLayerData.islocked ? 'Unlock' : 'Lock'" @click="toggleLock">
+        <mu-icon slot="left" :value="menuLayerData && menuLayerData.islocked ? 'lock_open' : 'lock'" style="color: white; font-size: 17px;"/>
+      </mu-list-item>
+      <mu-list-item :disabled="itemIsLocked" titleClass="command-item" :title="getTitle('list')" @click="toggleList">
         <mu-icon slot="left" value="keyboard_arrow_right" style="color: white; font-size: 17px;"/>
       </mu-list-item>
       <mu-divider />
@@ -63,7 +80,7 @@
         <mu-icon slot="left" value="keyboard_arrow_down" style="color: white; font-size: 17px;"/>
       </mu-list-item> -->
       <mu-divider />
-      <mu-list-item titleClass="command-item" title="Delete" @click="removeLayer">
+      <mu-list-item :disabled="itemIsLocked" titleClass="command-item" title="Delete" @click="removeLayer">
         <mu-icon slot="left" value="delete" style="color: white; font-size: 17px;"/>
       </mu-list-item>
     </mu-list>
@@ -71,6 +88,7 @@
   <div class="rename-inp" ref="renameInp" v-show="renaming">
     <input type="text" class="default-inp" @click="_prevEvt" @change="handleChanged" @blur="setpValue" @keydown.enter="setpValue">
   </div>
+
 </div>
 </template>
 <script>
@@ -80,6 +98,7 @@ import templateSelection from '../../components/template/select-template'
 import appHelper from '../../helpers/app.helper.js'
 import undoRedo from '../../helpers/undo-redo.js'
 import browserHelper from '../../helpers/browser.js'
+import snackBar from '../../helpers/snackbar.js'
 export default {
   name: 'Sidebar',
   data () {
@@ -111,62 +130,103 @@ export default {
       shapeTypes: [
         {
           id: 1,
-          name: 'Rectangle Filled',
+          name: 'Rectangle',
           shape: 'square',
           type: 'filled',
           icon: 'stop',
           selected: false
         },
-         {
+        {
           id: 2,
-          name: 'Rectangle',
-          shape: 'square',
-          type: 'line',
-          icon: 'crop_square',
+          name: 'Circle',
+          shape: 'circle',
+          type: 'filled',
+          icon: 'fiber_manual_record',
           selected: false
-         },
-         {
+        },
+        {
           id: 3,
-          name: 'Triangle Filled',
-          shape: 'triangle',
+          name: 'Triangle',
+          shape: 'triangle ',
           type: 'filled',
           icon: 'network_cell',
           selected: false
-         },
-         {
+        },
+        {
           id: 4,
-          name: 'Triangle',
-          shape: 'triangle',
-          type: 'line',
-          icon: 'signal_cellular_null',
-          selected: false
-         },
-         {
-          id: 5,
-          name: 'Circle Filled',
-          shape: 'circle',
+          name: 'Trapezoid',
+          shape: 'trapezoid ',
           type: 'filled',
-          icon: 'lens',
+          icon: 'network_cell',
           selected: false
-         },
-         {
-          id: 6,
-          name: 'Circle',
-          shape: 'circle',
-          type: 'line',
-          icon: 'panorama_fish_eye',
+        },
+        {
+          id: 5,
+          name: 'Parallelogram',
+          shape: 'parallelogram ',
+          type: 'filled',
+          icon: 'network_cell',
           selected: false
-         }
+        },
+        // {
+        //   id: 1,
+        //   name: 'Rectangle Filled',
+        //   shape: 'square',
+        //   type: 'filled',
+        //   icon: 'stop',
+        //   selected: false
+        // },
+        //  {
+        //   id: 2,
+        //   name: 'Rectangle',
+        //   shape: 'square',
+        //   type: 'line',
+        //   icon: 'crop_square',
+        //   selected: false
+        //  },
+        //  {
+        //   id: 3,
+        //   name: 'Triangle Filled',
+        //   shape: 'triangle',
+        //   type: 'filled',
+        //   icon: 'network_cell',
+        //   selected: false
+        //  },
+        //  {
+        //   id: 4,
+        //   name: 'Triangle',
+        //   shape: 'triangle',
+        //   type: 'line',
+        //   icon: 'signal_cellular_null',
+        //   selected: false
+        //  },
+        //  {
+        //   id: 5,
+        //   name: 'Circle Filled',
+        //   shape: 'circle',
+        //   type: 'filled',
+        //   icon: 'lens',
+        //   selected: false
+        //  },
+        //  {
+        //   id: 6,
+        //   name: 'Circle',
+        //   shape: 'circle',
+        //   type: 'line',
+        //   icon: 'panorama_fish_eye',
+        //   selected: false
+        //  }
       ],
       renaming: false,
       menuVisible: false,
       menuLayerData: null,
       menuElement: null,
+      itemIsLocked: false,
     }
   },
   components: {
     Expanding,
-    'select-template': templateSelection
+    'select-template': templateSelection,
   },
   computed: {
     ...mapGetters( {
@@ -206,15 +266,17 @@ export default {
     },
     addShape(shape) {
       var _sl = this.getShapeLayer();
-      if (shape.indexOf('Filled') !== -1) {
-         _sl.attributes.color = '#333';
-         _sl.attributes.borderSize = 0;
-         _sl.attributes.shape_type = 'filled'
-      } else {
-        _sl.attributes.color = 'transparent';
-       _sl.attributes.borderSize = 5;
-         _sl.attributes.shape_type = ' '
-      }
+      // if (shape.indexOf('Filled') !== -1) {
+      //    _sl.attributes.color = '#333';
+      //    _sl.attributes.borderSize = 0;
+      //    _sl.attributes.shape_type = 'filled'
+      // } else {
+      //   _sl.attributes.color = 'transparent';
+      //  _sl.attributes.borderSize = 5;
+      //    _sl.attributes.shape_type = ' '
+      // }
+      _sl.attributes.color = 'red';
+      _sl.attributes.shape_type = shape.shape
       _sl.attributes.shape = shape.indexOf(' ') !== -1 ? shape.split(' ')[0].trim() : shape.trim();
       _sl.attributes.borderStyle = 'solid'
       console.log('getShapeLayer', _sl)
@@ -223,7 +285,11 @@ export default {
     },
     removeLayer() {
       var selectedLayer = this.getSelectedLayerId();
-        console.log('selectedLayer:',selectedLayer)
+        
+      if (selectedLayer && selectedLayer.sourceLayer.islocked) {
+        snackBar.show("Unable to perform action: Layer is locked");
+        return;
+      }
       if (selectedLayer) {
         undoRedo.add(appHelper.cloneLayer(selectedLayer.sourceLayer), "delete");
         this.removeSelectedLayer(selectedLayer.id);
@@ -282,7 +348,7 @@ export default {
     hoverLayer (index) {
         this.shapeSelected = index === 0
         if(this.shapeSelected){
-            this.hoverShape(this.shapeTypes[4])
+            this.hoverShape(this.shapeTypes[1])
         }
     },
     // for renaming or deleting a layer using context menu (right click)
@@ -293,6 +359,7 @@ export default {
       this.$refs.layerMenu.style.left = e.clientX + 'px';
       this.$refs.layerMenu.style.top = e.clientY + 'px';
       this.menuVisible = true;
+      this.itemIsLocked = layerData.islocked;
     },
     handleMousedown(e) {
       if (this.$refs.layerMenu && !this.$refs.layerMenu.contains(e.target)) {
@@ -312,6 +379,11 @@ export default {
       this.menuVisible = false;
       console.log(this.menuElement);
       this.renaming = true;
+    },
+    toggleLock() {
+      this.menuLayerData.selected = false;
+      this.menuLayerData.islocked = !this.menuLayerData.islocked;
+      this.menuVisible = false;
     },
     toggleVisibility() {
       this.menuLayerData.visible = !this.menuLayerData.visible;
@@ -349,6 +421,9 @@ export default {
 <style  lang="scss">
 @import '../../css/tooltip.scss';
 @import '../../css/menu2.scss';
+.mu-item-wrapper.disabled {
+  opacity: 0.5;
+}
 .rename-inp {
   position: absolute !important;
   top: -20px;
@@ -363,6 +438,7 @@ export default {
   top: 20px;
   background-color: #1da675;
   z-index: 999;
+  user-select: none;
   // max-height: 150px;
   // overflow-y: auto
 }
@@ -377,8 +453,11 @@ export default {
   width: 43px;
 }
 .pop-title{
-    margin-left: 10px;
+    margin-left: 50px;
     font-size: 15px;
+}
+.mu-appbar-title {
+  text-align: right;
 }
 .mu-divider{
   background-color: rgba(255, 245, 245, 0.21);
@@ -423,6 +502,9 @@ export default {
 }
 .mu-menu{
   width: 336px;
+}
+.mu-menu-list {
+  overflow: initial;
 }
 .activeIcon {
     border: 1px solid #1da675 ;
