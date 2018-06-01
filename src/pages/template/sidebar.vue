@@ -295,7 +295,7 @@ export default {
       var selectedLayer = this.getSelectedLayerId();
         
       if (selectedLayer && selectedLayer.sourceLayer.islocked) {
-        snackBar.show("Unable to perform action: Layer is locked");
+        snackBar.show("Layer is locked");
         return;
       }
       if (selectedLayer) {

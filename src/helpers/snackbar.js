@@ -1,5 +1,5 @@
 export default {
-    timeout: 3000,
+    timeout: 2000,
     timer: null,
     setConfig(data) {
         if (typeof data === 'object') {

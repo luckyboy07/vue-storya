@@ -2,7 +2,7 @@
   <div>
      <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
        <!-- :title="data.attributes.shape === 'Triangle' ? 'Shape Layer (SVG)' : data.content" -->
-        <mu-list-item :title="'Shape - ' + data.attributes.shape" :open="data.selected"  @click.stop="open">
+        <mu-list-item :title="data.attributes.shape + ' - Shape'" :open="data.selected"  @click.stop="open">
             <mu-icon slot="left" value="landscape" style="color: #fff"/>
             <mu-icon-button :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
             <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
