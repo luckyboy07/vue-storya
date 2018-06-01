@@ -11,6 +11,13 @@ export default {
             // if (textElement) {
             //     textElement.style.color = '#fff';
             // }
+            // removing unnecessary elements
+            // removing: layer info when dragging, resize or rotate
+            var elems = this.clonedElement.querySelectorAll('.layer-action-info');
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].style.display = 'none';
+            }
+
             this.clonedElement.style.zIndex = 0;
             document.body.appendChild(this.clonedElement);
         } else {
