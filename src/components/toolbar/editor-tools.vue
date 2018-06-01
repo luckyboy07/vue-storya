@@ -2,7 +2,7 @@
 <div>
   <mu-appbar class="header-tools editor-tools">
     <mu-flat-button id="btn" class="save-menu-btn" labelPosition="before" 
-      label="Save Project" slot="left" icon="keyboard_arrow_down"
+      label="Save" slot="left" icon="keyboard_arrow_down"
       @click="saveButtonClicked"/>
     <!-- start: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
@@ -44,6 +44,12 @@
           </mu-flat-button>
        </div>
      </div>
+     <div slot="left">
+       Responsive
+       <toggle-button :color="{checked: '#009d70',unchecked:'#333333'}"/>
+        <!-- <mu-switch label="Responsive" labelLeft class="thumbs"/> -->
+        <mu-raised-button label="Original Size" @click="openModal"/> 
+     </div>
     <!-- <mu-flat-button 
       slot="right"
       style="padding: 0 5px; text-transform: none; background-color: #222222; margin-right: 20px; height: 70%" 
@@ -54,11 +60,13 @@
   <mu-icon-menu menuClass="xxx" icon="" @change="handleChange" :anchorOrigin="rightTop"
       :targetOrigin="rightTop"
       :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
-      <mu-menu-item value="1" title="Save As" @click="SaveContent()"/>
+      <mu-menu-item value="0" title="Save" @click="SaveContent()"/>
       <mu-divider inset class="temp-action-item-divider"/>
-      <mu-menu-item value="1" title="Save As Template" @click="SaveTemplate()"/>
+       <mu-menu-item value="2" title="Save Project" @click="SaveContent()"/>
       <mu-divider inset class="temp-action-item-divider"/>
-      <mu-menu-item value="1" title="Export As" @click="exportContent()"/>
+      <mu-menu-item value="3" title="Save As Template" @click="SaveTemplate()"/>
+      <mu-divider inset class="temp-action-item-divider"/>
+      <mu-menu-item value="4" title="Export" @click="exportContent()"/>
     </mu-icon-menu>
 </div>
 </template>
@@ -89,11 +97,13 @@ import customMenu from '../menus/custom-menu'
 import {mapGetters} from 'vuex'
 import zoomHelper from '../../helpers/zoom.helper.js'
 import exportHelper from '../../helpers/import-export.helper.js'
+import ToggleButton from '../switchButton/button'
 export default {
   name: 'editor-tools',
   props:['selectedtemplate'],
   components: {
-    'custom-menu':customMenu
+    'custom-menu':customMenu,
+    ToggleButton
   },
   data() {
     return {
@@ -163,6 +173,9 @@ export default {
     },
     savetoLocalstorage () {
       this.$localStorage.set('canvas',JSON.stringify(this.selectedtemplate))
+    },
+    openModal () {
+      this.$modal.show('responsive-modal')
     }
   },
   computed: {
@@ -245,6 +258,9 @@ export default {
 }
 .mu-popover {
 background-color: red!important;
+}
+.mu-switch input[type="checkbox"]:checked+.mu-switch-wrapper .mu-switch-track {
+  background-color: #009d70 !important;
 }
 </style>
 

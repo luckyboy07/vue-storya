@@ -18,6 +18,7 @@
     </div>
   </div>
   <modal></modal>
+  <responsive-modal></responsive-modal>
   <!-- Ruler Lines -->
   <div class="h-lrl1" ref="hhl1"
     :style="{width: (canvasData.width + 400) + 'px', height: '2px'}">
@@ -40,6 +41,7 @@
 <script>
 import colorpicker from '../../components/editor/color-picker'
 import imageModal from '../../components/layer-modal/image-modal'
+import responsiveModal from '../../components/modal-responsive/modal'
 import {mapGetters} from 'vuex'
 import Header from '../template/header'
 import Siderbar from '../template/sidebar'
@@ -60,6 +62,7 @@ export default {
     sideBar: Siderbar,
     layer: selectionBox,
     modal: imageModal,
+    responsiveModal,
     colorPicker: colorpicker
   },
   computed: {
