@@ -19,6 +19,8 @@ export const store = new Vuex.Store({
             zoomIncrease: 20,
             bgColor: '#fff',
             gridLines: true,
+            isResponsive: false,
+            selectedRatio: ''
         },
         // auto save status
         // 0: no changes
@@ -310,8 +312,9 @@ export const store = new Vuex.Store({
             let template = state.canvasData
             template = payload
             template.zoom = 100
+            template.isResponsive = false
+            template.selectedRatio = ''
             Vue.localStorage.set('canvas',JSON.stringify(template))
-            Vue.set(state, 'canvasData', template)
         },
         setAutosaveData: (state, data) => {
             if (data !== '0' && data !== '1' && data !== '2') {
