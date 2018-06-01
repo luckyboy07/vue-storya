@@ -496,6 +496,11 @@ export default {
             height: 100%;
             z-index: 1;
         }
+
+        .shape-container, .shape {
+          width: 100%;
+          height: 100%;
+        }
       </style>
     </head>
     <body onload="_p()">
