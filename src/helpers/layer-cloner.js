@@ -4,7 +4,7 @@ export default {
         if (!document.getElementById('cloned-' + layer.id)) {
             this.clonedElement = document.getElementById(layer.id).cloneNode(true);
             this.clonedElement.id = 'cloned-' + layer.id;
-            this.clonedElement.style.zIndex = '1';
+            // this.clonedElement.style.zIndex = '1';
             this.clonedElement.style.opacity = 0;
             // if text eelement, change color to white
             var textElement = this.clonedElement.querySelector('.tl-container');
