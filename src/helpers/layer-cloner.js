@@ -7,10 +7,10 @@ export default {
             // this.clonedElement.style.zIndex = '1';
             this.clonedElement.style.opacity = 0;
             // if text eelement, change color to white
-            var textElement = this.clonedElement.querySelector('.tl-container');
-            if (textElement) {
-                textElement.style.color = '#fff';
-            }
+            // var textElement = this.clonedElement.querySelector('.tl-container');
+            // if (textElement) {
+            //     textElement.style.color = '#fff';
+            // }
             this.clonedElement.style.zIndex = 0;
             document.body.appendChild(this.clonedElement);
         } else {
