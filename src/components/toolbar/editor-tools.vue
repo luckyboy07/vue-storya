@@ -185,13 +185,13 @@ export default {
       var oldMargin = '';
       var elem = document.getElementsByClassName('editor-box')[0];
       // fixed error on margin
-      if (browserHelper.isChrome()) {
+      if (browserHelper.isChrome() || browserHelper.isOpera()) {
         oldMargin = elem.style.marginLeft;
         elem.style.marginLeft = '0px';
       }
       dom2image.toPng(elem, {width: this.editorData.width, height: this.editorData.height, bgcolor: '#fff'}).then(function(dataUri) {
         // restore margin after
-        if (browserHelper.isChrome()) {
+        if (browserHelper.isChrome() || browserHelper.isOpera()) {
             elem.style.marginLeft = oldMargin;
         }
         var link = document.createElement('a');
