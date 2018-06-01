@@ -654,10 +654,15 @@ export default {
         // this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
 
         // making responsive, cleaning html
+        // var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
+        // editorElem = this.$_responsiveness(editorElem);
+        var htmlContent = this.getExportingElement().outerHTML;
+        this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
+    },
+    getExportingElement() {
         var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
         editorElem = this.$_responsiveness(editorElem);
-        var htmlContent = editorElem.outerHTML;
-        this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
+        return editorElem;
     },
     /**
      * Generates a responsive version of the exported HTML

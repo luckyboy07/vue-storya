@@ -66,7 +66,8 @@
       <mu-divider inset class="temp-action-item-divider"/>
       <mu-menu-item value="3" title="Save As Template" @click="SaveTemplate()"/>
       <mu-divider inset class="temp-action-item-divider"/>
-      <mu-menu-item value="4" title="Export" @click="exportContent()"/>
+      <mu-menu-item value="4" title="Export as HTML" @click="exportContent()"/>
+      <mu-menu-item value="4" title="Export as Image" @click="ExportImage()"/>
     </mu-icon-menu>
 </div>
 </template>
@@ -97,7 +98,10 @@ import customMenu from '../menus/custom-menu'
 import {mapGetters} from 'vuex'
 import zoomHelper from '../../helpers/zoom.helper.js'
 import exportHelper from '../../helpers/import-export.helper.js'
+import browserHelper from '../../helpers/browser.js'
 import ToggleButton from '../switchButton/button'
+import dom2image from 'dom-to-image'
+import appHelper from '../../helpers/app.helper';
 export default {
   name: 'editor-tools',
   props:['selectedtemplate'],
@@ -176,7 +180,34 @@ export default {
     },
     openModal () {
       this.$modal.show('responsive-modal')
-    }
+    },
+    ExportImage() {
+      var oldMargin = '';
+      var elem = document.getElementsByClassName('editor-box')[0];
+      // fixed error on margin
+      if (browserHelper.isChrome()) {
+        oldMargin = elem.style.marginLeft;
+        elem.style.marginLeft = '0px';
+      }
+      dom2image.toPng(elem, {width: this.editorData.width, height: this.editorData.height, bgcolor: '#fff'}).then(function(dataUri) {
+        // restore margin after
+        if (browserHelper.isChrome()) {
+            elem.style.marginLeft = oldMargin;
+        }
+        var link = document.createElement('a');
+        link.download = "export-" + appHelper.generateGUID() + '.png';
+        link.href = dataUri;
+        // fixed on firefox not downloading
+        // explicitly append the a tag to work
+        if (browserHelper.isFirefox()) {
+          document.body.appendChild(link);
+        }
+        link.click();
+        if (browserHelper.isFirefox()) {
+          document.body.removeChild(link);
+        }
+      });
+    },
   },
   computed: {
     ...mapGetters({
