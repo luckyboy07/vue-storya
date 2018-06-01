@@ -45,6 +45,7 @@ import Header from '../template/header'
 import Siderbar from '../template/sidebar'
 import selectionBox from './layer'
 import gridlineHelper from '../../helpers/ruler-guidelines.js'
+import layerCloner from '../../helpers/layer-cloner.js'
 export default {
   name: 'Editor',
   data (){
@@ -109,11 +110,15 @@ export default {
           this.$refs.vlrl2.style.display="block";
           this.$refs.vlrl2.style.left = ((layerData.x + bounds2.left + layerData.width) - 1) + 'px';
           this.$refs.vlrl2.style.top = (bounds2.top - 50) + 'px';
+
+          layerCloner.cloneElement(layerData.id);
         } else {
           this.$refs.hhl1.style.display="none";
           this.$refs.hhl2.style.display="none";
           this.$refs.vlrl1.style.display="none";
           this.$refs.vlrl2.style.display="none";
+
+          layerCloner.removeElement();
         }
       }, 50);
     }
