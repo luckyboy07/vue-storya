@@ -32,28 +32,4 @@ export default {
             document.body.removeChild(this.clonedElement);
         }
     },
-    $$$$$$$rotatedTopLeft(x, y, width, height, rotationAngle) {
-        // get the center of the rectangle (==rotation point)
-        var cx = x + width / 2;
-        var cy = y + height / 2;
-
-        // calc the angle of the unrotated TL corner vs the center point
-        var dx = x - cx;
-        var dy = y - cy;
-        var originalTopLeftAngle = Math.atan2(dy, dx);
-        console.log('originalTopLeftAngle', originalTopLeftAngle)
-
-        // Add the unrotatedTL + rotationAngle to get total rotation
-        var rotatedTopLeftAngle = originalTopLeftAngle + rotationAngle;
-
-        // calc the radius of the rectangle (==diagonalLength/2)
-        var radius = Math.sqrt(width * width + height * height) / 2;
-
-        // calc the rotated top & left corner
-        var rx = cx + radius * Math.cos(rotatedTopLeftAngle);
-        var ry = cy + radius * Math.sin(rotatedTopLeftAngle);
-
-        // return the results
-        return ({ left: rx, top: ry });
-    }
 }
