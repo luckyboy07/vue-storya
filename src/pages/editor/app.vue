@@ -21,16 +21,16 @@
   <responsive-modal></responsive-modal>
   <!-- Ruler Lines -->
   <div class="h-lrl1 g-lines" ref="hhl1"
-    :style="{width: (canvasData.width + 400) + 'px', height: '2px'}">
+    :style="{width: (parseInt(canvasData.width) + parseInt(400)) + 'px', height: '2px'}">
   </div>
   <div class="h-lrl2 g-lines" ref="hhl2"
-    :style="{width: (canvasData.width + 400) + 'px', height: '2px'}">
+    :style="{width: (parseInt(canvasData.width) + parseInt(400)) + 'px', height: '2px'}">
   </div>
   <div class="v-lrl1 g-lines" ref="vlrl1"
-    :style="{width: '2px', height: (canvasData.height + 100) + 'px'}">
+    :style="{width: '2px', height: (parseInt(canvasData.height) + parseInt(100)) + 'px'}">
   </div>
   <div class="v-lrl2 g-lines" ref="vlrl2"
-    :style="{width: '2px', height: (canvasData.height + 100) + 'px'}">
+    :style="{width: '2px', height: (parseInt(canvasData.height) + (100)) + 'px'}">
   </div>
   <!-- Ruler Lines -->
 
@@ -123,7 +123,7 @@ export default {
 
           layerCloner.removeElement();
         }
-      }, 50);
+      }, 30);
     }
   },
   watch: {
@@ -138,7 +138,7 @@ export default {
 </script>
 <style scoped>
 .g-lines {
-  z-index: 9999;
+  z-index: 1;
 }
 .h-lrl1, .v-lrl1, .h-lrl2, .v-lrl2 {
   position: absolute;

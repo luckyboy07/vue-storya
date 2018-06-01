@@ -11,6 +11,7 @@ export default {
             if (textElement) {
                 textElement.style.color = '#fff';
             }
+            this.clonedElement.style.zIndex = 0;
             document.body.appendChild(this.clonedElement);
         } else {
             var elem = document.getElementById(layer.id);
