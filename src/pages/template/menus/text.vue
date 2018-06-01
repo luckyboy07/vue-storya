@@ -4,6 +4,7 @@
     :open="data.selected"
      @click.stop="open">
         <mu-icon slot="left" value="text_fields" style="color: #fff"/>
+        <mu-icon-button :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
         <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
         <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
         <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
@@ -234,6 +235,7 @@ export default {
   methods: {
     ...mapMutations(['setLayerValue','setSelectedLayerId']),
     open (event) {
+      if (this.data.islocked)return;
        for(let i = 0; i < this.getLayers.length;i++){
           if (this.getLayers[i].id === this.data.id) {
             this.data.selected = !this.data.selected;
@@ -327,6 +329,7 @@ export default {
       this.data.attributes.fontFamily = evt.target.parentElement.style.fontFamily.replace(/"/g, '')
     },
     toggleLayer() {
+      if (this.data.islocked)return;
       this.data.selected = this.data.visible = !this.data.visible;
     },
     getTextContent() {
@@ -340,6 +343,13 @@ export default {
     showMenu(e) {
       e.preventDefault();
       this.$emit("onRenameOrDelete", this.data, e)
+    },
+    lockLayer(e) {
+      e.stopPropagation();
+      if (this.data.selected) {
+        this.data.selected = false;
+      }
+      this.data.islocked = ! this.data.islocked;
     },
   },
   watch: {

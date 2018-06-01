@@ -28,7 +28,13 @@ export default {
         "Lemonada",
         "Shrikhand",
         "Frijole",
-        "Clicker Script"
+        "Clicker Script",
+        "Fira Sans",
+        "Pacifico",
+        "Concert One",
+        "Monoton",
+        "Nova Script",
+        "Londrina Shadow"
     ],
     processedFonts: [],
     getFonts: function() {

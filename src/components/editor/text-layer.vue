@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'noselect':isDragging}" ref="editable" class="tl-container" contenteditable="true" spellcheck="false" 
+  <div :class="{'noselect':isDragging}" ref="editable" class="tl-container" :contenteditable="!data.islocked" spellcheck="false" 
     :style="getStyle()" @keydown="_p" @keyup="_sc()">
   </div>
 </template>
@@ -90,6 +90,7 @@ export default {
       var layerData = this.data.attributes;
       return {
         // position: 'absolute',
+        'user-select':'none',
         opacity: layerData.opacity,
         fontFamily: layerData.fontFamily,
         fontSize: layerData.fontSize + 'px',
