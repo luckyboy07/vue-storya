@@ -114,7 +114,7 @@ export default {
           this.$refs.vlrl2.style.left = ((layerData.x + bounds2.left + layerData.width) - 1) + 'px';
           this.$refs.vlrl2.style.top = (bounds2.top - 50) + 'px';
 
-          layerCloner.cloneElement(layerData.id);
+          layerCloner.cloneElement(layerData);
         } else {
           this.$refs.hhl1.style.display="none";
           this.$refs.hhl2.style.display="none";
