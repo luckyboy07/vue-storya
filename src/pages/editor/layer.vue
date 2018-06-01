@@ -46,6 +46,7 @@
 <script>
 import appHelper from '../../helpers/app.helper.js'
 import undoRedo from '../../helpers/undo-redo.js'
+import snackBar from '../../helpers/snackbar.js'
 import textLayer from '../../components/editor/text-layer'
 import shape from "../../components/editor/shape.vue"
 import cssShape from '../../components/editor/css-shape.vue'
@@ -75,7 +76,9 @@ export default {
     };
   },
   beforeDestroy() {
-    this.$el.parentElement.parentElement.parentElement.removeEventListener('mousedown', this.handleCanvasClicks)
+    if (this.$el.parentElement.parentElement.parentElement) {
+      this.$el.parentElement.parentElement.parentElement.removeEventListener('mousedown', this.handleCanvasClicks)
+    }
   },
   mounted() {
     // get the parent's dimension
@@ -87,7 +90,9 @@ export default {
     this.parentH = _d.height// parseInt(_d.height.replace('px', '')) + 14;
     this.parentW = _d.width;//parseInt(_d.width.replace('px', '')) + 14;
     // handling layer desselection
-    this.$el.parentElement.parentElement.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
+    if (this.$el.parentElement.parentElement.parentElement) {
+      this.$el.parentElement.parentElement.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
+    }
   },
   methods: {
     ...mapMutations(['setLayerValue', 'setSelectedLayerId']),
@@ -115,7 +120,10 @@ export default {
     },
     // focusing on item neglecting its order
     focused(elem, islocked) {
-      if (!this.selectedLayer || islocked) return;
+      if (!this.selectedLayer || islocked) {
+        snackBar.show("Layer is locked", 800);
+        return;
+      }
 
       if (this.previousElem) {
         this.previousElem.elem.style.zIndex = this.previousElem.z;

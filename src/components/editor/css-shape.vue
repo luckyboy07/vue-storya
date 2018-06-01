@@ -20,6 +20,7 @@ export default {
         'background-blend-mode': 'multiply',
         'boxShadow': att.shadowColor ? '1px 12px '+att.shadowSize+'px '+att.shadowColor : '',
         'opacity': this.data.attributes.opacity,
+         border: att.borderWidth + 'px ' + att.borderColor + ' ' + att.borderStyle,
       }
     },
     getCircleStyle() {
@@ -30,6 +31,7 @@ export default {
         'background-blend-mode': 'multiply',
         'boxShadow': att.shadowColor ? '1px 12px '+att.shadowSize+'px '+att.shadowColor : '',
         'opacity': this.data.attributes.opacity,
+        border: att.borderWidth + 'px ' + att.borderColor + ' ' + att.borderStyle,
       }
     },
     getTriangleStyle() {
@@ -67,6 +69,7 @@ export default {
         '-o-transform': 'skew(20deg)',
         'background': bg,
         'margin-left': '20px',
+        border: att.borderWidth + 'px ' + att.borderColor + ' ' + att.borderStyle,
       }
     },
     getDiamondStyle() {

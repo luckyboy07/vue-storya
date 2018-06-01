@@ -2,7 +2,7 @@
   <div>
      <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
        <!-- :title="data.attributes.shape === 'Triangle' ? 'Shape Layer (SVG)' : data.content" -->
-        <mu-list-item :title="data.attributes.shape + ' - Shape'" :open="data.selected"  @click.stop="open">
+        <mu-list-item :title="getTitle()" @click.stop="open" :open="data.selected">
             <mu-icon slot="left" value="landscape" style="color: #fff"/>
             <mu-icon-button :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
             <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
@@ -97,38 +97,38 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-            <!-- <mu-sub-header slot="nested">Border</mu-sub-header> -->
-            <!-- <mu-sub-header> <mu-icon slot="right" value="image" style="color: #fff"/></mu-sub-header> -->
-            <!-- <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+            <mu-sub-header :disabled="!hasBorder()" slot="nested">Border</mu-sub-header>
+            <mu-sub-header> <mu-icon slot="right" value="image" style="color: #fff"/></mu-sub-header>
+            <mu-list-item :disabled="!hasBorder()"  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
                 <mu-grid-list class="right">
-                <mu-slider v-model="data.attributes.borderWidth" class="mmslider" :step="1"/>
-                <input v-digitsonly v-model="data.attributes.borderWidth" spellcheck="false" class="input-size sliderInput">
+                <mu-slider :disabled="!hasBorder()" v-model="data.attributes.borderWidth" class="mmslider" :step="1"/>
+                <input :disabled="!hasBorder()" v-digitsonly v-model="data.attributes.borderWidth" spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
-            </mu-list-item> -->
-            <!-- <mu-list-item  slot="nested"  class="paddingZero demiBlackbg" v-no-ripple>
+            </mu-list-item>
+            <mu-list-item slot="nested" :disabled="!hasBorder()" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Style</mu-grid-list>
                 <mu-grid-list class="right">
-                <multiselect v-model="data.attributes.borderStyle" :options="['None','Square','Solid','Round']" :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
+                <multiselect  v-model="data.attributes.borderStyle" :options="['None','Dashed', 'Dotted', 'Solid']" :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
                 </mu-grid-list>
               </div>
-            </mu-list-item> -->
-             <!-- <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+            </mu-list-item>
+            <mu-list-item :disabled="!hasBorder()" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
                 <input disabled spellcheck="false" class="input-size colorPicka" v-model="data.attributes.borderColor">
-                <input spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.borderColor}" @click="showPicker($event,'border')">
+                <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.borderColor}" @click="showPicker($event,'border')">
                 </mu-grid-list>
               </div>
               <div ref="borderColor" v-show="selectedPicker === 'borderColor'" class="item-color-picker">
                 <color-picker v-model="colors" @input="colorSelected" 
                   style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
               </div>
-            </mu-list-item> -->
+            </mu-list-item>
             <mu-sub-header v-if="hasGradient()" slot="nested">Shadow</mu-sub-header>
             <mu-list-item v-if="hasGradient()" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
@@ -341,6 +341,14 @@ export default {
       }
       this.data.islocked = ! this.data.islocked;
     },
+    getTitle() {
+      return this.data.attributes.shape.length <= 9 ? this.data.attributes.shape + ' - Shape' :
+        this.data.attributes.shape.slice(0, 9) + '... - Shape';
+    },
+    hasBorder() {
+      var borderLessShapes = ['Triangle', 'Trapezoid'];
+      return !borderLessShapes.includes(this.data.attributes.shape);
+    },
   }
 }
 </script>
@@ -362,6 +370,10 @@ export default {
     float: right;
     left: 0;
     padding-right: 12px;
+}
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>
 

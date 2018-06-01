@@ -1,12 +1,19 @@
+/**
+ * SNackbar as notif
+ */
 export default {
     timeout: 2000,
     timer: null,
-    setConfig(data) {
+    $_setConfig(data) {
         if (typeof data === 'object') {
             console.log()
         }
     },
-    show(message) {
+    /**
+     * Shows the snackbar 
+     * @param {The content of the snackbar} message 
+     */
+    show(message, _timeout) {
         if (this.timer) {
             window.clearTimeout(this.timer);
             this.timer = null;
@@ -16,7 +23,7 @@ export default {
             this.hide();
             this.$_setContent(message);
             window.setTimeout(() => {
-                document.getElementById('storya-snackbar').style.bottom = '20px'
+                document.getElementById('storya-snackbar').style.bottom = '40px'
             }, 50);
         } else {
             var elem = document.createElement('div');
@@ -31,13 +38,13 @@ export default {
             document.body.appendChild(elem);
 
             window.setTimeout(() => {
-                elem.style.bottom = '20px'
+                elem.style.bottom = '40px'
             }, 20);
         }
 
         this.timer = window.setTimeout(() => {
             this.hide();
-        }, this.timeout);
+        }, _timeout || this.timeout);
     },
     hide() {
         var elem = document.getElementById('storya-snackbar');
