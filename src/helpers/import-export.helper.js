@@ -421,38 +421,52 @@ export default {
         word-wrap: break-word;
       }
       #shapeContainer {
-          width: 35%;
-          height: 100%;
-          margin: auto;
-          background-image: linear-gradient(
-              to bottom,
-              rgba(255, 159, 63, 0.2),
-              rgba(255, 159, 63, 0.8)
-            ),
-            url(http://coothead.co.uk/images/amy.jpg);
-          background-size: auto 100%;
-          background-position: center top;
-        }
-        svg {
-          display: block;
-          width: 100%;
-          height: 100%;
-          overflow:visible;
-        }
-        .circle {
-          /* width: 200px; */
-          /* height: 200px; */
-          line-height: 200px;
-          border-radius: 50%; /* the magic */
-          -moz-border-radius: 50%;
-          -webkit-border-radius: 50%;
-          text-align: center;
-          color: white;
-          font-size: 16px;
-          text-transform: uppercase;
-          font-weight: 700;
-          margin: 0 auto 40px;
-        }
+        width: 35%;
+        height: 100%;
+        margin: auto;
+        background-image: linear-gradient(
+            to bottom,
+            rgba(255, 159, 63, 0.2),
+            rgba(255, 159, 63, 0.8)
+          ),
+          url(http://coothead.co.uk/images/amy.jpg);
+        background-size: auto 100%;
+        background-position: center top;
+      }
+      svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow:visible;
+      }
+      .circle {
+        width: 100%!important;
+        height: 100%!important;
+        line-height: 200px;
+        border-radius: 50%; /* the magic */
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        text-align: center;
+        color: white;
+        font-size: 16px;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin: 0 auto 40px;
+        position: absolute;
+      }
+      .triangle {
+        /* border-left: 50px solid transparent; */
+        /* border-right: 50px solid transparent; */
+        /* border-bottom: 100px solid red; */
+      }
+      .square {
+        width: 100%!important;
+        height: 100%!important;
+        position: absolute;
+      }
+      .blue {
+        background-color: #3498db;  
+      }
         .editor-container, .editor-box {
           width: 100%;
           height: 100%;
@@ -491,20 +505,133 @@ export default {
     <!-- REPLACE THIS PART -->
       <!-- DO NOT REMOVE ME -->
       <script type="text/javascript">
-        function _p() {
-          // var gsap = new TimelineMax(); 
-          // var elem1 = document.getElementsByClassName('rr-resizer');
-          // gsap.from(elem1[0],1,{left:100,opacity:0,repeat: -1, yoyo: true});
-          
-          var editable_elements = document.querySelectorAll("[contenteditable=true]");
-            for (var i = 0; i < editable_elements.length; i++) {
-              editable_elements[i].setAttribute("contenteditable", false);
+      var defaultW, 
+        defaultH = 0;
+      var defaultLayerValues = [];
+
+      function setDefault() {
+        var pElem = document.getElementsByClassName('editor-box')[0];
+        var bounds = pElem.getBoundingClientRect();
+        console.log(bounds);
+        defaultW = bounds.width;
+        defaultH = bounds.height;
+
+        // making height and width to 100%
+        pElem.style.width = '100%';
+        pElem.style.height = '100%';
+
+        var layers = pElem.querySelectorAll('.rr-resizer');
+        for (var i = 0; i < layers.length; i++) {
+          var layer = layers[i];
+          var content = getContent(layer);
+          var b = layer.getBoundingClientRect();
+          defaultLayerValues.push({
+            w: b.width,
+            h: b.height,
+            l: b.left,
+            t: b.top,
+            fontSize: getFontSize(content),
+          });
+        }
+
+        _p();
+        updateElements();
+      }
+
+      function updateElements() {
+         console.log('----------------------------------------------', defaultLayerValues)
+        var pElem = document.getElementsByClassName('editor-box')[0];
+        var bounds = pElem.getBoundingClientRect();
+
+        console.log('defaults', defaultW, defaultH)
+        console.log('bounds', bounds.width, bounds.height);
+
+        var multiplierW = 
+          bounds.width / defaultW > 0 ?  bounds.width / defaultW : 1;
+        var multiplierH = 
+          bounds.height / defaultH > 0 ?  bounds.height / defaultH : 1;
+
+        console.log('msfdf', multiplierW, multiplierH)
+
+        var layers = pElem.querySelectorAll('.rr-resizer');
+        for (var i = 0; i < layers.length; i++) {
+          var layer = layers[i];
+          console.log('layer', layer)
+          console.log('layer lBound', defaultLayerValues[i])
+          layer.style.width = (defaultLayerValues[i].w * multiplierW) + 'px';
+          layer.style.height = (defaultLayerValues[i].h * multiplierH) + 'px';
+          layer.style.left = (defaultLayerValues[i].l * multiplierW) + 'px'; 
+          layer.style.top = (defaultLayerValues[i].t * multiplierH) + 'px';
+
+          var content = getContent(layer);
+          var type = getLayerType(content);
+          console.log('type', getLayerType(content));
+          if (type === 'text') {
+            console.log('**************',  content.children[0].style.fontSize);
+            content.children[0].style.fontSize = (defaultLayerValues[i].fontSize * multiplierW) + 'px';
+          } else if (type === 'shape') {
+            console.log('isPolygon(content)', isPolygon(content));
+            if (isPolygon(content)) {
+              // triangle
             }
-            // removing editor's data
-            var tohide = document.getElementsByClassName('handle-tt');
-            for (var i = 0; i < tohide.length; i++) {
-              tohide[i].style.display="none"
-            } 
+          }
+        }
+      }
+      function isPolygon(elem) {
+        console.log('isSVG', elem)
+        var p = elem.children[0];
+        for (var i = 0; i < p.children.length; i++) {
+         // if svg, look for polygon tag
+         if (p.children[i].nodeName === 'svg') {
+            for (var j = 0; j < p.children[i].children.length; j++) {
+              if (p.children[i].children[j].nodeName === 'polygon') {
+                return true;
+              }
+            }
+         }
+        }
+        return false;
+      }
+      function getContent(elem) {
+        for (var i = 0; i < elem.children.length; i++) {
+          if (elem.children[i].className === 'rr-content') {
+            return elem.children[i];
+          }
+        }
+        return null;
+      }
+      function getLayerType(elem) {
+        if (elem.className !== 'rr-content') {
+          throw new Error('rr content expeected');
+        }
+        return elem.children[0].id;
+      }
+      function getFontSize(elemContent) {
+        if (elemContent.children[0].id !== 'text') return 0;
+
+        return parseInt(elemContent.children[0].style.fontSize.replace('px', ''));
+      }
+      function _clean(elem) {
+        var count = 1;
+        console.log("elem.getElementsByTagName('comment')", elem.getElementsByTagName('comment'))
+        // while (count > 0) {
+        //   count = elem.getElementsByTagName('comment');
+        // }
+      }
+        function _p() {
+        // var gsap = new TimelineMax();
+        // var elem1 = document.getElementsByClassName('rr-resizer');
+        // gsap.from(elem1[0],1,{left:100,opacity:0,repeat: -1, yoyo: true});
+        
+        var editable_elements = document.querySelectorAll("[contenteditable=true]");
+        for (var i = 0; i < editable_elements.length; i++) {
+        editable_elements[i].setAttribute("contenteditable", false);
+        }
+        // removing editor's data
+        // var tohide = document.getElementsByClassName('handle-tt');
+        // for (var i = 0; i < tohide.length; i++) {
+        //   tohide[i].style.display="none"
+        //   }
         }
       </script>
       <!-- DO NOT REMOVE ME -->
@@ -517,19 +644,34 @@ export default {
      * Exports the current editor content into a packed html file (.html)
      */
     exportTemplate() {
-        var editorElem = document.getElementsByClassName('editor-box')[0]; // clone the div element
-        var htmlContent = editorElem.outerHTML;
-        this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
-
-        // making responsive, cleaning html
-        // var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
-        // editorElem = this.$_responsiveness(editorElem);
+        // var editorElem = document.getElementsByClassName('editor-box')[0]; // clone the div element
         // var htmlContent = editorElem.outerHTML;
         // this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
+
+        // making responsive, cleaning html
+        var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
+        editorElem = this.$_responsiveness(editorElem);
+        var htmlContent = editorElem.outerHTML;
+        this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
     },
+    /**
+     * Generates a responsive version of the exported HTML
+     * @param {The source element} elem 
+     */
+    $_responsiveness(elem) {
+        var canvasContainer = elem.children[0].children[0];
+        canvasContainer = this.$_cleanHTML(canvasContainer);
+
+        return elem;
+    },
+    /**
+     * Downloads the generated html file
+     * @param {The exported htm file names} filename 
+     * @param {The html element present on the editor's content} htmlContent 
+     */
     $_download(filename, htmlContent) {
-        console.log('filename:', filename)
-        console.log('htmlContent:', htmlContent)
+        // console.log('filename:', filename)
+        // console.log('htmlContent:', htmlContent)
         var element = document.createElement('a')
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(htmlContent))
         element.setAttribute('download', filename)
@@ -541,33 +683,29 @@ export default {
 
         document.body.removeChild(element);
     },
-    $_responsiveness(elem) {
-        var canvasContainer = elem.children[0].children[0];
-        canvasContainer = this.$_cleanHTML(canvasContainer);
-        console.log('canvasContainer', canvasContainer);
-    },
+    /**
+     * Removes unnecessary html elements
+     * @param {The source parent element} elem 
+     */
     $_cleanHTML(elem) {
         var _rclass = ['rr-bar', 'rr-rotate-handle', 'rr-handle', 'p-d-g', 'layer-action-info'];
         var layerElems = elem.querySelectorAll('.rr-resizer');
         for (var i = 0; i < layerElems.length; i++) {
-            console.log(layerElems[i]);
             // removing by class names
             for (var j = 0; j < _rclass.length; j++) {
-                // removing per class
-                console.log('_rclass[j]', _rclass[j]);
+                // do not stop until all elements having the same classnames as specified above 
+                // are removed from the exported HTML file
                 var ld = [''];
-                console.log(_rclass[j], ld)
                 while (ld.length > 0) {
-                    ld = layerElems[i].querySelectorAll('.' + _rclass[j]);
                     for (var k = 0; k < ld.length; k++) {
                         if (ld[k].parentElement) {
                             ld[k].parentElement.removeChild(ld[k]);
                         }
                     }
+                    ld = layerElems[i].querySelectorAll('.' + _rclass[j]);
                 }
             }
         }
-        console.log('layerElems', layerElems);
         return elem;
     },
 }

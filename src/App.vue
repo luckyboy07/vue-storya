@@ -100,7 +100,6 @@ export default {
         } 
       } else {
         if (evt.key === 'Delete') {
-          console.log('Delete app');
           var item = this.getSelectedLayerId();
           if (item) {
             undoRedo.add(appHelper.cloneLayer(item.sourceLayer), 'delete');
@@ -118,10 +117,12 @@ export default {
       this.idleTime += 1;
       if (this.idleTime >= 3) {
          // check if the main layer array has items
-        if (this.layers.length > 0 && this.getAutosaveStatusData() === '1') {
+        if (this.getAutosaveStatusData() === '1') {
           // trigger the idle time event
           this.$_debugLogger('Call auto save here (App.vue:113)');
           this.setAutosaveData("2");
+          // move to save only at every 3 seconds idle
+          this.$localStorage.set('layers',JSON.stringify(this.layers))
         } 
         // else {
         //   this.$_debugLogger('Auto save: No data to save');
@@ -139,7 +140,6 @@ export default {
           this.autoSaveInfoDisplayDuration = 0;
         }
       }
-        this.$localStorage.set('layers',JSON.stringify(this.layers))
     },
     $_handleUndo(item, action) {
         // console.log('_handleUndoRedo', item, action);

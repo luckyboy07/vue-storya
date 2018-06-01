@@ -51,6 +51,7 @@ export const store = new Vuex.Store({
                 icon: 'landscape',
                 order: 0,
                 visible: true,
+                islocked: false,
                 animation: null,
                 selected: false,
                 open: false,
@@ -127,6 +128,7 @@ export const store = new Vuex.Store({
                 icon: 'image',
                 order: 0,
                 visible: true,
+                islocked: false,
                 animation: null,
                 selected: false,
                 type: 'image',
@@ -145,7 +147,7 @@ export const store = new Vuex.Store({
                     borderColor: '',
                     shadowSize: '1',
                     shadowColor: '',
-                    objectFit: 'fill'
+                    objectFit: 'Scale-Down'
                 }
             },
             {
@@ -160,6 +162,7 @@ export const store = new Vuex.Store({
                 height: 150,
                 order: 0,
                 visible: true,
+                islocked: false,
                 animation: null,
                 selected: false,
                 type: 'text',
@@ -194,6 +197,7 @@ export const store = new Vuex.Store({
                 icon: 'play_arrow',
                 order: 0,
                 visible: true,
+                islocked: false,
                 animation: null,
                 selected: false,
                 type: 'video',
@@ -209,6 +213,7 @@ export const store = new Vuex.Store({
                 icon: 'volume_down',
                 order: 0,
                 visible: true,
+                islocked: false,
                 animation: null,
                 selected: false,
                 type: 'audio',
@@ -218,9 +223,9 @@ export const store = new Vuex.Store({
     },
     mutations: {
         addLayer: (state, payload) => {
-                // check if the item is from undo or redo
-                // if not, assign a new id for this item
-                // indicating that this item is created
+            // check if the item is from undo or redo
+            // if not, assign a new id for this item
+            // indicating that this item is created
             let layers = state.layers
             if (!payload.fromUndoRedo) {
                 payload = appHelper.createLayer(payload);
@@ -234,10 +239,10 @@ export const store = new Vuex.Store({
             for (let i = 0; i < layers.length; i++) {
                 layers[i].selected = false
             }
-            
+
             layers.push(payload)
             let sam = layers.sort((a, b) => {
-                return  b.order - a.order
+                return b.order - a.order
             })
             Vue.localStorage.set('layers', JSON.stringify(sam))
             Vue.set(state, 'layers', sam)
@@ -283,7 +288,7 @@ export const store = new Vuex.Store({
         },
         // updates the layer list
         updateLayers: (state) => {
-                // Vue.set(state, 'layers', newLayers)
+            // Vue.set(state, 'layers', newLayers)
         },
         removeGlobalLayer: (state, _layerId) => {
             Vue.set(state, 'removableId', _layerId)
@@ -306,7 +311,7 @@ export const store = new Vuex.Store({
                     break;
                 }
             }
-            Vue.localStorage.set('layers',JSON.stringify(state.layers))
+            Vue.localStorage.set('layers', JSON.stringify(state.layers))
         },
         selectTemplate: (state, payload) => {
             let template = state.canvasData
@@ -327,9 +332,9 @@ export const store = new Vuex.Store({
         },
         setLayer: state => {
             let storaged = JSON.parse(Vue.localStorage.get('layers'))
-            Vue.set(state,'layers', storaged === null || undefined ? [] : storaged)
+            Vue.set(state, 'layers', storaged === null || undefined ? [] : storaged)
         },
-        applyTemplate: (state,payload) => {
+        applyTemplate: (state, payload) => {
             let layers = state.layers
             layers = payload.item
             Vue.set(state, 'layers', layers)
@@ -343,7 +348,7 @@ export const store = new Vuex.Store({
             // let saveLayer = Vue.localStorage.get('layers')
             // console.log('saveLayer:',saveLayer)
             let sam = state.layers.sort((a, b) => {
-                return  b.order - a.order
+                return b.order - a.order
             })
             return state.layers
         },
