@@ -69,8 +69,6 @@ export default {
       'setLayer'
       ]),
     keydownEventHandler(evt) {
-      // evt.preventDefault();
-      // evt.stopPropagation();
       // resetting idle time in key activities
       if (this.idleTime !== 0) {
         this.idleTime = 0;
@@ -81,6 +79,9 @@ export default {
       }
       // for keys with ctrl
       if (evt.ctrlKey) {
+        // stop the event  from propagating or executing default tasks
+        evt.preventDefault();
+        evt.stopPropagation();
         if (evt.key === 'y') {
            var redoData = undoRedo.redo();
           //  if (redoData && redoData.lastAction === 'scale') {
@@ -207,7 +208,7 @@ export default {
       // console.log('---------------------- lastLayerAddTime changes');
       if (this.layers.length > 0) {
         var newLayer = this.layers[this.layers.length -1];
-        this.setSelectedLayerId(newLayer.id);
+        // this.setSelectedLayerId(newLayer.id);
         undoRedo.add(newLayer, 'create');
       }
     },
