@@ -430,7 +430,7 @@ export default {
 @import '../../css/tooltip.scss';
 @import '../../css/menu2.scss';
 .mu-item-wrapper.disabled {
-  opacity: 0.5;
+  opacity: 0.21;
 }
 .rename-inp {
   position: absolute !important;
