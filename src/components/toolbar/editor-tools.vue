@@ -191,12 +191,17 @@ export default {
       this.$localStorage.set('canvas',JSON.stringify(this.selectedtemplate))
     },
     openModal () {
-      this.$modal.show('responsive-modal',{data: this.selectedtemplate})
+      this.$modal.show('responsive-modal',{data: this.selectedtemplate},{
+        'closed': this.beforeClose
+      })
     },
     watchChanges(evt) {
       this.selectedtemplate.isResponsive = evt.value
       this.savetoLocalstorage()
     },
+     beforeClose () {
+      console.log('close')
+     },
      ExportImage() {
       var oldMargin = '';
       var elem = document.getElementsByClassName('editor-box')[0];

@@ -20,7 +20,9 @@ export const store = new Vuex.Store({
             bgColor: '#fff',
             gridLines: true,
             isResponsive: false,
-            selectedRatio: ''
+            selectedRatio: '',
+            activeSize: {},
+            ratios: []
         },
         // auto save status
         // 0: no changes
@@ -319,6 +321,8 @@ export const store = new Vuex.Store({
             template.zoom = 100
             template.isResponsive = false
             template.selectedRatio = ''
+            template.ratios = []
+            template.activeSize = {}
             Vue.localStorage.set('canvas', JSON.stringify(template))
         },
         setAutosaveData: (state, data) => {
