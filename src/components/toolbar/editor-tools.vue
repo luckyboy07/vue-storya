@@ -44,11 +44,11 @@
           </mu-flat-button>
        </div>
      </div>
-     <div slot="left">
+     <div slot="right" class="s-responsive-right">
        Responsive
-       <toggle-button :color="{checked: '#009d70',unchecked:'#333333'}"/>
+       <toggle-button @change="watchChanges" :value="selectedtemplate.isResponsive" :sync="true" :color="{checked: '#009d70',unchecked:'#333333'}"/>
         <!-- <mu-switch label="Responsive" labelLeft class="thumbs"/> -->
-        <mu-raised-button label="Original Size" @click="openModal"/> 
+        <mu-raised-button :disabled="!selectedtemplate.isResponsive" :label="selectedtemplate.selectedRatio !== '' ? selectedtemplate.selectedRatio : 'Original Size'" @click="openModal"/> 
      </div>
     <!-- <mu-flat-button 
       slot="right"
@@ -114,6 +114,7 @@ export default {
       value: '3',
       saveMenu: null,
       menuOpen: false,
+      sam: false,
       rightTop: {horizontal: 'left', vertical: 'top'},
     }
   },
@@ -179,9 +180,13 @@ export default {
       this.$localStorage.set('canvas',JSON.stringify(this.selectedtemplate))
     },
     openModal () {
-      this.$modal.show('responsive-modal')
+      this.$modal.show('responsive-modal',{data: this.selectedtemplate})
     },
-    ExportImage() {
+    watchChanges(evt) {
+      this.selectedtemplate.isResponsive = evt.value
+      this.savetoLocalstorage()
+    },
+     ExportImage() {
       var oldMargin = '';
       var elem = document.getElementsByClassName('editor-box')[0];
       // fixed error on margin
@@ -207,7 +212,7 @@ export default {
           document.body.removeChild(link);
         }
       });
-    },
+    }
   },
   computed: {
     ...mapGetters({
@@ -218,6 +223,10 @@ export default {
 }
 </script>
 <style scoped>
+.s-responsive-right {
+  margin-right: 15px;
+  height: 70%;
+}
 .s-editor-btn-zoom-ctrl {
   padding: 0;
 }
