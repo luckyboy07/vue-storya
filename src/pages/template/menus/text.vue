@@ -334,8 +334,8 @@ export default {
     },
     getTextContent() {
       var data = this.data.content.replace(/<(?:.|\n)*?>/gm, ' ').replace(/&(?:.|\n)*?;/gm, ' ').trim();
-      if (data && data.length >= 20) {
-        return data.slice(0, 20) + '...';
+      if (data && data.length >= 15) {
+        return data.slice(0, 15) + '...';
       } 
 
       return data;

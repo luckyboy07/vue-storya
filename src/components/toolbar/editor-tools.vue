@@ -205,11 +205,20 @@ export default {
         oldMargin = elem.style.marginLeft;
         elem.style.marginLeft = '0px';
       }
+      // if zoom level is not 100%
+      if (this.editorData.zoom !== 100) {
+        elem.style.zoom = '100%';
+        elem.style["-moz-transform"] = "scale(1)"
+      }
       dom2image.toPng(elem, {
         width: this.editorData.width, 
         height: this.editorData.height, 
         bgcolor: this.editorData.bgColor
-      }).then(function(dataUri) {
+      }).then((dataUri) => {
+        if (this.editorData.zoom !== 100) {
+          elem.style.zoom = this.editorData.zoom / 100;
+          elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
+        }
         // restore margin after
         if (browserHelper.isChrome() || browserHelper.isOpera()) {
             elem.style.marginLeft = oldMargin;
