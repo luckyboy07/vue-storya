@@ -51,6 +51,7 @@ import Siderbar from '../template/sidebar'
 import selectionBox from './layer'
 import gridlineHelper from '../../helpers/ruler-guidelines.js'
 import layerCloner from '../../helpers/layer-cloner.js'
+import editorCanvasHelper  from '../../helpers/editor-canvas.helper.js'
 export default {
   name: 'Editor',
   data (){
