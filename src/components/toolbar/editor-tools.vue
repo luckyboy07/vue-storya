@@ -11,22 +11,22 @@
     </div>
     <!-- end: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
-       <div class="label-item">Selected Canvas Size</div>
+       <div class="label-item" :class="{'disabled':editorData.isResponsive}">Selected Canvas Size</div>
        <div class="tool-item-group-content" style="width: 260px; display: flex">
          <div class="tool-item-group-content" style="width: 106px; display: flex">
-            <div class="label-item p-r">W:</div> 
-            <input v-model="selectedtemplate.width"  @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
+            <div class="label-item p-r" :class="{'disabled':editorData.isResponsive}">W:</div> 
+            <input v-model="selectedtemplate.width" :class="{'disabled':editorData.isResponsive}" :disabled="editorData.isResponsive" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
            </div>
            <div class="tool-item-group-content">
             <div class="label-item">
-              <mu-flat-button class="s-editor-btn-zoom-ctrl">
+              <mu-flat-button class="s-editor-btn-zoom-ctrl" :class="{'disabled':editorData.isResponsive}">
                 <i class="si-link" style="height: 90%"></i>
               </mu-flat-button>
             </div>
            </div>
            <div class="tool-item-group-content" style="width: 106px; display: flex;">
-            <div class="label-item p-r">H:</div> 
-            <input v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
+            <div class="label-item p-r" :class="{'disabled':editorData.isResponsive}">H:</div> 
+            <input :class="{'disabled':editorData.isResponsive}" :disabled="editorData.isResponsive" v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
            </div>
        </div>
      </div>
@@ -37,7 +37,7 @@
             <i class="si-zoomout" style="height: 90%"></i>
           </mu-flat-button>
           <div class="tool-item-group-content">
-            <input disabled="true" v-model="selectedtemplate.zoom" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
+            <input ref="zoomInp" @blur="zoom()" @keydown.enter="zoom()" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'"/>
           </div>
           <mu-flat-button class="s-editor-btn-zoom-ctrl" @click="zoom('in')">
             <i class="si-zoomin" style="height: 90%"></i>
@@ -121,6 +121,9 @@ export default {
   beforeMount() {
     zoomHelper.adjustCanvasAndLayerDimension(this.selectedtemplate);
   },
+  mounted() {
+    this.$refs.zoomInp.value = this.selectedtemplate.zoom + '%';
+  },
   methods: {
      ...mapGetters(['getExportContent', 'template']),
     handleChange(val) {
@@ -155,13 +158,21 @@ export default {
       this.$emit('onResize', {with:  this.$refs.width.value, height:  this.$refs.height.value});
     },
     zoom(zoomType) {
-      if (zoomType === 'in') {
-        this.selectedtemplate.zoom = this.selectedtemplate.zoom + this.selectedtemplate.zoomIncrease;
+      var value = !this.$refs.zoomInp.value ?  this.selectedtemplate.zoom :  parseInt(this.$refs.zoomInp.value.replace('%', ''));
+      if (!zoomType) {
+        // handle enter or unfocus (blur)
+         this.selectedtemplate.zoom = value;
       } else {
-        if ((this.selectedtemplate.zoom - this.selectedtemplate.zoomIncrease) > 0) {
-          this.selectedtemplate.zoom = this.selectedtemplate.zoom - this.selectedtemplate.zoomIncrease;
+        if (zoomType === 'in') {
+          this.selectedtemplate.zoom = value + this.selectedtemplate.zoomIncrease;
+        } else {
+          if ((this.selectedtemplate.zoom - this.selectedtemplate.zoomIncrease) > 0) {
+            this.selectedtemplate.zoom = value - this.selectedtemplate.zoomIncrease;
+          }
         }
       }
+      
+      this.$refs.zoomInp.value = this.selectedtemplate.zoom + '%';
       this.savetoLocalstorage()
     },
     SaveContent() {
@@ -194,7 +205,11 @@ export default {
         oldMargin = elem.style.marginLeft;
         elem.style.marginLeft = '0px';
       }
-      dom2image.toPng(elem, {width: this.editorData.width, height: this.editorData.height, bgcolor: '#fff'}).then(function(dataUri) {
+      dom2image.toPng(elem, {
+        width: this.editorData.width, 
+        height: this.editorData.height, 
+        bgcolor: this.editorData.bgColor
+      }).then(function(dataUri) {
         // restore margin after
         if (browserHelper.isChrome() || browserHelper.isOpera()) {
             elem.style.marginLeft = oldMargin;

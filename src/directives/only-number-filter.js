@@ -6,8 +6,6 @@
 import Vue from 'vue'
 Vue.directive('digitsonly', {
     bind(el, binding, vnode) {
-        // making input type as number
-        el.type = 'number';
         var filter = function(evt) {
             var key = evt.key.toLowerCase();
             if (isNaN(key) && key !== 'backspace' && key !== '.' &&

@@ -69,8 +69,8 @@ export default {
       'setLayer'
       ]),
     keydownEventHandler(evt) {
-      evt.preventDefault();
-      evt.stopPropagation();
+      // evt.preventDefault();
+      // evt.stopPropagation();
       // resetting idle time in key activities
       if (this.idleTime !== 0) {
         this.idleTime = 0;
