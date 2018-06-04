@@ -6,8 +6,8 @@
     <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
     <div class="zoom-container">
         <div class="editor-box" ref="editorBox"
-          :style="{width: canvasData.width + 'px', 
-          height: canvasData.height + 'px', 
+          :style="{width: canvasData.isResponsive ? canvasData.activeSize.width + 'px': canvasData.width + 'px', 
+          height: canvasData.isResponsive ? canvasData.activeSize.height + 'px':canvasData.height + 'px', 
           zoom: (canvasData.zoom / 100),
           '-moz-transform': 'scale(' + (canvasData.zoom / 100) +')',
           backgroundColor:canvasData.bgColor,}">
