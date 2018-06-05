@@ -48,7 +48,7 @@
             <mu-grid-list class="gridlist-demo left">Rotate</mu-grid-list>
             <mu-grid-list class="right">
             <mu-slider v-model="data.attributes.rotation" class="mmslider" :max="360"/>
-            <input v-digitsonly spellcheck="false" class="input-size sliderInput" v-model="data.attributes.rotation">
+            <input type="number" v-digitsonly spellcheck="false" class="input-size sliderInput" v-model="data.attributes.rotation">
             </mu-grid-list>
           </div>
         </mu-list-item>

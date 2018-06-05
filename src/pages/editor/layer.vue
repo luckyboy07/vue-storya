@@ -7,7 +7,7 @@
       :disabled="!elem.selected" 
       :rotatable="!elem.islocked"
       :draggable="!elem.islocked"
-      :rotation="elem.attributes.rotation"
+      :rotation="elem.attributes.rotation.toString()"
       :fixedProportion="false"
       :left="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.x : -7 : elem.x"
       :top="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.y : -7 : elem.y"
@@ -124,23 +124,24 @@ export default {
       this.resetFocus();
     },
     handleCanvasKeydown(evt) {
-      evt.preventDefault();
-      evt.stopPropagation();
-
       if (!this.selectedLayer) return;
 
       var val = evt.shiftKey ? 10 : 1;
       this.shiftKeyOn = evt.shiftKey;
       if (evt.key === 'ArrowUp') {
+        this.$_pevEvent(evt);
         this.$_decreaseLayerY(val);
         this.$_executeAfterArrowKey();
       } else if (evt.key === 'ArrowDown') {
+         this.$_pevEvent(evt);
         this.$_increaseLayerY(val);
         this.$_executeAfterArrowKey();
       } else if (evt.key === 'ArrowRight') {
+         this.$_pevEvent(evt);
         this.$_increaseLayerX(val);
         this.$_executeAfterArrowKey();
       } else if (evt.key === 'ArrowLeft') {
+         this.$_pevEvent(evt);
         this.$_decreaseLayerX(val);
         this.$_executeAfterArrowKey();
       } else if (evt.shiftKey) {
@@ -148,8 +149,6 @@ export default {
       }
     },
     handleCanvasKeyup(evt) {
-      evt.preventDefault();
-      evt.stopPropagation();
       if (evt.key === 'Shift') {
         this.shiftKeyOn = false;
         this.$emit('scaling', null);
@@ -313,7 +312,11 @@ export default {
       }
       this.scaleTimeout = window.setTimeout(() => {
         this.$emit('scaling', null);
-      }, 100);
+      }, 50);
+    },
+    $_pevEvent(evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
     },
   },
   computed: {

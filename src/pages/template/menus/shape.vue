@@ -38,7 +38,7 @@
                 <mu-grid-list class="gridlist-demo left">Opacity</mu-grid-list>
                 <mu-grid-list class="right">
                 <mu-slider :max="1" v-model="data.attributes.opacity" class="mmslider"/>
-                <input v-model="data.attributes.opacity" disabled spellcheck="false" class="input-size sliderInput">
+                <div class="input-size sliderInput div-inp">{{data.attributes.opacity}}</div>
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -55,7 +55,7 @@
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
-                  <input disabled spellcheck="false" class="input-size colorPicka" v-model="data.attributes.color">
+                  <div class="input-size colorPicka div-inp">{{data.attributes.color}}</div>
                   <input spellcheck="false" id="colour" class="input-size sliderInput" :style="{backgroundColor:data.attributes.color}"  @click="showPicker($event,'')">
                 </mu-grid-list>
                 <!-- <div ref="colorPicker" v-show="selectedPicker === 'colorPicker'" class="item-color-picker">
@@ -79,7 +79,7 @@
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Colour</mu-grid-list>
                 <mu-grid-list class="right">
-                <input disabled spellcheck="false" v-model="data.attributes.gradientBackgroundData.sliderStyle[selectedHandle].backgroundColor" class="input-size colorPicka">
+                <div :class="{'disabled':!data.attributes.isGradient}" class="div-inp input-size colorPicka">{{data.attributes.gradientBackgroundData.sliderStyle[selectedHandle].backgroundColor}}</div>
                 <input :disabled="!data.attributes.isGradient" style="cursor: pointer" id="gradcolour" @click="showPicker($event,'gradient')" spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:selectedGradientColor}" >
                 </mu-grid-list>
               </div>
@@ -120,7 +120,7 @@
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
-                <input disabled spellcheck="false" class="input-size colorPicka" v-model="data.attributes.borderColor">
+                <div class="input-size colorPicka div-inp" :class="{'disabled':!hasBorder()}">{{data.attributes.borderColor}}</div>
                 <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.borderColor}" @click="showPicker($event,'border')">
                 </mu-grid-list>
               </div>

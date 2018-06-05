@@ -81,9 +81,10 @@ export default {
   methods: {
     openWindow (val) {
         this.targetElement = val
-        console.log('openWindow:',val)
+        // console.log('targetElement', val)
+        // console.log('openWindow:',val)
         setTimeout(()=>{
-        this.isWindowOpen = val[0]
+          this.isWindowOpen = val[0]
         },100)
         // this.$emit('isOpen',true)
     },
