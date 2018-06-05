@@ -47,7 +47,7 @@
        </div>
      </div>
      <div slot="right" class="s-responsive-right">
-       <div style="margin-right: 10px;">Responsive</div> 
+       <div style="margin-right: 10px; user-select: none">Responsive</div> 
        <toggle-button  style="margin-right: 10px;" @change="watchChanges" :value="selectedtemplate.isResponsive" :sync="true" :color="{checked: '#009d70',unchecked:'#333333'}"/>
         <!-- <mu-switch label="Responsive" labelLeft class="thumbs"/> -->
         <mu-raised-button :disabled="!selectedtemplate.isResponsive" :label="selectedtemplate.selectedRatio !== '' ? selectedtemplate.selectedRatio : 'Original Size'" @click="openModal"/> 

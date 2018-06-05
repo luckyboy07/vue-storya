@@ -1,100 +1,96 @@
-.yawaa{
+.yawaa {
+    user-select: none;
     .paddingZero {
         .mu-item {
             padding: 0px !important;
         }
     }
-
     .minHytZero {
         .mu-item {
-             min-height: 0px !important;
+            min-height: 0px !important;
         }
     }
     .minHytZero {
-        .mu-item-wrapper{
+        .mu-item-wrapper {
             width: 307px;
             margin: 0 auto;
             margin-bottom: 5px;
             height: 34px !important;
         }
     }
-    .multiselect__tags{
+    .multiselect__tags {
         min-height: 35px !important;
         border-radius: 0px !important;
         border: 1px solid #333333 !important;
         background: #333 !important;
         padding: 6px 40px 0 8px !important;
     }
-    .multiselect__single{
+    .multiselect__single {
         margin-bottom: 0px !important;
         background: transparent !important;
         color: #fff;
         font-size: 14px !important;
         text-align: right;
     }
-    .multiselect__select{
+    .multiselect__select {
         height: 35px !important;
         padding: 0px 8px !important;
     }
     .paddingZero {
-        .mu-item-wrapper{
+        .mu-item-wrapper {
             height: 43px;
         }
     }
-
     .mu-item.show-left {
         background: #222;
         border-bottom: 1px solid #2d2d2d;
     }
-    .mu-item-wrapper{
+    .mu-item-wrapper {
         border-top: 0px !important
     }
-
-    .labelSpyker{
+    .labelSpyker {
         padding-top: 6px;
         padding-right: 2px;
     }
-    .inputSpyker{
+    .inputSpyker {
         margin-top: 0px;
         margin-bottom: -2px;
         width: 64px;
         text-align: right;
     }
-    .iconSpyker{
+    .iconSpyker {
         color: rgb(255, 255, 255);
         padding: 5px 8px;
         margin-bottom: -1px;
     }
-    .mmslider{
+    .mmslider {
         width: 135px;
         margin-right: 3px;
         margin-top: 6px;
         margin-bottom: 11px;
     }
-    .sliderInput{
+    .sliderInput {
         width: 64px !important;
         margin-right: -2px !important;
         height: 35px !important;
         margin-left: 2px !important;
         text-align: right;
     }
-    .colorPicka{
+    .colorPicka {
         width: 135px !important;
         margin-right: 3px !important;
         height: 35px !important;
         text-align: right;
     }
-    .demiBlackbg{
+    .demiBlackbg {
         background: #191919 !important;
     }
-
-    .demiBlackbg .gridlist-demo{
+    .demiBlackbg .gridlist-demo {
         font-size: 12px !important;
         color: #ccc !important;
         padding: 8px !important;
     }
-
-    .multiselect__content-wrapper{
+    .multiselect__content-wrapper {
         max-height: 225px !important;
         background: #333 !important;
         color: #fff !important;
@@ -106,7 +102,6 @@
     .multiselect__content-wrapper::-webkit-scrollbar {
         width: 0px;
     }
-
     .multiselect__option:after {
         top: 0;
         right: 0;
@@ -116,15 +111,15 @@
         padding-left: 10px !important;
         font-size: 11px !important;
     }
-    .left{
+    .left {
         margin-left: 0px;
         width: 21.5%;
         padding: 6px 0;
     }
-    .right{
+    .right {
         width: 60.3%
     }
-    .flex-container{
+    .flex-container {
         height: 35px;
         background-color: #3333339c;
         text-align: center;
@@ -132,12 +127,12 @@
         border: 1px dashed;
         border-color: #5d5b5b;
     }
-    .gridlist-demo-container{
+    .gridlist-demo-container {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-around;
     }
-    .csFlatBtn{
+    .csFlatBtn {
         margin-top: -5px;
         min-width: 40px;
         width: 40px;
@@ -145,30 +140,29 @@
         height: 35px;
         line-height: 35px;
     }
-    .ativeBtn{
+    .ativeBtn {
         border: 1px solid #636363;
     }
-    .optionInput{
+    .optionInput {
         width: 64px !important;
         margin-right: 11px !important;
         height: 35px !important;
         text-align: right;
         margin-top: -5px;
     }
-    .nestedBtnGroup{
+    .nestedBtnGroup {
         background-color: rgb(25, 25, 25) !important;
         margin-top: 4px !important;
         margin-bottom: 4px !important;
     }
-    .limitGroupBtn{
+    .limitGroupBtn {
         margin-right: 15px !important;
         margin-left: 15px !important;
     }
-    .groupBtnR{
+    .groupBtnR {
         float: right !important;
         right: 10px !important;
         text-align: right;
         position: absolute;
     }
-
 }

@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%; height: 100%;position: absolute;">
-    <img :src="layerData.image.url ? layerData.image.url : 'http://via.placeholder.com/140x100'"  :style="getStyle()"/>
+    <img :src="layerData.image.url ? layerData.image.url : require('../../assets/img_default.jpeg')"  :style="getStyle()"/>
     <div class="img-layer-cover"></div>
   </div>
 </template>
