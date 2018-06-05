@@ -9,7 +9,7 @@ declare interface Point {
     top: number;
     width: number;
     height: number;
-    rotation?: number;
+    rotation?: any;
     octant?: number;
     z?: number;
     zoom?: Number;
