@@ -52,6 +52,15 @@
             </mu-grid-list>
           </div>
         </mu-list-item>
+        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
+          <div class="gridlist-demo-container">
+            <mu-grid-list class="gridlist-demo left">Blur Effect</mu-grid-list>
+            <mu-grid-list class="right">
+            <mu-slider v-model="data.attributes.filterBlur" class="mmslider" :max="100"/>
+            <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.filterBlur">
+            </mu-grid-list>
+          </div>
+        </mu-list-item>
         <mu-sub-header slot="nested">Border</mu-sub-header>
         <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
           <div class="gridlist-demo-container">

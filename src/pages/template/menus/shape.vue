@@ -64,6 +64,15 @@
                 </div> -->
               </div>
             </mu-list-item>
+            <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Blur Effect</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="data.attributes.filterBlur" class="mmslider" :max="100"/>
+                <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.filterBlur">
+                </mu-grid-list>
+              </div>
+            </mu-list-item>
             <!--  v-if="data.attributes.shape_type !== 'filled'" -->
             <mu-sub-header v-if="hasGradient()" slot="nested">Gradient Background <mu-checkbox v-model="data.attributes.isGradient" class="subheader-chckbox"/></mu-sub-header>
             <mu-list-item v-if="hasGradient()" slot="nested" class="paddingZero demiBlackbg">

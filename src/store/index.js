@@ -116,7 +116,8 @@ export const store = new Vuex.Store({
                     backgroundImageUri: '',
                     backgroundImageRepeat: 'none',
                     backgroundImagePosition: 'Left',
-                    backgroundImageAttachment: 'none'
+                    backgroundImageAttachment: 'none',
+                    filterBlur: 0
                 }
             },
             // image
@@ -149,7 +150,8 @@ export const store = new Vuex.Store({
                     borderColor: '',
                     shadowSize: '1',
                     shadowColor: '',
-                    objectFit: 'Scale-Down'
+                    objectFit: 'Scale-Down',
+                    filterBlur: 0
                 }
             },
             {
@@ -191,6 +193,7 @@ export const store = new Vuex.Store({
                     shadowSize: 0,
                     shadowColor: "",
                     opacity: 1,
+                    filterBlur: 0
                 }
             },
             {

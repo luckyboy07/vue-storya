@@ -35,7 +35,9 @@ export default {
               sizeOption: layerData.sizeOption,
               boxShadow: layerData.shadowColor ? shadows : '',
               width: '100%',
-              height: '100%'
+              height: '100%',
+              "-webkit-filter": "blur(" + layerData.filterBlur + "px)",
+              filter: "blur(" + layerData.filterBlur + "px)",
           }
         //   return this.layer
         //   return this.layerData 
