@@ -32,7 +32,7 @@ export default {
       idleTimeout: 1000, // the idle timeout to trigger the 'idleTimer' event. The value is in milliseconds
       idleTime: 0, // the idle time in seconds
       idleTimer: null, // the idle timer function. Assigned to a variable to be able to use it such as stopping the timer
-      allowedKeys: ['y', 'z', 'Delete'], // allowed keys
+      allowedKeys: ['y', 'z', 'Delete', 'ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'], // allowed keys
       autoSaveInfoDisplayDuration: 0,
     }
   },
@@ -80,8 +80,7 @@ export default {
       // for keys with ctrl
       if (evt.ctrlKey) {
         // stop the event  from propagating or executing default tasks
-        evt.preventDefault();
-        evt.stopPropagation();
+        this. $_pevEvent(evt);
         if (evt.key === 'y') {
            var redoData = undoRedo.redo();
           //  if (redoData && redoData.lastAction === 'scale') {
@@ -101,7 +100,20 @@ export default {
           }
            this.$_debugLogger("key action: undo");
         } 
+      } else if (evt.shiftKey) {
+        // for shift keys combo
+        this. $_pevEvent(evt);
+        if (evt.key === 'ArrowUp') {
+          this.decreaseLayerY(10);
+        } else if (evt.key === 'ArrowDown') {
+          this.increaseLayerY(10);
+        } else if (evt.key === 'ArrowRight') {
+          this.increaseLayerX(10);
+        } else if (evt.key === 'ArrowLeft') {
+          this.decreaseLayerX(10);
+        }
       } else {
+        this. $_pevEvent(evt);
         if (evt.key === 'Delete') {
           var item = this.getSelectedLayerId();
           if (item) {
@@ -109,7 +121,32 @@ export default {
             this.$_removeFromArray(this.layers, item.id)
           }
         }
+        else if (evt.key === 'ArrowUp') {
+          this.decreaseLayerY(1);
+        } else if (evt.key === 'ArrowDown') {
+          this.increaseLayerY(1);
+        } else if (evt.key === 'ArrowRight') {
+          this.increaseLayerX(1);
+        } else if (evt.key === 'ArrowLeft') {
+          this.decreaseLayerX(1);
+        }
       }
+    },
+    increaseLayerX(val) {
+       var item = this.getSelectedLayerId();
+       item.sourceLayer.x += val;
+    },
+    decreaseLayerX(val) {
+      var item = this.getSelectedLayerId();
+       item.sourceLayer.x -= val;
+    },
+    increaseLayerY(val) {
+      var item = this.getSelectedLayerId();
+      item.sourceLayer.y += val;
+    },
+    decreaseLayerY(val) {
+      var item = this.getSelectedLayerId();
+      item.sourceLayer.y -= val;
     },
     handleMouseMoveEvent(evt) {
       if (this.idleTime !== 0) {
@@ -192,6 +229,10 @@ export default {
       }
 
       return arr;
+    },
+    $_pevEvent(evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
     },
     $_debugLogger(log) {
        console.log('%c ' + log, 'background: green; color: #fff');
