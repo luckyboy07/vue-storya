@@ -32,7 +32,7 @@ export default {
       idleTimeout: 1000, // the idle timeout to trigger the 'idleTimer' event. The value is in milliseconds
       idleTime: 0, // the idle time in seconds
       idleTimer: null, // the idle timer function. Assigned to a variable to be able to use it such as stopping the timer
-      allowedKeys: ['y', 'z', 'Delete', 'ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'], // allowed keys
+      allowedKeys: ['y', 'z', 'Delete'], // allowed keys
       autoSaveInfoDisplayDuration: 0,
     }
   },
@@ -100,18 +100,6 @@ export default {
           }
            this.$_debugLogger("key action: undo");
         } 
-      } else if (evt.shiftKey) {
-        // for shift keys combo
-        this. $_pevEvent(evt);
-        if (evt.key === 'ArrowUp') {
-          this.decreaseLayerY(10);
-        } else if (evt.key === 'ArrowDown') {
-          this.increaseLayerY(10);
-        } else if (evt.key === 'ArrowRight') {
-          this.increaseLayerX(10);
-        } else if (evt.key === 'ArrowLeft') {
-          this.decreaseLayerX(10);
-        }
       } else {
         this. $_pevEvent(evt);
         if (evt.key === 'Delete') {
@@ -120,15 +108,6 @@ export default {
             undoRedo.add(appHelper.cloneLayer(item.sourceLayer), 'delete');
             this.$_removeFromArray(this.layers, item.id)
           }
-        }
-        else if (evt.key === 'ArrowUp') {
-          this.decreaseLayerY(1);
-        } else if (evt.key === 'ArrowDown') {
-          this.increaseLayerY(1);
-        } else if (evt.key === 'ArrowRight') {
-          this.increaseLayerX(1);
-        } else if (evt.key === 'ArrowLeft') {
-          this.decreaseLayerX(1);
         }
       }
     },

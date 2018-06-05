@@ -1,5 +1,6 @@
 <template>
 <div>
+      <!-- :handles="'nw,ne,se,sw'" -->
     <rotatable-resizer 
       :id="elem.id"
       :islocked="elem.islocked"
@@ -8,7 +9,6 @@
       :draggable="!elem.islocked"
       :rotation="elem.attributes.rotation"
       :fixedProportion="false"
-      :handles="'nw,ne,se,sw'"
       :left="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.x : -7 : elem.x"
       :top="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.y : -7 : elem.y"
       :width="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.width : parentW : elem.width"
@@ -65,6 +65,8 @@ export default {
   data() {
     return {
       focusTimeout: null, // the timer to when the layer gets back its zIndex
+      scaleTimeout: null, // the timer to when the layer is reset after arrow keys functions are executed
+      shiftKeyOn: false,
 
       selectedLayer: null,
       previousElem: null,
@@ -78,6 +80,8 @@ export default {
   beforeDestroy() {
     if (this.$el.parentElement.parentElement.parentElement) {
       this.$el.parentElement.parentElement.parentElement.removeEventListener('mousedown', this.handleCanvasClicks)
+      this.$el.parentElement.parentElement.parentElement.removeEventListener('keydown', this.handleCanvasKeydown)
+      this.$el.parentElement.parentElement.parentElement.removeEventListener('keyup', this.handleCanvasKeyup)
     }
   },
   mounted() {
@@ -92,6 +96,8 @@ export default {
     // handling layer desselection
     if (this.$el.parentElement.parentElement.parentElement) {
       this.$el.parentElement.parentElement.parentElement.addEventListener('mousedown', this.handleCanvasClicks)
+      this.$el.parentElement.parentElement.parentElement.addEventListener('keydown', this.handleCanvasKeydown)
+      this.$el.parentElement.parentElement.parentElement.addEventListener('keyup', this.handleCanvasKeyup)
     }
   },
   methods: {
@@ -99,6 +105,11 @@ export default {
     ...mapGetters(['getCanvasData']),
     // handling the click event
     handleCanvasClicks(evt) {
+      // handle click and shiftkey
+      // if clicking/selecting, remove the clone layer by throwing the caling having null params
+      this.shiftKeyOn = false;
+      this.$emit('scaling', null)
+
       if (this.selectedLayer) {
         // deselect the previous layer
         this.selectedLayer.selected = false;
@@ -111,6 +122,38 @@ export default {
       }
       
       this.resetFocus();
+    },
+    handleCanvasKeydown(evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
+
+      if (!this.selectedLayer) return;
+
+      var val = evt.shiftKey ? 10 : 1;
+      this.shiftKeyOn = evt.shiftKey;
+      if (evt.key === 'ArrowUp') {
+        this.$_decreaseLayerY(val);
+        this.$_executeAfterArrowKey();
+      } else if (evt.key === 'ArrowDown') {
+        this.$_increaseLayerY(val);
+        this.$_executeAfterArrowKey();
+      } else if (evt.key === 'ArrowRight') {
+        this.$_increaseLayerX(val);
+        this.$_executeAfterArrowKey();
+      } else if (evt.key === 'ArrowLeft') {
+        this.$_decreaseLayerX(val);
+        this.$_executeAfterArrowKey();
+      } else if (evt.shiftKey) {
+         this.$emit('scaling', this.selectedLayer)
+      }
+    },
+    handleCanvasKeyup(evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
+      if (evt.key === 'Shift') {
+        this.shiftKeyOn = false;
+        this.$emit('scaling', null);
+      }
     },
     resetFocus() {
        if (this.previousElem) {
@@ -143,6 +186,11 @@ export default {
       }, 1000);
     },
     activated(elem) {
+      // handle click and shiftkey
+      // if clicking/selecting, remove the clone layer by throwing the caling having null params
+      this.shiftKeyOn = false;
+      this.$emit('scaling', null)
+
       if (elem.islocked) return;
 
       console.log('%c Selected: ' + elem.id, 'background-color: red; color: white');
@@ -237,6 +285,35 @@ export default {
     },
     $_isShape(layer) {
       return layer.type === 'shape'
+    },
+    $_increaseLayerX(val) {
+       this.selectedLayer.x += val;
+       this.$emit('scaling', this.selectedLayer)
+    },
+    $_decreaseLayerX(val) {
+       this.selectedLayer.x -= val;
+       this.$emit('scaling', this.selectedLayer)
+    },
+    $_increaseLayerY(val) {
+      this.selectedLayer.y += val;
+      this.$emit('scaling', this.selectedLayer)
+    },
+    $_decreaseLayerY(val) {
+      this.selectedLayer.y -= val;
+      this.$emit('scaling', this.selectedLayer)
+    },
+    $_executeAfterArrowKey() {
+      // do not throw the scaling (null) event if shiftKey is still active
+      if (this.shiftKeyOn) return;
+
+      if ( this.scaleTimeout) {
+        // do not stack timeouts
+        window.clearTimeout(this.scaleTimeout);
+        this.scaleTimeout = null;
+      }
+      this.scaleTimeout = window.setTimeout(() => {
+        this.$emit('scaling', null);
+      }, 100);
     },
   },
   computed: {

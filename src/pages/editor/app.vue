@@ -4,7 +4,7 @@
 <side-bar @openWindow="openWindow"></side-bar>
   <div class="editor-container" ref="editorContainer">
     <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
-    <div class="zoom-container">
+    <div class="zoom-container" tabindex="0">
         <div class="editor-box" ref="editorBox"
           :style="{width: canvasData.isResponsive ? canvasData.activeSize.width + 'px': canvasData.width + 'px', 
           height: canvasData.isResponsive ? canvasData.activeSize.height + 'px':canvasData.height + 'px', 
@@ -217,8 +217,7 @@ export default {
     height: 80vh;
     overflow: auto;
     margin-bottom: 20px;
-    /* background: red;
-    border: 2px solid blue; */
+    outline: none;
 }
 </style>
 

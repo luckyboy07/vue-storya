@@ -38,6 +38,7 @@ export default {
     removeElement() {
         if (this.clonedElement) {
             document.body.removeChild(this.clonedElement);
+            this.clonedElement = null;
         }
     },
 }
