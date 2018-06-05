@@ -10,24 +10,26 @@
       <input @change="filenameChanged" ref="filename" v-model="selectedtemplate.file_name" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
     </div>
     <!-- end: Project Name -->
-    <div class="tool-item tool-item-group" slot="left">
+    <div class="tool-item tool-item-group" slot="left" >
        <div class="label-item" :class="{'disabled':editorData.isResponsive}">Selected Canvas Size</div>
-       <div class="tool-item-group-content" style="width: 260px; display: flex">
-         <div class="tool-item-group-content" style="width: 106px; display: flex">
-            <div class="label-item p-r" :class="{'disabled':editorData.isResponsive}">W:</div> 
-            <input v-model="selectedtemplate.width" :class="{'disabled':editorData.isResponsive}" :disabled="editorData.isResponsive" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
-           </div>
-           <div class="tool-item-group-content">
-            <div class="label-item">
-              <mu-flat-button class="s-editor-btn-zoom-ctrl" :class="{'disabled':editorData.isResponsive}">
-                <i class="si-link" style="height: 90%"></i>
-              </mu-flat-button>
-            </div>
-           </div>
-           <div class="tool-item-group-content" style="width: 106px; display: flex;">
-            <div class="label-item p-r" :class="{'disabled':editorData.isResponsive}">H:</div> 
-            <input :class="{'disabled':editorData.isResponsive}" :disabled="editorData.isResponsive" v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
-           </div>
+       <div class="tool-item-group-content" style="display: flex">
+          <div :class="{'disabled':editorData.isResponsive}" style="display: contents; width: 106px;">
+             <div class="label-item p-r">W:</div> 
+              <input v-model="selectedtemplate.width" :disabled="editorData.isResponsive" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
+          </div>
+          <mu-flat-button style="padding: 0  10px;" class="s-editor-btn-zoom-ctrl" :class="{'disabled':editorData.isResponsive}">
+            <i class="si-link" style="height: 90%"></i>
+          </mu-flat-button>
+           <div :class="{'disabled':editorData.isResponsive}" style="display: contents; width: 50px;">
+             <div class="label-item p-r">H:</div> 
+              <input :class="{'disabled':editorData.isResponsive}" :disabled="editorData.isResponsive" v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
+          </div>
+          <!-- <div class="tool-item-group-content">
+            <input ref="zoomInp" @blur="zoom()" @keydown.enter="zoom()" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'"/>
+          </div>
+          <mu-flat-button class="s-editor-btn-zoom-ctrl" @click="zoom('in')">
+            <i class="si-zoomin" style="height: 90%"></i>
+          </mu-flat-button> -->
        </div>
      </div>
     <div class="tool-item tool-item-group" slot="left">
@@ -45,8 +47,8 @@
        </div>
      </div>
      <div slot="right" class="s-responsive-right">
-       Responsive
-       <toggle-button @change="watchChanges" :value="selectedtemplate.isResponsive" :sync="true" :color="{checked: '#009d70',unchecked:'#333333'}"/>
+       <div style="margin-right: 10px;">Responsive</div> 
+       <toggle-button  style="margin-right: 10px;" @change="watchChanges" :value="selectedtemplate.isResponsive" :sync="true" :color="{checked: '#009d70',unchecked:'#333333'}"/>
         <!-- <mu-switch label="Responsive" labelLeft class="thumbs"/> -->
         <mu-raised-button :disabled="!selectedtemplate.isResponsive" :label="selectedtemplate.selectedRatio !== '' ? selectedtemplate.selectedRatio : 'Original Size'" @click="openModal"/> 
      </div>
@@ -255,6 +257,7 @@ export default {
 .s-responsive-right {
   margin-right: 15px;
   height: 70%;
+  display: contents;
 }
 .s-editor-btn-zoom-ctrl {
   padding: 0;
@@ -308,7 +311,8 @@ export default {
 .tool-item-group-content {
   padding-left: 10px;
   padding-right: 10px;
-  vertical-align: middle;
+  position: relative;
+  display: block;
 }
 .default-inp {
   width: auto;
