@@ -894,3 +894,16 @@ input[type='number'] {
 .snack-bar-bottom {
     bottom: -100px;
 }
+
+.disabled {
+    opacity: 0.21;
+}
+
+input[disabled="disabled"] {
+    opacity: 0.21!important;
+}
+
+.div-inp {
+    background-color: #333333;
+    padding: 6px;
+}

@@ -4,7 +4,7 @@
 <side-bar @openWindow="openWindow"></side-bar>
   <div class="editor-container" ref="editorContainer">
     <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
-    <div class="zoom-container">
+    <div class="zoom-container" tabindex="0">
         <div class="editor-box" ref="editorBox"
           :style="{width: canvasData.isResponsive ? canvasData.activeSize.width + 'px': canvasData.width + 'px', 
           height: canvasData.isResponsive ? canvasData.activeSize.height + 'px':canvasData.height + 'px', 
@@ -32,6 +32,9 @@
   <div class="v-lrl2 g-lines" ref="vlrl2"
     :style="{width: '2px', height: (parseInt(canvasData.height) + (100)) + 'px'}">
   </div>
+  <!-- <div class="offset-line" ref="vlrl3"
+    :style="{width: '2px', height: (parseInt(canvasData.height) + parseInt(100)) + 'px'}">
+  </div> -->
   <!-- Ruler Lines -->
 
   <!-- Grid Lines -->
@@ -48,6 +51,7 @@ import Siderbar from '../template/sidebar'
 import selectionBox from './layer'
 import gridlineHelper from '../../helpers/ruler-guidelines.js'
 import layerCloner from '../../helpers/layer-cloner.js'
+import editorCanvasHelper  from '../../helpers/editor-canvas.helper.js'
 export default {
   name: 'Editor',
   data (){
@@ -77,9 +81,10 @@ export default {
   methods: {
     openWindow (val) {
         this.targetElement = val
-        console.log('openWindow:',val)
+        // console.log('targetElement', val)
+        // console.log('openWindow:',val)
         setTimeout(()=>{
-        this.isWindowOpen = val[0]
+          this.isWindowOpen = val[0]
         },100)
         // this.$emit('isOpen',true)
     },
@@ -91,6 +96,9 @@ export default {
 
       var bounds1 = this.$refs.editorContainer.getBoundingClientRect();
       var bounds2 = this.$refs.editorBox.getBoundingClientRect();
+      // this.$refs.vlrl3.style.left = bounds2.left - 1 + 'px';
+      // this.$refs.vlrl3.style.top = bounds2.top - 51 + 'px';
+      // this.$refs.vlrl3.style.display = 'block';
       setTimeout(() => {
         // console.log(layerData, bounds);
         if (layerData) {
@@ -115,11 +123,16 @@ export default {
           this.$refs.vlrl2.style.top = (bounds2.top - 50) + 'px';
 
           layerCloner.cloneElement(layerData);
+
+          // show the offset limit border
+          // this.$refs.vlrl3.style.visi
         } else {
           this.$refs.hhl1.style.display="none";
           this.$refs.hhl2.style.display="none";
           this.$refs.vlrl1.style.display="none";
           this.$refs.vlrl2.style.display="none";
+
+          //  this.$refs.vlrl3.style.display = 'none';
 
           layerCloner.removeElement();
         }
@@ -137,6 +150,15 @@ export default {
 }
 </script>
 <style scoped>
+.offset-line {
+  border-left: 2px dashed violet;
+  position: absolute;
+  height: 500px;
+  width: 2px;
+  left: 500px;
+  top: 0px;
+  z-index: 1;
+}
 .g-lines {
   z-index: 1;
 }
@@ -196,8 +218,7 @@ export default {
     height: 80vh;
     overflow: auto;
     margin-bottom: 20px;
-    /* background: red;
-    border: 2px solid blue; */
+    outline: none;
 }
 </style>
 

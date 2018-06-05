@@ -46,7 +46,7 @@ export default {
       type: Number
     },
     rotation: {
-      type: Number
+      type: String
     },
     fixedProportion: {
       type: Boolean,
