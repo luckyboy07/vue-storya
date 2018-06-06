@@ -1,7 +1,10 @@
 <template>
 <div>
-<headers style="z-index: 999"></headers>
-<side-bar @openWindow="openWindow"></side-bar>
+   <mu-popup position="top" :overlay="false" popupClass="demo-popup-top" :open="topPopup">
+    Save
+  </mu-popup>
+<headers style="z-index: 999" @popupSave="popupSave"></headers>
+<side-bar @openWindow="openWindow" ></side-bar>
   <div class="editor-container" ref="editorContainer">
     <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
     <div class="zoom-container" tabindex="0">
@@ -19,6 +22,7 @@
   </div>
   <modal></modal>
   <responsive-modal></responsive-modal>
+  <preview-modal></preview-modal>
   <!-- Ruler Lines -->
   <div class="h-lrl1 g-lines" ref="hhl1"
     :style="{width: (parseInt(canvasData.width) + parseInt(400)) + 'px', height: '2px'}">
@@ -45,6 +49,7 @@
 import colorpicker from '../../components/editor/color-picker'
 import imageModal from '../../components/layer-modal/image-modal'
 import responsiveModal from '../../components/modal-responsive/modal'
+import previewModal from '../../components/layer-modal/preview-modal'
 import {mapGetters} from 'vuex'
 import Header from '../template/header'
 import Siderbar from '../template/sidebar'
@@ -58,7 +63,8 @@ export default {
     return {
       isWindowOpen: false,
       initposition: '360 / -80',
-      targetElement: null
+      targetElement: null,
+      topPopup: false
     }
   },
   components: {
@@ -67,7 +73,8 @@ export default {
     layer: selectionBox,
     modal: imageModal,
     responsiveModal,
-    colorPicker: colorpicker
+    colorPicker: colorpicker,
+    previewModal
   },
   computed: {
     ...mapGetters({
@@ -156,6 +163,13 @@ export default {
       if(evt.key === 'Escape' && this.isWindowOpen) {
         this.isWindowOpen = false
       }
+    },
+    popupSave(val){
+      console.log('popupSave',val)
+      this.topPopup = val
+      setTimeout(()=>{
+      this.topPopup = false
+      },2000)
     }
   },
   watch: {
@@ -168,7 +182,7 @@ export default {
   },
 }
 </script>
-<style scoped>
+<style >
 .offset-line {
   border-left: 2px dashed violet;
   position: absolute;
@@ -238,6 +252,16 @@ export default {
     overflow: auto;
     margin-bottom: 20px;
     outline: none;
+}
+.demo-popup-top {
+  width: 100%;
+  opacity: .8;
+  height: 48px;
+  line-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 375px;
 }
 </style>
 

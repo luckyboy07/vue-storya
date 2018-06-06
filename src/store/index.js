@@ -23,7 +23,9 @@ export const store = new Vuex.Store({
             selectedRatio: '',
             activeSize: {},
             ratios: [],
-            layers: []
+            layers: [],
+            templateSelected: {},
+            tabSelected: ''
         },
         // auto save status
         // 0: no changes
@@ -319,14 +321,14 @@ export const store = new Vuex.Store({
             Vue.localStorage.set('layers', JSON.stringify(state.layers))
         },
         selectTemplate: (state, payload) => {
-            let template = state.canvasData
-            template = payload
-            template.zoom = 100
-            template.isResponsive = false
-            template.selectedRatio = ''
-            template.ratios = []
-            template.layers = []
-            template.activeSize = {}
+            console.log('payload;',payload)
+            let template = state.canvasData 
+            template.bgColor = payload.bgColor
+            template.file_name = payload.file_name
+            template.project_name = payload.project_name
+            template.height = payload.height
+            template.width = payload.width
+            template.templateSelected = payload.templateSelected
             Vue.localStorage.set('canvas', JSON.stringify(template))
         },
         setAutosaveData: (state, data) => {

@@ -1,5 +1,6 @@
 <template>
 <div>
+  
   <mu-appbar class="header-tools editor-tools">
     <mu-flat-button id="btn" class="save-menu-btn" labelPosition="before" 
       label="Save" slot="left" icon="keyboard_arrow_down"
@@ -10,23 +11,23 @@
       <input @change="filenameChanged" ref="filename" v-model="selectedtemplate.file_name" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
     </div>
     <!-- end: Project Name -->
-    <div class="tool-item tool-item-group" slot="left">
-       <div class="label-item" :class="{'disabled':editorData.isResponsive}">Selected Canvas Size</div>
+    <div class="tool-item tool-item-group" slot="left" :class="{'disabls': selectedtemplate.isResponsive}">
+       <div class="label-item">Selected Canvas Size</div>
        <div class="tool-item-group-content" style="width: 260px; display: flex">
          <div class="tool-item-group-content" style="width: 106px; display: flex">
-            <div class="label-item p-r" :class="{'disabled':editorData.isResponsive}">W:</div> 
-            <input v-model="selectedtemplate.width" :class="{'disabled':editorData.isResponsive}" :disabled="editorData.isResponsive" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
+            <div class="label-item p-r">W:</div> 
+            <input v-model="selectedtemplate.width"  @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
            </div>
            <div class="tool-item-group-content">
             <div class="label-item">
-              <mu-flat-button class="s-editor-btn-zoom-ctrl" :class="{'disabled':editorData.isResponsive}">
+              <mu-flat-button class="s-editor-btn-zoom-ctrl">
                 <i class="si-link" style="height: 90%"></i>
               </mu-flat-button>
             </div>
            </div>
            <div class="tool-item-group-content" style="width: 106px; display: flex;">
-            <div class="label-item p-r" :class="{'disabled':editorData.isResponsive}">H:</div> 
-            <input :class="{'disabled':editorData.isResponsive}" :disabled="editorData.isResponsive" v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
+            <div class="label-item p-r">H:</div> 
+            <input v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
            </div>
        </div>
      </div>
@@ -37,14 +38,14 @@
             <i class="si-zoomout" style="height: 90%"></i>
           </mu-flat-button>
           <div class="tool-item-group-content">
-            <input ref="zoomInp" @blur="zoom()" @keydown.enter="zoom()" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'"/>
+            <input disabled="true" v-model="selectedtemplate.zoom" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
           </div>
           <mu-flat-button class="s-editor-btn-zoom-ctrl" @click="zoom('in')">
             <i class="si-zoomin" style="height: 90%"></i>
           </mu-flat-button>
        </div>
      </div>
-     <div slot="right" class="s-responsive-right">
+     <div slot="left">
        Responsive
        <toggle-button @change="watchChanges" :value="selectedtemplate.isResponsive" :sync="true" :color="{checked: '#009d70',unchecked:'#333333'}"/>
         <!-- <mu-switch label="Responsive" labelLeft class="thumbs"/> -->
@@ -66,8 +67,7 @@
       <mu-divider inset class="temp-action-item-divider"/>
       <mu-menu-item value="3" title="Save As Template" @click="SaveTemplate()"/>
       <mu-divider inset class="temp-action-item-divider"/>
-      <mu-menu-item value="4" title="Export as HTML" @click="exportContent()"/>
-      <mu-menu-item value="4" title="Export as Image" @click="ExportImage()"/>
+      <mu-menu-item value="4" title="Export" @click="exportContent()"/>
     </mu-icon-menu>
 </div>
 </template>
@@ -98,10 +98,7 @@ import customMenu from '../menus/custom-menu'
 import {mapGetters,mapActions} from 'vuex'
 import zoomHelper from '../../helpers/zoom.helper.js'
 import exportHelper from '../../helpers/import-export.helper.js'
-import browserHelper from '../../helpers/browser.js'
 import ToggleButton from '../switchButton/button'
-import dom2image from 'dom-to-image'
-import appHelper from '../../helpers/app.helper';
 export default {
   name: 'editor-tools',
   props:['selectedtemplate'],
@@ -120,9 +117,6 @@ export default {
   },
   beforeMount() {
     zoomHelper.adjustCanvasAndLayerDimension(this.selectedtemplate);
-  },
-  mounted() {
-    this.$refs.zoomInp.value = this.selectedtemplate.zoom + '%';
   },
   methods: {
      ...mapGetters(['getExportContent', 'template']),
@@ -159,21 +153,13 @@ export default {
       this.$emit('onResize', {with:  this.$refs.width.value, height:  this.$refs.height.value});
     },
     zoom(zoomType) {
-      var value = !this.$refs.zoomInp.value ?  this.selectedtemplate.zoom :  parseInt(this.$refs.zoomInp.value.replace('%', ''));
-      if (!zoomType) {
-        // handle enter or unfocus (blur)
-         this.selectedtemplate.zoom = value;
+      if (zoomType === 'in') {
+        this.selectedtemplate.zoom = this.selectedtemplate.zoom + this.selectedtemplate.zoomIncrease;
       } else {
-        if (zoomType === 'in') {
-          this.selectedtemplate.zoom = value + this.selectedtemplate.zoomIncrease;
-        } else {
-          if ((this.selectedtemplate.zoom - this.selectedtemplate.zoomIncrease) > 0) {
-            this.selectedtemplate.zoom = value - this.selectedtemplate.zoomIncrease;
-          }
+        if ((this.selectedtemplate.zoom - this.selectedtemplate.zoomIncrease) > 0) {
+          this.selectedtemplate.zoom = this.selectedtemplate.zoom - this.selectedtemplate.zoomIncrease;
         }
       }
-      
-      this.$refs.zoomInp.value = this.selectedtemplate.zoom + '%';
       this.savetoLocalstorage()
     },
     SaveContent() {
@@ -181,13 +167,15 @@ export default {
       if(this.selectedtemplate.isResponsive){
         for(let i = 0;i < ratios.length;i++){
             if(this.selectedtemplate.selectedRatio === ratios[i].name) {
-              console.log('ratios',ratios[i])
-              ratios[i].layers = this.selectedtemplate.layers
+              ratios[i].layers = JSON.parse(JSON.stringify(this.selectedtemplate.layers))
               this.updateLayers(ratios[i].layers)
             }
         }
+       
         console.log('selectedtemplate:',this.selectedtemplate)
       }
+        console.log('ASDASD')
+       this.$emit('openPopup',true)
       this.savetoLocalstorage()
       // alert('Save As');
     },
@@ -196,7 +184,6 @@ export default {
     },
     exportContent() {
       console.log('Exporting....')
-      // console.log(JSON.stringify( this.getExportContent()));
       exportHelper.exportTemplate();
       console.log('Export finished')
     },
@@ -210,50 +197,27 @@ export default {
     },
     watchChanges(evt) {
       this.selectedtemplate.isResponsive = evt.value
+      console.log('this.layer:',this.selectedtemplate)
+      let layers = this.selectedtemplate.layers
+      let ratios = this.selectedtemplate.ratios
+      if (!this.selectedtemplate.isResponsive && this.selectedtemplate.selectedRatio) {
+          for (let i=0;i<layers.length;i++) {
+              layers[i].x = 100
+              layers[i].y = 100
+          }
+      }else if(this.selectedtemplate.isResponsive && this.selectedtemplate.selectedRatio) {
+          for (let i=0;i<ratios.length;i++) {
+             if(this.selectedtemplate.selectedRatio === ratios[i].name){
+                  this.selectedtemplate.layers = JSON.parse(JSON.stringify(ratios[i].layers))
+                  console.log('ratios[i].layers:',ratios[i].layers)
+                  this.updateLayers(this.selectedtemplate.layers)
+             } 
+          }
+      }
       this.savetoLocalstorage()
     },
-     beforeClose () {
+    beforeClose () {
       console.log('close')
-     },
-     ExportImage() {
-      var oldMargin = '';
-      var elem = document.getElementsByClassName('editor-box')[0];
-      // fixed error on margin
-      if (browserHelper.isChrome() || browserHelper.isOpera()) {
-        oldMargin = elem.style.marginLeft;
-        elem.style.marginLeft = '0px';
-      }
-      // if zoom level is not 100%
-      if (this.editorData.zoom !== 100) {
-        elem.style.zoom = '100%';
-        elem.style["-moz-transform"] = "scale(1)"
-      }
-      dom2image.toPng(elem, {
-        width: this.editorData.width, 
-        height: this.editorData.height, 
-        bgcolor: this.editorData.bgColor
-      }).then((dataUri) => {
-        if (this.editorData.zoom !== 100) {
-          elem.style.zoom = this.editorData.zoom / 100;
-          elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
-        }
-        // restore margin after
-        if (browserHelper.isChrome() || browserHelper.isOpera()) {
-            elem.style.marginLeft = oldMargin;
-        }
-        var link = document.createElement('a');
-        link.download = "export-" + appHelper.generateGUID() + '.png';
-        link.href = dataUri;
-        // fixed on firefox not downloading
-        // explicitly append the a tag to work
-        if (browserHelper.isFirefox()) {
-          document.body.appendChild(link);
-        }
-        link.click();
-        if (browserHelper.isFirefox()) {
-          document.body.removeChild(link);
-        }
-      });
     }
   },
   computed: {
@@ -265,10 +229,6 @@ export default {
 }
 </script>
 <style scoped>
-.s-responsive-right {
-  margin-right: 15px;
-  height: 70%;
-}
 .s-editor-btn-zoom-ctrl {
   padding: 0;
 }
@@ -343,6 +303,10 @@ background-color: red!important;
 }
 .mu-switch input[type="checkbox"]:checked+.mu-switch-wrapper .mu-switch-track {
   background-color: #009d70 !important;
+}
+.disabls {
+    pointer-events: none;
+    opacity: 0.4;
 }
 </style>
 

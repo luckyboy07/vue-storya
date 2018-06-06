@@ -1,12 +1,23 @@
 <template>
   <div>
     <div class="s-create-tab-btns">
-      <mu-raised-button @click="tabClicked(0)" label="Templates" class="s-tab-btn" :class="selectedTab === 0 ? 's-primary-btn' : 's-default-btn'"/>
-      <mu-raised-button @click="tabClicked(1)" label="Projects" class="s-tab-btn" :class="selectedTab === 1 || selectedTab === 3 ? 's-primary-btn' : 's-default-btn'"/>
-      <mu-raised-button @click="tabClicked(2)" label="Assets" class="s-tab-btn" :class="selectedTab === 2 ? 's-primary-btn' : 's-default-btn'"/>
+      <mu-raised-button @click="tabClicked(0)" label="Recent" class="s-tab-btn" :class="selectedTab === 0 ? 's-primary-btn' : 's-default-btn'"/>
+      <mu-raised-button @click="tabClicked(1)" label="Templates" class="s-tab-btn" :class="selectedTab === 1 ? 's-primary-btn' : 's-default-btn'"/>
+      <mu-raised-button @click="tabClicked(2)" label="Projects" class="s-tab-btn" :class="selectedTab === 2 || selectedTab === 3 ? 's-primary-btn' : 's-default-btn'"/>
+      <mu-raised-button @click="tabClicked(3)" label="Assets" class="s-tab-btn" :class="selectedTab === 3 ? 's-primary-btn' : 's-default-btn'"/>
     </div>
     <div class="s-tab-content">
       <div v-if="selectedTab === 0">
+        <mu-grid-list :cols="5" :padding="10" :cellHeight="300">
+          <mu-grid-tile v-for="(tile, index) in tempData" :key="index" v-if="tile.id !== '-1'">
+            <mu-flat-button class="tem-avatar" @click="handleItemClick(tile, 'template', $event)">
+              <img v-if="tile.id !== '-1'" class="tem-avatar" :src="tile.avatar"/>
+              <div v-if="tile.id === '-1'" class="blank-template"><div>{{tile.name}}</div></div>
+            </mu-flat-button>
+          </mu-grid-tile>
+        </mu-grid-list>
+      </div>
+      <div v-if="selectedTab === 1">
         <mu-grid-list :cols="5" :padding="10" :cellHeight="300">
           <mu-grid-tile v-for="(tile, index) in tempData" :key="index">
             <mu-flat-button class="tem-avatar" @click="handleItemClick(tile, 'template', $event)">
@@ -16,7 +27,7 @@
           </mu-grid-tile>
         </mu-grid-list>
       </div>
-       <div v-if="selectedTab === 1">
+       <div v-if="selectedTab === 2">
          <mu-grid-list :cols="5" :padding="10" :cellHeight="300">
           <mu-grid-tile v-for="(tile, index) in projData" :key="index">
             <mu-flat-button class="tem-avatar" @click="handleItemClick(tile, 'project', $event)">
@@ -30,7 +41,7 @@
           </mu-grid-tile>
         </mu-grid-list>
       </div>
-      <div v-if="selectedTab === 2">
+      <div v-if="selectedTab === 3">
          <mu-grid-list :cols="5" :padding="10" :cellHeight="300">
           <mu-grid-tile v-for="(tile, index) in asstsData" :key="index">
             <mu-flat-button class="tem-avatar" @click="handleItemClick(tile, 'asset', $event)">
@@ -41,7 +52,7 @@
         </mu-grid-list>
       </div>
       <!-- When opening a project -->
-      <div v-if="selectedTab === 3">
+      <div v-if="selectedTab === 4">
         <div class="s-create-tab-action-header">
           <mu-flat-button slot="left" class="s-create-tab-action-header-btn-back" @click="backButtonClicked">
             <i class="si-keyboard-arrow-left" style="height: 100%; margin-bottom: 7px;"></i>

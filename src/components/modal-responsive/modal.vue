@@ -47,7 +47,7 @@
                     <mu-raised-button label="Landscape" fullWidth  v-no-ripple/>
                     <div class="tab-detail">
                          <mu-grid-list :cols="1" :padding="10" class="gridlist">
-                               <div style="display: flex;"  v-for="(item,i) in banners"  :key="i" v-if="item.category === 'landscape'"  @click="selectRatio(item,$event)">
+                               <div style="display: flex;"  v-for="(item,i) in banners"  :key="i" v-if="item.category === 'landscape'"  @click="selectRatio(item,'banners',$event)">
                                     <!-- :class="{'overlay-active': item.selected}" -->
                                      <div class="overlay" :class="{'overlay-active': item.selected || item.isPick}">
                                         <img v-if="item.isPick" class="img-overlay" src="../../assets/icoCheck.png" />
@@ -66,9 +66,9 @@
                          </mu-grid-list>
                     </div>  
                     <mu-raised-button label="Portrait" fullWidth  v-no-ripple/>
-                     <div class="tab-detail">
-                          <mu-grid-list :cols="1" :padding="10" class="gridlist">
-                            <div style="display: flex;"  v-for="(item,i) in banners"  :key="i" v-if="item.category === 'Portrait'" @click="selectRatio(item, $event)">
+                    <div class="tab-detail">
+                        <mu-grid-list :cols="1" :padding="10" class="gridlist">
+                            <div style="display: flex;"  v-for="(item,i) in banners"  :key="i" v-if="item.category === 'Portrait'" @click="selectRatio(item,'banners',$event)">
                                 <div class="overlay" :class="{'overlay-active': item.selected || item.isPick}">
                                         <img v-if="item.isPick" class="img-overlay" src="../../assets/icoCheck.png" />
                                 </div>
@@ -83,8 +83,8 @@
                                     </span>
                                 </mu-grid-tile>
                             </div>
-                         </mu-grid-list>
-                     </div>  
+                        </mu-grid-list>
+                    </div>  
                 </div>
             </div>
             </div>
@@ -92,70 +92,45 @@
                  <div class="tabs">
                     <mu-raised-button label="Portrait" fullWidth  v-no-ripple/>
                     <div class="tab-detail">
-                            <mu-grid-list  :cols="5" :padding="10" class="gridlist">
-                                <div style="display: flex;"  v-for="(item,i) in screens"  :key="i"  @click="selectRatio(item, $event)">
-                                     <div class="overlay" :class="{'overlay-active': item.selected}">
-                                        <img class="img-overlay" src="../../assets/icoCheck.png" />
-                                </div>
-                                <mu-grid-tile  style="width: 160px; padding: 5px 20px;border: 1px solid rgba(117, 117, 117, 0.48);margin-right: 10px;"> 
-                                    <div class="img-container">
-                                        <img :src="item.image" style="width: 50%;"/>
+                        <mu-grid-list  :cols="5" :padding="10" class="gridlist">
+                           <div style="display: flex;" v-for="(item,i) in screens" :key="i"  v-if="item.category === 'portrait'"  @click="selectRatio(item, 'screens', $event)">
+                                    <!-- :class="{'overlay-active': item.selected}" -->
+                                     <div class="overlay" :class="{'overlay-active': item.selected || item.isPick}">
+                                        <img v-if="item.isPick" class="img-overlay" src="../../assets/icoCheck.png" />
                                     </div>
-                                    <span class="img-detail">
-                                        Portrait
-                                        <br>
-                                        {{item.name}}
-                                    </span>
-                                </mu-grid-tile>
-                                </div>
-                            </mu-grid-list>
+                                    <mu-grid-tile  style="width: 160px; padding: 5px 20px;border: 1px solid rgba(117, 117, 117, 0.48);margin-right: 10px;"> 
+                                        <div class="img-container">
+                                            <img :src="item.image" class="avatar"/>
+                                        </div>
+                                        <span class="img-detail">
+                                            Landscape
+                                            <br>
+                                            {{item.name}}
+                                        </span>
+                                    </mu-grid-tile>
+                            </div>
+                        </mu-grid-list>
                     </div>
                     <mu-raised-button label="Landscape" fullWidth  v-no-ripple/>
                     <div class="tab-detail">
-                         <mu-flex justify-content="center">
-                            <mu-grid-list  :cols="5" :padding="10" class="gridlist">
-                                <mu-grid-tile  style="width: 160px; padding: 5px 20px;border: 1px solid rgba(117, 117, 117, 0.48);margin-right: 10px;margin-bottom: 10px;"> 
-                                    <div class="img-container">
-                                        <img src="../../assets/tile_grey.png" class="avatar"/>
+                        <mu-grid-list  :cols="5" :padding="10" class="gridlist">
+                             <div style="display: flex;" v-for="(item,i) in screens" :key="i"  v-if="item.category === 'landscape'"  @click="selectRatio(item, 'screens', $event)">
+                                    <!-- :class="{'overlay-active': item.selected}" -->
+                                     <div class="overlay" :class="{'overlay-active': item.selected || item.isPick}">
+                                        <img v-if="item.isPick" class="img-overlay" src="../../assets/icoCheck.png" />
                                     </div>
-                                    <span class="img-detail">
-                                        Portrait
-                                        <br>
-                                        2:1
-                                    </span>
-                                </mu-grid-tile>
-                                <mu-grid-tile  style="width: 160px; padding: 5px 20px;border: 1px solid rgba(117, 117, 117, 0.48);margin-right: 10px;margin-bottom: 10px;"> 
-                                    <div class="img-container">
-                                        <img src="../../assets/tile_grey.png" class="avatar"/>
-                                    </div>
-                                    <span class="img-detail">
-                                        Portrait
-                                        <br>
-                                        2:1
-                                    </span>
-                                </mu-grid-tile>
-                                <mu-grid-tile  style="width: 160px; padding: 5px 20px;border: 1px solid rgba(117, 117, 117, 0.48);margin-right: 10px;margin-bottom: 10px;"> 
-                                    <div class="img-container">
-                                        <img src="../../assets/tile_grey.png" class="avatar"/>
-                                    </div>
-                                    <span class="img-detail">
-                                        Portrait
-                                        <br>
-                                        2:1
-                                    </span>
-                                </mu-grid-tile>
-                                <mu-grid-tile  style="width: 160px; padding: 5px 20px;border: 1px solid rgba(117, 117, 117, 0.48);margin-right: 10px;margin-bottom: 10px;"> 
-                                    <div class="img-container">
-                                        <img src="../../assets/tile_grey.png" class="avatar"/>
-                                    </div>
-                                    <span class="img-detail">
-                                        Portrait
-                                        <br>
-                                        2:1
-                                    </span>
-                                </mu-grid-tile>
-                            </mu-grid-list>
-                         </mu-flex>
+                                    <mu-grid-tile  style="width: 160px; padding: 5px 20px;border: 1px solid rgba(117, 117, 117, 0.48);margin-right: 10px;"> 
+                                        <div class="img-container">
+                                            <img :src="item.image" class="avatar"/>
+                                        </div>
+                                        <span class="img-detail">
+                                            Landscape
+                                            <br>
+                                            {{item.name}}
+                                        </span>
+                                    </mu-grid-tile>
+                            </div>
+                        </mu-grid-list>
                     </div>
                  </div>
             </div>
@@ -184,162 +159,218 @@ export default {
             currentElement: {}, 
             isRemove: false,
             modal: {},
-            banners: [{
-                id:1,
-                name:'2-1',
-                image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
-                category: 'landscape',
-                selected: false,
-                width:'600',
-                height: '300',
-                isPick: false
-               
-            },{
-                id:2,
-                name:'4-1',
-                image: 'http://www.mediafire.com/convkey/9a28/s99999yq9554453zg.jpg',
-                category: 'landscape',
-                selected: false,
-                width: '1200',
-                height: '300' ,
-                isPick: false
-            },
-            {
-                id:3,
-                name:'6-1',
-                image: 'http://www.mediafire.com/convkey/9fa4/b7zz7y84hhgi13pzg.jpg',
-                category: 'landscape',
-                selected: false,
-                width:'1800',
-                height: '300',
-                isPick: false
-            },{
-                id:4,
-                name:'8-1',
-                image: 'http://www.mediafire.com/convkey/1eca/yocyt55k27878e3zg.jpg',
-                category: 'landscape',
-                selected: false,
-                width:'2400',
-                height: '300',
-                isPick: false
-            },{
-                id:5,
-                name:'10-1',
-                image: 'http://www.mediafire.com/convkey/5f48/patm8ybc1cul96gzg.jpg',
-                category: 'landscape',
-                selected: false,
-                width:'3000',
-                height: '300',
-                isPick: false
-            },{
-                id:6,
-                name:'1-2',
-                image: 'http://www.mediafire.com/convkey/2f40/09ur7jt75i6r06mzg.jpg',
-                category: 'Portrait',
-                selected: false,
-                width: '300',
-                height: '600',
-                isPick: false
-            },{
-                id:7,
-                name:'1-4',
-                image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
-                category: 'Portrait',
-                selected: false,
-                width:'300',
-                height: '1200',
-                isPick: false
-            },{
-                id:8,
-                name:'1-6',
-                image: 'http://www.mediafire.com/convkey/4936/5q5rv4rmtyr1gaizg.jpg',
-                category: 'Portrait',
-                selected: false,
-                width:'300',
-                height: '1800',
-                isPick: false
-            },{
-                id:9,
-                name:'1-8',
-                image: 'http://www.mediafire.com/convkey/9deb/91xnbpic37dw4y2zg.jpg',
-                category: 'Portrait',
-                selected: false,
-                width:'300',
-                height: '2400',
-                isPick: false
-            },{
-                id:10,
-                name:'1-10',
-                image: 'http://www.mediafire.com/convkey/ca09/0w9feiopqg0e168zg.jpg',
-                category: 'Portrait',
-                selected: false,
-                width:'300',
-                height: '3000',
-                isPick: false
-            }],
-            screens: [{
-                id:1,
-                name:'3:2',
-                image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
-                category: 'portrait',
-                selected: false,
-                width:'',
-                height: '',
-                isPick: false
-              
-            },
-            {
-                id:2,
-                name:'4:3',
-                image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
-                category: 'portrait',
-                selected: false,
-                width:'',
-                height: '',
-                isPick: false
-               
-            },
-            {
-                id:3,
-                name:'5:3',
-                image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
-                category: 'portrait',
-                selected: false,
-                width:'',
-                height: '',
-                isPick: false
-               
-            },{
-                id:4,
-                name:'16:9',
-                image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
-                category: 'portrait',
-                selected: false,
-                width:'',
-                height: '',
-                isPick: false
-               
-            },{
-                id:5,
-                name:'16:10',
-                image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
-                category: 'portrait',
-                selected: false,
-                width:'',
-                height: '',
-                isPick: false
-               
-            },{
-                id:6,
-                name:'16:5:9',
-                image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
-                category: 'portrait',
-                selected: false,
-                width:'',
-                height: '',
-                isPick: false
-               
-            }]
+             screens: [
+                {
+                    id:1,
+                    name:'2:3',
+                    image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
+                    category: 'portrait',
+                    selected: false,
+                    width:'',
+                    height: '',
+                    isPick: false
+                
+                },
+                {
+                    id:2,
+                    name:'3:4',
+                    image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
+                    category: 'portrait',
+                    selected: false,
+                    width:'',
+                    height: '',
+                    isPick: false
+                
+                },
+                {
+                    id:3,
+                    name:'3:5',
+                    image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
+                    category: 'portrait',
+                    selected: false,
+                    width:'',
+                    height: '',
+                    isPick: false
+                
+                },{
+                    id:4,
+                    name:'9:16',
+                    image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
+                    category: 'portrait',
+                    selected: false,
+                    width:'',
+                    height: '',
+                    isPick: false
+                
+                },{
+                    id:5,
+                    name:'10:16',
+                    image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
+                    category: 'portrait',
+                    selected: false,
+                    width:'',
+                    height: '',
+                    isPick: false
+                
+                },{
+                    id:6,
+                    name:'9:18.5',
+                    image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
+                    category: 'portrait',
+                    selected: false,
+                    width:'',
+                    height: '',
+                    isPick: false
+                
+                },{
+                    id:7,
+                    name:'3:2',
+                    image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
+                    category: 'landscape',
+                    selected: false,
+                    width:'',
+                    height: '',
+                    isPick: false
+                
+                },
+                {
+                    id:8,
+                    name:'4:3',
+                    image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
+                    category: 'landscape',
+                    selected: false,
+                    width:'',
+                    height: '',
+                    isPick: false
+                
+                },{
+                    id:9,
+                    name:'5:3',
+                    image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
+                    category: 'landscape',
+                    selected: false,
+                    width:'',
+                    height: '',
+                    isPick: false
+                
+                },{
+                    id:10,
+                    name:'16:9',
+                    image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
+                    category: 'landscape',
+                    selected: false,
+                    width:'',
+                    height: '',
+                    isPick: false
+                
+                },{
+                    id:11,
+                    name:'16:10',
+                    image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
+                    category: 'landscape',
+                    selected: false,
+                    width:'',
+                    height: '',
+                    isPick: false
+                
+                }
+            ],
+            banners: [
+                {
+                    id:1,
+                    name:'2-1',
+                    image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
+                    category: 'landscape',
+                    selected: false,
+                    width:'600',
+                    height: '300',
+                    isPick: false
+                
+                },{
+                    id:2,
+                    name:'4-1',
+                    image: 'http://www.mediafire.com/convkey/9a28/s99999yq9554453zg.jpg',
+                    category: 'landscape',
+                    selected: false,
+                    width: '1200',
+                    height: '300' ,
+                    isPick: false
+                },
+                {
+                    id:3,
+                    name:'6-1',
+                    image: 'http://www.mediafire.com/convkey/9fa4/b7zz7y84hhgi13pzg.jpg',
+                    category: 'landscape',
+                    selected: false,
+                    width:'1800',
+                    height: '300',
+                    isPick: false
+                },{
+                    id:4,
+                    name:'8-1',
+                    image: 'http://www.mediafire.com/convkey/1eca/yocyt55k27878e3zg.jpg',
+                    category: 'landscape',
+                    selected: false,
+                    width:'2400',
+                    height: '300',
+                    isPick: false
+                },{
+                    id:5,
+                    name:'10-1',
+                    image: 'http://www.mediafire.com/convkey/5f48/patm8ybc1cul96gzg.jpg',
+                    category: 'landscape',
+                    selected: false,
+                    width:'3000',
+                    height: '300',
+                    isPick: false
+                },{
+                    id:6,
+                    name:'1-2',
+                    image: 'http://www.mediafire.com/convkey/2f40/09ur7jt75i6r06mzg.jpg',
+                    category: 'Portrait',
+                    selected: false,
+                    width: '300',
+                    height: '600',
+                    isPick: false
+                },{
+                    id:7,
+                    name:'1-4',
+                    image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
+                    category: 'Portrait',
+                    selected: false,
+                    width:'300',
+                    height: '1200',
+                    isPick: false
+                },{
+                    id:8,
+                    name:'1-6',
+                    image: 'http://www.mediafire.com/convkey/4936/5q5rv4rmtyr1gaizg.jpg',
+                    category: 'Portrait',
+                    selected: false,
+                    width:'300',
+                    height: '1800',
+                    isPick: false
+                },{
+                    id:9,
+                    name:'1-8',
+                    image: 'http://www.mediafire.com/convkey/9deb/91xnbpic37dw4y2zg.jpg',
+                    category: 'Portrait',
+                    selected: false,
+                    width:'300',
+                    height: '2400',
+                    isPick: false
+                },{
+                    id:10,
+                    name:'1-10',
+                    image: 'http://www.mediafire.com/convkey/ca09/0w9feiopqg0e168zg.jpg',
+                    category: 'Portrait',
+                    selected: false,
+                    width:'300',
+                    height: '3000',
+                    isPick: false
+                }
+            ],
+           
         }
     },
     mounted () {
@@ -350,25 +381,31 @@ export default {
         beforeOpen (event) {
             this.modal = event
             this.template = event.params.data
-            console.log('this.template:',this.template)
             let ratios = this.template.ratios
             if(this.template.selectedRatio !== '') {
-               this.refresh()
+               this.refresh(this.activeTab)
             }
-            console.log('this.banners:',this.banners)
         },
          tabChanged(val) {
+             console.log("ASDASD",val)
             this.activeTab = val;
+            this.refresh(this.activeTab)
         },
          closeModal () {
            this.$modal.hide('responsive-modal')
          },
-        selectRatio (item, event) {
-            for(let i = 0;i < this.banners.length;i++){
-                    if(item.id === this.banners[i].id){
-                        this.banners[i].selected = true
+        selectRatio (item, name,event) {
+            let arr = []
+            if(name === 'banners') {
+                arr = this.banners
+            }else{
+                arr = this.screens
+            }
+            for(let i = 0;i < arr.length;i++){
+                    if(item.id === arr[i].id){
+                        arr[i].selected = true
                     }else {
-                        this.banners[i].selected = false
+                        arr[i].selected = false
                     }
             }
             if(item.isPick) {
@@ -378,13 +415,13 @@ export default {
             }
             this.currentElement = event
             this.ratioSelected = item
+            this.ratioSelected.tabSelected = name
             this.showMenu = this.ratioSelected != null;
             this.removeSelectedfn(item,event)
         },
         removeSelectedfn (item, event) {
                 event.stopPropagation()
                 let popover = document.getElementsByClassName('tem-action-menu')[0]
-                console.log('popover:',popover)
                 popover.style.zIndex = '9999'
                 if(item.isPick) {
                     event.path[1].appendChild(popover)
@@ -408,33 +445,36 @@ export default {
                 height: this.ratioSelected.height,
                 width: this.ratioSelected.width
             }
-            console.log('this.template:',this.template)
-            console.log('this.ratioSelected:',this.ratioSelected)
             if(this.template.selectedRatio !== '') {
                 var index = this.template.ratios.findIndex((e)=>{return this.template.selectedRatio === e.name})
                 this.ratioSelected.layers = JSON.parse(JSON.stringify(this.template.ratios[index].layers))
             }else{
                 let newlayer = this.template.layers
-                console.log('newlayer;',newlayer)
                 this.ratioSelected.layers = JSON.parse(JSON.stringify(newlayer))
             }
-            console.log('this.ratioSelected.layers:',this.ratioSelected)
             this.updateLayers(this.ratioSelected.layers)
             this.ratioSelected.isPick = true
             this.template.ratios.push(this.ratioSelected)
             this.currentElement.target.removeAttribute('style')
             this.showMenu = false
             this.template.selectedRatio = this.ratioSelected.name
+            this.template.tabSelected = this.ratioSelected.tabSelected
             this.$localStorage.set('canvas',JSON.stringify(this.template))
             this.closeModal()
         },
         removeDesign (){
             let ratios = this.template.ratios
-            for(let i = 0;i < this.banners.length;i++){
+            let arr = []
+            if(this.template.tabSelected === 'banners'){
+                arr = this.banners
+            }else {
+                arr = this.screens
+            }
+            for(let i = 0;i < arr.length;i++){
                 for(let i = 0;i < ratios.length;i++) {
-                    if(this.ratioSelected.name === this.banners[i].name && this.ratioSelected.id === this.banners[i].id){
-                        this.banners[i].selected = false
-                        this.banners[i].isPick = false
+                    if(this.ratioSelected.name === arr[i].name && this.ratioSelected.id === arr[i].id){
+                        arr[i].selected = false
+                        arr[i].isPick = false
                     }
                 }
             }
@@ -444,19 +484,24 @@ export default {
             this.$localStorage.set('canvas',JSON.stringify(this.template))
             this.showMenu = false
         },
-        refresh() {
+        refresh(activeTab) {
             let ratios = this.template.ratios
-            for(let i = 0;i < this.banners.length;i++){
+            let arr = []
+            if (activeTab === '1'){
+                arr = this.banners
+            }else {
+                arr = this.screens
+            }
+            for(let i = 0;i < arr.length;i++){
                 if(ratios.length>0){
                     for(let j = 0;j < ratios.length;j++){
-                        if(ratios[j].name === this.banners[i].name){
-                            this.banners[i].selected = true
-                            this.banners[i].isPick = true
+                        if(ratios[j].name === arr[i].name){
+                            arr[i].selected = true
+                            arr[i].isPick = true
                         }
                     }
                 }
             } 
-            console.log('this.banners:',this.banners)
         },
         open () {
              this.template.activeSize = {
@@ -464,11 +509,11 @@ export default {
                 width: this.ratioSelected.width
             }
             this.template.selectedRatio = this.ratioSelected.name
+            this.template.tabSelected = this.ratioSelected.tabSelected
             this.$localStorage.set('canvas',JSON.stringify(this.template))
             this.closeModal()
         },
         beforeClose () {
-            console.log('close')
             this.showMenu = false
             this.ratioSelected.selected = false
             this.ratioSelected.isPick = false
