@@ -3,99 +3,40 @@
 */
 export default {
     deltaAllowance: 0,
-    // Zooming-in to a a specific value
-    zoomIn(type, canvas, layers, val, zoomIncrease) {
-        var delta = val + this.deltaAllowance;
-        if (type === 'in') {
-            delta = val > 100 ? delta : ((delta - this.deltaAllowance) - zoomIncrease * 2) - zoomIncrease;
-            delta /= 2;
-            canvas.width = canvas.width + delta;
-            canvas.height = canvas.height + delta;
-            // layers
-            for (var i = 0; i < layers.length; i++) {
-                // dimensions
-                layers[i].width = layers[i].width + delta;
-                layers[i].height = layers[i].height + delta;
-                // position
+    zoom: 0,
+    scale: 1,
+    execZoom(type, canvasData, layers) {
+        var delta = type === 'in' ? -100 : 100;
+        this.zoom += delta;
+        this.zoom = Math.min(this.zoom, 30);
+        this.zoom = Math.max(this.zoom, -30);
+        this.scale = Math.pow(1.2, (this.zoom / 30));
 
-                switch (layers[i].type) {
-                    case "shape":
-                        // change border size of shape layer when zooming
-                        layers[i].attributes.borderWidth = layers[i].attributes.borderWidth + (delta / 100)
-                        break;
-                    case "image":
-                        layers[i].attributes.borderWidth = layers[i].attributes.borderWidth + (delta / 100)
-                        break;
-                    case "text":
-                        // change font size
-                        layers[i].attributes.fontSize += (delta / 100) + 10;
-                        break;
-                    case "audio":
-                        break;
-                    case "video":
-                        break;
-                    default:
-                        break;
-                }
-            }
-        } else {
-            delta = val + zoomIncrease > 100 ? delta + zoomIncrease : delta - this.deltaAllowance - zoomIncrease * 2;
-            delta /= 2;
-            canvas.width = canvas.width - delta;
-            canvas.height = canvas.height - delta;
-            for (var i = 0; i < layers.length; i++) {
-                layers[i].width = layers[i].width - delta;
-                layers[i].height = layers[i].height - delta;
+        canvasData.width = Math.round(canvasData.width / this.scale);
+        canvasData.height = Math.round(canvasData.height / this.scale);
 
-                switch (layers[i].type) {
-                    case "shape":
-                        // change border size of shape layer when zooming
-                        layers[i].attributes.borderWidth = layers[i].attributes.borderWidth - (delta / 100)
-                        break;
-                    case "image":
-                        layers[i].attributes.borderWidth = layers[i].attributes.borderWidth - (delta / 100)
-                        break;
-                    case "text":
-                        // change font size
-                        layers[i].attributes.fontSize -= (delta / 100) + 10;
-                        break;
-                    case "audio":
-                        break;
-                    case "video":
-                        break;
-                    default:
-                        break;
+
+        for (var i = 0; i < layers.length; i++) {
+            // dimensions
+            layers[i].width /= this.scale;
+            layers[i].height /= this.scale;
+            layers[i].x /= this.scale;
+            layers[i].y /= this.scale
+            console.log(layers[i].type, layers[i])
+
+            // adjust shadow size to all layers
+            // layers[i].attributes.shadowSize /= this.scale;
+            console.log(layers[i].attributes.shadowSize)
+
+            if (layers[i].type === 'shape') {
+                // only circle and rectangle is currenly supported with border
+                if (layers[i].attributes.shape === 'Circle' || layers[i].attributes.shape === 'Reactangle') {
+                    layers[i].attributes.borderWidth /= this.scale;
                 }
+            } else if (layers[i].type === 'text') {
+                // font size
+                layers[i].attributes.fontSize /= this.scale
             }
         }
-    },
-    // use this whenn creating layer
-    adjustCanvasAndLayerDimension(canvasData, layer) {
-        // if (canvasData.zoom === 100) {
-        //     return;
-        // }
-        // var delta = canvasData.zoom + this.deltaAllowance;
-        // // increase and decrease dimension base on canvasData.zoom
-        // if (canvasData.zoom > 100) {
-        //     delta = canvasData.zoom > 100 ? delta : ((delta - this.deltaAllowance) - canvasData.zoomIncrease * 2) - canvasData.zoomIncrease;
-        //     delta /= 2;
-        //     canvasData.width = canvasData.width + delta;
-        //     canvasData.height = canvasData.height + delta;
-
-        //     if (layer) {
-        //         layer.width = layer.width + delta;
-        //         layer.height = layer.height + delta;
-        //     }
-        // } else {
-        //     delta = canvasData.zoom + canvasData.zoomIncrease > 100 ? delta + canvasData.zoomIncrease : delta - this.deltaAllowance - canvasData.zoomIncrease * 2;
-        //     delta /= 2;
-        //     canvasData.width = canvasData.width - delta;
-        //     canvasData.height = canvasData.height - delta;
-
-        //     if (layer) {
-        //         layer.width = layer.width - delta;
-        //         layer.height = layer.height - delta;
-        //     }
-        // }
     },
 }

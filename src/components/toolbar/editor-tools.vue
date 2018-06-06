@@ -39,7 +39,7 @@
             <i class="si-zoomout" style="height: 90%"></i>
           </mu-flat-button>
           <div class="tool-item-group-content">
-            <input ref="zoomInp" @blur="zoom()" @keydown.enter="zoom()" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'"/>
+            <input disabled ref="zoomInp" @blur="zoom()" @keydown.enter="zoom()" style="width: 100%; text-align: center; opacity: 1!important;" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'"/>
           </div>
           <mu-flat-button class="s-editor-btn-zoom-ctrl" @click="zoom('in')">
             <i class="si-zoomin" style="height: 90%"></i>
@@ -120,9 +120,9 @@ export default {
       rightTop: {horizontal: 'left', vertical: 'top'},
     }
   },
-  beforeMount() {
-    zoomHelper.adjustCanvasAndLayerDimension(this.selectedtemplate);
-  },
+  // beforeMount() {
+  //   zoomHelper.adjustCanvasAndLayerDimension(this.selectedtemplate);
+  // },
   mounted() {
     this.$refs.zoomInp.value = this.selectedtemplate.zoom + '%';
   },
@@ -160,6 +160,8 @@ export default {
       this.$emit('onResize', {with:  this.$refs.width.value, height:  this.$refs.height.value});
     },
     zoom(zoomType) {
+      if (zoomType === 'out' && this.selectedtemplate.zoom <= 0) return;
+
       var value = !this.$refs.zoomInp.value ?  this.selectedtemplate.zoom :  parseInt(this.$refs.zoomInp.value.replace('%', ''));
       if (!zoomType) {
         // handle enter or unfocus (blur)
@@ -168,11 +170,12 @@ export default {
         if (zoomType === 'in') {
           this.selectedtemplate.zoom = value + this.selectedtemplate.zoomIncrease;
         } else {
-          if ((this.selectedtemplate.zoom - this.selectedtemplate.zoomIncrease) > 0) {
+          if (this.selectedtemplate.zoom > 0) {
             this.selectedtemplate.zoom = value - this.selectedtemplate.zoomIncrease;
           }
         }
       }
+      zoomHelper.execZoom(zoomType, this.editorData, this.layers);
       
       this.$refs.zoomInp.value = this.selectedtemplate.zoom + '%';
       this.savetoLocalstorage()

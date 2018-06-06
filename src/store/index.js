@@ -111,7 +111,7 @@ export const store = new Vuex.Store({
                     borderWidth: 0,
                     borderStyle: 'Solid',
                     borderColor: 'red',
-                    shadowSize: '',
+                    shadowSize: 0,
                     shadowColor: '',
                     backgroundImageUri: '',
                     backgroundImageRepeat: 'none',
@@ -148,7 +148,7 @@ export const store = new Vuex.Store({
                     borderWidth: 0,
                     borderStyle: 'None',
                     borderColor: '',
-                    shadowSize: '1',
+                    shadowSize: 1,
                     shadowColor: '',
                     objectFit: 'Scale-Down',
                     filterBlur: 0
