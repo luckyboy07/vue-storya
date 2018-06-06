@@ -13,14 +13,14 @@
     <div class="tool-item tool-item-group" slot="left" >
        <div class="label-item" :class="{'disabled':editorData.isResponsive|| selectedtemplate.zoom !== 100}">Selected Canvas Size</div>
        <div class="tool-item-group-content" style="display: flex">
-          <div :class="{'disabled':editorData.isResponsive|| selectedtemplate.zoom !== 100}" style="display: contents; width: 106px;">
+          <div :class="{'disabled':editorData.isResponsive|| selectedtemplate.zoom !== 100}" style="display: flex; width: 106px;">
              <div class="label-item p-r">W:</div> 
               <input v-model="selectedtemplate.width" :disabled="editorData.isResponsive || selectedtemplate.zoom !== 100" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
           </div>
           <mu-flat-button style="padding: 0  10px;" class="s-editor-btn-zoom-ctrl" :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}">
             <i class="si-link" style="height: 90%"></i>
           </mu-flat-button>
-           <div :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}" style="display: contents; width: 50px;">
+           <div :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}" style="display: flex; width: 106px;">
              <div class="label-item p-r">H:</div> 
               <input :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}" :disabled="editorData.isResponsive || selectedtemplate.zoom !== 100" v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
           </div>
@@ -48,7 +48,7 @@
      </div>
      <div slot="right" class="s-responsive-right">
        <div style="margin-right: 10px; user-select: none">Responsive</div> 
-       <toggle-button  style="margin-right: 10px;" @change="watchChanges" :value="selectedtemplate.isResponsive" :sync="true" :color="{checked: '#009d70',unchecked:'#333333'}"/>
+       <toggle-button  style="margin-right: 10px; font-size: 10px;" @change="watchChanges" :value="selectedtemplate.isResponsive" :sync="true" :color="{checked: '#009d70',unchecked:'#333333'}"/>
         <!-- <mu-switch label="Responsive" labelLeft class="thumbs"/> -->
         <mu-raised-button :disabled="!selectedtemplate.isResponsive" :label="selectedtemplate.selectedRatio !== '' ? selectedtemplate.selectedRatio : 'Original Size'" @click="openModal"/> 
      </div>
@@ -308,7 +308,7 @@ export default {
 .s-responsive-right {
   margin-right: 15px;
   height: 70%;
-  display: contents;
+  display: flex;
 }
 .s-editor-btn-zoom-ctrl {
   padding: 0;

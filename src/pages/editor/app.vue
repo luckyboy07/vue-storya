@@ -210,6 +210,7 @@ export default {
 .editor-container {
     padding-top: 22px;
     padding-left: 345px;
+    user-select: none;
 }
 .editor-container .editor-box {
     width: 508px;
@@ -240,7 +241,7 @@ export default {
     overflow: auto;
     margin-bottom: 20px;
     outline: none;
-    
+     user-select: none;
 }
 </style>
 
