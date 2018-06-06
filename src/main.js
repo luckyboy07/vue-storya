@@ -21,6 +21,7 @@ import RotatableResizer from './components/draggable/rotatable-resizer'
 import { store } from './store/index.js'
 import VueLocalStorage from 'vue-localstorage'
 import ToggleButton from './components/switchButton/button'
+import browserHelper from './helpers/browser'
 // import 'muse-components/styles/base.less'
 Vue.use(MuseUI)
 Vue.use(VueWindow)
@@ -34,6 +35,11 @@ Vue.use(LayerComponent)
 Vue.component('multiselect', Multiselect)
 Vue.component('rotatable-resizer', RotatableResizer)
     /* eslint-disable no-new */
+    // filter if mobile
+    // just show something abno hahaha
+if (browserHelper.isMobile()) {
+    router.push({ name: 'Namanday' });
+}
 new Vue({
     el: '#app',
     router,
