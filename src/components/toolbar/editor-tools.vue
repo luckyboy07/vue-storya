@@ -327,6 +327,7 @@ export default {
 }
 .p-r {
   padding-right: 5px;
+  opacity: inherit;
 }
 .mu-icon-button {
   width: auto;

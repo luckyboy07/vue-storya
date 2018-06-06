@@ -10,7 +10,7 @@ export default {
         this.zoom += delta;
         this.zoom = Math.min(this.zoom, 30);
         this.zoom = Math.max(this.zoom, -30);
-        this.scale = Math.pow(1.2, (this.zoom / 30));
+        this.scale = Math.pow(1.09, (this.zoom / 30));
 
         canvasData.width = Math.round(canvasData.width / this.scale);
         canvasData.height = Math.round(canvasData.height / this.scale);
@@ -22,7 +22,6 @@ export default {
             layers[i].height /= this.scale;
             layers[i].x /= this.scale;
             layers[i].y /= this.scale
-            console.log(layers[i].type, layers[i])
 
             // adjust shadow size to all layers
             // layers[i].attributes.shadowSize /= this.scale;
