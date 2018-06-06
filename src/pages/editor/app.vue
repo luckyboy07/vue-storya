@@ -12,7 +12,7 @@
           '-moz-transform': 'scale(' + (canvasData.zoom / 100) +')',
           backgroundColor:canvasData.bgColor,}">
         <div class="canvas-wrap">
-            <layer @scaling="layerScaling" :layers="layers"></layer>
+            <layer @scaling="layerScaling" :layers="filterLayer(layers)"></layer>
         </div>
       </div>
     </div>
@@ -72,12 +72,12 @@ export default {
     })
   },
   mounted() {
+    document.addEventListener('keydown', this.keydownEventHandler);
     //gridlineHelper.createGridLines(this.canvasData, this.$refs.editorBox);
   },
   methods: {
     openWindow (val) {
         this.targetElement = val
-        console.log('openWindow:',val)
         setTimeout(()=>{
         this.isWindowOpen = val[0]
         },100)
@@ -124,6 +124,26 @@ export default {
           layerCloner.removeElement();
         }
       }, 30);
+    },
+    filterLayer (layers){
+      let canvas = this.canvasData
+      if(!this.canvasData.isResponsive){
+        return layers
+      }else {
+        if(canvas.ratios.length > 0) {
+          var index = canvas.ratios.findIndex((e)=>{return canvas.selectedRatio === e.name})
+          layers = canvas.ratios[index].layers
+          return layers
+        }else{
+          return layers
+        }
+        
+      }
+    },
+    keydownEventHandler(evt){
+      if(evt.key === 'Escape' && this.isWindowOpen) {
+        this.isWindowOpen = false
+      }
     }
   },
   watch: {

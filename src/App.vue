@@ -32,7 +32,7 @@ export default {
       idleTimeout: 1000, // the idle timeout to trigger the 'idleTimer' event. The value is in milliseconds
       idleTime: 0, // the idle time in seconds
       idleTimer: null, // the idle timer function. Assigned to a variable to be able to use it such as stopping the timer
-      allowedKeys: ['y', 'z', 'Delete'], // allowed keys
+      allowedKeys: ['y', 'z', 'Delete','Escape'], // allowed keys
       autoSaveInfoDisplayDuration: 0,
     }
   },
@@ -105,6 +105,8 @@ export default {
             undoRedo.add(appHelper.cloneLayer(item.sourceLayer), 'delete');
             this.$_removeFromArray(this.layers, item.id)
           }
+        }else if (evt.key === 'Escape') {
+           this.$emit('pickerisShow',false)
         }
       }
     },

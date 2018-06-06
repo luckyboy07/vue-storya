@@ -1,5 +1,5 @@
 <template>
-<modal name="responsive-modal" transition="pop-out" :width="900" :height="600" @before-open="beforeOpen">
+<modal name="responsive-modal" transition="pop-out" :width="900" :height="600" @before-open="beforeOpen" @before-close="beforeClose">
    <div class="box">
        <!-- :value="activeTab" @change="tabChanged"  -->
         <div class="tabss">
@@ -47,7 +47,7 @@
                     <mu-raised-button label="Landscape" fullWidth  v-no-ripple/>
                     <div class="tab-detail">
                          <mu-grid-list :cols="1" :padding="10" class="gridlist">
-                               <div style="display: flex;"  v-for="(item,i) in banners"  :key="i" v-if="item.category === 'landscape'"  @click.stop="selectRatio(item,$event)">
+                               <div style="display: flex;"  v-for="(item,i) in banners"  :key="i" v-if="item.category === 'landscape'"  @click="selectRatio(item,$event)">
                                     <!-- :class="{'overlay-active': item.selected}" -->
                                      <div class="overlay" :class="{'overlay-active': item.selected || item.isPick}">
                                         <img v-if="item.isPick" class="img-overlay" src="../../assets/icoCheck.png" />
@@ -161,15 +161,17 @@
             </div>
              <div ref="tempPopupMenu" class="tem-action-menu" :class="[showMenu ? 'tem-action-menu-shown' : 'tem-action-menu-hidden']">
                 <mu-list style="padding: 0">
-                    <mu-list-item title="Add current design" class="tem-action-item" @click.stop="addCurentDesign()"/>
+                    <mu-list-item v-if="!isRemove" title="Add current design" class="tem-action-item" @click.stop="addCurentDesign()"/>
+                    <mu-list-item  v-else title="Open" class="tem-action-item" @click.stop="open()"/>
                     <mu-divider inset class="temp-action-item-divider"/>
-                    <mu-list-item title-class="cust-title" title="Remove design" class="tem-action-item" @click="removeDesign()"/>
+                    <mu-list-item v-if="isRemove" title-class="cust-title" title="Remove design" class="tem-action-item" @click.stop="removeDesign()"/>
                 </mu-list>
             </div>
        </div>
 </modal>
 </template>
 <script>
+import {mapActions} from 'vuex'
 export default {
     name: 'responsiveModal',
     data () {
@@ -180,6 +182,8 @@ export default {
             showMenu: false,
             ratioSelected: {},
             currentElement: {}, 
+            isRemove: false,
+            modal: {},
             banners: [{
                 id:1,
                 name:'2-1',
@@ -342,21 +346,14 @@ export default {
         let grid = document.getElementsByClassName('list-container')
     },
     methods: {
+        ...mapActions(['updateLayers']),
         beforeOpen (event) {
+            this.modal = event
             this.template = event.params.data
             console.log('this.template:',this.template)
             let ratios = this.template.ratios
             if(this.template.selectedRatio !== '') {
-               for(let i = 0;i < this.banners.length;i++){
-                   if(ratios.length>0){
-                        for(let j = 0;j < ratios.length;j++){
-                            if(ratios[j].name === this.banners[i].name){
-                                this.banners[i].selected = true
-                                this.banners[i].isPick = true
-                            }
-                        }
-                   }
-                } 
+               this.refresh()
             }
             console.log('this.banners:',this.banners)
         },
@@ -368,30 +365,31 @@ export default {
          },
         selectRatio (item,$event) {
             for(let i = 0;i < this.banners.length;i++){
-                if(item.id === this.banners[i].id){
-                    this.banners[i].selected = true
-                }else {
-                    this.banners[i].selected = false
-                }
+                    if(item.id === this.banners[i].id){
+                        this.banners[i].selected = true
+                    }else {
+                        this.banners[i].selected = false
+                    }
             }
-            console.log('event;',event)
+            if(item.isPick) {
+                this.isRemove = true
+            }else{
+                this.isRemove = false
+            }
             this.currentElement = event
-            this.template.selectedRatio = item.name
-            this.showMenu = this.ratioSelected != null;
             this.ratioSelected = item
-            
-            console.log('event;',event)
+            this.showMenu = this.ratioSelected != null;
             this.removeSelectedfn(item,event)
         },
         removeSelectedfn (item, event) {
-                // event.stopPropagation()
+                event.stopPropagation()
                 let popover = document.getElementsByClassName('tem-action-menu')[0]
                 console.log('popover:',popover)
                 popover.style.zIndex = '9999'
                 if(item.isPick) {
-                event.path[1].appendChild(popover)
+                    event.path[1].appendChild(popover)
                 }else{
-                this.currentElement.target.appendChild(popover)
+                    this.currentElement.target.appendChild(popover)
                 }
                 // event.srcElement.style.background = 'rgba(0, 0, 0, 0.29)'
                 // for(let i = 0; this.gridElements.length > i; i++){
@@ -412,16 +410,68 @@ export default {
             }
             console.log('this.template:',this.template)
             console.log('this.ratioSelected:',this.ratioSelected)
+            if(this.template.selectedRatio !== '') {
+                var index = this.template.ratios.findIndex((e)=>{return this.template.selectedRatio === e.name})
+                this.ratioSelected.layers = JSON.parse(JSON.stringify(this.template.ratios[index].layers))
+            }else{
+                let newlayer = this.template.layers
+                console.log('newlayer;',newlayer)
+                this.ratioSelected.layers = JSON.parse(JSON.stringify(newlayer))
+            }
+            console.log('this.ratioSelected.layers:',this.ratioSelected)
+            this.updateLayers(this.ratioSelected.layers)
             this.ratioSelected.isPick = true
             this.template.ratios.push(this.ratioSelected)
             this.currentElement.target.removeAttribute('style')
             this.showMenu = false
+            this.template.selectedRatio = this.ratioSelected.name
             this.$localStorage.set('canvas',JSON.stringify(this.template))
-            
             this.closeModal()
         },
         removeDesign (){
-
+            let ratios = this.template.ratios
+            for(let i = 0;i < this.banners.length;i++){
+                for(let i = 0;i < ratios.length;i++) {
+                    if(this.ratioSelected.name === this.banners[i].name && this.ratioSelected.id === this.banners[i].id){
+                        this.banners[i].selected = false
+                        this.banners[i].isPick = false
+                    }
+                }
+            }
+            var index = ratios.findIndex((e)=>{return this.ratioSelected.name === e.name})
+            ratios.splice(index,1)
+            this.template.ratios = ratios
+            this.$localStorage.set('canvas',JSON.stringify(this.template))
+            this.showMenu = false
+        },
+        refresh() {
+            let ratios = this.template.ratios
+            for(let i = 0;i < this.banners.length;i++){
+                if(ratios.length>0){
+                    for(let j = 0;j < ratios.length;j++){
+                        if(ratios[j].name === this.banners[i].name){
+                            this.banners[i].selected = true
+                            this.banners[i].isPick = true
+                        }
+                    }
+                }
+            } 
+            console.log('this.banners:',this.banners)
+        },
+        open () {
+             this.template.activeSize = {
+                height: this.ratioSelected.height,
+                width: this.ratioSelected.width
+            }
+            this.template.selectedRatio = this.ratioSelected.name
+            this.$localStorage.set('canvas',JSON.stringify(this.template))
+            this.closeModal()
+        },
+        beforeClose () {
+            console.log('close')
+            this.showMenu = false
+            this.ratioSelected.selected = false
+            this.ratioSelected.isPick = false
         }
     }
 }
