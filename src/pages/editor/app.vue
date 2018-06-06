@@ -241,7 +241,19 @@ export default {
     overflow: auto;
     margin-bottom: 20px;
     outline: none;
-     user-select: none;
+    user-select: none;
 }
+@media screen and (max-heght: 728px) {
+  body {
+    background: red
+  }
+}
+
+/* fixed scrollbar on smaller screen size */
+@media(min-height:600px) {
+  .zoom-container {
+    height: 70vh;
+  }
+ }
 </style>
 
