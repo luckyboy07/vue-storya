@@ -17,7 +17,7 @@
     <div class="rr-bar rr-ord-s" key="bar-s"></div>
     <div class="rr-bar rr-ord-e" key="bar-e"></div>
     <div class="rr-bar rr-ord-w" key="bar-w"></div>
-    <div v-show="zoom > 60" class="rr-rotate-handle" v-if="rotatable" ref="rotateHandle">
+    <div class="rr-rotate-handle" v-if="rotatable" ref="rotateHandle">
       <div v-show="!isRotating" class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Rotate</div>
     </div>
     <div class="rr-handle rr-ord-n" v-if="hasHandle('n')" key="ord-n">

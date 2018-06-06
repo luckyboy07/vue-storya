@@ -25,8 +25,6 @@ export default {
 
             // adjust shadow size to all layers
             // layers[i].attributes.shadowSize /= this.scale;
-            console.log(layers[i].attributes.shadowSize)
-
             if (layers[i].type === 'shape') {
                 // only circle and rectangle is currenly supported with border
                 if (layers[i].attributes.shape === 'Circle' || layers[i].attributes.shape === 'Reactangle') {

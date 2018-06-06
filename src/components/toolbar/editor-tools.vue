@@ -11,18 +11,18 @@
     </div>
     <!-- end: Project Name -->
     <div class="tool-item tool-item-group" slot="left" >
-       <div class="label-item" :class="{'disabled':editorData.isResponsive}">Selected Canvas Size</div>
+       <div class="label-item" :class="{'disabled':editorData.isResponsive|| selectedtemplate.zoom !== 100}">Selected Canvas Size</div>
        <div class="tool-item-group-content" style="display: flex">
-          <div :class="{'disabled':editorData.isResponsive}" style="display: contents; width: 106px;">
+          <div :class="{'disabled':editorData.isResponsive|| selectedtemplate.zoom !== 100}" style="display: contents; width: 106px;">
              <div class="label-item p-r">W:</div> 
-              <input v-model="selectedtemplate.width" :disabled="editorData.isResponsive" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
+              <input v-model="selectedtemplate.width" :disabled="editorData.isResponsive || selectedtemplate.zoom !== 100" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
           </div>
-          <mu-flat-button style="padding: 0  10px;" class="s-editor-btn-zoom-ctrl" :class="{'disabled':editorData.isResponsive}">
+          <mu-flat-button style="padding: 0  10px;" class="s-editor-btn-zoom-ctrl" :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}">
             <i class="si-link" style="height: 90%"></i>
           </mu-flat-button>
-           <div :class="{'disabled':editorData.isResponsive}" style="display: contents; width: 50px;">
+           <div :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}" style="display: contents; width: 50px;">
              <div class="label-item p-r">H:</div> 
-              <input :class="{'disabled':editorData.isResponsive}" :disabled="editorData.isResponsive" v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
+              <input :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}" :disabled="editorData.isResponsive || selectedtemplate.zoom !== 100" v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
           </div>
           <!-- <div class="tool-item-group-content">
             <input ref="zoomInp" @blur="zoom()" @keydown.enter="zoom()" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'"/>
