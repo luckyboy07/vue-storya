@@ -22,7 +22,8 @@ export const store = new Vuex.Store({
             isResponsive: false,
             selectedRatio: '',
             activeSize: {},
-            ratios: []
+            ratios: [],
+            layers: []
         },
         // auto save status
         // 0: no changes
@@ -292,8 +293,10 @@ export const store = new Vuex.Store({
             Vue.set(state, 'layers', layers)
         },
         // updates the layer list
-        updateLayers: (state) => {
-            // Vue.set(state, 'layers', newLayers)
+        updateLayers: (state, layers) => {
+            console.log('SET NEW LAYER')
+            let newLayers = layers
+            Vue.set(state, 'layers', newLayers)
         },
         removeGlobalLayer: (state, _layerId) => {
             Vue.set(state, 'removableId', _layerId)
@@ -325,6 +328,7 @@ export const store = new Vuex.Store({
             template.isResponsive = false
             template.selectedRatio = ''
             template.ratios = []
+            template.layers = []
             template.activeSize = {}
             Vue.localStorage.set('canvas', JSON.stringify(template))
         },
@@ -417,6 +421,9 @@ export const store = new Vuex.Store({
         },
         selectTemplate: ({ commit }, payload) => {
             commit('selectTemplate', payload)
+        },
+        updateLayers: ({ commit }, payload) => {
+            commit('updateLayers', payload)
         }
     }
     //   strict: process.env.NODE_ENV !== 'production'

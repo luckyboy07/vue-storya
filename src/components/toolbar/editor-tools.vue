@@ -97,7 +97,7 @@
       - occurs when the 'Add Canvas' button was clicked
 */
 import customMenu from '../menus/custom-menu'
-import {mapGetters} from 'vuex'
+import {mapGetters,mapActions} from 'vuex'
 import zoomHelper from '../../helpers/zoom.helper.js'
 import exportHelper from '../../helpers/import-export.helper.js'
 import browserHelper from '../../helpers/browser.js'
@@ -128,6 +128,7 @@ export default {
   },
   methods: {
      ...mapGetters(['getExportContent', 'template']),
+     ...mapActions(['updateLayers']),
     handleChange(val) {
       this.value = val;
     },
@@ -181,7 +182,19 @@ export default {
       this.savetoLocalstorage()
     },
     SaveContent() {
-      alert('Save As');
+      let ratios = this.selectedtemplate.ratios
+      if(this.selectedtemplate.isResponsive){
+        for(let i = 0;i < ratios.length;i++){
+            if(this.selectedtemplate.selectedRatio === ratios[i].name) {
+              console.log('ratios',ratios[i])
+              ratios[i].layers = this.selectedtemplate.layers
+              this.updateLayers(ratios[i].layers)
+            }
+        }
+        console.log('selectedtemplate:',this.selectedtemplate)
+      }
+      this.savetoLocalstorage()
+      // alert('Save As');
     },
     SaveTemplate() {
        alert('Save As Template');
