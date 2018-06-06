@@ -1,13 +1,13 @@
 <template>
 <div>
   <mu-appbar class="header-tools editor-tools">
-    <mu-flat-button id="btn" class="save-menu-btn" labelPosition="before" 
+    <mu-flat-button style="width: 100px;" id="btn" class="save-menu-btn" labelPosition="before" 
       label="Save" slot="left" icon="keyboard_arrow_down"
       @click="saveButtonClicked"/>
     <!-- start: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
       <div class="tool-item-group-content label-item">File Name</div> 
-      <input @change="filenameChanged" ref="filename" v-model="selectedtemplate.file_name" spellcheck="false" style="width: 248px" class="tool-item-group-content default-inp">
+      <input @change="filenameChanged" ref="filename" v-model="selectedtemplate.file_name" spellcheck="false" style="width: 140px" class="tool-item-group-content default-inp">
     </div>
     <!-- end: Project Name -->
     <div class="tool-item tool-item-group" slot="left" >
@@ -47,10 +47,10 @@
        </div>
      </div>
      <div slot="right" class="s-responsive-right">
-       <div style="margin-right: 10px; user-select: none">Responsive</div> 
-       <toggle-button  style="margin-right: 10px; font-size: 10px;" @change="watchChanges" :value="selectedtemplate.isResponsive" :sync="true" :color="{checked: '#009d70',unchecked:'#333333'}"/>
+       <div style="margin-right: 10px; user-select: none; margin-top: 5px;">Responsive</div> 
+       <toggle-button  style="height: 100%; margin-right: 10px; margin-top: 5px;" @change="watchChanges" :value="selectedtemplate.isResponsive" :sync="true" :color="{checked: '#009d70',unchecked:'#333333'}"/>
         <!-- <mu-switch label="Responsive" labelLeft class="thumbs"/> -->
-        <mu-raised-button :disabled="!selectedtemplate.isResponsive" :label="selectedtemplate.selectedRatio !== '' ? selectedtemplate.selectedRatio : 'Original Size'" @click="openModal"/> 
+        <mu-raised-button style="font-size: 10px; height: 100%;" :disabled="!selectedtemplate.isResponsive" :label="selectedtemplate.selectedRatio !== '' ? selectedtemplate.selectedRatio : 'Original Size'" @click="openModal"/> 
      </div>
     <!-- <mu-flat-button 
       slot="right"
@@ -59,7 +59,7 @@
       <i class="material-icons">{{selectedtemplate.gridLines ? 'grid_on' :  'grid_off'}}</i>
     </mu-flat-button> -->
   </mu-appbar>
-  <mu-icon-menu menuClass="xxx" icon="" @change="handleChange" :anchorOrigin="rightTop"
+  <mu-icon-menu icon="" @change="handleChange" :anchorOrigin="rightTop"
       :targetOrigin="rightTop"
       :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
       <mu-menu-item value="0" title="Save" @click="SaveContent()"/>
@@ -69,6 +69,7 @@
       <mu-menu-item value="3" title="Save As Template" @click="SaveTemplate()"/>
       <mu-divider inset class="temp-action-item-divider"/>
       <mu-menu-item value="4" title="Export as HTML" @click="exportContent()"/>
+       <mu-divider inset class="temp-action-item-divider"/>
       <mu-menu-item value="4" title="Export as Image" @click="ExportImage()"/>
     </mu-icon-menu>
 </div>
@@ -144,7 +145,7 @@ export default {
             elem.setAttribute('style', `
               left: 10px!important; z-index: 4; background-color: #009d70!important;`);
             elem = document.getElementsByClassName('mu-menu')[0]; 
-               elem.setAttribute('style', `width: 200px!important;`);
+               elem.setAttribute('style', `width: 150px!important;`);
             // get the seconds child
             elem = document.getElementsByClassName('mu-menu-list')[0]; 
                elem.setAttribute('style', `width: auto!important;`);
