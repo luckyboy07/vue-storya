@@ -907,3 +907,16 @@ input[disabled="disabled"] {
     background-color: #333333;
     padding: 6px;
 }
+
+.mu-slider-thumb {
+    background-color: #fff;
+    color: #fff;
+}
+
+.mu-slider-track {
+    background-color: #343434;
+}
+
+.mu-slider-fill {
+    background-color: #fff;
+}

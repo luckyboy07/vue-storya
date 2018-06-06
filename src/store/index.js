@@ -381,8 +381,8 @@ export const store = new Vuex.Store({
         // canvas related data
         // this is the value of the editor's toolbar (zoom, height, width, etc.)
         getCanvasData: state => {
-            let storaged = JSON.parse(Vue.localStorage.get('canvas'))
-            state.canvasData = storaged !== null ? storaged : state.canvasData
+            // let storaged = JSON.parse(Vue.localStorage.get('canvas'))
+            // state.canvasData = storaged !== null ? storaged : state.canvasData
             return state.canvasData;
         },
         // returns the default shape layer

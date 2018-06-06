@@ -7,7 +7,7 @@ export default {
     scale: 1,
     execZoom(type, canvasData, layers) {
         var delta = type === 'in' ? -100 : 100;
-        this.zoom += delta;
+        this.zoom = delta;
         this.zoom = Math.min(this.zoom, 30);
         this.zoom = Math.max(this.zoom, -30);
         this.scale = Math.pow(1.09, (this.zoom / 30));

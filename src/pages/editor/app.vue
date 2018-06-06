@@ -205,6 +205,7 @@ export default {
     border-style: solid;
     border-color: rgb(255, 255, 255);
     border-image: initial;
+    /* margin: 50px; */
 }
 .canvas-wrap {
    /* background-color: white; */
@@ -220,6 +221,7 @@ export default {
     overflow: auto;
     margin-bottom: 20px;
     outline: none;
+    
 }
 </style>
 

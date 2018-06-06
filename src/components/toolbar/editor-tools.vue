@@ -160,7 +160,7 @@ export default {
       this.$emit('onResize', {with:  this.$refs.width.value, height:  this.$refs.height.value});
     },
     zoom(zoomType) {
-      if (zoomType === 'out' && this.selectedtemplate.zoom <= 0) return;
+      if (zoomType === 'out' && this.selectedtemplate.zoom <= 0 || zoomType === 'in' && this.selectedtemplate.zoom >= 300) return;
 
       var value = !this.$refs.zoomInp.value ?  this.selectedtemplate.zoom :  parseInt(this.$refs.zoomInp.value.replace('%', ''));
       if (!zoomType) {
@@ -187,10 +187,24 @@ export default {
        alert('Save As Template');
     },
     exportContent() {
+      var zoom = 100;
       console.log('Exporting....')
+      // if (this.editorData.zoom !== 100) {
+      //   alert('fdf')
+      //   zoom = this.editorData.zoom;
+      //   this.editorData.zoom = 100;
+      //   zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
+      // }
       // console.log(JSON.stringify( this.getExportContent()));
-      exportHelper.exportTemplate();
-      console.log('Export finished')
+      exportHelper.exportTemplate().then((val) => {
+        console.log('Export finished', true)
+        // if (zoom !== 100) {
+        //     alert('1')
+        //   this.editorData.zoom = zoom;
+        //   zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
+        // }
+      });
+      
     },
     savetoLocalstorage () {
       this.$localStorage.set('canvas',JSON.stringify(this.selectedtemplate))
@@ -208,6 +222,7 @@ export default {
       console.log('close')
      },
      ExportImage() {
+      var zoom = 100;
       var oldMargin = '';
       var elem = document.getElementsByClassName('editor-box')[0];
       // fixed error on margin
@@ -219,7 +234,12 @@ export default {
       if (this.editorData.zoom !== 100) {
         elem.style.zoom = '100%';
         elem.style["-moz-transform"] = "scale(1)"
+
+        zoom = this.editorData.zoom;
+        this.editorData.zoom = 100;
+        zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
       }
+
       dom2image.toPng(elem, {
         width: this.editorData.width, 
         height: this.editorData.height, 
@@ -228,7 +248,11 @@ export default {
         if (this.editorData.zoom !== 100) {
           elem.style.zoom = this.editorData.zoom / 100;
           elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
+
+          this.editorData.zoom = zoom;
+          zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
         }
+        
         // restore margin after
         if (browserHelper.isChrome() || browserHelper.isOpera()) {
             elem.style.marginLeft = oldMargin;
@@ -243,6 +267,17 @@ export default {
         }
         link.click();
         if (browserHelper.isFirefox()) {
+          document.body.removeChild(link);
+        }
+      }).catch(() => {
+        if (this.editorData.zoom !== 100) {
+          elem.style.zoom = this.editorData.zoom / 100;
+          elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
+        }
+         if (browserHelper.isFirefox()) {
+          document.body.appendChild(link);
+        }
+         if (browserHelper.isFirefox()) {
           document.body.removeChild(link);
         }
       });

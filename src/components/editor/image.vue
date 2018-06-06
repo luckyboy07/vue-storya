@@ -23,7 +23,7 @@ export default {
   methods: {
       getStyle () {
           let layerData = this.layerData.attributes
-          let shadows = '1px 12px '+layerData.shadowSize+'px '+layerData.shadowColor
+          let shadows = layerData.shadowSize > 0 ? '1px 12px '+layerData.shadowSize+'px '+layerData.shadowColor : ''
           return {
               borderColor: layerData.borderColor,
               borderWidth: layerData.borderWidth+'px',

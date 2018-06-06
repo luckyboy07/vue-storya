@@ -656,8 +656,13 @@ export default {
         // making responsive, cleaning html
         // var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
         // editorElem = this.$_responsiveness(editorElem);
-        var htmlContent = this.getExportingElement().outerHTML;
-        this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
+        return new Promise((res, rej) => {
+            var htmlContent = this.getExportingElement().outerHTML;
+            this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
+            setTimeout(() => {
+                res(true);
+            }, 100);
+        })
     },
     getExportingElement() {
         var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element

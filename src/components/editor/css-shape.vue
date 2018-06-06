@@ -18,7 +18,7 @@ export default {
       return {
         background: !att.isGradient ? att.color : 'linear-gradient('+att.gradientBackgroundData.rotation+'deg,'+att.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+att.gradientBackgroundData.value[0]+'%,'+att.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+att.gradientBackgroundData.value[1]+'%)' +', url('+this.data.attributes.backgroundImageUri.url+')',
         'background-blend-mode': 'multiply',
-        'boxShadow': att.shadowColor ? '1px 12px '+att.shadowSize+'px '+att.shadowColor : '',
+        'boxShadow': att.shadowSize > 0 ? att.shadowColor ? '1px 12px '+att.shadowSize+'px '+att.shadowColor : '' : '',
         'opacity': this.data.attributes.opacity,
          border: att.borderWidth + 'px ' + att.borderColor + ' ' + att.borderStyle,
       }
@@ -29,7 +29,7 @@ export default {
         'border-radius': '50%',
         background: !att.isGradient ? att.color : 'linear-gradient('+att.gradientBackgroundData.rotation+'deg,'+att.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+att.gradientBackgroundData.value[0]+'%,'+att.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+att.gradientBackgroundData.value[1]+'%)' +', url('+this.data.attributes.backgroundImageUri.url+')',
         'background-blend-mode': 'multiply',
-        'boxShadow': att.shadowColor ? '1px 12px '+att.shadowSize+'px '+att.shadowColor : '',
+        'boxShadow': att.shadowSize > 0 ? att.shadowColor ? '1px 12px '+att.shadowSize+'px '+att.shadowColor : '' : '',
         'opacity': this.data.attributes.opacity,
         border: att.borderWidth + 'px ' + att.borderColor + ' ' + att.borderStyle,
         "-webkit-filter": "blur(" + att.filterBlur + "px)",

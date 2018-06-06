@@ -152,7 +152,7 @@
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
-                <input spellcheck="false" v-model="data.attributes.shadowColor" class="input-size colorPicka">
+                <div class="div-inp input-size colorPicka">{{data.attributes.shadowColor}}</div>
                 <input spellcheck="false" class="input-size sliderInput" style="background-color:white" @click="showPicker($event,'shadow')">
                 </mu-grid-list>
               </div>
