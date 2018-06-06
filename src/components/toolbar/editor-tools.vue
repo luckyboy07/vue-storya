@@ -17,7 +17,7 @@
              <div class="label-item p-r">W:</div> 
               <input v-model="selectedtemplate.width" :disabled="editorData.isResponsive || selectedtemplate.zoom !== 100" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
           </div>
-          <mu-flat-button style="padding: 0  10px;" class="s-editor-btn-zoom-ctrl" :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}">
+          <mu-flat-button id="secretDKoMagsaba" style="padding: 0  10px;" class="s-editor-btn-zoom-ctrl" :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}">
             <i class="si-link" style="height: 90%"></i>
           </mu-flat-button>
            <div :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}" style="display: flex; width: 106px;">
@@ -126,6 +126,9 @@ export default {
   // },
   mounted() {
     this.$refs.zoomInp.value = this.selectedtemplate.zoom + '%';
+    if (browserHelper.isFirefox()) {
+      this.$el.querySelector('#secretDKoMagsaba').style.marginLeft = '20px';
+    }
   },
   methods: {
      ...mapGetters(['getExportContent', 'template']),
