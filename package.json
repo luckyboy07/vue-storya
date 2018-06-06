@@ -16,6 +16,7 @@
   "dependencies": {
     "@hscmap/vue-window": "^1.8.2",
     "axios": "^0.18.0",
+    "dom-to-image": "^2.6.0",
     "gsap": "^2.0.0",
     "less": "^2.7.2",
     "less-loader": "^2.2.3",

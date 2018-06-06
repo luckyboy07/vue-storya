@@ -54,7 +54,7 @@ export default {
         'border-left': this.data.width / 3 + 'px solid transparent',
         'border-right': this.data.width / 3 + 'px solid transparent',
         'height': '0',
-        'width': this.data.width + 'px',
+        'width': 'auto',
         'opacity': this.data.attributes.opacity,
       }
     },

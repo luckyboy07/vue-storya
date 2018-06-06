@@ -82,7 +82,7 @@
                   <!-- <input spellcheck="false" class="default-inp inp-ctrl-digits" style="margin-top: 0" v-digitsonly
                     v-append-unit="'px'" v-model="data.attributes.lineHeight" @blur="handleLineHeight($event)" @keyup.enter="handleLineHeight($event)"> -->
                     <mu-slider :max="50" v-model="data.attributes.lineHeight" class="mmslider" />
-                    <input disabled v-model="data.attributes.lineHeight" spellcheck="false" class="input-size sliderInput">
+                    <div class="div-inp input-size sliderInput">{{data.attributes.lineHeight}}</div>
                 </mu-grid-list>
                 </div>
         </mu-list-item>
@@ -90,8 +90,8 @@
           <div class="gridlist-demo-container" style="margin-top: -6px;">
             <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
             <mu-grid-list class="right">
-            <input disabled spellcheck="false" :value="data.attributes.color" class="input-size colorPicka">
-            <input  spellcheck="false" class="input-size sliderInput" :style="{backgroundColor: data.attributes.color}" @click="showPicker($event, '')">
+            <div class="div-inp input-size colorPicka">{{data.attributes.color}}</div>
+            <input spellcheck="false" class="input-size sliderInput" :style="{backgroundColor: data.attributes.color}" @click="showPicker($event, '')">
             </mu-grid-list>
           </div>
           <!-- <div ref="foregroundColor" v-show="selectedPicker === 'foregroundColor'" class="item-color-picker">
@@ -99,18 +99,18 @@
               style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
           </div> -->
         </mu-list-item>  
-        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple @click="showPicker('backgroundColor')">
+        <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container" style="margin-top: -6px;">
             <mu-grid-list class="gridlist-demo left">Background</mu-grid-list>
             <mu-grid-list class="right">
-            <input disabled spellcheck="false" :value="data.attributes.backgroundColor" class="input-size colorPicka">
-            <input disabled spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.backgroundColor}">
+            <div class="div-inp input-size colorPicka">{{data.attributes.backgroundColor}}</div>
+            <input @click="showPicker($event,'backgroundColor')" spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.backgroundColor}">
             </mu-grid-list>
           </div>
-          <div ref="backgroundColor" v-show="selectedPicker === 'backgroundColor'" class="item-color-picker">
+          <!-- <div ref="backgroundColor" v-show="selectedPicker === 'backgroundColor'" class="item-color-picker">
             <color-picker v-model="colors" @input="colorSelected" 
               style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
-          </div>
+          </div> -->
         </mu-list-item>  
         <mu-sub-header slot="nested">Border</mu-sub-header>
             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
@@ -118,7 +118,7 @@
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
                 <mu-grid-list class="right">
                   <mu-slider v-model="data.attributes.borderSize" class="mmslider" />
-                  <input disabled v-model="data.attributes.borderSize" spellcheck="false" class="input-size sliderInput">
+                  <div class="div-inp input-size sliderInput">{{data.attributes.borderSize}}</div>
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -134,8 +134,8 @@
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
-                <input disabled :value="data.attributes.borderColor" spellcheck="false" class="input-size colorPicka">
-                <input  spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.borderColor}"  @click="showPicker($event,'border')">
+                <div class="div-inp input-size colorPicka">{{data.attributes.borderColor}}</div>
+                <input spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.borderColor}"  @click="showPicker($event,'border')">
                 </mu-grid-list>
               </div>
               <div ref="borderColor" v-show="selectedPicker === 'borderColor'" class="item-color-picker">
@@ -149,16 +149,16 @@
                 <mu-grid-list class="gridlist-demo left">Size</mu-grid-list>
                 <mu-grid-list class="right">
                 <mu-slider v-model="data.attributes.shadowSize" :max="100" class="mmslider" />
-                <input disabled :value="data.attributes.shadowSize" spellcheck="false" class="input-size sliderInput">
+                <div class="div-inp input-size sliderInput">{{data.attributes.shadowSize}}</div>
                 </mu-grid-list>
               </div>
             </mu-list-item>
-             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+             <mu-list-item slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
-                <input disabled :value="data.attributes.shadowColor" spellcheck="false" class="input-size colorPicka">
-                <input  spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.shadowColor}"  @click="showPicker($event,'shadow')">
+                <div class="div-inp input-size colorPicka">{{data.attributes.shadowColor}}</div>
+                <input spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.shadowColor}"  @click="showPicker($event,'shadow')">
                 </mu-grid-list>
               </div>
               <div ref="shadowColor" v-show="selectedPicker === 'shadowColor'" class="item-color-picker">
@@ -281,8 +281,7 @@ export default {
       } 
     },
     showPicker(picker, name) {
-      console.log('picker,', picker)
-      console.log('this.data,', this.data)
+      // console.log('picker,', picker)
        this.$emit('isOpen',[true,picker.target,this.data,name])
       // this.selectedPicker = picker;
     },
@@ -334,8 +333,8 @@ export default {
     },
     getTextContent() {
       var data = this.data.content.replace(/<(?:.|\n)*?>/gm, ' ').replace(/&(?:.|\n)*?;/gm, ' ').trim();
-      if (data && data.length >= 20) {
-        return data.slice(0, 20) + '...';
+      if (data && data.length >= 15) {
+        return data.slice(0, 15) + '...';
       } 
 
       return data;

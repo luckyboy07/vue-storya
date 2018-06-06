@@ -5,7 +5,8 @@
         <i class="si-keyboard-arrow-left"></i>
       </mu-flat-button>
       <img slot="left" class="appBarIcon" src="@/assets/storya.png" alt="App Logo" style="margin-left: 10px;width: inherit;"/>
-      <mu-flat-button label="Create" slot="left" class="btn-file h-60-p" style="margin-left: 10px"/>
+      <mu-flat-button @click="createButtonClicked()" label="Create" slot="left" class="btn-file h-60-p" style="margin-left: 10px"/>
+      <mu-flat-button v-if="currentPage === 'editor'" @click="closeButtonClicked()" label="Close" slot="left" class="btn-file h-60-p"/>
       <mu-flat-button label="Help" slot="left" class="btn-file h-60-p"/>
       <div v-if="currentPage === 'editor'" slot="left" class="s-header-prj-name s-f-14" style="margin-left: 10px; width: 300px;">Project Name:</div>
       <input v-if="currentPage === 'editor'" v-model="getCanvasData.project_name" spellcheck="false" slot="left" class="default-inp" style="margin-left: 10px; width: 200px;"/>
@@ -24,10 +25,10 @@
   <mu-divider/>
   <editor-tools v-if="!hideSecondHeader" :selectedtemplate="getCanvasData"></editor-tools>
   <!-- alert modal -->
-  <mu-dialog :open="confirmOpen" title="Leave Page?">
-    <div style="font-family: Lato; font-size: 17px; color: #fff">Are you sure you want to leave this page?</div> 
-    <mu-flat-button label="Yes" slot="actions" primary @click="confirm"/>
-    <mu-flat-button label="No" slot="actions" primary @click="confirmOpen = false"/>
+  <mu-dialog :open="confirmOpen" :title="popupTitle">
+    <div style="font-family: Lato; font-size: 17px; color: #fff">{{popupMsg}}</div> 
+    <mu-flat-button label="Yes" slot="actions" primary @click="confirm(1)"/>
+    <mu-flat-button label="No" slot="actions" primary @click="confirm(2)"/>
   </mu-dialog>
 </div>
 </template>
@@ -52,6 +53,9 @@ export default {
     return {
       currentPage: '',
       confirmOpen: false,
+      confirmAction: '',
+      popupTitle: '',
+      popupMsg: '',
     }
   },
   computed: {
@@ -63,14 +67,45 @@ export default {
   methods: {
     backButtonClicked() {
      if (this.$route.path.replace('/', '')  === 'editor') {
+       this.confirmAction = 'back';
+        this.popupTitle = 'Leave Page?';
+        //Are you sure you want to leave this page?
+        this.popupMsg = 'Really Nigguh?';
        this.confirmOpen = true;
      } else {
       this.$router.go(-1);
      }
     },
-    confirm() {
+    createButtonClicked() {
+      this.popupTitle = 'Save Workplace?';
+      this.popupMsg = 'Really Nigguh?';
+      this.confirmAction = 'create';
+      this.confirmOpen = true;
+    },
+    closeButtonClicked() {
+      this.popupTitle = 'Save Workplace?';
+      this.popupMsg = 'Really Nigguh?';
+      this.confirmAction = 'close';
+      this.confirmOpen = true;
+    },
+    confirm(status) {
       this.confirmOpen = false;
-       this.$router.go(-1);
+      switch (this.confirmAction) {
+        case 'back':
+          this.$router.go(-1);
+        break;
+        case 'create':
+          if (status === 1) {
+            // save
+          }
+          this.$router.push({name: 'New Storya'})
+        break;
+        case 'close':
+          alert('Okay nigguh')
+        break;
+        default:
+        break;
+      }
     },
     getInfo() {
       if (this.autoData === '0') {

@@ -68,7 +68,7 @@
                     <mu-raised-button label="Portrait" fullWidth  v-no-ripple/>
                      <div class="tab-detail">
                           <mu-grid-list :cols="1" :padding="10" class="gridlist">
-                            <div style="display: flex;"  v-for="(item,i) in banners"  :key="i" v-if="item.category === 'Portrait'" @click="selectRatio(item)">
+                            <div style="display: flex;"  v-for="(item,i) in banners"  :key="i" v-if="item.category === 'Portrait'" @click="selectRatio(item, $event)">
                                 <div class="overlay" :class="{'overlay-active': item.selected || item.isPick}">
                                         <img v-if="item.isPick" class="img-overlay" src="../../assets/icoCheck.png" />
                                 </div>
@@ -93,7 +93,7 @@
                     <mu-raised-button label="Portrait" fullWidth  v-no-ripple/>
                     <div class="tab-detail">
                             <mu-grid-list  :cols="5" :padding="10" class="gridlist">
-                                <div style="display: flex;"  v-for="(item,i) in screens"  :key="i"  @click="selectRatio(item)">
+                                <div style="display: flex;"  v-for="(item,i) in screens"  :key="i"  @click="selectRatio(item, $event)">
                                      <div class="overlay" :class="{'overlay-active': item.selected}">
                                         <img class="img-overlay" src="../../assets/icoCheck.png" />
                                 </div>
@@ -363,7 +363,7 @@ export default {
          closeModal () {
            this.$modal.hide('responsive-modal')
          },
-        selectRatio (item,$event) {
+        selectRatio (item, event) {
             for(let i = 0;i < this.banners.length;i++){
                     if(item.id === this.banners[i].id){
                         this.banners[i].selected = true

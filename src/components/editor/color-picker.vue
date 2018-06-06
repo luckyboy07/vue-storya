@@ -38,10 +38,12 @@ export default {
     updateValue (value) {
         this.target[1].style.backgroundColor = value.hex
         if(this.target[3] === 'border'){
-        this.target[2].attributes.borderColor = value.hex
-        }else if (this.target[3] === 'shadow') {
-        this.target[2].attributes.shadowColor = value.hex
-        }else if (this.target[3] === 'gradient') {
+          this.target[2].attributes.borderColor = value.hex
+        } else if (this.target[3] === 'shadow') {
+          this.target[2].attributes.shadowColor = value.hex
+        } else if (this.target[3] === 'backgroundColor') {
+          this.target[2].attributes.backgroundColor = value.hex
+        } else if (this.target[3] === 'gradient') {
           if(this.target[4] === '0') {
             this.target[2].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor = value.hex;
           }else if (this.target[4] === '1'){

@@ -7,10 +7,17 @@ export default {
             // this.clonedElement.style.zIndex = '1';
             this.clonedElement.style.opacity = 0;
             // if text eelement, change color to white
-            var textElement = this.clonedElement.querySelector('.tl-container');
-            if (textElement) {
-                textElement.style.color = '#fff';
+            // var textElement = this.clonedElement.querySelector('.tl-container');
+            // if (textElement) {
+            //     textElement.style.color = '#fff';
+            // }
+            // removing unnecessary elements
+            // removing: layer info when dragging, resize or rotate
+            var elems = this.clonedElement.querySelectorAll('.layer-action-info');
+            for (var i = 0; i < elems.length; i++) {
+                elems[i].style.display = 'none';
             }
+
             this.clonedElement.style.zIndex = 0;
             document.body.appendChild(this.clonedElement);
         } else {
@@ -31,6 +38,7 @@ export default {
     removeElement() {
         if (this.clonedElement) {
             document.body.removeChild(this.clonedElement);
+            this.clonedElement = null;
         }
     },
 }

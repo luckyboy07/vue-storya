@@ -30,7 +30,10 @@ export default {
      * @param  {} layerDetail layerDetail the layer to be created on the memory
      * @param  {} lastAction
      */
-    add(layerDetail, lastAction) {
+    add(layerDetail, lastAction, ownerScreen) {
+        // if (!ownerScreen) {
+        //     throw new Error("Owner must be specified");
+        // }
         let id = appHelper.generateGUID();
         this.$_addLayer(id, layerDetail, lastAction);
         var _removeItem = (_layerId) => {

@@ -236,13 +236,13 @@ export const store = new Vuex.Store({
                 payload.x = 100;
                 payload.y = 100;
                 payload.open = true;
-                payload.selected = true;
             }
             //setting the last active layer to in-active
             for (let i = 0; i < layers.length; i++) {
                 layers[i].selected = false
             }
 
+            payload.selected = true;
             layers.push(payload)
             let sam = layers.sort((a, b) => {
                 return b.order - a.order
@@ -327,7 +327,7 @@ export const store = new Vuex.Store({
             template.ratios = []
             template.layers = []
             template.activeSize = {}
-            Vue.localStorage.set('canvas',JSON.stringify(template))
+            Vue.localStorage.set('canvas', JSON.stringify(template))
         },
         setAutosaveData: (state, data) => {
             if (data !== '0' && data !== '1' && data !== '2') {
