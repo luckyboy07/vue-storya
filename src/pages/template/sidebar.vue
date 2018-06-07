@@ -254,7 +254,7 @@ export default {
     document.addEventListener('mousedown', this.handleMousedown);
   },
   methods: {
-    ...mapMutations(['updateLayers', 'removeSelectedLayer']),
+    ...mapMutations(['updateLayers', 'removeSelectedLayer', 'broadCastStatus']),
     ...mapActions(['addLayer']),
     ...mapGetters(['getShapeLayer', 'getSelectedLayerId','sortLayer']),
     hoverBtn () {
@@ -294,9 +294,10 @@ export default {
     },
     removeLayer() {
       var selectedLayer = this.getSelectedLayerId();
-        
+      
       if (selectedLayer && selectedLayer.sourceLayer.islocked) {
         snackBar.show("Layer is locked");
+        this.broadCastStatus({action: 'notify', layerId: selectedLayer.id});
         return;
       }
       if (selectedLayer) {

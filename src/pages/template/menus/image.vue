@@ -2,7 +2,7 @@
 <div class="yawaa" :class="data.selected ? 'activeTool': ''">
     <mu-list-item title="Image Layer" :open="data.selected" @click.stop="open">
           <mu-icon slot="left" value="image" style="color: #fff"/>
-          <mu-icon-button :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
+          <mu-icon-button :class="{'s-cannot-delete':statuses && statuses.layerId === data.id}" :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
           <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
         <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
         <mu-list-item  slot="nested"  class="paddingZero minHytZero"   @click="openModalimage">
@@ -155,12 +155,18 @@ export default {
     this.$el.querySelector(".mu-item-wrapper").addEventListener('contextmenu', this.showMenu)
   },
    computed: {
-    ...mapGetters(['getLayers'])
+    ...mapGetters(['getLayers']),
+    ...mapGetters({
+        statuses: 'getBroadcastedStatuses'
+      }),
   },
   methods: {
-    ...mapMutations(['setSelectedLayerId']),
+    ...mapMutations(['setSelectedLayerId', 'broadCastStatus']),
     open (event) {
-       if (this.data.islocked)return;
+       if (this.data.islocked) {
+         this.broadCastStatus({action: 'notify', layerId: this.data.id});
+         return; 
+         }
       // this.panelopen = !this.panelopen
       // this.$emit('openpanel',this.panelopen)
       for(let i = 0; i < this.getLayers.length;i++){
@@ -184,7 +190,10 @@ export default {
       this.$modal.show('image-modal',{data:this.data})
     },
     toggleLayer() {
-      if (this.data.islocked)return;
+      if (this.data.islocked) { 
+        this.broadCastStatus({action: 'notify', layerId: this.data.id});
+        return; 
+      }
       this.data.selected = this.data.visible = !this.data.visible;
     },
     showPicker (event,name) {

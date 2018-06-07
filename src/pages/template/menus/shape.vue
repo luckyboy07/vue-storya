@@ -4,7 +4,7 @@
        <!-- :title="data.attributes.shape === 'Triangle' ? 'Shape Layer (SVG)' : data.content" -->
         <mu-list-item :title="getTitle()" @click.stop="open" :open="data.selected">
             <mu-icon slot="left" value="landscape" style="color: #fff"/>
-            <mu-icon-button :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
+            <mu-icon-button :class="{'s-cannot-delete':statuses && statuses.layerId === data.id}" :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
             <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
             <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
             <!-- <mu-list-item  slot="nested"  class="paddingZero">
@@ -247,10 +247,13 @@ export default {
     };
   },
    computed: {
-    ...mapGetters(['getLayers'])
+    ...mapGetters(['getLayers',]),
+    ...mapGetters({
+        statuses: 'getBroadcastedStatuses'
+      }),
   },
   methods: {
-    ...mapMutations(['setSelectedLayerId']),
+    ...mapMutations(['setSelectedLayerId', 'broadCastStatus']),
     setGradientColors(evt) {
       console.log('setGradientColors:',evt)
       // var p = evt.$el.children[0];
@@ -314,12 +317,18 @@ export default {
       }
     },
     toggleLayer() {
-      if (this.data.islocked)return;
+      if (this.data.islocked) {
+        this.broadCastStatus({action: 'notify', layerId: this.data.id});
+        return;
+      }
 
       this.data.selected = this.data.visible = !this.data.visible;
     },
     open (event) {
-       if (this.data.islocked)return;
+       if (this.data.islocked) {
+         this.broadCastStatus({action: 'notify', layerId: this.data.id});
+         return;
+        }
 
         for(let i = 0; i < this.getLayers.length;i++){
           if (this.getLayers[i].id === this.data.id) {
@@ -358,7 +367,7 @@ export default {
       var borderLessShapes = ['Triangle', 'Trapezoid'];
       return !borderLessShapes.includes(this.data.attributes.shape);
     },
-  }
+  },
 }
 </script>
 <style scoped>

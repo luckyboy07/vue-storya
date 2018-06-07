@@ -41,4 +41,7 @@ export default {
             this.clonedElement = null;
         }
     },
+    layerDrag() {
+
+    },
 }

@@ -101,7 +101,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setLayerValue', 'setSelectedLayerId']),
+    ...mapMutations(['setLayerValue', 'setSelectedLayerId', 'broadCastStatus']),
     ...mapGetters(['getCanvasData']),
     // handling the click event
     handleCanvasClicks(evt) {
@@ -161,9 +161,10 @@ export default {
        }
     },
     // focusing on item neglecting its order
-    focused(elem, islocked) {
-      if (!this.selectedLayer || islocked) {
+    focused(elem, data) {
+      if (!this.selectedLayer || data.islocked) {
         snackBar.show("Layer is locked", 800);
+        this.broadCastStatus({action: 'notify', layerId: data.id});
         return;
       }
 

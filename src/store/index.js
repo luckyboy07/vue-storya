@@ -225,7 +225,8 @@ export const store = new Vuex.Store({
                 type: 'audio',
                 attributes: {}
             }
-        ]
+        ],
+        broadcastedStatuses: null,
     },
     mutations: {
         addLayer: (state, payload) => {
@@ -349,7 +350,16 @@ export const store = new Vuex.Store({
             let layers = state.layers
             layers = payload.item
             Vue.set(state, 'layers', layers)
-        }
+        },
+        broadCastStatus: (state, status) => {
+            if (!state) {
+                throw new Error('Invalid status');
+            }
+            state.broadcastedStatuses = status;
+            window.setTimeout(() => {
+                state.broadcastedStatuses = null;
+            }, 500);
+        },
     },
     getters: {
         getItems: state => {
@@ -410,6 +420,9 @@ export const store = new Vuex.Store({
         // returns the auto save status data
         getAutosaveStatusData: state => {
             return state.autoSaveStatus;
+        },
+        getBroadcastedStatuses: state => {
+            return state.broadcastedStatuses;
         },
     },
     actions: {
