@@ -1,5 +1,5 @@
 <template>
-  <div class="shape-container">
+  <div class="shape-container" id="sp1">
     <div v-if="data.attributes.shape === 'Rectangle'" class="shape" :style="getRectangleStyle()"></div>
     <div v-if="data.attributes.shape === 'Circle'" class="shape" :style="getCircleStyle()"></div>
     <div v-if="data.attributes.shape === 'Triangle'" class="shape" :style="getTriangleStyle()"></div>
@@ -93,4 +93,9 @@ export default {
     width: 100%;
     height: 100%;
   }
+   /* @-webkit-keyframes rotate { 0% { -webkit-transform: translate(0px,0px) rotate(0deg) scale(1,1); } 20% { -webkit-transform: translate(0px,0px) rotate(0deg) scale(2,1); } 40% { -webkit-transform: translate(0px,0px) rotate(90deg) scale(1,1); } 60% { -webkit-transform: translate(0px,0px) rotate(180deg) scale(1,1); } 80% { -webkit-transform: translate(0px,0px) rotate(270deg) scale(1,1); } 100% { -webkit-transform: translate(0px,0px) rotate(360deg) scale(1,1); } }
+.rotats { 
+  animation-name: rotate;
+  animation-duration: 4s;  
+} */
 </style>

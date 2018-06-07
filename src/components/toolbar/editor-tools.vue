@@ -210,6 +210,7 @@ export default {
              if(this.selectedtemplate.selectedRatio === ratios[i].name){
                   this.selectedtemplate.layers = JSON.parse(JSON.stringify(ratios[i].layers))
                   console.log('ratios[i].layers:',ratios[i].layers)
+                  console.log('this.selectedtemplate:',this.selectedtemplate)
                   this.updateLayers(this.selectedtemplate.layers)
              } 
           }

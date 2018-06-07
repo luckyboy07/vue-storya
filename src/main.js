@@ -7,6 +7,7 @@ import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
 import './css/main.css'
 import './css/shape-icons.css'
+import './css/sample.css'
 import VTooltip from 'v-tooltip'
 // directives
 import JustDigits from './directives/only-number-filter.js'

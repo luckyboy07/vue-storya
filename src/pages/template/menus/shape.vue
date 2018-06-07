@@ -165,6 +165,119 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
+            <mu-sub-header slot="nested" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'">Animations</mu-sub-header>
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                  <mu-grid-list class="gridlist-demo left">Loop</mu-grid-list>
+                  <mu-grid-list class="right">
+                    <multiselect :options="['Once','Infinite', 'Custom']" :show-labels="false" :searchable="false" :close-on-select="true" style="max-width: 165px;"></multiselect>
+                      <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
+                  </mu-grid-list>
+                  <!-- <mu-grid-list class="right">
+                  </mu-grid-list> -->
+              </div>
+            </mu-list-item>
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+            <mu-raised-button  v-no-ripple label="Animation Flow(seconds)" fullWidth style="text-transform: none;background-color: #000000;"/>
+            </mu-list-item>
+            <mu-list-item  slot="nested" class="paddingZero diBlackbg" v-no-ripple  style="height: 70px;margin-left: 15px;">
+                  <div style="float:left;margin-right:3px;text-align:center">
+                       <label for="name" style="font-size:10px;">Delay Start</label>
+                      <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" >
+                  </div>
+                  <div style="float:left;margin-right:3px;text-align:center">
+                       <label for="name" style="font-size:10px;">FX Start</label>
+                      <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
+                  </div>
+                   <div style="float:left;margin-right:3px;text-align:center">
+                       <label for="name" style="font-size:10px;">Elapsed</label>
+                      <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" >
+                  </div>
+                   <div style="float:left;margin-right:3px;text-align:center">
+                       <label for="name" style="font-size:10px;">FX End</label>
+                      <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" >
+                  </div>
+                   <div style="float:left;margin-right:3px;text-align:center">
+                       <label for="name" style="font-size:10px;">Delay End</label>
+                      <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" >
+                  </div>
+            </mu-list-item>
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                  <mu-grid-list  slot="left"><mu-icon-button icon="close" icon-class="ics"/></mu-grid-list> 
+                  <mu-grid-list class="gridlist-demo" slot="right">Animation</mu-grid-list>
+                  <mu-grid-list class="right">
+                  <multiselect :options="['None','Dashed', 'Dotted', 'Solid']" :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
+                  </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <!-- FADE PROPERTY -->
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                  <mu-grid-list class="gridlist-demo" slot="right">Start</mu-grid-list>
+                  <mu-grid-list class="right">
+                   <multiselect :options="['Once','Infinite', 'Custom']" :show-labels="false" :searchable="false" :close-on-select="true" style="max-width: 165px;"></multiselect>
+                  <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
+                  </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                  <mu-grid-list class="gridlist-demo" slot="right">End</mu-grid-list>
+                  <mu-grid-list class="right">
+                   <multiselect :options="['Once','Infinite', 'Custom']" :show-labels="false" :searchable="false" :close-on-select="true" style="max-width: 165px;"></multiselect>
+                  <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
+                  </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <!-- ---------------------------------------------- -->
+            <!-- ROTATION PROPERTY -->
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Rotate Start</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider :disabled="!hasBorder()"  class="mmslider" :step="1"/>
+                <input :disabled="!hasBorder()" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Rotate End</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider :disabled="!hasBorder()"  class="mmslider" :step="1"/>
+                <input :disabled="!hasBorder()" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <!-- ---------------------------------------------- -->
+            <!-- SLIDE -->
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Start Position</mu-grid-list>
+                <mu-grid-list class="right">
+                  <input spellcheck="false"  class="input-size colorPicka">
+                  <input spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
+                  </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">End Position</mu-grid-list>
+                <mu-grid-list class="right">
+                  <input spellcheck="false"  class="input-size colorPicka">
+                  <input spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
+                  </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <!-- ---------------------------------------------- -->
+            <mu-list-item  slot="nested" class="paddingZero minHytZero" @click="addAnimations">
+             <mu-flexbox>
+                  <mu-flexbox-item class="flex-container"> 
+                      + Add Animation
+                  </mu-flexbox-item>
+             </mu-flexbox>
+            </mu-list-item>
            <!-- <mu-list-item  slot="nested"  class="paddingZero demiBlackbg">
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Repeat</mu-grid-list>
@@ -214,6 +327,14 @@ export default {
   mounted() {
      // for the context menu to show only on the title part
     this.$el.querySelector(".mu-item-wrapper").addEventListener('contextmenu', this.showMenu)
+    // this.buildAnimation('rotate', [
+    //   [0,0,0,1.0,1.0],
+    //   [0,0,0,2.0,1.0],
+    //   [0,0,90,1.0,1.0],
+    //   [0,0,180,1.0,1.0],
+    //   [0,0,270,1.0,1.0],
+    //   [0,0,360,1.0,1.0]
+    // ])
   },
   beforeDestroy() {
     document.removeEventListener('mousedown', this.hidePicker);
@@ -235,6 +356,7 @@ export default {
       value3: "",
       options: ["Manual", "Automatic", "test", "TEst 2"],
       selectedPicker: '',
+      animations: []
     };
   },
    computed: {
@@ -349,10 +471,40 @@ export default {
       var borderLessShapes = ['Triangle', 'Trapezoid'];
       return !borderLessShapes.includes(this.data.attributes.shape);
     },
+    buildAnimation (name,frames) {
+      var frames1 = "";
+      let len = frames.length
+      console.log('len:',len)
+      for (let i=0;i<len;i++){
+        let kf = frames[i]
+        let dt = (i/(len-1)) * 100
+        frames1 += dt + "% { -webkit-transform: translate(" + kf[0] + "px," + kf[1] + "px) rotate(" + kf[2] + "deg) scale(" + kf[3] + "," + kf[4] + "); } "
+      }
+       var idx = document.styleSheets[5].cssRules.length;
+        document.styleSheets[5].insertRule("@-webkit-keyframes " + name + " { " + frames1 + "}", idx);
+        console.log(document.styleSheets)
+      setTimeout(() => {
+      let shaps = document.getElementById('shape')
+      console.log(shaps)
+      console.log(document.styleSheets[5])
+        shaps.style.webkitAnimationIterationCount = 'infinite';
+      // shaps.style.webkitAnimationTimingFunction = 'linear';
+      shaps.style.webkitAnimationDuration = '2.0s';
+      shaps.style.webkitAnimationName = 'rotate';
+      }, (1000));
+      
+      // console.log('idx:',idx)
+    },
+    addAnimations() {
+      let obj = {
+        animation: 'none',
+        subAnimation:[]
+      }
+    } 
   }
 }
 </script>
-<style scoped>
+<style scoped  title="sad">
 @import "./menu.css";
 .inp-edit-disabled {
   cursor: not-allowed;
@@ -374,6 +526,12 @@ export default {
 .disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+input, label {
+    display:block;
+}
+.ics {
+  font-size: 10px
 }
 </style>
 
