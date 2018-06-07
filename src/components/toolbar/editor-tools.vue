@@ -235,69 +235,82 @@ export default {
       this.selectedtemplate.isResponsive = evt.value
       this.savetoLocalstorage()
     },
-     beforeClose () {
+    beforeClose () {
       console.log('close')
-     },
-     ExportImage() {
+    },
+    ExportImage() {
+      var filter = function(node) {
+        console.log('node', node)
+        return (node.className && node.className.indexOf('rr-bar') === -1)
+      };
+
       var zoom = 100;
       var oldMargin = '';
       var elem = document.getElementsByClassName('editor-box')[0];
+      dom2image.toSvg(elem, {filter: filter})
+      .then((data) => {
+        console.log('sucess', data)
+      })
+      .catch((err) => {
+        console.log('Error on exporting');
+        console.error(err);
+      })
       // fixed error on margin
-      if (browserHelper.isChrome() || browserHelper.isOpera()) {
-        oldMargin = elem.style.marginLeft;
-        elem.style.marginLeft = '0px';
-      }
-      // if zoom level is not 100%
-      if (this.editorData.zoom !== 100) {
-        elem.style.zoom = '100%';
-        elem.style["-moz-transform"] = "scale(1)"
+      // if (browserHelper.isChrome() || browserHelper.isOpera()) {
+      //   oldMargin = elem.style.marginLeft;
+      //   elem.style.marginLeft = '0px';
+      // }
+      // // if zoom level is not 100%
+      // if (this.editorData.zoom !== 100) {
+      //   elem.style.zoom = '100%';
+      //   elem.style["-moz-transform"] = "scale(1)"
 
-        zoom = this.editorData.zoom;
-        this.editorData.zoom = 100;
-        zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
-      }
+      //   zoom = this.editorData.zoom;
+      //   this.editorData.zoom = 100;
+      //   zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
+      // }
 
-      dom2image.toPng(elem, {
-        width: this.editorData.width, 
-        height: this.editorData.height, 
-        bgcolor: this.editorData.bgColor
-      }).then((dataUri) => {
-        if (this.editorData.zoom !== 100) {
-          elem.style.zoom = this.editorData.zoom / 100;
-          elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
+      // dom2image.toPng(elem, {
+      //   width: this.editorData.width, 
+      //   height: this.editorData.height, 
+      //   bgcolor: this.editorData.bgColor
+      // }).then((dataUri) => {
+      //   if (this.editorData.zoom !== 100) {
+      //     elem.style.zoom = this.editorData.zoom / 100;
+      //     elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
 
-          this.editorData.zoom = zoom;
-          zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
-        }
+      //     this.editorData.zoom = zoom;
+      //     zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
+      //   }
         
-        // restore margin after
-        if (browserHelper.isChrome() || browserHelper.isOpera()) {
-            elem.style.marginLeft = oldMargin;
-        }
-        var link = document.createElement('a');
-        link.download = "export-" + appHelper.generateGUID() + '.png';
-        link.href = dataUri;
-        // fixed on firefox not downloading
-        // explicitly append the a tag to work
-        if (browserHelper.isFirefox()) {
-          document.body.appendChild(link);
-        }
-        link.click();
-        if (browserHelper.isFirefox()) {
-          document.body.removeChild(link);
-        }
-      }).catch(() => {
-        if (this.editorData.zoom !== 100) {
-          elem.style.zoom = this.editorData.zoom / 100;
-          elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
-        }
-         if (browserHelper.isFirefox()) {
-          document.body.appendChild(link);
-        }
-         if (browserHelper.isFirefox()) {
-          document.body.removeChild(link);
-        }
-      });
+      //   // restore margin after
+      //   if (browserHelper.isChrome() || browserHelper.isOpera()) {
+      //       elem.style.marginLeft = oldMargin;
+      //   }
+      //   var link = document.createElement('a');
+      //   link.download = "export-" + appHelper.generateGUID() + '.png';
+      //   link.href = dataUri;
+      //   // fixed on firefox not downloading
+      //   // explicitly append the a tag to work
+      //   if (browserHelper.isFirefox()) {
+      //     document.body.appendChild(link);
+      //   }
+      //   link.click();
+      //   if (browserHelper.isFirefox()) {
+      //     document.body.removeChild(link);
+      //   }
+      // }).catch(() => {
+      //   if (this.editorData.zoom !== 100) {
+      //     elem.style.zoom = this.editorData.zoom / 100;
+      //     elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
+      //   }
+      //    if (browserHelper.isFirefox()) {
+      //     document.body.appendChild(link);
+      //   }
+      //    if (browserHelper.isFirefox()) {
+      //     document.body.removeChild(link);
+      //   }
+      // });
     }
   },
   computed: {
