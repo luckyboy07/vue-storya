@@ -247,34 +247,15 @@ export default {
       var zoom = 100;
       var oldMargin = '';
       var elem = document.getElementsByClassName('editor-box')[0];
+      // elem.style.marginLeft = '0px';
       console.log(elem)
-      dom2image.toBlob(elem)
+      dom2image.toSvg(elem)
       .then((data) => {
-        // console.log('sucess', data)
-        // var img = document.createElement('img');
-        // img.width = '300';
-        // img.height = '300';
-        // img.style.border = '1px solid blue';
-        // img.style.zIndex = '99999';
-        // img.style.position = 'absolute';
-        // img.style.top = '5px';
-        // img.style.left = '5px';
-        // img.id = 'imgnako';
-        // img.src = data;
-        // document.body.appendChild(img)
-        console.log(data)
-        // window.saveAs(data, 'my-node.png');
-        var blobUrl = URL.createObjectURL(data);
         var link = document.createElement("a"); // Or maybe get it from the current document
-        link.href = blobUrl;
-        link.download = "aDefaultFileName.png";
+        link.href = data;
+        link.download = appHelper.generateGUID() + '.svg';;
         document.body.appendChild(link); // Or append it whereever you want
         link.click();
-
-
-      //  var a = 'data:image/png;base64,' + window.btoa(data);
-      //  console.log(a)
-      //  window.open(a)
       })
       .catch((err) => {
         console.log('Error on exporting');
