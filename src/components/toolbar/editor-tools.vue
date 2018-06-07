@@ -64,8 +64,8 @@
       :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
       <mu-menu-item value="0" title="Save" @click="SaveContent()"/>
       <mu-divider inset class="temp-action-item-divider"/>
-       <mu-menu-item value="2" title="Save Project" @click="SaveContent()"/>
-      <mu-divider inset class="temp-action-item-divider"/>
+      <!-- <mu-menu-item value="2" title="Save Project" @click="SaveContent()"/>
+      <mu-divider inset class="temp-action-item-divider"/> -->
       <mu-menu-item value="3" title="Save As Template" @click="SaveTemplate()"/>
       <mu-divider inset class="temp-action-item-divider"/>
       <mu-menu-item value="4" title="Export as HTML" @click="exportContent()"/>
@@ -247,76 +247,79 @@ export default {
       var zoom = 100;
       var oldMargin = '';
       var elem = document.getElementsByClassName('editor-box')[0];
-      // elem.style.marginLeft = '0px';
-      console.log(elem)
-      dom2image.toSvg(elem)
-      .then((data) => {
-        var link = document.createElement("a"); // Or maybe get it from the current document
-        link.href = data;
-        link.download = appHelper.generateGUID() + '.svg';;
-        document.body.appendChild(link); // Or append it whereever you want
-        link.click();
-      })
-      .catch((err) => {
-        console.log('Error on exporting');
-        console.error(err);
-      })
-      // fixed error on margin
-      // if (browserHelper.isChrome() || browserHelper.isOpera()) {
-      //   oldMargin = elem.style.marginLeft;
-      //   elem.style.marginLeft = '0px';
-      // }
-      // // if zoom level is not 100%
-      // if (this.editorData.zoom !== 100) {
-      //   elem.style.zoom = '100%';
-      //   elem.style["-moz-transform"] = "scale(1)"
+      // safari behaves differently from other major browsers
+      // image saving via front-end is not possible in safari browsers
+      // instead, save data as SVG format XD
+      if (browserHelper.isSafari()) {
+        dom2image.toSvg(elem)
+        .then((data) => {
+          var link = document.createElement("a"); // Or maybe get it from the current document
+          link.href = data;
+          link.download = appHelper.generateGUID() + '.svg';;
+          document.body.appendChild(link); // Or append it whereever you want
+          link.click();
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+      } else {
+        // handling other major browsers
+        // fixed error on margin
+        if (browserHelper.isChrome() || browserHelper.isOpera()) {
+          oldMargin = elem.style.marginLeft;
+          elem.style.marginLeft = '0px';
+        }
+        // if zoom level is not 100%
+        if (this.editorData.zoom !== 100) {
+          elem.style.zoom = '100%';
+          elem.style["-moz-transform"] = "scale(1)"
 
-      //   zoom = this.editorData.zoom;
-      //   this.editorData.zoom = 100;
-      //   zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
-      // }
+          zoom = this.editorData.zoom;
+          this.editorData.zoom = 100;
+          zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
+        }
+        dom2image.toPng(elem, {
+          width: this.editorData.width, 
+          height: this.editorData.height, 
+          bgcolor: this.editorData.bgColor
+        }).then((dataUri) => {
+          if (this.editorData.zoom !== 100) {
+            elem.style.zoom = this.editorData.zoom / 100;
+            elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
 
-      // dom2image.toPng(elem, {
-      //   width: this.editorData.width, 
-      //   height: this.editorData.height, 
-      //   bgcolor: this.editorData.bgColor
-      // }).then((dataUri) => {
-      //   if (this.editorData.zoom !== 100) {
-      //     elem.style.zoom = this.editorData.zoom / 100;
-      //     elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
-
-      //     this.editorData.zoom = zoom;
-      //     zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
-      //   }
-        
-      //   // restore margin after
-      //   if (browserHelper.isChrome() || browserHelper.isOpera()) {
-      //       elem.style.marginLeft = oldMargin;
-      //   }
-      //   var link = document.createElement('a');
-      //   link.download = "export-" + appHelper.generateGUID() + '.png';
-      //   link.href = dataUri;
-      //   // fixed on firefox not downloading
-      //   // explicitly append the a tag to work
-      //   if (browserHelper.isFirefox()) {
-      //     document.body.appendChild(link);
-      //   }
-      //   link.click();
-      //   if (browserHelper.isFirefox()) {
-      //     document.body.removeChild(link);
-      //   }
-      // }).catch(() => {
-      //   if (this.editorData.zoom !== 100) {
-      //     elem.style.zoom = this.editorData.zoom / 100;
-      //     elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
-      //   }
-      //    if (browserHelper.isFirefox()) {
-      //     document.body.appendChild(link);
-      //   }
-      //    if (browserHelper.isFirefox()) {
-      //     document.body.removeChild(link);
-      //   }
-      // });
+            this.editorData.zoom = zoom;
+            zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
+          }
+          
+          // restore margin after
+          if (browserHelper.isChrome() || browserHelper.isOpera()) {
+              elem.style.marginLeft = oldMargin;
+          }
+          var link = document.createElement('a');
+          link.download = "export-" + appHelper.generateGUID() + '.png';
+          link.href = dataUri;
+          // fixed on firefox not downloading
+          // explicitly append the a tag to work
+          if (browserHelper.isFirefox()) {
+            document.body.appendChild(link);
+          }
+          link.click();
+          if (browserHelper.isFirefox()) {
+            document.body.removeChild(link);
+          }
+        }).catch(() => {
+          if (this.editorData.zoom !== 100) {
+            elem.style.zoom = this.editorData.zoom / 100;
+            elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
+          }
+          if (browserHelper.isFirefox()) {
+            document.body.appendChild(link);
+          }
+          if (browserHelper.isFirefox()) {
+            document.body.removeChild(link);
+          }
+        });
+      }
     }
   },
   computed: {
