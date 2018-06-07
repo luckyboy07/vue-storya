@@ -192,7 +192,7 @@ export default {
 
     emitActivated() {
       this.$emit("activated");
-      this.$emit("focused", this.$el, this.islocked);
+      this.$emit("focused", this.$el, {id: this.$el.id, islocked: this.islocked});
     },
 
     emitRotateStated() {
