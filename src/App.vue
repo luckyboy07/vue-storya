@@ -108,14 +108,15 @@ export default {
           if (this.layers.length <= 0) return;
 
           this.copiedLayer.order = $.from(this.layers).max(l => l.order) + 1;
+          this.copiedLayer.fromUndoRedo = true; // hack lol; this should be like this
           this.addLayer(this.copiedLayer);
           for (var i = 0; i < this.layers.length; i++) {
             this.layers[i].selected = false;
           }
 
-          this.layers[this.layers.length - 1].selected = true;
-          this.setSelectedLayerId(this.layers[this.layers.length - 1].id)
-           this.copiedLayer = null;
+         this.copiedLayer.selected = true;
+          this.setSelectedLayerId(this.copiedLayer.id)
+          this.copiedLayer = null;
         }
       } else {
         if (evt.key === 'Delete') {

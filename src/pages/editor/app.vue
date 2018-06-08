@@ -189,12 +189,13 @@ export default {
       if (val === 'copy') {
         var copiedLayer = appHelper.createLayer(this.selectedLayer);
         copiedLayer.order = $.from(this.layers).max(l => l.order) + 1;
+        copiedLayer.fromUndoRedo = true; // hack lol; this should be like this
         this.addLayer(copiedLayer);
         for (var i = 0; i < this.layers.length; i++) {
            this.layers[i].selected = false;
         }
-        this.layers[this.layers.length - 1].selected = true;
-        this.setSelectedLayerId(this.layers[this.layers.length - 1].id)
+        copiedLayer.selected = true;
+        this.setSelectedLayerId(copiedLayer.id)
       }
       else if (val === 'lock') {
         this.selectedLayer.islocked = !this.selectedLayer.islocked;
@@ -232,14 +233,6 @@ export default {
       setTimeout(()=>{
       this.topPopup = false
       },2000)
-    }
-  },
-  watch: {
-    "canvasData.gridLines": {
-      handler(val) {
-        //gridlineHelper.showGridLines(val)
-      },
-      deep: true
     }
   },
 }
