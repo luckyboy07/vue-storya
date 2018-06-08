@@ -6,7 +6,7 @@
             <mu-icon slot="left" value="landscape" style="color: #fff"/>
             <mu-icon-button :class="{'s-cannot-delete':statuses && statuses.layerId === data.id}" :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
             <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
-            <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
+            <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.selected && !data.islocked ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
             <!-- <mu-list-item  slot="nested"  class="paddingZero">
                 <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size Option</mu-grid-list>
@@ -540,10 +540,6 @@ export default {
     float: right;
     left: 0;
     padding-right: 12px;
-}
-.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 input, label {
     display:block;
