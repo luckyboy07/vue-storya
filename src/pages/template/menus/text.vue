@@ -1,7 +1,7 @@
 <template>
   <div class="yawaa" :class="data.selected ? 'activeTool': ''">
    <mu-list-item :title="getTextContent() || 'Text Layer'" 
-    :open="data.selected"
+    :open="data.selected && !data.islocked"
      @click.stop="open">
         <mu-icon slot="left" value="text_fields" style="color: #fff"/>
         <mu-icon-button :class="{'s-cannot-delete':statuses && statuses.layerId === data.id}" :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>

@@ -62,16 +62,34 @@
   <mu-icon-menu icon="" @change="handleChange" :anchorOrigin="rightTop"
       :targetOrigin="rightTop"
       :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
-      <mu-menu-item value="0" title="Save" @click="SaveContent()"/>
-      <mu-divider inset class="temp-action-item-divider"/>
-      <!-- <mu-menu-item value="2" title="Save Project" @click="SaveContent()"/>
-      <mu-divider inset class="temp-action-item-divider"/> -->
-      <mu-menu-item value="3" title="Save As Template" @click="SaveTemplate()"/>
-      <mu-divider inset class="temp-action-item-divider"/>
-      <mu-menu-item value="4" title="Export as HTML" @click="exportContent()"/>
-       <mu-divider inset class="temp-action-item-divider"/>
-      <mu-menu-item value="4" title="Export as Image" @click="ExportImage()"/>
-    </mu-icon-menu>
+    <mu-menu-item value="0" title="Save" @click="SaveContent()"/>
+    <mu-divider inset class="temp-action-item-divider"/>
+    <!-- <mu-menu-item value="2" title="Save Project" @click="SaveContent()"/>
+    <mu-divider inset class="temp-action-item-divider"/> -->
+    <mu-menu-item value="3" title="Save As Template" @click="SaveTemplate()"/>
+    <mu-divider inset class="temp-action-item-divider"/>
+    <mu-menu-item value="4" title="Export as HTML" @click="exportContent()"/>
+    <mu-divider inset class="temp-action-item-divider"/>
+    <mu-menu-item value="4" title="Export as Image" @click="ExportImage()"/>
+  </mu-icon-menu>
+   <mu-dialog :open="isExporting" title="Exporting Content">
+    <div style="font-family: Lato; font-size: 17px; color: #fff">
+      <div class="s-info-modal" v-show="hasBackgroundProcess">
+        <div class="s-text-info-modal">Please wait while your content is being rendered... </div>
+        <mu-linear-progress color="#009D70" style="width: 40%; margin-left: 60px; margin-top: 10px;"/>
+      </div>
+      <div v-show="!hasBackgroundProcess">
+        <div class="s-info-modal">Image Rendering is finished</div>
+        <img class="s-export-preview-img" :src="exportedImgData ? exportedImgData.url : ''" alt="img">
+      </div>
+      <!-- <div>
+       Content Rendered
+        <mu-linear-progress />
+      </div> -->
+    </div> 
+    <mu-flat-button v-show="!hasBackgroundProcess" label="Close" slot="actions" secondary @click="close()"/>
+    <mu-flat-button v-show="!hasBackgroundProcess" label="Download" slot="actions" secondary @click="download()"/>
+  </mu-dialog>
 </div>
 </template>
 <script>
@@ -105,6 +123,7 @@ import browserHelper from '../../helpers/browser.js'
 import ToggleButton from '../switchButton/button'
 import appHelper from '../../helpers/app.helper';
 import rest from '../../helpers/rest.helper'
+import snackbar from '../../helpers/snackbar';
 export default {
   name: 'editor-tools',
   props:['selectedtemplate'],
@@ -119,6 +138,9 @@ export default {
       menuOpen: false,
       sam: false,
       rightTop: {horizontal: 'left', vertical: 'top'},
+      isExporting: false,
+      hasBackgroundProcess: true,
+      exportedImgData: null,
     }
   },
   // beforeMount() {
@@ -239,7 +261,8 @@ export default {
       console.log('close')
     },
     ExportImage() {
-      var htmlStr =exportHelper.getHtmlString();
+      this.isExporting = this.hasBackgroundProcess = true;
+      var htmlStr = exportHelper.getHtmlString();
       rest.post('renderimage', 
       {
         width: this.editorData.width,
@@ -248,13 +271,26 @@ export default {
       })
       .then((response) => {
         console.log('result', response)
-          var link = document.createElement("a"); // Or maybe get it from the current document
-          link.href = response.body.base64;
-          link.download = appHelper.generateGUID() + '.png';;
-          document.body.appendChild(link); // Or append it whereever you want
-          link.click();
+        this.hasBackgroundProcess = false;
+        this.exportedImgData = {data: response.body.base64, url: response.body.url};
+      })
+      .catch((err) => {
+         this.hasBackgroundProcess = false;
+         this.isExporting = false;
+        snackbar.show("An error occured during the redering process", null, 'error')
       });
-    }
+    },
+    download() {
+      var link = document.createElement("a"); // Or maybe get it from the current document
+      link.href =  this.exportedImgData.data;
+      link.download = appHelper.generateGUID() + '.png';;
+      document.body.appendChild(link); // Or append it whereever you want
+      link.click();
+      this.isExporting = false;
+    },
+    close() {
+       this.isExporting = false;
+    },
   },
   computed: {
     ...mapGetters({
@@ -265,6 +301,13 @@ export default {
 }
 </script>
 <style scoped>
+
+.s-text-info-modal {
+  font-size: 15px;
+}
+.s-info-modal {
+  display: flex;
+}
 .s-responsive-right {
   margin-right: 15px;
   height: 70%;
@@ -346,6 +389,11 @@ background-color: red!important;
 }
 .mu-switch input[type="checkbox"]:checked+.mu-switch-wrapper .mu-switch-track {
   background-color: #009d70 !important;
+}
+.s-export-preview-img {
+  width: 100px;
+  height: 100px;
+  margin-top: 20px;
 }
 </style>
 

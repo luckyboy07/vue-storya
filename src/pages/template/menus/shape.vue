@@ -2,7 +2,7 @@
   <div>
      <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
        <!-- :title="data.attributes.shape === 'Triangle' ? 'Shape Layer (SVG)' : data.content" -->
-        <mu-list-item :title="getTitle()" @click.stop="open" :open="data.selected">
+        <mu-list-item :title="getTitle()" @click.stop="open" :open="data.selected && !data.islocked">
             <mu-icon slot="left" value="landscape" style="color: #fff"/>
             <mu-icon-button :class="{'s-cannot-delete':statuses && statuses.layerId === data.id}" :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
             <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
@@ -388,10 +388,6 @@ export default {
     float: right;
     left: 0;
     padding-right: 12px;
-}
-.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 </style>
 

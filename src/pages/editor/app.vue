@@ -63,6 +63,8 @@ import gridlineHelper from '../../helpers/ruler-guidelines.js'
 import layerCloner from '../../helpers/layer-cloner.js'
 import editorCanvasHelper  from '../../helpers/editor-canvas.helper.js'
 import snackbar from '../../helpers/snackbar';
+import appHelper from '../../helpers/app.helper';
+import * as $ from 'linq'
 export default {
   name: 'Editor',
   data (){
@@ -93,7 +95,7 @@ export default {
     document.addEventListener('mousedown', this.handleMousedown);
   },
   methods: {
-    ...mapMutations(['broadCastStatus']), 
+    ...mapMutations(['addLayer', 'setSelectedLayerId', 'broadCastStatus']), 
     ...mapGetters(['getSelectedLayerId']),
     openWindow (val) {
         this.targetElement = val
@@ -165,7 +167,6 @@ export default {
         } else{
           return layers
         }
-        
       }
     },
     keydownEventHandler(evt){
@@ -176,8 +177,17 @@ export default {
     executeMenuCommand(val) {
       if (!this.selectedLayer) return;
 
-      if (val === 'copy') {
+      this.showContextMenu = false;
 
+      if (val === 'copy') {
+        var copiedLayer = appHelper.createLayer(this.selectedLayer);
+        copiedLayer.order = $.from(this.layers).max(l => l.order) + 1;
+        this.addLayer(copiedLayer);
+        for (var i = 0; i < this.layers.length; i++) {
+           this.layers[i].selected = false;
+        }
+        this.layers[this.layers.length - 1].selected = true;
+        this.setSelectedLayerId(this.layers[this.layers.length - 1].id)
       }
       else if (val === 'lock') {
         this.selectedLayer.islocked = !this.selectedLayer.islocked;
@@ -195,7 +205,6 @@ export default {
           }
         }
       }
-      this.showContextMenu = false;
     },
     handleMousedown(evt) {
       if (this.$refs.contextMenu && !this.$refs.contextMenu.contains(evt.target))  this.showContextMenu = false;
@@ -306,6 +315,8 @@ export default {
   z-index: 9999;
   top: 100px;
   left: 100px;
+  box-shadow: 0 1px 6px #c9c5c5, 0 1px 4px #c9c5c5;
+  border-radius: 2px;
 }
 .context-menu-overr {
   background-color: #009D70;

@@ -893,12 +893,22 @@ input[type='number'] {
     box-shadow: 0 2px 1px -1px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12);
 }
 
+.storya-snack-bar .error {
+    background-color: red;
+}
+
 .snack-bar-bottom {
     bottom: -100px;
 }
 
 .disabled {
     opacity: 0.21;
+    cursor: not-allowed;
+}
+
+.mu-icon-button .disabled {
+    opacity: 0.21!important;
+    cursor: not-allowed;
 }
 
 input[disabled="disabled"] {
