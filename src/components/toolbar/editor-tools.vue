@@ -1,5 +1,6 @@
 <template>
 <div>
+  
   <mu-appbar class="header-tools editor-tools">
     <mu-flat-button style="width: 100px;" id="btn" class="save-menu-btn" labelPosition="before" 
       label="Save" slot="left" icon="keyboard_arrow_down"
@@ -119,11 +120,11 @@ import customMenu from '../menus/custom-menu'
 import {mapGetters,mapActions} from 'vuex'
 import zoomHelper from '../../helpers/zoom.helper.js'
 import exportHelper from '../../helpers/import-export.helper.js'
-import browserHelper from '../../helpers/browser.js'
 import ToggleButton from '../switchButton/button'
 import appHelper from '../../helpers/app.helper';
 import rest from '../../helpers/rest.helper'
 import snackbar from '../../helpers/snackbar';
+import browserHelper from '../../helpers/browser.js'
 export default {
   name: 'editor-tools',
   props:['selectedtemplate'],
@@ -212,13 +213,15 @@ export default {
       if(this.selectedtemplate.isResponsive){
         for(let i = 0;i < ratios.length;i++){
             if(this.selectedtemplate.selectedRatio === ratios[i].name) {
-              console.log('ratios',ratios[i])
-              ratios[i].layers = this.selectedtemplate.layers
+              ratios[i].layers = JSON.parse(JSON.stringify(this.selectedtemplate.layers))
               this.updateLayers(ratios[i].layers)
             }
         }
+       
         console.log('selectedtemplate:',this.selectedtemplate)
       }
+        console.log('ASDASD')
+       this.$emit('openPopup',true)
       this.savetoLocalstorage()
       // alert('Save As');
     },
@@ -255,6 +258,24 @@ export default {
     },
     watchChanges(evt) {
       this.selectedtemplate.isResponsive = evt.value
+      console.log('this.layer:',this.selectedtemplate)
+      let layers = this.selectedtemplate.layers
+      let ratios = this.selectedtemplate.ratios
+      if (!this.selectedtemplate.isResponsive && this.selectedtemplate.selectedRatio) {
+          for (let i=0;i<layers.length;i++) {
+              layers[i].x = 100
+              layers[i].y = 100
+          }
+      }else if(this.selectedtemplate.isResponsive && this.selectedtemplate.selectedRatio) {
+          for (let i=0;i<ratios.length;i++) {
+             if(this.selectedtemplate.selectedRatio === ratios[i].name){
+                  this.selectedtemplate.layers = JSON.parse(JSON.stringify(ratios[i].layers))
+                  console.log('ratios[i].layers:',ratios[i].layers)
+                  console.log('this.selectedtemplate:',this.selectedtemplate)
+                  this.updateLayers(this.selectedtemplate.layers)
+             } 
+          }
+      }
       this.savetoLocalstorage()
     },
     beforeClose () {

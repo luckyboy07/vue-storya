@@ -23,7 +23,7 @@
       </div>
   </mu-appbar>
   <mu-divider/>
-  <editor-tools v-if="!hideSecondHeader" :selectedtemplate="getCanvasData"></editor-tools>
+  <editor-tools v-if="!hideSecondHeader" :selectedtemplate="getCanvasData" @openPopup="openPopup"></editor-tools>
   <!-- alert modal -->
   <mu-dialog :open="confirmOpen" :title="popupTitle">
     <div style="font-family: Lato; font-size: 17px; color: #fff">{{popupMsg}}</div> 
@@ -116,6 +116,10 @@ export default {
         return 'All Changes Saved'
       }
     },
+    openPopup (val){
+      console.log('val:',val)
+      this.$emit('popupSave',val)
+    } 
   }
 }
 </script>

@@ -36,7 +36,6 @@
        <mu-row gutter>
           <mu-checkbox name="group" nativeValue="" label="Do not show this again" class="demo-checkbox"/>
        </mu-row>
-      <!-- <mu-flat-button primary label="Close" @click="dialogOpen = false" slot="actions"/> -->
     </mu-dialog>
   </div>
 </template>
@@ -247,10 +246,12 @@ export default {
       this.$emit('templateSelectionChanged', item);
     },
     onPreview(event) {
+      console.log('preview')
       this.currentElement.target.removeAttribute('style')
       this.onApplys = false
-      this.dialogOpen = true;
+      // this.dialogOpen = true;
       this.showMenu = true;
+      this.$modal.show('preview-modal')
       this.$emit('onPreview', this.selectedTemplate);
     },
     onApply() {

@@ -81,8 +81,6 @@ export default {
       }
       // for keys with ctrl
       if (evt.ctrlKey) {
-        // stop the event  from propagating or executing default tasks
-        this. $_pevEvent(evt);
         if (evt.key === 'y') {
            var redoData = undoRedo.redo();
           //  if (redoData && redoData.lastAction === 'scale') {
@@ -120,33 +118,14 @@ export default {
            this.copiedLayer = null;
         }
       } else {
-        this. $_pevEvent(evt);
         if (evt.key === 'Delete') {
           var item = this.getSelectedLayerId();
           if (item) {
             undoRedo.add(appHelper.cloneLayer(item.sourceLayer), 'delete');
             this.$_removeFromArray(this.layers, item.id)
           }
-        }else if (evt.key === 'Escape') {
-           this.$emit('pickerisShow',false)
         }
       }
-    },
-    increaseLayerX(val) {
-       var item = this.getSelectedLayerId();
-       item.sourceLayer.x += val;
-    },
-    decreaseLayerX(val) {
-      var item = this.getSelectedLayerId();
-       item.sourceLayer.x -= val;
-    },
-    increaseLayerY(val) {
-      var item = this.getSelectedLayerId();
-      item.sourceLayer.y += val;
-    },
-    decreaseLayerY(val) {
-      var item = this.getSelectedLayerId();
-      item.sourceLayer.y -= val;
     },
     handleMouseMoveEvent(evt) {
       if (this.idleTime !== 0) {
@@ -230,10 +209,6 @@ export default {
 
       return arr;
     },
-    $_pevEvent(evt) {
-      evt.preventDefault();
-      evt.stopPropagation();
-    },
     $_debugLogger(log) {
        console.log('%c ' + log, 'background: green; color: #fff');
     }
@@ -249,7 +224,7 @@ export default {
       // console.log('---------------------- lastLayerAddTime changes');
       if (this.layers.length > 0) {
         var newLayer = this.layers[this.layers.length -1];
-        // this.setSelectedLayerId(newLayer.id);
+        this.setSelectedLayerId(newLayer.id);
         undoRedo.add(newLayer, 'create');
       }
     },
