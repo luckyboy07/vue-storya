@@ -1,5 +1,6 @@
 import axious from 'axios'
 export default {
+    cancelTokens: [], // cancel tokens, use for cancelling a request
     config: {
         baseUrl: 'http://192.168.254.114',
         port: 3000,
@@ -25,14 +26,13 @@ export default {
         if (typeof param !== 'object') {
             console.warn('Object is require for http post');
         }
+        const CancelToken = axious.CancelToken;
         return new Promise((resolve, reject) => {
             axious.post(this.$_getCompeleteUrl(url), param)
                 .then((response) => {
-                    console.log('success', response)
                     resolve(this.$_getReponseData(response));
                 })
                 .catch((err) => {
-                    console.log('catch', err)
                     reject(err)
                 })
         });

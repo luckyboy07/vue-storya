@@ -163,7 +163,7 @@ export default {
     // focusing on item neglecting its order
     focused(elem, data) {
       if (!this.selectedLayer || data.islocked) {
-        snackBar.show("Layer is locked", 800);
+        // snackBar.show("Layer is locked", 800);
         this.broadCastStatus({action: 'notify', layerId: data.id});
         // return;
       }
