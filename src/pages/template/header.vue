@@ -8,8 +8,8 @@
       <mu-flat-button @click="createButtonClicked()" label="Create" slot="left" class="btn-file h-60-p" style="margin-left: 10px"/>
       <mu-flat-button v-if="currentPage === 'editor'" @click="closeButtonClicked()" label="Close" slot="left" class="btn-file h-60-p"/>
       <mu-flat-button label="Help" slot="left" class="btn-file h-60-p"/>
-      <div v-if="currentPage === 'editor'" slot="left" class="s-header-prj-name s-f-14" style="margin-left: 10px; width: 300px;">Project Name:</div>
-      <input v-if="currentPage === 'editor'" v-model="getCanvasData.project_name" spellcheck="false" slot="left" class="default-inp" style="margin-left: 10px; width: 200px;"/>
+      <div v-if="currentPage === 'editor'" slot="left" class="s-header-prj-name s-f-14" style="margin-left: 10px; width: 320px;">Project Name:</div>
+      <input v-if="currentPage === 'editor'" v-model="getCanvasData.project_name" spellcheck="false" slot="left" class="default-inp" style="margin-left: 10px; min-width: 200px;"/>
       <div slot="left" class="s-unsave-info" :class="[autoData === '1' || autoData === '2' ? 'info-shown' : 'info-hidden']">{{getInfo()}}</div>
       <div slot="right" class="s-header-acct-sett-container">
         <div class="s-header-acct-owner"><div>Hi Storjak</div></div>

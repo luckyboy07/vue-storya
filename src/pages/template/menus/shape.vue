@@ -2,11 +2,11 @@
   <div>
      <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
        <!-- :title="data.attributes.shape === 'Triangle' ? 'Shape Layer (SVG)' : data.content" -->
-        <mu-list-item :title="getTitle()" @click.stop="open" :open="data.selected">
+        <mu-list-item :title="getTitle()" @click.stop="open" :open="data.selected && !data.islocked">
             <mu-icon slot="left" value="landscape" style="color: #fff"/>
-            <mu-icon-button :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
-            <mu-icon-button :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
-            <mu-icon-button :icon="data.selected ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
+            <mu-icon-button :class="{'s-cannot-delete':statuses && statuses.layerId === data.id}" :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
+            <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
+            <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.selected && !data.islocked ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
             <!-- <mu-list-item  slot="nested"  class="paddingZero">
                 <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Size Option</mu-grid-list>
@@ -62,6 +62,15 @@
                   <color-picker v-model="colors" @input="colorSelected" 
                     style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
                 </div> -->
+              </div>
+            </mu-list-item>
+            <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Blur Effect</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="data.attributes.filterBlur" class="mmslider" :max="100"/>
+                <input spellcheck="false" class="input-size sliderInput" v-model="data.attributes.filterBlur">
+                </mu-grid-list>
               </div>
             </mu-list-item>
             <!--  v-if="data.attributes.shape_type !== 'filled'" -->
@@ -143,7 +152,7 @@
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
-                <input spellcheck="false" v-model="data.attributes.shadowColor" class="input-size colorPicka">
+                <div class="div-inp input-size colorPicka">{{data.attributes.shadowColor}}</div>
                 <input spellcheck="false" class="input-size sliderInput" style="background-color:white" @click="showPicker($event,'shadow')">
                 </mu-grid-list>
               </div>
@@ -360,10 +369,13 @@ export default {
     };
   },
    computed: {
-    ...mapGetters(['getLayers'])
+    ...mapGetters(['getLayers',]),
+    ...mapGetters({
+        statuses: 'getBroadcastedStatuses'
+      }),
   },
   methods: {
-    ...mapMutations(['setSelectedLayerId']),
+    ...mapMutations(['setSelectedLayerId', 'broadCastStatus']),
     setGradientColors(evt) {
       console.log('setGradientColors:',evt)
       // var p = evt.$el.children[0];
@@ -427,12 +439,18 @@ export default {
       }
     },
     toggleLayer() {
-      if (this.data.islocked)return;
+      if (this.data.islocked) {
+        this.broadCastStatus({action: 'notify', layerId: this.data.id});
+        return;
+      }
 
       this.data.selected = this.data.visible = !this.data.visible;
     },
     open (event) {
-       if (this.data.islocked)return;
+       if (this.data.islocked) {
+         this.broadCastStatus({action: 'notify', layerId: this.data.id});
+         return;
+        }
 
         for(let i = 0; i < this.getLayers.length;i++){
           if (this.getLayers[i].id === this.data.id) {
@@ -522,10 +540,6 @@ export default {
     float: right;
     left: 0;
     padding-right: 12px;
-}
-.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 input, label {
     display:block;

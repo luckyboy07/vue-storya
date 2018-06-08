@@ -53,7 +53,8 @@
         :openpanel="layer.selected" 
         :data="layer" 
         @isOpen="isOpen"
-        @onRenameOrDelete="onRenameOrDelete">
+        @onRenameOrDelete="onRenameOrDelete"
+        @mousedown.native="selectLayer(layer, $event)">
       </component>
     </mu-list>
   </mu-drawer>
@@ -253,7 +254,7 @@ export default {
     document.addEventListener('mousedown', this.handleMousedown);
   },
   methods: {
-    ...mapMutations(['updateLayers', 'removeSelectedLayer']),
+    ...mapMutations(['updateLayers', 'removeSelectedLayer', 'broadCastStatus']),
     ...mapActions(['addLayer']),
     ...mapGetters(['getShapeLayer', 'getSelectedLayerId','sortLayer']),
     hoverBtn () {
@@ -293,9 +294,10 @@ export default {
     },
     removeLayer() {
       var selectedLayer = this.getSelectedLayerId();
-        
+      
       if (selectedLayer && selectedLayer.sourceLayer.islocked) {
         snackBar.show("Layer is locked");
+        this.broadCastStatus({action: 'notify', layerId: selectedLayer.id});
         return;
       }
       if (selectedLayer) {
@@ -422,6 +424,20 @@ export default {
       // this.menuElement.removeChild( this.menuElement.children[0]);
        this.menuElement.innerHTML =  this.menuLayerData.content;
        this.renaming = false;
+    },
+    // selecting the layer when button 2 is clicked
+    // right click XD
+    selectLayer(layer, evt) {
+      if (evt.button !== 2) return;
+      for (var i = 0; i < this.layers.length; i++) {
+        if (this.layers[i].id === layer.id) {
+          if (!this.layers[i].islocked) {
+            layer.selected = true;
+          } 
+        } else {
+          this.layers[i].selected = false;
+        }
+      }
     },
   }
 }

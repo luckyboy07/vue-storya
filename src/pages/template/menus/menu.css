@@ -65,3 +65,38 @@ input {
   height: 450px;
   overflow-y: auto;
 }*/
+
+.s-cannot-delete {
+    animation: shake-anim 0.5s;
+    animation-iteration-count: 1;
+}
+
+@keyframes shake-anim {
+    0% {
+        transform: rotate(0);
+    }
+    15% {
+        transform: rotate(8deg);
+    }
+    30% {
+        transform: rotate(-8deg);
+    }
+    45% {
+        transform: rotate(7deg);
+    }
+    60% {
+        transform: rotate(-7deg);
+    }
+    75% {
+        transform: rotate(5deg);
+    }
+    85% {
+        transform: rotate(-5deg);
+    }
+    92% {
+        transform: rotate(1deg);
+    }
+    100% {
+        transform: rotate(0);
+    }
+}

@@ -192,7 +192,7 @@ export default {
 
     emitActivated() {
       this.$emit("activated");
-      this.$emit("focused", this.$el, this.islocked);
+      this.$emit("focused", this.$el, {id: this.$el.id, islocked: this.islocked});
     },
 
     emitRotateStated() {
@@ -312,21 +312,21 @@ export default {
 
           // add zoom value to left and top if > 100
           // decrease  left and top to zoom if < 100
-          if (self.zoom > 100) {
-            if (browserHelper.isChrome()) {
-              center.left += self.zoom * 2;
-              center.top += self.zoom;
-            } else if (browserHelper.isFirefox()) {
-               // TODO: handle firefox
-            }
-          } else if (self.zoom < 100) {
-            if (browserHelper.isChrome()) {
-              center.left -= self.zoom * 2;
-              center.top -= self.zoom;
-            } else if (browserHelper.isFirefox()) {
-               // TODO: handle firefox
-            }
-          }
+          // if (self.zoom > 100) {
+          //   if (browserHelper.isChrome()) {
+          //     center.left += self.zoom * 2;
+          //     center.top += self.zoom;
+          //   } else if (browserHelper.isFirefox()) {
+          //      // TODO: handle firefox
+          //   }
+          // } else if (self.zoom < 100) {
+          //   if (browserHelper.isChrome()) {
+          //     center.left -= self.zoom * 2;
+          //     center.top -= self.zoom;
+          //   } else if (browserHelper.isFirefox()) {
+          //      // TODO: handle firefox
+          //   }
+          // }
 
           var degree = (Math.atan2(event.clientY - center.top, event.clientX - center.left) * 180 / Math.PI + 90) % 360;
           self.setOctantValue(self.value.rotation);

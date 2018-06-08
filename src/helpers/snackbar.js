@@ -13,7 +13,7 @@ export default {
      * Shows the snackbar 
      * @param {The content of the snackbar} message 
      */
-    show(message, _timeout) {
+    show(message, _timeout, _type = 'success') {
         if (this.timer) {
             window.clearTimeout(this.timer);
             this.timer = null;
@@ -29,6 +29,9 @@ export default {
             var elem = document.createElement('div');
             elem.id = 'storya-snackbar';
             elem.className = 'storya-snack-bar snack-bar-bottom';
+            if (_type === 'error') {
+                elem.className += 'error';
+            }
             var content = `
               <div id='snackbar-content'>
                 ` + message + `

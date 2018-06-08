@@ -8,11 +8,12 @@
   <div class="editor-container" ref="editorContainer">
     <colorPicker :pickerisShow="isWindowOpen" @closepicker="closepicker" :initialPosition="initposition" :target="targetElement"/>
     <div class="zoom-container" tabindex="0">
-        <div class="editor-box" ref="editorBox"
+        <!-- zoom: (canvasData.zoom / 100),
+          '-moz-transform': 'scale(' + (canvasData.zoom / 100) +')', -->
+        <div class="editor-box" ref="editorBox" @contextmenu="openContextMenu"
           :style="{width: canvasData.isResponsive ? canvasData.activeSize.width + 'px': canvasData.width + 'px', 
           height: canvasData.isResponsive ? canvasData.activeSize.height + 'px':canvasData.height + 'px', 
-          zoom: (canvasData.zoom / 100),
-          '-moz-transform': 'scale(' + (canvasData.zoom / 100) +')',
+        
           backgroundColor:canvasData.bgColor,}">
         <div class="canvas-wrap">
             <layer @scaling="layerScaling" :layers="filterLayer(layers)"></layer>
@@ -42,21 +43,33 @@
   <!-- Ruler Lines -->
 
   <!-- Grid Lines -->
-   <!-- Grid Lines -->
+  <!-- Grid Lines -->
+  <div tabindex="0" class="context-menu" @blur.native="showContextMenu = false" ref="contextMenu" v-show="showContextMenu" >
+    <mu-paper class="context-menu-overr">
+        <mu-menu>
+          <mu-menu-item @click="executeMenuCommand('copy')" title="Copy" :class="{'disabled': !selectedLayer}"/>
+          <!-- <mu-menu-item @click="executeMenuCommand('lock')" :title="selectedLayer && selectedLayer.islocked ? 'Unlock' : 'Lock'" :class="{'disabled': !selectedLayer}"/> -->
+          <mu-menu-item @click="executeMenuCommand('delete')" title="Delete" :class="{'disabled': !selectedLayer || selectedLayer && selectedLayer.islocked}"/>
+        </mu-menu>
+      </mu-paper>
+  </div>
 </div>
 </template>
 <script>
 import colorpicker from '../../components/editor/color-picker'
 import imageModal from '../../components/layer-modal/image-modal'
 import responsiveModal from '../../components/modal-responsive/modal'
+import {mapGetters, mapMutations} from 'vuex'
 import previewModal from '../../components/layer-modal/preview-modal'
-import {mapGetters} from 'vuex'
 import Header from '../template/header'
 import Siderbar from '../template/sidebar'
 import selectionBox from './layer'
 import gridlineHelper from '../../helpers/ruler-guidelines.js'
 import layerCloner from '../../helpers/layer-cloner.js'
 import editorCanvasHelper  from '../../helpers/editor-canvas.helper.js'
+import snackbar from '../../helpers/snackbar';
+import appHelper from '../../helpers/app.helper';
+import * as $ from 'linq'
 export default {
   name: 'Editor',
   data (){
@@ -64,6 +77,8 @@ export default {
       isWindowOpen: false,
       initposition: '360 / -80',
       targetElement: null,
+      showContextMenu: false,
+      selectedLayer: null,
       topPopup: false
     }
   },
@@ -84,9 +99,11 @@ export default {
   },
   mounted() {
     document.addEventListener('keydown', this.keydownEventHandler);
-    //gridlineHelper.createGridLines(this.canvasData, this.$refs.editorBox);
+    document.addEventListener('mousedown', this.handleMousedown);
   },
   methods: {
+    ...mapMutations(['addLayer', 'setSelectedLayerId', 'broadCastStatus']), 
+    ...mapGetters(['getSelectedLayerId']),
     openWindow (val) {
         this.targetElement = val
         setTimeout(()=>{
@@ -98,7 +115,8 @@ export default {
       this.isWindowOpen = value
     },
     layerScaling(layerData) {
-      if (this.canvasData.zoom !== 100) return;
+      this.showContextMenu = false;
+      // if (this.canvasData.zoom !== 100) return;
 
       var bounds1 = this.$refs.editorContainer.getBoundingClientRect();
       var bounds2 = this.$refs.editorBox.getBoundingClientRect();
@@ -142,7 +160,7 @@ export default {
 
           layerCloner.removeElement();
         }
-      }, 30);
+      }, 10);
     },
     filterLayer (layers){
       let canvas = this.canvasData
@@ -153,16 +171,60 @@ export default {
           var index = canvas.ratios.findIndex((e)=>{return canvas.selectedRatio === e.name})
           layers = canvas.ratios[index].layers
           return layers
-        }else{
+        } else{
           return layers
         }
-        
       }
     },
     keydownEventHandler(evt){
       if(evt.key === 'Escape' && this.isWindowOpen) {
         this.isWindowOpen = false
       }
+    },
+    executeMenuCommand(val) {
+      if (!this.selectedLayer) return;
+
+      this.showContextMenu = false;
+
+      if (val === 'copy') {
+        var copiedLayer = appHelper.createLayer(this.selectedLayer);
+        copiedLayer.order = $.from(this.layers).max(l => l.order) + 1;
+        this.addLayer(copiedLayer);
+        for (var i = 0; i < this.layers.length; i++) {
+           this.layers[i].selected = false;
+        }
+        this.layers[this.layers.length - 1].selected = true;
+        this.setSelectedLayerId(this.layers[this.layers.length - 1].id)
+      }
+      else if (val === 'lock') {
+        this.selectedLayer.islocked = !this.selectedLayer.islocked;
+      } else if (val === 'delete') {
+        if (this.selectedLayer.islocked) {
+          snackbar.show('Layer is locked');
+            this.broadCastStatus({action: 'notify', layerId: this.selectedLayer.id});
+          return;
+        }
+
+        for (var i = 0; i < this.layers.length; i++) {
+          if (this.layers[i].id === this.selectedLayer.id) {
+            this.layers.splice(i, 1);
+            break;
+          }
+        }
+      }
+    },
+    handleMousedown(evt) {
+      if (this.$refs.contextMenu && !this.$refs.contextMenu.contains(evt.target))  this.showContextMenu = false;
+    },  
+    openContextMenu(evt) {
+      evt.preventDefault();
+      var selected = this.getSelectedLayerId();
+      this.selectedLayer = selected && selected.sourceLayer && selected.sourceLayer.selected ?
+        selected.sourceLayer : null;
+
+      this.$refs.contextMenu.style.left = evt.clientX + 'px';
+      this.$refs.contextMenu.style.top = evt.clientY + 'px';
+      this.showContextMenu = true;
     },
     popupSave(val){
       console.log('popupSave',val)
@@ -223,6 +285,7 @@ export default {
 .editor-container {
     padding-top: 22px;
     padding-left: 345px;
+    user-select: none;
 }
 .editor-container .editor-box {
     width: 508px;
@@ -237,6 +300,7 @@ export default {
     border-style: solid;
     border-color: rgb(255, 255, 255);
     border-image: initial;
+    /* margin: 50px; */
 }
 .canvas-wrap {
    /* background-color: white; */
@@ -252,6 +316,32 @@ export default {
     overflow: auto;
     margin-bottom: 20px;
     outline: none;
+    user-select: none;
+}
+@media screen and (max-heght: 728px) {
+  body {
+    background: red
+  }
+}
+
+/* fixed scrollbar on smaller screen size */
+@media(min-height:600px) {
+  .zoom-container {
+    height: 70vh;
+  }
+ }
+ .context-menu {
+  width: 100px;
+  overflow: hidden;
+  position: absolute;
+  z-index: 9999;
+  top: 100px;
+  left: 100px;
+  box-shadow: 0 1px 6px #c9c5c5, 0 1px 4px #c9c5c5;
+  border-radius: 2px;
+}
+.context-menu-overr {
+  background-color: #009D70;
 }
 .demo-popup-top {
   width: 100%;
