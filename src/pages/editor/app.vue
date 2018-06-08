@@ -7,7 +7,7 @@
     <div class="zoom-container" tabindex="0">
         <!-- zoom: (canvasData.zoom / 100),
           '-moz-transform': 'scale(' + (canvasData.zoom / 100) +')', -->
-        <div class="editor-box" ref="editorBox"
+        <div class="editor-box" ref="editorBox" @contextmenu="openContextMenu"
           :style="{width: canvasData.isResponsive ? canvasData.activeSize.width + 'px': canvasData.width + 'px', 
           height: canvasData.isResponsive ? canvasData.activeSize.height + 'px':canvasData.height + 'px', 
         
@@ -39,27 +39,39 @@
   <!-- Ruler Lines -->
 
   <!-- Grid Lines -->
-   <!-- Grid Lines -->
+  <!-- Grid Lines -->
+  <div tabindex="0" class="context-menu" @blur.native="showContextMenu = false" ref="contextMenu" v-show="showContextMenu" >
+    <mu-paper class="context-menu-overr">
+        <mu-menu>
+          <mu-menu-item @click="executeMenuCommand('copy')" title="Copy" :class="{'disabled': !selectedLayer}"/>
+          <!-- <mu-menu-item @click="executeMenuCommand('lock')" :title="selectedLayer && selectedLayer.islocked ? 'Unlock' : 'Lock'" :class="{'disabled': !selectedLayer}"/> -->
+          <mu-menu-item @click="executeMenuCommand('delete')" title="Delete" :class="{'disabled': !selectedLayer || selectedLayer && selectedLayer.islocked}"/>
+        </mu-menu>
+      </mu-paper>
+  </div>
 </div>
 </template>
 <script>
 import colorpicker from '../../components/editor/color-picker'
 import imageModal from '../../components/layer-modal/image-modal'
 import responsiveModal from '../../components/modal-responsive/modal'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 import Header from '../template/header'
 import Siderbar from '../template/sidebar'
 import selectionBox from './layer'
 import gridlineHelper from '../../helpers/ruler-guidelines.js'
 import layerCloner from '../../helpers/layer-cloner.js'
 import editorCanvasHelper  from '../../helpers/editor-canvas.helper.js'
+import snackbar from '../../helpers/snackbar';
 export default {
   name: 'Editor',
   data (){
     return {
       isWindowOpen: false,
       initposition: '360 / -80',
-      targetElement: null
+      targetElement: null,
+      showContextMenu: false,
+      selectedLayer: null,
     }
   },
   components: {
@@ -78,9 +90,11 @@ export default {
   },
   mounted() {
     document.addEventListener('keydown', this.keydownEventHandler);
-    //gridlineHelper.createGridLines(this.canvasData, this.$refs.editorBox);
+    document.addEventListener('mousedown', this.handleMousedown);
   },
   methods: {
+    ...mapMutations(['broadCastStatus']), 
+    ...mapGetters(['getSelectedLayerId']),
     openWindow (val) {
         this.targetElement = val
         setTimeout(()=>{
@@ -92,6 +106,7 @@ export default {
       this.isWindowOpen = value
     },
     layerScaling(layerData) {
+      this.showContextMenu = false;
       // if (this.canvasData.zoom !== 100) return;
 
       var bounds1 = this.$refs.editorContainer.getBoundingClientRect();
@@ -147,7 +162,7 @@ export default {
           var index = canvas.ratios.findIndex((e)=>{return canvas.selectedRatio === e.name})
           layers = canvas.ratios[index].layers
           return layers
-        }else{
+        } else{
           return layers
         }
         
@@ -157,15 +172,44 @@ export default {
       if(evt.key === 'Escape' && this.isWindowOpen) {
         this.isWindowOpen = false
       }
-    }
-  },
-  watch: {
-    "canvasData.gridLines": {
-      handler(val) {
-        //gridlineHelper.showGridLines(val)
-      },
-      deep: true
-    }
+    },
+    executeMenuCommand(val) {
+      if (!this.selectedLayer) return;
+
+      if (val === 'copy') {
+
+      }
+      else if (val === 'lock') {
+        this.selectedLayer.islocked = !this.selectedLayer.islocked;
+      } else if (val === 'delete') {
+        if (this.selectedLayer.islocked) {
+          snackbar.show('Layer is locked');
+            this.broadCastStatus({action: 'notify', layerId: this.selectedLayer.id});
+          return;
+        }
+
+        for (var i = 0; i < this.layers.length; i++) {
+          if (this.layers[i].id === this.selectedLayer.id) {
+            this.layers.splice(i, 1);
+            break;
+          }
+        }
+      }
+      this.showContextMenu = false;
+    },
+    handleMousedown(evt) {
+      if (this.$refs.contextMenu && !this.$refs.contextMenu.contains(evt.target))  this.showContextMenu = false;
+    },  
+    openContextMenu(evt) {
+      evt.preventDefault();
+      var selected = this.getSelectedLayerId();
+      this.selectedLayer = selected && selected.sourceLayer && selected.sourceLayer.selected ?
+        selected.sourceLayer : null;
+
+      this.$refs.contextMenu.style.left = evt.clientX + 'px';
+      this.$refs.contextMenu.style.top = evt.clientY + 'px';
+      this.showContextMenu = true;
+    },
   },
 }
 </script>
@@ -255,5 +299,16 @@ export default {
     height: 70vh;
   }
  }
+ .context-menu {
+  width: 100px;
+  overflow: hidden;
+  position: absolute;
+  z-index: 9999;
+  top: 100px;
+  left: 100px;
+}
+.context-menu-overr {
+  background-color: #009D70;
+}
 </style>
 

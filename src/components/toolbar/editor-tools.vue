@@ -103,8 +103,8 @@ import zoomHelper from '../../helpers/zoom.helper.js'
 import exportHelper from '../../helpers/import-export.helper.js'
 import browserHelper from '../../helpers/browser.js'
 import ToggleButton from '../switchButton/button'
-import dom2image from 'dom-to-image'
 import appHelper from '../../helpers/app.helper';
+import rest from '../../helpers/rest.helper'
 export default {
   name: 'editor-tools',
   props:['selectedtemplate'],
@@ -239,87 +239,21 @@ export default {
       console.log('close')
     },
     ExportImage() {
-      var filter = function(node) {
-        console.log('node', node)
-        return (node.className && node.className.indexOf('rr-bar') === -1)
-      };
-
-      var zoom = 100;
-      var oldMargin = '';
-      var elem = document.getElementsByClassName('editor-box')[0];
-      // safari behaves differently from other major browsers
-      // image saving via front-end is not possible in safari browsers
-      // instead, save data as SVG format XD
-      if (browserHelper.isSafari()) {
-        dom2image.toSvg(elem)
-        .then((data) => {
+      var htmlStr =exportHelper.getHtmlString();
+      rest.post('renderimage', 
+      {
+        width: this.editorData.width,
+        height: this.editorData.height,
+        html: htmlStr
+      })
+      .then((response) => {
+        console.log('result', response)
           var link = document.createElement("a"); // Or maybe get it from the current document
-          link.href = data;
-          link.download = appHelper.generateGUID() + '.svg';;
+          link.href = response.body.base64;
+          link.download = appHelper.generateGUID() + '.png';;
           document.body.appendChild(link); // Or append it whereever you want
           link.click();
-        })
-        .catch((err) => {
-          console.error(err);
-        })
-      } else {
-        // handling other major browsers
-        // fixed error on margin
-        if (browserHelper.isChrome() || browserHelper.isOpera()) {
-          oldMargin = elem.style.marginLeft;
-          elem.style.marginLeft = '0px';
-        }
-        // if zoom level is not 100%
-        if (this.editorData.zoom !== 100) {
-          elem.style.zoom = '100%';
-          elem.style["-moz-transform"] = "scale(1)"
-
-          zoom = this.editorData.zoom;
-          this.editorData.zoom = 100;
-          zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
-        }
-        dom2image.toPng(elem, {
-          width: this.editorData.width, 
-          height: this.editorData.height, 
-          bgcolor: this.editorData.bgColor
-        }).then((dataUri) => {
-          if (this.editorData.zoom !== 100) {
-            elem.style.zoom = this.editorData.zoom / 100;
-            elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
-
-            this.editorData.zoom = zoom;
-            zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
-          }
-          
-          // restore margin after
-          if (browserHelper.isChrome() || browserHelper.isOpera()) {
-              elem.style.marginLeft = oldMargin;
-          }
-          var link = document.createElement('a');
-          link.download = "export-" + appHelper.generateGUID() + '.png';
-          link.href = dataUri;
-          // fixed on firefox not downloading
-          // explicitly append the a tag to work
-          if (browserHelper.isFirefox()) {
-            document.body.appendChild(link);
-          }
-          link.click();
-          if (browserHelper.isFirefox()) {
-            document.body.removeChild(link);
-          }
-        }).catch(() => {
-          if (this.editorData.zoom !== 100) {
-            elem.style.zoom = this.editorData.zoom / 100;
-            elem.style["-moz-transform"] = "scale(" + this.editorData.zoom / 100 + ")"
-          }
-          if (browserHelper.isFirefox()) {
-            document.body.appendChild(link);
-          }
-          if (browserHelper.isFirefox()) {
-            document.body.removeChild(link);
-          }
-        });
-      }
+      });
     }
   },
   computed: {
