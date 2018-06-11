@@ -100,6 +100,8 @@ export default {
         textAlign: layerData.textAlign,
         lineHeight: layerData.lineHeight,
         color: layerData.color,
+        "-webkit-filter": "blur(" + layerData.filterBlur + "px)",
+        filter: "blur(" + layerData.filterBlur + "px)",
         backgroundColor: layerData.backgroundColor,
         border: layerData.borderSize + 'px ' + layerData.borderStyle + ' ' + layerData.borderColor,
         textShadow: '' + layerData.shadowSize + 'px' + ' ' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowColor + ',' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowSize + 'px ' + layerData.shadowColor

@@ -114,12 +114,13 @@ export const store = new Vuex.Store({
                     borderWidth: 0,
                     borderStyle: 'Solid',
                     borderColor: 'red',
-                    shadowSize: '',
+                    shadowSize: 0,
                     shadowColor: '',
                     backgroundImageUri: '',
                     backgroundImageRepeat: 'none',
                     backgroundImagePosition: 'Left',
-                    backgroundImageAttachment: 'none'
+                    backgroundImageAttachment: 'none',
+                    filterBlur: 0
                 }
             },
             // image
@@ -150,9 +151,10 @@ export const store = new Vuex.Store({
                     borderWidth: 0,
                     borderStyle: 'None',
                     borderColor: '',
-                    shadowSize: '1',
+                    shadowSize: 1,
                     shadowColor: '',
-                    objectFit: 'Scale-Down'
+                    objectFit: 'Scale-Down',
+                    filterBlur: 0
                 }
             },
             {
@@ -194,6 +196,7 @@ export const store = new Vuex.Store({
                     shadowSize: 0,
                     shadowColor: "",
                     opacity: 1,
+                    filterBlur: 0
                 }
             },
             {
@@ -224,7 +227,8 @@ export const store = new Vuex.Store({
                 type: 'audio',
                 attributes: {}
             }
-        ]
+        ],
+        broadcastedStatuses: null,
     },
     mutations: {
         addLayer: (state, payload) => {
@@ -348,7 +352,16 @@ export const store = new Vuex.Store({
             let layers = state.layers
             layers = payload.item
             Vue.set(state, 'layers', layers)
-        }
+        },
+        broadCastStatus: (state, status) => {
+            if (!state) {
+                throw new Error('Invalid status');
+            }
+            state.broadcastedStatuses = status;
+            window.setTimeout(() => {
+                state.broadcastedStatuses = null;
+            }, 500);
+        },
     },
     getters: {
         getItems: state => {
@@ -409,6 +422,9 @@ export const store = new Vuex.Store({
         // returns the auto save status data
         getAutosaveStatusData: state => {
             return state.autoSaveStatus;
+        },
+        getBroadcastedStatuses: state => {
+            return state.broadcastedStatuses;
         },
     },
     actions: {

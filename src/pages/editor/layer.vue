@@ -1,6 +1,6 @@
 <template>
 <div>
-      <!-- :handles="'nw,ne,se,sw'" -->
+    <!-- :handles="'nw,ne,se,sw'" -->
     <rotatable-resizer 
       :id="elem.id"
       :islocked="elem.islocked"
@@ -101,7 +101,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setLayerValue', 'setSelectedLayerId']),
+    ...mapMutations(['setLayerValue', 'setSelectedLayerId', 'broadCastStatus']),
     ...mapGetters(['getCanvasData']),
     // handling the click event
     handleCanvasClicks(evt) {
@@ -161,10 +161,11 @@ export default {
        }
     },
     // focusing on item neglecting its order
-    focused(elem, islocked) {
-      if (!this.selectedLayer || islocked) {
-        snackBar.show("Layer is locked", 800);
-        return;
+    focused(elem, data) {
+      if (!this.selectedLayer || data.islocked) {
+        // snackBar.show("Layer is locked", 800);
+        this.broadCastStatus({action: 'notify', layerId: data.id});
+        // return;
       }
 
       if (this.previousElem) {
@@ -190,7 +191,7 @@ export default {
       this.shiftKeyOn = false;
       this.$emit('scaling', null)
 
-      if (elem.islocked) return;
+      // if (elem.islocked) return;
 
       console.log('%c Selected: ' + elem.id, 'background-color: red; color: white');
       //  check if there is a previously assigned layer

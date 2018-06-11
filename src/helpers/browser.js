@@ -41,4 +41,10 @@ export default {
     isBlink() {
         return (isChrome || isOpera) && !!window.CSS;
     },
+    /**
+     * Return true if browser is mobile
+     */
+    isMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
 }

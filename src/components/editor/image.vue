@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%; height: 100%;position: absolute;">
-    <img :src="layerData.image.url ? layerData.image.url : 'http://via.placeholder.com/140x100'"  :style="getStyle()"/>
+    <img :src="layerData.image.url ? layerData.image.url : require('../../assets/img_default.jpeg')"  :style="getStyle()"/>
     <div class="img-layer-cover"></div>
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
   methods: {
       getStyle () {
           let layerData = this.layerData.attributes
-          let shadows = '1px 12px '+layerData.shadowSize+'px '+layerData.shadowColor
+          let shadows = layerData.shadowSize > 0 ? '1px 12px '+layerData.shadowSize+'px '+layerData.shadowColor : ''
           return {
               borderColor: layerData.borderColor,
               borderWidth: layerData.borderWidth+'px',
@@ -35,7 +35,9 @@ export default {
               sizeOption: layerData.sizeOption,
               boxShadow: layerData.shadowColor ? shadows : '',
               width: '100%',
-              height: '100%'
+              height: '100%',
+              "-webkit-filter": "blur(" + layerData.filterBlur + "px)",
+              filter: "blur(" + layerData.filterBlur + "px)",
           }
         //   return this.layer
         //   return this.layerData 

@@ -24,6 +24,7 @@ import appHelper  from './helpers/app.helper.js'
 import undoRedo from './helpers/undo-redo'
 import fontHelper from './helpers/fonts.helper.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
+import* as $ from 'linq'
 export default {
   data () {
     return {
@@ -32,8 +33,9 @@ export default {
       idleTimeout: 1000, // the idle timeout to trigger the 'idleTimer' event. The value is in milliseconds
       idleTime: 0, // the idle time in seconds
       idleTimer: null, // the idle timer function. Assigned to a variable to be able to use it such as stopping the timer
-      allowedKeys: ['y', 'z', 'Delete'], // allowed keys
+      allowedKeys: ['y', 'z', 'Delete','Escape', 'c', 'v'], // allowed keys
       autoSaveInfoDisplayDuration: 0,
+      copiedLayer: null, // the container of copied layer
     }
   },
   name: 'App',
@@ -97,7 +99,25 @@ export default {
              this.$_handleUndo(undoData.layer, undoData.lastAction)
           }
            this.$_debugLogger("key action: undo");
-        } 
+        }  else if (evt.key === 'c') {
+           var item = this.getSelectedLayerId();
+          if (item && item.sourceLayer.selected) {
+           this.copiedLayer = appHelper.createLayer(item.sourceLayer);
+          }
+        } else if (evt.key === 'v') {
+          if (this.layers.length <= 0) return;
+
+          this.copiedLayer.order = $.from(this.layers).max(l => l.order) + 1;
+          this.copiedLayer.fromUndoRedo = true; // hack lol; this should be like this
+          this.addLayer(this.copiedLayer);
+          for (var i = 0; i < this.layers.length; i++) {
+            this.layers[i].selected = false;
+          }
+
+         this.copiedLayer.selected = true;
+          this.setSelectedLayerId(this.copiedLayer.id)
+          this.copiedLayer = null;
+        }
       } else {
         if (evt.key === 'Delete') {
           var item = this.getSelectedLayerId();

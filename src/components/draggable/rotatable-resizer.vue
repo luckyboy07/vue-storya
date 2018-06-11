@@ -17,31 +17,31 @@
     <div class="rr-bar rr-ord-s" key="bar-s"></div>
     <div class="rr-bar rr-ord-e" key="bar-e"></div>
     <div class="rr-bar rr-ord-w" key="bar-w"></div>
-    <div v-show="zoom > 60" class="rr-rotate-handle" v-if="rotatable" ref="rotateHandle">
+    <div class="rr-rotate-handle" v-if="rotatable" ref="rotateHandle">
       <div v-show="!isRotating" class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Rotate</div>
     </div>
-    <div class="rr-handle rr-ord-n" v-if="hasHandle('n')" key="ord-n">
+    <div v-show="!islocked" class="rr-handle rr-ord-n" v-if="hasHandle('n')" key="ord-n">
       <div v-show="!isResizing" class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
-    <div class="rr-handle rr-ord-s" v-if="hasHandle('s')" key="ord-s">
+    <div v-show="!islocked" class="rr-handle rr-ord-s" v-if="hasHandle('s')" key="ord-s">
       <div v-show="!isResizing" class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
-    <div class="rr-handle rr-ord-e" v-if="hasHandle('e')" key="ord-e">
+    <div v-show="!islocked" class="rr-handle rr-ord-e" v-if="hasHandle('e')" key="ord-e">
       <div v-show="!isResizing" class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
-    <div class="rr-handle rr-ord-w" v-if="hasHandle('w')" key="ord-w">
+    <div v-show="!islocked" class="rr-handle rr-ord-w" v-if="hasHandle('w')" key="ord-w">
       <div v-show="!isResizing" class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
-    <div class="rr-handle rr-ord-nw" v-if="hasHandle('nw')" key="ord-nw">
+    <div v-show="!islocked" class="rr-handle rr-ord-nw" v-if="hasHandle('nw')" key="ord-nw">
       <div v-show="!isResizing" class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
-    <div class="rr-handle rr-ord-ne" v-if="hasHandle('ne')" key="ord-ne">
+    <div v-show="!islocked" class="rr-handle rr-ord-ne" v-if="hasHandle('ne')" key="ord-ne">
       <div v-show="!isResizing" class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
-    <div class="rr-handle rr-ord-se" v-if="hasHandle('se')" key="ord-se">
+    <div v-show="!islocked" class="rr-handle rr-ord-se" v-if="hasHandle('se')" key="ord-se">
       <div v-show="!isResizing" class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
-    <div class="rr-handle rr-ord-sw" v-if="hasHandle('sw')" key="ord-sw">
+    <div v-show="!islocked" class="rr-handle rr-ord-sw" v-if="hasHandle('sw')" key="ord-sw">
       <div v-show="!isResizing" class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
     <div class="p-d-g">
@@ -56,7 +56,7 @@
     <div v-show="isDragging" class="layer-action-info info-top" :style="{transform: 'rotateZ(' + (this.rotation * -1) + 'deg)',}">
       {{parseInt(this.left) + ', ' + parseInt(this.top)}}
     </div>
-    <div class="rr-content">
+    <div class="rr-content" :class="[!islocked ? 's-layer-movable' : 's-layer-unmovable']">
       <slot></slot>
     </div>
   </div>
@@ -64,6 +64,12 @@
 
 <style lang="scss">
 @import './resizer.scss';
+.s-layer-movable {
+  cursor: move;
+}
+.s-layer-unmovable {
+   cursor: auto;
+}
 .layer-action-info {
   font-size: 10px;
   color:#7F7F7F;
