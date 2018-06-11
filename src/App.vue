@@ -25,6 +25,7 @@ import undoRedo from './helpers/undo-redo'
 import fontHelper from './helpers/fonts.helper.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
 import* as $ from 'linq'
+import snackbar from './helpers/snackbar.js';
 export default {
   data () {
     return {
@@ -68,7 +69,8 @@ export default {
       'setSelectedLayerId', 
       'updateUndoRedoAction', 
       'setAutosaveData',
-      'setLayer'
+      'setLayer',
+      'broadCastStatus'
       ]),
     keydownEventHandler(evt) {
       // resetting idle time in key activities
@@ -122,6 +124,11 @@ export default {
         if (evt.key === 'Delete') {
           var item = this.getSelectedLayerId();
           if (item) {
+            if (item.sourceLayer.islocked) {
+              snackbar.show("Layer is locked");
+              this.broadCastStatus({action: 'notify', layerId: item.sourceLayer.id});
+              return;
+            }
             undoRedo.add(appHelper.cloneLayer(item.sourceLayer), 'delete');
             this.$_removeFromArray(this.layers, item.id)
           }

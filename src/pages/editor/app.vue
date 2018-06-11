@@ -160,7 +160,7 @@ export default {
 
           layerCloner.removeElement();
         }
-      }, 10);
+      }, 5);
     },
     filterLayer (layers){
       let canvas = this.canvasData

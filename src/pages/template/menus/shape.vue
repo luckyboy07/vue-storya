@@ -75,7 +75,7 @@
             </mu-list-item>
             <!--  v-if="data.attributes.shape_type !== 'filled'" -->
             <mu-sub-header v-if="hasGradient()" slot="nested">Gradient Background <mu-checkbox v-model="data.attributes.isGradient" class="subheader-chckbox"/></mu-sub-header>
-            <mu-list-item v-if="hasGradient()" slot="nested" class="paddingZero demiBlackbg">
+            <mu-list-item v-if="hasGradient()" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Position</mu-grid-list>
                 <mu-grid-list class="right">
