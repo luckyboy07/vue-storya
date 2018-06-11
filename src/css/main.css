@@ -911,9 +911,10 @@ input[type='number'] {
     cursor: not-allowed;
 }
 
-input[disabled="disabled"] {
+
+/* input[disabled="disabled"] {
     opacity: 0.21!important;
-}
+} */
 
 .div-inp {
     background-color: #333333;
