@@ -77,6 +77,8 @@
   import Vue from 'vue'
   import FileUpload from 'vue-upload-component'
   import {mapMutations} from 'vuex'
+  import {upload} from '../../helpers/upload.js'
+
 Vue.component('file-upload', FileUpload)
 export default {
     name: 'imageModal',
@@ -115,19 +117,18 @@ export default {
             return prevent()
           }
         }
+        console.log('newFile:',newFile)
+          this.save(newFile)
         if (newFile && (!oldFile || newFile.file !== oldFile.file)) {
           newFile.url = ''
           newFile.selected = false
           let URL = window.URL || window.webkitURL
           console.log(URL)
           if (URL && URL.createObjectURL) {
-            console.log('DIRI nasad')
             newFile.url = URL.createObjectURL(newFile.file)
             let reader = new Image()
             reader.src = newFile.url
             reader.onload = function(){
-              console.log('height', reader.naturalWidth)
-              console.log('width', reader.naturalHeight)
               newFile.originalWidth = reader.naturalWidth
               newFile.originalHeight = reader.naturalHeight
             }
@@ -135,17 +136,14 @@ export default {
         }
       },
       inputFile(newFile, oldFile,prevent) {
-          console.log('add', newFile)
         if (newFile && !oldFile) {
           // add
         }
         if (newFile && oldFile) {
           // update
-          console.log('update', newFile)
         }
         if (!newFile && oldFile) {
           // remove
-          console.log('remove', oldFile)
         }
       },
       closeModal () {
@@ -160,8 +158,6 @@ export default {
         })
       },
       confirm () {
-        console.log('this.layer:',this.selectedLayer)
-        console.log('this.selectedImage:',this.selectedImage)
         if(this.selectedLayer.type === 'shape'){
           this.selectedLayer.attributes.backgroundImageUri = this.selectedImage
         }else{
@@ -176,10 +172,21 @@ export default {
         // console.log('files:',this.selectedImage)
         // this.selectedImage = this.selectedImage
       },
-    beforeOpen(event) {
-      console.log('event:',event)
+      beforeOpen(event) {
       this.selectedLayer = event.params.data
+      },
+      wait(min) {
+            return (x) => {
+              return new Promise(resolve => setTimeout(() => resolve(x), min));
+            };
+      },
+      save(formdata) {
+        upload(formdata)
+        .then(val =>{
+          console.log('val:',val)
+        })
       }
+
   },
   // upated () {
   //   this.files()  {
