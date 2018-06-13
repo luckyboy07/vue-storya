@@ -86,12 +86,14 @@ export default {
     },
     addAnimation(id, animations, ts, loop, custom) {
         // console.log(id, animations, ts, loop, custom)
+        if (!loop) loop = 'Infinite';
         if (loop === 'Once') loop = 1;
         if (loop === 'Custom') loop = custom;
 
+
         var oldStyle = document.getElementById('style-' + id);
         if (oldStyle) {
-            document.head.removeChild(oldStyle);
+            oldStyle.parentElement.removeChild(oldStyle);
         }
         var cssVal = '';
         for (var i = 0; i < animations.length; i++) {
@@ -189,7 +191,7 @@ export default {
 
         var oldStyle = document.getElementById('style-' + layer.id);
         if (oldStyle) {
-            document.head.removeChild(oldStyle);
+            oldStyle.parentElement.removeChild(oldStyle);
         }
     },
     getAnimatedLayers() {
