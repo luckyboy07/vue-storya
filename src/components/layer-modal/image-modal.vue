@@ -27,8 +27,8 @@
          <br>
           <div class="container-grid">
           <mu-grid-list class="gridlist">
-            <mu-grid-tile v-for="(img,i) in medias" :key="i">
-               <img :src="img.media_path" @click.stop="selectImage(img)" class="img-grid" :class="`${img.selected? 'selected' : ''}`"/>
+            <mu-grid-tile v-for="(img,i) in files" :key="i">
+               <img :src="img.url" @click.stop="selectImage(img)" class="img-grid" :class="`${img.selected? 'selected' : ''}`"/>
             </mu-grid-tile>
           </mu-grid-list>
         </div>
@@ -36,7 +36,7 @@
        <mu-col width="30"  desktop="30" style="margin-top: 10px;">
          <mu-grid-list>
              <mu-grid-tile class="overview-tile">
-               <img :src="selectedImage.media_path"/>
+               <img :src="selectedImage.url"/>
              </mu-grid-tile>
               <div class="selected-title">
             {{selectedImage.name}}<br>

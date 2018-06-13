@@ -127,7 +127,7 @@ import snackbar from '../../helpers/snackbar';
 import browserHelper from '../../helpers/browser.js'
 export default {
   name: 'editor-tools',
-  props:['selectedtemplate'],
+  props:['selectedtemplate','dataLayer'],
   components: {
     'custom-menu':customMenu,
     ToggleButton
@@ -252,7 +252,8 @@ export default {
       this.$localStorage.set('canvas',JSON.stringify(this.selectedtemplate))
     },
     openModal () {
-      this.$modal.show('responsive-modal',{data: this.selectedtemplate},{
+    console.log('laeyers:', this.dataLayer)
+      this.$modal.show('responsive-modal',{data: this.selectedtemplate,layers:this.dataLayer},{
         'closed': this.beforeClose
       })
     },

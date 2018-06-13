@@ -159,7 +159,8 @@ export default {
             currentElement: {}, 
             isRemove: false,
             modal: {},
-             screens: [
+            layers: [],
+            screens: [
                 {
                     id:1,
                     name:'2:3',
@@ -379,8 +380,10 @@ export default {
     methods: {
         ...mapActions(['updateLayers']),
         beforeOpen (event) {
+            console.log('evenmt:',event)
             this.modal = event
             this.template = event.params.data
+            this.layers = event.params.layers
             let ratios = this.template.ratios
             if(this.template.selectedRatio !== '') {
                this.refresh(this.activeTab)
@@ -448,10 +451,12 @@ export default {
             if(this.template.selectedRatio !== '') {
                 var index = this.template.ratios.findIndex((e)=>{return this.template.selectedRatio === e.name})
                 this.ratioSelected.layers = JSON.parse(JSON.stringify(this.template.ratios[index].layers))
+                console.log('this.ratioSelected:',this.ratioSelected)
             }else{
-                let newlayer = this.template.layers
-                this.ratioSelected.layers = JSON.parse(JSON.stringify(newlayer))
+                // let newlayer = this.template.layers
+                this.ratioSelected.layers = JSON.parse(JSON.stringify(this.layers))
             }
+
             this.updateLayers(this.ratioSelected.layers)
             this.ratioSelected.isPick = true
             this.template.ratios.push(this.ratioSelected)
