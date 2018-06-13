@@ -202,9 +202,9 @@
                        <label for="name" style="font-size:10px;">FX Start</label>
                       <input v-model="data.attributes.animation.animationFlow.fxs" v-digitsonly spellcheck="false" class="input-size sliderInput" style="border: 1px solid #CC785A; text-align: center; width:35px !important;">
                   </div>
-                   <div style="float:left;margin-right:3px;text-align:center">
+                   <div style="float:left;margin-right:3px;text-align:center; width: 100px;">
                        <label for="name" style="font-size:10px;">Elapsed</label>
-                      <input  v-model="data.attributes.animation.animationFlow.e" v-digitsonly spellcheck="false" class="input-size sliderInput" style="text-align: center;">
+                      <input  v-model="data.attributes.animation.animationFlow.e" v-digitsonly spellcheck="false" class="input-size sliderInput" style="width: 100%!important;text-align: center;">
                   </div>
                    <div style="float:left;margin-right:3px;text-align:center">
                        <label for="name" style="font-size:10px;">FX End</label>
@@ -219,7 +219,7 @@
              v-for="(anim, index) in data.attributes.animation.animations" :key="index">
               <mu-icon-button style="opacity: 0.5; margin-left: -10px; font-size: 5px;" slot="left" @click="removeAnimation(index)" icon="close" icon-class="ics"/>
                <mu-grid-list slot="right" :toggleNested="false" >
-                  <multiselect v-model="anim.animation" open-direction="bottom" style=" margin-right: 100px; width: 165px!important;" :options="['Fade','Rotate', 'Size', 'Slide Left/Right', 'Slide Top/Bottom']" :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
+                  <multiselect @select="onSelect(anim)" v-model="anim.animation" open-direction="bottom" style=" margin-right: 100px; width: 165px!important;" :options="['Fade','Rotate', 'Size', 'Slide Left/Right', 'Slide Top/Bottom']" :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
                </mu-grid-list>
                 <!-- <mu-icon-button slot="right" icon="keyboard_arrow_down"/> -->
               <!-- FADE PROPERTY -->
@@ -249,7 +249,7 @@
                 <mu-grid-list class="gridlist-demo left">Rotate Start</mu-grid-list>
                 <mu-grid-list class="right">
                 <mu-slider v-model="anim.start" :max="360" class="mmslider" :step="1"/>
-                <input style="width: 57px!important;" :value="anim.start" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                <input style="width: 57px!important;" :value="anim.start + '°'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -258,7 +258,7 @@
                 <mu-grid-list class="gridlist-demo left">Rotate End</mu-grid-list>
                 <mu-grid-list class="right">
                 <mu-slider v-model="anim.end" :max="360" class="mmslider" :step="1"/>
-                <input style="width: 57px!important;" :value="anim.end" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                <input style="width: 57px!important;" :value="anim.end + '°'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -268,7 +268,7 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Start Position</mu-grid-list>
                 <mu-grid-list class="right">
-                  <input v-digitsonly v-model="anim.start" spellcheck="false" class="input-size colorPicka">
+                  <input style="width: 155px!important;" v-digitsonly v-model="anim.start" spellcheck="false" class="input-size colorPicka">
                   <input :value="data.attributes.animation.animationFlow.fxs" disabled spellcheck="false" class="input-size sliderInput" style="border: 1px solid #CC785A; text-align: center;width:35px !important;">
                   </mu-grid-list>
               </div>
@@ -277,9 +277,28 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">End Position</mu-grid-list>
                 <mu-grid-list class="right">
-                  <input v-append-unit="'px'" v-digitsonly v-model="anim.end" spellcheck="false" class="input-size colorPicka">
+                  <input style="width: 155px!important;" v-append-unit="'px'" v-digitsonly v-model="anim.end" spellcheck="false" class="input-size colorPicka">
                   <input :value="data.attributes.animation.animationFlow.fxe" disabled spellcheck="false" class="input-size sliderInput" style="border: 1px solid #44C5B5; text-align: center;width:35px !important;">
                   </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <!-- Scale -->
+            <mu-list-item v-if="anim.animation === 'Size'" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Start Scale</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="anim.start" :max="1000" class="mmslider" :step="0.1"/>
+                <input style="width: 57px!important;" :value="anim.start + '%'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <mu-list-item v-if="anim.animation === 'Size'" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">End Scale</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="anim.end" :max="1000" class="mmslider" :step="0.1"/>
+                <input style="width: 57px!important;" :value="anim.end + '%'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
               </div>
             </mu-list-item>
             </mu-list-item>
@@ -527,7 +546,10 @@ export default {
       
       // console.log('idx:',idx)
     },
-
+    onSelect(data) {
+      data.end = '';
+      data.start = '';
+    },
     addAnimations() {
      var animData = {
        animation: 'Fade',

@@ -45,10 +45,35 @@ export default {
                 case "Rotate":
                     var start = layer.attributes.animation.animations[i].start;
                     var end = layer.attributes.animation.animations[i].end;
-                    var rotate = templates.rotate.toRotate(layer.id, this.getFlowsArr(animFlow), ts, start, end);
+                    var scale_start = 100,
+                        scale_end = 100;
+                    // finding scale value
+                    for (var j = 0; j < layer.attributes.animation.animations.length; j++) {
+                        if (layer.attributes.animation.animations[j].animation === 'Size') {
+                            scale_start = layer.attributes.animation.animations[j].start;
+                            scale_end = layer.attributes.animation.animations[j].end;
+                        }
+                    }
+                    var rotate = templates.rotate.toRotate(layer.id, this.getFlowsArr(animFlow), ts, start, end, scale_start, scale_end);
                     // console.log('rotate', rotate)
                     animations.push(rotate);
                     break;
+                case "Size":
+                    // scale will be included in rotate
+                    // only activate if rotation is not defined
+                    var canExecute = true;
+                    for (var j = 0; j < layer.attributes.animation.animations.length; j++) {
+                        if (layer.attributes.animation.animations[j].animation === 'Rotate') {
+                            canExecute = false;
+                            break;
+                        }
+                    }
+                    if (canExecute) {
+                        var scale_start = layer.attributes.animation.animations[i].start;
+                        var scale_end = layer.attributes.animation.animations[i].end;
+                        var scaled = templates.scale.getScale(layer.id, this.getFlowsArr(animFlow), ts, scale_start, scale_end);
+                        animations.push(scaled);
+                    }
                     break;
                 default:
                     break;

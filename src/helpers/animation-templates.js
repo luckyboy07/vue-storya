@@ -55,8 +55,7 @@ export default {
             var strCSS = '@keyframes slideLeftRight-' + id + `{
             0% {
               left: ` + sp + `px;
-          }
-          `;
+            }`;
             var nums = 0;
             for (var i = 0; i < flows.length; i++) {
                 nums += flows[i];
@@ -103,25 +102,34 @@ export default {
         }
     },
     rotate: {
-        toRotate(id, flows, total, rstart, rend) {
-            console.log(id, flows, total, rstart, rend)
+        toRotate(id, flows, total, rstart, rend, ss, se) {
+            // console.log(id, flows, total, rstart, rend, ss, se)
 
             var strCSS = '@keyframes rotate-' + id + `{
-        0% {
-          transform: rotate(0deg) scale(1);
-        }
-      `;
+                0% {
+                    transform: rotate(0deg) scale(` + (parseFloat(ss) / 100) + `);
+                }
+            `;
             var nums = 0;
             for (var i = 0; i < flows.length; i++) {
                 nums += flows[i];
                 var perc = Math.round((nums / total) * 100);
                 var rotation = '0deg';
-                if (i <= 1) rotation = rstart + 'deg';
-                if (i > 1) rotation = rend + 'deg';
+                var scale = ss;
+
+                if (i <= 1) {
+                    rotation = rstart + 'deg';
+                    scale = ss;
+                }
+
+                if (i > 1) {
+                    rotation = rend + 'deg';
+                    scale = se;
+                }
 
                 strCSS += `
             ` + perc + `% {
-              transform: rotate(` + rotation + `);
+              transform: rotate(` + rotation + `) scale(` + (parseFloat(scale) / 100) + `);
             }
           `;
             }
@@ -129,6 +137,30 @@ export default {
             strCSS += '}';
 
             return { cn: 'layerRotate-' + id, css: strCSS, kfn: 'rotate-' + id };
+        },
+    },
+    scale: {
+        getScale(id, flows, total, ss, es) {
+            var strCSS = '@keyframes layerScaling-' + id + `{
+                0% {
+                    transform: scale(` + (parseInt(ss) / 100) + `);
+                }`;
+            var nums = 0;
+            for (var i = 0; i < flows.length; i++) {
+                nums += flows[i];
+                var perc = Math.round((nums / total) * 100);
+                var scale = ss;
+                if (i <= 1) scale = ss;
+                if (i > 1) scale = es;
+
+                strCSS += `` + perc + `% {
+                        transform: scale(` + (parseInt(scale) / 100) + `);
+                    }`;
+            }
+
+            strCSS += '}';
+
+            return { cn: 'layerscale-' + id, css: strCSS, kfn: 'layerScaling-' + id };
         },
     }
 }
