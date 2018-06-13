@@ -16,7 +16,8 @@
                 :drop="true"
                 :drop-directory="true"
                 v-model="files"
-                ref="upload">
+                ref="upload"
+                :post-action="'http://206.189.153.177:4000/media'">
             <mu-flexbox class="flx">
               <mu-flexbox-item class="flex-container" > 
                           + Drag and Drop Images
@@ -26,8 +27,8 @@
          <br>
           <div class="container-grid">
           <mu-grid-list class="gridlist">
-            <mu-grid-tile v-for="(img,i) in files" :key="i">
-               <img :src="img.url" @click.stop="selectImage(img)" class="img-grid" :class="`${img.selected? 'selected' : ''}`"/>
+            <mu-grid-tile v-for="(img,i) in medias" :key="i">
+               <img :src="img.media_path" @click.stop="selectImage(img)" class="img-grid" :class="`${img.selected? 'selected' : ''}`"/>
             </mu-grid-tile>
           </mu-grid-list>
         </div>
@@ -35,7 +36,7 @@
        <mu-col width="30"  desktop="30" style="margin-top: 10px;">
          <mu-grid-list>
              <mu-grid-tile class="overview-tile">
-               <img :src="selectedImage.url"/>
+               <img :src="selectedImage.media_path"/>
              </mu-grid-tile>
               <div class="selected-title">
             {{selectedImage.name}}<br>
@@ -78,17 +79,20 @@
   import FileUpload from 'vue-upload-component'
   import {mapMutations} from 'vuex'
   import {upload} from '../../helpers/upload.js'
-
+  import API from '../../helpers/API.js'
+  import axios from 'axios';
+  const API_URL = 'http://206.189.153.177:4000/'
 Vue.component('file-upload', FileUpload)
 export default {
     name: 'imageModal',
     props: [ 'modal', 'dialog'],
     data () {
       return {
-       files: [],
-       selectedImage: {},
+      files: [],
+      selectedImage: {},
       selectedLayer: {},
-       images:[{
+      medias: [],
+      images:[{
          id: 1,
          image: 'https://marketplace.canva.com/MACPvCG4Ti4/1/0/thumbnail_large/canva-gray-and-blue-photo-fitness-facebook-post-MACPvCG4Ti4.jpg'
        },
@@ -107,25 +111,28 @@ export default {
        ]
       }
     },
+    mounted () {
+      console.log('mounted')
+      this.getImages()
+    },
     methods:{
       ...mapMutations(['addImage']),
         inputFilter(newFile, oldFile, prevent) {
-            console.log("DIRI",newFile)
           if (newFile && !oldFile) {
           if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
             this.alert('Your choice is not a picture')
             return prevent()
           }
         }
-        console.log('newFile:',newFile)
-          this.save(newFile)
-        if (newFile && (!oldFile || newFile.file !== oldFile.file)) {
+          // this.save(newFile)
+          //  && (!oldFile || newFile.file !== oldFile.file)
+        if (newFile) {
           newFile.url = ''
           newFile.selected = false
           let URL = window.URL || window.webkitURL
-          console.log(URL)
           if (URL && URL.createObjectURL) {
-            newFile.url = URL.createObjectURL(newFile.file)
+            newFile.url = newFile.response.statusCode === 201 ? API_URL+newFile.response.response.data.media_path: URL.createObjectURL(newFile.file)
+            console.log("DIRI",newFile)
             let reader = new Image()
             reader.src = newFile.url
             reader.onload = function(){
@@ -136,6 +143,7 @@ export default {
         }
       },
       inputFile(newFile, oldFile,prevent) {
+         this.$refs.upload.active = true
         if (newFile && !oldFile) {
           // add
         }
@@ -145,6 +153,9 @@ export default {
         if (!newFile && oldFile) {
           // remove
         }
+        setTimeout(()=>{
+          this.getImages()
+        },1000)
       },
       closeModal () {
         // console.log('files"',this.files)
@@ -152,6 +163,7 @@ export default {
            this.$modal.hide('image-modal')
       },
       selectImage (image) {
+        console.log('image:',image)
         this.selectedImage = image
         this.files.forEach(row => {
             row.selected = row.id === image.id
@@ -185,8 +197,12 @@ export default {
         .then(val =>{
           console.log('val:',val)
         })
+      },
+      getImages () {
+        API.getImages().then(response=>{
+          this.medias = response
+        })
       }
-
   },
   // upated () {
   //   this.files()  {

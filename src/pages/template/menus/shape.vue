@@ -618,27 +618,24 @@ export default {
       var frames1 = "";
       let len = frames.length
       let sad = 6
-      console.log('len:',len)
       for (let i=0;i<sad;i++){
         let kf = frames[i]
         let dt = (i/(sad-1)) * 100
         console.log('dt:',dt)
         frames1 += dt + "% { -webkit-transform: translate(" + kf[0] + "px," + kf[1] + "px) rotate(" + kf[2] + "deg) scale(" + kf[3] + "," + kf[4] + "); } "
-        console.log('frames1:',frames1)
       }
 
        var idx = document.styleSheets[5].cssRules.length;
         document.styleSheets[5].insertRule("@-webkit-keyframes " + name + " { " + frames1 + "}", idx);
-        console.log(document.styleSheets)
-      setTimeout(() => {
-      let shaps = document.getElementById('shape')
-      console.log(shaps)
-      console.log(document.styleSheets[5])
+      // setTimeout(() => {
+      // let shaps = document.getElementById('shape')
+      // console.log(shaps)
+      // console.log(document.styleSheets[5])
       //   shaps.style.webkitAnimationIterationCount = 'infinite';
       // shaps.style.webkitAnimationTimingFunction = 'linear';
       // shaps.style.webkitAnimationDuration = '2.0s';
       // shaps.style.webkitAnimationName = 'rotate';
-      }, (1000));
+      // }, (1000));
       
       // console.log('idx:',idx)
     },
