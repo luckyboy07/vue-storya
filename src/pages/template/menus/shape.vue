@@ -75,7 +75,7 @@
             </mu-list-item>
             <!--  v-if="data.attributes.shape_type !== 'filled'" -->
             <mu-sub-header v-if="hasGradient()" slot="nested">Gradient Background <mu-checkbox v-model="data.attributes.isGradient" class="subheader-chckbox"/></mu-sub-header>
-            <mu-list-item v-if="hasGradient()" slot="nested" class="paddingZero demiBlackbg">
+            <mu-list-item v-if="hasGradient()" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Position</mu-grid-list>
                 <mu-grid-list class="right">
@@ -174,13 +174,17 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-            <mu-sub-header slot="nested" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'">Animations <mu-icon-button class="subheader-chckbox"  icon="keyboard_arrow_down" style="top: 0px;" /> <mu-icon-button class="subheader-chckbox"  icon="play_arrow" style="top: 0px;" @click="playAnimation" /></mu-sub-header>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>  
+            <mu-sub-header slot="nested">
+              Animations 
+              <img v-show="data.attributes.animation.playing" src="../../../assets/animation_playing.gif" alt="playing" class="si-playing">
+              <mu-icon-button @click="previewAnimation()" class="subheader-chckbox" :icon="!data.attributes.animation.playing ? 'play_arrow' : 'stop'" style="top: 0"/>
+            </mu-sub-header>
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                   <mu-grid-list class="gridlist-demo left">Loop</mu-grid-list>
                   <mu-grid-list class="right">
-                    <multiselect v-model="animations.loop" :options="['Once','Infinite', 'Custom']" :show-labels="false" :searchable="false" :close-on-select="true" style="max-width: 165px;"></multiselect>
-                      <input v-model="animations.custom" type="number" :disabled="animations.loop !== 'Custom'"  spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
+                    <multiselect v-model="data.attributes.animation.loop" :options="['Once','Infinite', 'Custom']" :show-labels="false" :searchable="false" :close-on-select="true" :style="{'max-width': data.attributes.animation.loop === 'Custom' ? '165px' : '195px'}"></multiselect>
+                    <input @keyup.enter="data.attributes.animation.custom = $event.target.value" @blur="data.attributes.animation.custom = $event.target.value" :value="data.attributes.animation.custom" v-show="data.attributes.animation.loop === 'Custom'" v-digitsonly spellcheck="false" class="input-size sliderInput" style="text-align: center; width:35px !important;">
                   </mu-grid-list>
                   <!-- <mu-grid-list class="right">
                   </mu-grid-list> -->
@@ -189,158 +193,121 @@
             <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
             <mu-raised-button  v-no-ripple label="Animation Flow(seconds)" fullWidth style="text-transform: none;background-color: #000000;"/>
             </mu-list-item>
-            <mu-list-item v-no-ripple slot="nested" class="paddingZero demiBlackbg" v-if="data.attributes.shape_type !== ' ' && data.attributes.shape !== 'Triangle'">
-              <div class="gridlist-demo-container" style="margin-top: -6px;">
-                <mu-grid-list class="gridlist-demo left">Elapsed</mu-grid-list>
-                <mu-grid-list class="right">
-                <input v-model="animations.elapsed" spellcheck="false" class="input-size colorPicka" style="width: 205px !important;
-                    margin-right: 0 !important;">
-                </mu-grid-list>
-              </div>
-            </mu-list-item>
-            <!-- <mu-list-item  slot="nested" class="paddingZero diBlackbg" v-no-ripple  style="height: 70px;margin-left: 50px;">
+            <mu-list-item  slot="nested" class="paddingZero diBlackbg" v-no-ripple  style="height: 70px;margin-left: 15px;">
                   <div style="float:left;margin-right:3px;text-align:center">
                        <label for="name" style="font-size:10px;">Delay Start</label>
-                      <input v-model="animations.delay_start" :disabled="!hasBorder()" type="number"  spellcheck="false" class="input-size sliderInput" >
+                      <input v-model="data.attributes.animation.animationFlow.ds" v-digitsonly spellcheck="false" class="input-size sliderInput" style="text-align: center;">
                   </div>
                   <div style="float:left;margin-right:3px;text-align:center">
                        <label for="name" style="font-size:10px;">FX Start</label>
-                      <input v-model="animations.fx_start" :disabled="!hasBorder()" type="number"  spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
+                      <input v-model="data.attributes.animation.animationFlow.fxs" v-digitsonly spellcheck="false" class="input-size sliderInput" style="border: 1px solid #CC785A; text-align: center; width:35px !important;">
                   </div>
-                   <div style="float:left;margin-right:3px;text-align:center">
+                   <div style="float:left;margin-right:3px;text-align:center; width: 100px;">
                        <label for="name" style="font-size:10px;">Elapsed</label>
-                      <input v-model="animations.elapsed" :disabled="!hasBorder()" type="number"  spellcheck="false" class="input-size sliderInput" >
+                      <input  v-model="data.attributes.animation.animationFlow.e" v-digitsonly spellcheck="false" class="input-size sliderInput" style="width: 100%!important;text-align: center;">
                   </div>
                    <div style="float:left;margin-right:3px;text-align:center">
                        <label for="name" style="font-size:10px;">FX End</label>
-                      <input v-model="animations.fx_end" :disabled="!hasBorder()" type="number"  spellcheck="false" class="input-size sliderInput" >
+                      <input v-model="data.attributes.animation.animationFlow.fxe" v-digitsonly spellcheck="false" class="input-size sliderInput" style="border: 1px solid #44C5B5; text-align: center; width:35px !important;">
                   </div>
-            </mu-list-item> -->
-            <mu-list-item  :class="{'anims': item.animation.name}" slot="nested" class="paddingZero demiBlackbg" v-no-ripple v-for="(item,i) in animations.animation" :key="i">
+                   <div style="float:left;margin-right:3px;text-align:center">
+                       <label for="name" style="font-size:10px;">Delay End</label>
+                      <input v-model="data.attributes.animation.animationFlow.de" v-digitsonly spellcheck="false" class="input-size sliderInput" style="text-align: center;">
+                  </div>
+            </mu-list-item>
+            <mu-list-item slot="nested" title="Animation"
+             v-for="(anim, index) in data.attributes.animation.animations" :key="index">
+              <mu-icon-button style="opacity: 0.5; margin-left: -10px; font-size: 5px;" slot="left" @click="removeAnimation(index)" icon="close" icon-class="ics"/>
+               <mu-grid-list slot="right" :toggleNested="false" >
+                  <multiselect @select="onSelect(anim)" v-model="anim.animation" open-direction="bottom" style=" margin-right: 100px; width: 165px!important;" :options="['Fade','Rotate', 'Size', 'Slide Left/Right', 'Slide Top/Bottom']" :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
+               </mu-grid-list>
+                <!-- <mu-icon-button slot="right" icon="keyboard_arrow_down"/> -->
+              <!-- FADE PROPERTY -->
+             <mu-list-item v-if="anim.animation === 'Fade'" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                  <mu-grid-list class="gridlist-demo" slot="right">Start</mu-grid-list>
+                  <mu-grid-list class="right">
+                  <multiselect v-model="anim.start" open-direction="bottom" :options="['In','Out']" :show-labels="false" :searchable="false" :close-on-select="true" style="max-width: 165px;"></multiselect>
+                  <input disabled :value="data.attributes.animation.animationFlow.fxs" spellcheck="false" class="input-size sliderInput" style="border: 1px solid #CC785A; text-align: center;width:35px !important;">
+                  </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <mu-list-item style="margin-bottom: 50px;" v-if="anim.animation === 'Fade'" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                  <mu-grid-list class="gridlist-demo" slot="right">End</mu-grid-list>
+                  <mu-grid-list class="right">
+                  <multiselect v-model="anim.end" open-direction="bottom" :options="['In','Out']" :show-labels="false" :searchable="false" :close-on-select="true" style="max-width: 165px;"></multiselect>
+                  <input disabled :value="data.attributes.animation.animationFlow.fxe" spellcheck="false" class="input-size sliderInput" style="border: 1px solid #44C5B5; text-align: center;width:35px !important;">
+                  </mu-grid-list>
+              </div>
+            </mu-list-item>
+             <!-- FADE PROPERTY -->
+            <!-- ---------------------------------------------- -->
+            <!-- ROTATION PROPERTY -->
+            <mu-list-item v-if="anim.animation === 'Rotate'" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Rotate Start</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="anim.start" :max="360" class="mmslider" :step="1"/>
+                <input style="width: 57px!important;" :value="anim.start + '°'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <mu-list-item v-if="anim.animation === 'Rotate'" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Rotate End</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="anim.end" :max="360" class="mmslider" :step="1"/>
+                <input style="width: 57px!important;" :value="anim.end + '°'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <!-- ---------------------------------------------- -->
+            <!-- SLIDE -->
+            <mu-list-item v-if="anim.animation && anim.animation.indexOf('Slide') !== -1" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Start Position</mu-grid-list>
+                <mu-grid-list class="right">
+                  <input style="width: 155px!important;" v-digitsonly v-model="anim.start" spellcheck="false" class="input-size colorPicka">
+                  <input :value="data.attributes.animation.animationFlow.fxs" disabled spellcheck="false" class="input-size sliderInput" style="border: 1px solid #CC785A; text-align: center;width:35px !important;">
+                  </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <mu-list-item v-if="anim.animation && anim.animation.indexOf('Slide') !== -1" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">End Position</mu-grid-list>
+                <mu-grid-list class="right">
+                  <input style="width: 155px!important;" v-append-unit="'px'" v-digitsonly v-model="anim.end" spellcheck="false" class="input-size colorPicka">
+                  <input :value="data.attributes.animation.animationFlow.fxe" disabled spellcheck="false" class="input-size sliderInput" style="border: 1px solid #44C5B5; text-align: center;width:35px !important;">
+                  </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <!-- Scale -->
+            <mu-list-item v-if="anim.animation === 'Size'" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">Start Scale</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="anim.start" :max="1000" class="mmslider" :step="0.1"/>
+                <input style="width: 57px!important;" :value="anim.start + '%'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
+            </mu-list-item>
+            <mu-list-item v-if="anim.animation === 'Size'" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+              <div class="gridlist-demo-container">
+                <mu-grid-list class="gridlist-demo left">End Scale</mu-grid-list>
+                <mu-grid-list class="right">
+                <mu-slider v-model="anim.end" :max="1000" class="mmslider" :step="0.1"/>
+                <input style="width: 57px!important;" :value="anim.end + '%'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                </mu-grid-list>
+              </div>
+            </mu-list-item>
+            </mu-list-item>
+            <!-- <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                   <mu-grid-list  slot="left"><mu-icon-button icon="close" icon-class="ics"/></mu-grid-list> 
                   <mu-grid-list class="gridlist-demo" slot="right">Animation</mu-grid-list>
                   <mu-grid-list class="right">
-                  <multiselect :options="animationList" v-model="item.animation" label="name"  :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
-                  </mu-grid-list>
-              </div>
-              <div class="gridlist-demo-container" style="width: auto;" v-if="item.animation.category === 'fade'">
-                  <mu-list-item class="paddingZero demiBlackbg" v-no-ripple style="width: 100%;">
-                    <div class="gridlist-demo-container">
-                        <mu-grid-list class="gridlist-demo" slot="right">Start</mu-grid-list>
-                        <mu-grid-list class="right">
-                        <multiselect v-model="item.start" :options="fade" :hide-selected="true" @select="selectedSub($event,fade)" :show-labels="false" :searchable="false" :close-on-select="true" style="max-width: 165px;"></multiselect>
-                        <input  v-model="item.start_time"  type="number" :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
-                        </mu-grid-list>
-                    </div>
-                  </mu-list-item>
-                   <mu-list-item class="paddingZero demiBlackbg" v-no-ripple style="width: 100%;">
-                      <div class="gridlist-demo-container">
-                          <mu-grid-list class="gridlist-demo" slot="right">End</mu-grid-list>
-                          <mu-grid-list class="right">
-                          <multiselect v-model="item.end"  :options="fade"  :hide-selected="true" @select="selectedSub($event,fade)" :show-labels="false" :searchable="false" :close-on-select="true" style="max-width: 165px;"></multiselect>
-                          <input  v-model="item.end_item"  type="number"  :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
-                          </mu-grid-list>
-                      </div>
-                    </mu-list-item>
-              </div>
-              <div class="gridlist-demo-container" style="width: auto;" v-if="item.animation.category === 'rotate'">
-                  <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple style="width: 100%;">
-                    <div class="gridlist-demo-container">
-                      <mu-grid-list class="gridlist-demo left">Rotate Start</mu-grid-list>
-                      <mu-grid-list class="right">
-                      <mu-slider v-model="item.start" :disabled="!hasBorder()"  class="mmslider" :step="1"/>
-                      <input  v-model="item.start" :disabled="!hasBorder()" v-digitsonly  spellcheck="false" class="input-size sliderInput">
-                      </mu-grid-list>
-                    </div>
-                  </mu-list-item>
-                  <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple style="width: 100%;">
-                    <div class="gridlist-demo-container">
-                      <mu-grid-list class="gridlist-demo left">Rotate End</mu-grid-list>
-                      <mu-grid-list class="right">
-                      <mu-slider v-model="item.end" :disabled="!hasBorder()"  class="mmslider" :step="1"/>
-                      <input v-model="item.end" :disabled="!hasBorder()" v-digitsonly  spellcheck="false" class="input-size sliderInput">
-                      </mu-grid-list>
-                    </div>
-                  </mu-list-item>
-              </div>
-              <div class="gridlist-demo-container" style="width: auto;" v-if="item.animation.category === 'slide'">
-                  <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple style="width: 100%;">
-                    <div class="gridlist-demo-container">
-                      <mu-grid-list class="gridlist-demo left">Start Position</mu-grid-list>
-                      <mu-grid-list class="right">
-                        <input v-model="item.start"  mask="###.###.###-##" spellcheck="false"  class="input-size colorPicka">
-                        <input v-model="item.start_time" type="number" spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
-                        </mu-grid-list>
-                    </div>
-                  </mu-list-item>
-                  <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple style="width: 100%;">
-                    <div class="gridlist-demo-container">
-                      <mu-grid-list class="gridlist-demo left">End Position</mu-grid-list>
-                      <mu-grid-list class="right">
-                        <input v-model="item.end" spellcheck="false"  class="input-size colorPicka">
-                        <input v-model="item.end_time" type="number" spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
-                        </mu-grid-list>
-                    </div>
-                   </mu-list-item>
-              </div>
-            </mu-list-item>
-            <!-- FADE PROPERTY -->
-            <!-- <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
-              <div class="gridlist-demo-container">
-                  <mu-grid-list class="gridlist-demo" slot="right">Start</mu-grid-list>
-                  <mu-grid-list class="right">
-                   <multiselect :options="['Once','Infinite', 'Custom']" :show-labels="false" :searchable="false" :close-on-select="true" style="max-width: 165px;"></multiselect>
-                  <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
-                  </mu-grid-list>
-              </div>
-            </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
-              <div class="gridlist-demo-container">
-                  <mu-grid-list class="gridlist-demo" slot="right">End</mu-grid-list>
-                  <mu-grid-list class="right">
-                   <multiselect :options="['Once','Infinite', 'Custom']" :show-labels="false" :searchable="false" :close-on-select="true" style="max-width: 165px;"></multiselect>
-                  <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
-                  </mu-grid-list>
-              </div>
-            </mu-list-item> -->
-            <!-- ---------------------------------------------- -->
-            <!-- ROTATION PROPERTY -->
-            <!-- <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
-              <div class="gridlist-demo-container">
-                <mu-grid-list class="gridlist-demo left">Rotate Start</mu-grid-list>
-                <mu-grid-list class="right">
-                <mu-slider :disabled="!hasBorder()"  class="mmslider" :step="1"/>
-                <input :disabled="!hasBorder()" v-digitsonly  spellcheck="false" class="input-size sliderInput">
-                </mu-grid-list>
-              </div>
-            </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
-              <div class="gridlist-demo-container">
-                <mu-grid-list class="gridlist-demo left">Rotate End</mu-grid-list>
-                <mu-grid-list class="right">
-                <mu-slider :disabled="!hasBorder()"  class="mmslider" :step="1"/>
-                <input :disabled="!hasBorder()" v-digitsonly  spellcheck="false" class="input-size sliderInput">
-                </mu-grid-list>
-              </div>
-            </mu-list-item> -->
-            <!-- ---------------------------------------------- -->
-            <!-- SLIDE -->
-            <!-- <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
-              <div class="gridlist-demo-container">
-                <mu-grid-list class="gridlist-demo left">Start Position</mu-grid-list>
-                <mu-grid-list class="right">
-                  <input spellcheck="false"  class="input-size colorPicka">
-                  <input spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
-                  </mu-grid-list>
-              </div>
-            </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
-              <div class="gridlist-demo-container">
-                <mu-grid-list class="gridlist-demo left">End Position</mu-grid-list>
-                <mu-grid-list class="right">
-                  <input spellcheck="false"  class="input-size colorPicka">
-                  <input spellcheck="false" class="input-size sliderInput" style="width:35px !important;">
+                    <multiselect style="max-width: 160px;" :options="['Fade','Rotate', 'Size', 'Slide Top/Bottom', 'Slide Left/Right']" :show-labels="false" :searchable="false" :close-on-select="true" ></multiselect>
                   </mu-grid-list>
               </div>
             </mu-list-item> -->
@@ -384,6 +351,7 @@
 import {mapGetters,mapMutations} from 'vuex'
 import { Photoshop, Chrome } from "vue-color";
 import vueSlider from 'vue-slider-component';
+import animationHelper from '../../../helpers/animation'
 export default {
   name: "ShapeLayer",
   props: ["data", "openpanel"],
@@ -401,14 +369,14 @@ export default {
   mounted() {
      // for the context menu to show only on the title part
     this.$el.querySelector(".mu-item-wrapper").addEventListener('contextmenu', this.showMenu)
-    this.buildAnimation('rotate', [
-      [0,0,0,1.0,1.0],
-      [0,0,0,2.0,1.0],
-      [0,0,90,1.0,1.0],
-      [0,0,180,1.0,1.0],
-      [0,0,270,1.0,1.0],
-      [0,0,360,1.0,1.0]
-    ])
+    // this.buildAnimation('rotate', [
+    //   [0,0,0,1.0,1.0],
+    //   [0,0,0,2.0,1.0],
+    //   [0,0,90,1.0,1.0],
+    //   [0,0,180,1.0,1.0],
+    //   [0,0,270,1.0,1.0],
+    //   [0,0,360,1.0,1.0]
+    // ])
   },
   beforeDestroy() {
     document.removeEventListener('mousedown', this.hidePicker);
@@ -429,68 +397,8 @@ export default {
       value2: "",
       value3: "",
       options: ["Manual", "Automatic", "test", "TEst 2"],
-      fade: ['Fade In','Fade Out'],
       selectedPicker: '',
-      animations: {
-        loop: '',
-        custom: '',
-        delay_start:'',
-        fx_start: '',
-        elapsed: '',
-        fx_end:'',
-        animation:[]
-      },
-      currentanimation: {},
-      animationList: [{
-        id: 1,
-        name: 'Fade',
-        category: 'fade',
-        start: '',
-        items: ['Fade In','Fade Out'],
-        start_time: '',
-        end: '',
-        end_time: '',
-        time: ''
-      },{
-        id: 2,
-        name: 'Rotate',
-        category: 'rotate',
-        start: '',
-        start_time: '',
-        end: '',
-        end_time: '',
-        time: ''
-      },
-      {
-        id: 3,
-        name: 'Slide Left/Right',
-        category: 'slide',
-        start: '',
-        start_time: '',
-        end: '',
-        end_time: '',
-        time: ''
-      },
-       {
-        id: 4,
-        name: 'Slide Top/Bottom',
-        category: 'slide',
-        start: '',
-        start_time: '',
-        end: '',
-        end_time: '',
-        time: ''
-      },
-      {
-        id: 5,
-        name: 'Scale',
-        category: 'scale',
-        start: '',
-        start_time: '',
-        end: '',
-        end_time: '',
-        time: ''
-      }]
+      animations: []
     };
   },
    computed: {
@@ -617,53 +525,60 @@ export default {
     buildAnimation (name,frames) {
       var frames1 = "";
       let len = frames.length
-      let sad = 6
-      for (let i=0;i<sad;i++){
+      console.log('len:',len)
+      for (let i=0;i<len;i++){
         let kf = frames[i]
-        let dt = (i/(sad-1)) * 100
-        console.log('dt:',dt)
+        let dt = (i/(len-1)) * 100
         frames1 += dt + "% { -webkit-transform: translate(" + kf[0] + "px," + kf[1] + "px) rotate(" + kf[2] + "deg) scale(" + kf[3] + "," + kf[4] + "); } "
       }
-
        var idx = document.styleSheets[5].cssRules.length;
         document.styleSheets[5].insertRule("@-webkit-keyframes " + name + " { " + frames1 + "}", idx);
-      // setTimeout(() => {
-      // let shaps = document.getElementById('shape')
-      // console.log(shaps)
-      // console.log(document.styleSheets[5])
-      //   shaps.style.webkitAnimationIterationCount = 'infinite';
+        console.log(document.styleSheets)
+      setTimeout(() => {
+      let shaps = document.getElementById('shape')
+      console.log(shaps)
+      console.log(document.styleSheets[5])
+        shaps.style.webkitAnimationIterationCount = 'infinite';
       // shaps.style.webkitAnimationTimingFunction = 'linear';
-      // shaps.style.webkitAnimationDuration = '2.0s';
-      // shaps.style.webkitAnimationName = 'rotate';
-      // }, (1000));
+      shaps.style.webkitAnimationDuration = '2.0s';
+      shaps.style.webkitAnimationName = 'rotate';
+      }, (1000));
       
       // console.log('idx:',idx)
     },
+    onSelect(data) {
+      data.end = '';
+      data.start = '';
+    },
     addAnimations() {
-      console.log('ADD')
+     var animData = {
+       animation: 'Fade',
+       start: null,
+       end: null,
+     };
 
-      let obj = {
-        animation: {},
-        start: '',
-        end:'',
-        id: this.animations.animation.length === 0 ? 0 :this.animations.animation.length +1
+      console.log('cuur', this.data.attributes.animation.animations)
+      this.data.attributes.animation.animations.push(animData);
+    },
+    removeAnimation(index) {
+      for (var i = 0; i < this.data.attributes.animation.animations.length; i++) {
+        if (i === index) {
+          this.data.attributes.animation.animations.splice(i, 1)
+          break;
+        }
       }
-      this.animations.animation.push(obj)
-      console.log('asdasd',this.animations)
+
+      animationHelper.updateAnimations(this.data);
     },
-    playAnimation() {
-      console.log('asdsa;',this.animations)
+    previewAnimation() {
+      // console.log(this.data.attributes.animation)
+     this.data.attributes.animation.playing = !this.data.attributes.animation.playing;
+      if ( this.data.attributes.animation.playing) {
+        animationHelper.applyAnimation(this.data);
+      } else {
+        animationHelper.stopAnimation(this.data);
+      }
     },
-    selectedSub (val,items){
-      // let arr = 0
-      // if(val === 'Fade In') {
-      //   arr = this.fade.slice(1,2)
-      //   this.fade = arr
-      // }else {
-      //   arr = this.fade.slice(0,1)
-      //   this.fade = arr
-      // }
-    } 
   }
 }
 </script>
@@ -678,23 +593,6 @@ export default {
   position: absolute;
   z-index: 2;
   box-shadow: 0 1px 6px rgba(0,0,0,.117647), 0 1px 4px rgba(0,0,0,.117647);
-}
-.subheader-chckbox{
-    position: relative;
-    top: 12px;
-    float: right;
-    left: 0;
-    padding-right: 12px;
-}
-input, label {
-    display:block;
-}
-.ics {
-  font-size: 10px
-}
-.anims {
-  height: 145px;
-  margin-bottom: 5px;
 }
 </style>
 

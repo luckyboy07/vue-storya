@@ -160,7 +160,7 @@ export default {
 
           layerCloner.removeElement();
         }
-      }, 10);
+      }, 5);
     },
     filterLayer (layers){
       let canvas = this.canvasData
@@ -189,6 +189,8 @@ export default {
       if (val === 'copy') {
         var copiedLayer = appHelper.createLayer(this.selectedLayer);
         copiedLayer.order = $.from(this.layers).max(l => l.order) + 1;
+        copiedLayer.x += 30;
+        copiedLayer.y += 10;
         copiedLayer.fromUndoRedo = true; // hack lol; this should be like this
         this.addLayer(copiedLayer);
         for (var i = 0; i < this.layers.length; i++) {
