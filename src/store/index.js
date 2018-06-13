@@ -166,7 +166,19 @@ export const store = new Vuex.Store({
                     shadowSize: 1,
                     shadowColor: '',
                     objectFit: 'Scale-Down',
-                    filterBlur: 0
+                    filterBlur: 0,
+                    animation: {
+                        loop: null,
+                        animationFlow: {
+                            ds: 0, // delay start
+                            fxs: 0, // fx start
+                            e: 0, // elapse
+                            fxe: 0, // fx end
+                            de: 0, // delay end
+                        },
+                        animations: [],
+                        playing: false,
+                    },
                 }
             },
             {
@@ -208,7 +220,19 @@ export const store = new Vuex.Store({
                     shadowSize: 0,
                     shadowColor: "",
                     opacity: 1,
-                    filterBlur: 0
+                    filterBlur: 0,
+                    animation: {
+                        loop: null,
+                        animationFlow: {
+                            ds: 0, // delay start
+                            fxs: 0, // fx start
+                            e: 0, // elapse
+                            fxe: 0, // fx end
+                            de: 0, // delay end
+                        },
+                        animations: [],
+                        playing: false,
+                    },
                 }
             },
             {

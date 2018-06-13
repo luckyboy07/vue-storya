@@ -196,23 +196,23 @@
             <mu-list-item  slot="nested" class="paddingZero diBlackbg" v-no-ripple  style="height: 70px;margin-left: 15px;">
                   <div style="float:left;margin-right:3px;text-align:center">
                        <label for="name" style="font-size:10px;">Delay Start</label>
-                      <input v-model="data.attributes.animation.animationFlow.ds" v-digitsonly :disabled="!hasBorder()" spellcheck="false" class="input-size sliderInput" style="text-align: center;">
+                      <input v-model="data.attributes.animation.animationFlow.ds" v-digitsonly spellcheck="false" class="input-size sliderInput" style="text-align: center;">
                   </div>
                   <div style="float:left;margin-right:3px;text-align:center">
                        <label for="name" style="font-size:10px;">FX Start</label>
-                      <input v-model="data.attributes.animation.animationFlow.fxs" v-digitsonly :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" style="border: 1px solid #CC785A; text-align: center; width:35px !important;">
+                      <input v-model="data.attributes.animation.animationFlow.fxs" v-digitsonly spellcheck="false" class="input-size sliderInput" style="border: 1px solid #CC785A; text-align: center; width:35px !important;">
                   </div>
                    <div style="float:left;margin-right:3px;text-align:center">
                        <label for="name" style="font-size:10px;">Elapsed</label>
-                      <input  v-model="data.attributes.animation.animationFlow.e" v-digitsonly :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" style="text-align: center;">
+                      <input  v-model="data.attributes.animation.animationFlow.e" v-digitsonly spellcheck="false" class="input-size sliderInput" style="text-align: center;">
                   </div>
                    <div style="float:left;margin-right:3px;text-align:center">
                        <label for="name" style="font-size:10px;">FX End</label>
-                      <input v-model="data.attributes.animation.animationFlow.fxe" v-digitsonly :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" style="border: 1px solid #44C5B5; text-align: center; width:35px !important;">
+                      <input v-model="data.attributes.animation.animationFlow.fxe" v-digitsonly spellcheck="false" class="input-size sliderInput" style="border: 1px solid #44C5B5; text-align: center; width:35px !important;">
                   </div>
                    <div style="float:left;margin-right:3px;text-align:center">
                        <label for="name" style="font-size:10px;">Delay End</label>
-                      <input v-model="data.attributes.animation.animationFlow.de" v-digitsonly :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" style="text-align: center;">
+                      <input v-model="data.attributes.animation.animationFlow.de" v-digitsonly spellcheck="false" class="input-size sliderInput" style="text-align: center;">
                   </div>
             </mu-list-item>
             <mu-list-item slot="nested" title="Animation"
@@ -236,7 +236,7 @@
               <div class="gridlist-demo-container">
                   <mu-grid-list class="gridlist-demo" slot="right">End</mu-grid-list>
                   <mu-grid-list class="right">
-                   <multiselect v-model="anim.end" open-direction="bottom" :options="['In','Out']" :show-labels="false" :searchable="false" :close-on-select="true" style="max-width: 165px;"></multiselect>
+                  <multiselect v-model="anim.end" open-direction="bottom" :options="['In','Out']" :show-labels="false" :searchable="false" :close-on-select="true" style="max-width: 165px;"></multiselect>
                   <input disabled :value="data.attributes.animation.animationFlow.fxe" spellcheck="false" class="input-size sliderInput" style="border: 1px solid #44C5B5; text-align: center;width:35px !important;">
                   </mu-grid-list>
               </div>
@@ -248,8 +248,8 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Rotate Start</mu-grid-list>
                 <mu-grid-list class="right">
-                <mu-slider v-model="anim.start" :max="360" :disabled="!hasBorder()"  class="mmslider" :step="1"/>
-                <input :value="anim.start" :disabled="!hasBorder()" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                <mu-slider v-model="anim.start" :max="360" class="mmslider" :step="1"/>
+                <input style="width: 57px!important;" :value="anim.start" v-digitsonly  spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -257,8 +257,8 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Rotate End</mu-grid-list>
                 <mu-grid-list class="right">
-                <mu-slider v-model="anim.end" :max="360" :disabled="!hasBorder()" class="mmslider" :step="1"/>
-                <input :value="anim.end" :disabled="!hasBorder()" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                <mu-slider v-model="anim.end" :max="360" class="mmslider" :step="1"/>
+                <input style="width: 57px!important;" :value="anim.end" v-digitsonly  spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -571,19 +571,6 @@ export default {
   position: absolute;
   z-index: 2;
   box-shadow: 0 1px 6px rgba(0,0,0,.117647), 0 1px 4px rgba(0,0,0,.117647);
-}
-.subheader-chckbox{
-    position: relative;
-    top: 12px;
-    float: right;
-    left: 0;
-    padding-right: 12px;
-}
-input, label {
-    display:block;
-}
-.ics {
-  font-size: 10px
 }
 </style>
 
