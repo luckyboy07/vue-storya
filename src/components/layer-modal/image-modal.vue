@@ -16,7 +16,8 @@
                 :drop="true"
                 :drop-directory="true"
                 v-model="files"
-                ref="upload">
+                ref="upload"
+                :post-action="'http://206.189.153.177:4000/media'">
             <mu-flexbox class="flx">
               <mu-flexbox-item class="flex-container" > 
                           + Drag and Drop Images
@@ -77,16 +78,21 @@
   import Vue from 'vue'
   import FileUpload from 'vue-upload-component'
   import {mapMutations} from 'vuex'
+  import {upload} from '../../helpers/upload.js'
+  import API from '../../helpers/API.js'
+  import axios from 'axios';
+  const API_URL = 'http://206.189.153.177:4000/'
 Vue.component('file-upload', FileUpload)
 export default {
     name: 'imageModal',
     props: [ 'modal', 'dialog'],
     data () {
       return {
-       files: [],
-       selectedImage: {},
+      files: [],
+      selectedImage: {},
       selectedLayer: {},
-       images:[{
+      medias: [],
+      images:[{
          id: 1,
          image: 'https://marketplace.canva.com/MACPvCG4Ti4/1/0/thumbnail_large/canva-gray-and-blue-photo-fitness-facebook-post-MACPvCG4Ti4.jpg'
        },
@@ -105,29 +111,31 @@ export default {
        ]
       }
     },
+    mounted () {
+      console.log('mounted')
+      this.getImages()
+    },
     methods:{
       ...mapMutations(['addImage']),
         inputFilter(newFile, oldFile, prevent) {
-            console.log("DIRI",newFile)
           if (newFile && !oldFile) {
           if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
             this.alert('Your choice is not a picture')
             return prevent()
           }
         }
-        if (newFile && (!oldFile || newFile.file !== oldFile.file)) {
+          // this.save(newFile)
+          //  && (!oldFile || newFile.file !== oldFile.file)
+        if (newFile) {
           newFile.url = ''
           newFile.selected = false
           let URL = window.URL || window.webkitURL
-          console.log(URL)
           if (URL && URL.createObjectURL) {
-            console.log('DIRI nasad')
-            newFile.url = URL.createObjectURL(newFile.file)
+            newFile.url = newFile.response.statusCode === 201 ? API_URL+newFile.response.response.data.media_path: URL.createObjectURL(newFile.file)
+            console.log("DIRI",newFile)
             let reader = new Image()
             reader.src = newFile.url
             reader.onload = function(){
-              console.log('height', reader.naturalWidth)
-              console.log('width', reader.naturalHeight)
               newFile.originalWidth = reader.naturalWidth
               newFile.originalHeight = reader.naturalHeight
             }
@@ -135,18 +143,19 @@ export default {
         }
       },
       inputFile(newFile, oldFile,prevent) {
-          console.log('add', newFile)
+         this.$refs.upload.active = true
         if (newFile && !oldFile) {
           // add
         }
         if (newFile && oldFile) {
           // update
-          console.log('update', newFile)
         }
         if (!newFile && oldFile) {
           // remove
-          console.log('remove', oldFile)
         }
+        setTimeout(()=>{
+          this.getImages()
+        },1000)
       },
       closeModal () {
         // console.log('files"',this.files)
@@ -154,14 +163,13 @@ export default {
            this.$modal.hide('image-modal')
       },
       selectImage (image) {
+        console.log('image:',image)
         this.selectedImage = image
         this.files.forEach(row => {
             row.selected = row.id === image.id
         })
       },
       confirm () {
-        console.log('this.layer:',this.selectedLayer)
-        console.log('this.selectedImage:',this.selectedImage)
         if(this.selectedLayer.type === 'shape'){
           this.selectedLayer.attributes.backgroundImageUri = this.selectedImage
         }else{
@@ -176,9 +184,24 @@ export default {
         // console.log('files:',this.selectedImage)
         // this.selectedImage = this.selectedImage
       },
-    beforeOpen(event) {
-      console.log('event:',event)
+      beforeOpen(event) {
       this.selectedLayer = event.params.data
+      },
+      wait(min) {
+            return (x) => {
+              return new Promise(resolve => setTimeout(() => resolve(x), min));
+            };
+      },
+      save(formdata) {
+        upload(formdata)
+        .then(val =>{
+          console.log('val:',val)
+        })
+      },
+      getImages () {
+        API.getImages().then(response=>{
+          this.medias = response
+        })
       }
   },
   // upated () {

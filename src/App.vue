@@ -27,6 +27,7 @@ import { mapMutations, mapGetters, mapState } from 'vuex'
 import* as $ from 'linq'
 import snackbar from './helpers/snackbar.js';
 import animation from './helpers/animation.js';
+import API from './helpers/API.js'
 export default {
   data () {
     return {
@@ -61,6 +62,9 @@ export default {
     // on loaded, start the timer
     this.idleTimer = setInterval(this.handleIdleTimerElapsed, this.idleTimeout)
     this.$store.watch(this.$store.getters.altGetlayer, v =>{})
+    API.getCanvas().then(response =>{
+      console.log('response:',response)
+    })
   },
   methods :{
     ...mapGetters(['getSelectedLayerId', 'getAutosaveStatusData']),

@@ -88,8 +88,9 @@ export default {
     // get the parent's dimension
     // var elem1 = document.getElementsByClassName('rr-resizer')
     // console.log('elem1,',elem1)
-    // var elem = document.getElementById(this.layers[0].id)
-    // this.GSAP.from(elem,1,{left:100,opacity:0,repeat: -1, yoyo: true});
+    // setTimeout(()=>{
+    // console.log('elem:',elem)
+    // },500)
     var _d = this.getCanvasData();
     this.parentH = _d.height// parseInt(_d.height.replace('px', '')) + 14;
     this.parentW = _d.width;//parseInt(_d.width.replace('px', '')) + 14;
