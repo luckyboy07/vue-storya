@@ -16,7 +16,7 @@ export default {
         var tem = '';
 
         var animations = [];
-        console.log(layer.attributes.animation);
+        // console.log(layer.attributes.animation);
         for (var i = 0; i < layer.attributes.animation.animations.length; i++) {
             switch (layer.attributes.animation.animations[i].animation) {
                 case "Fade":
@@ -32,21 +32,21 @@ export default {
                     var start = layer.attributes.animation.animations[i].start;
                     var end = layer.attributes.animation.animations[i].end;
                     var mtr = templates.move.getLeftToRight(layer.id, this.getFlowsArr(animFlow), ts, start, end);
-                    console.log('Slide left/Right', mtr)
+                    // console.log('Slide left/Right', mtr)
                     animations.push(mtr);
                     break;
                 case "Slide Top/Bottom":
                     var t_start = layer.attributes.animation.animations[i].start;
                     var b_end = layer.attributes.animation.animations[i].end;
                     var mtb = templates.move.getTopToBottom(layer.id, this.getFlowsArr(animFlow), ts, t_start, b_end);
-                    console.log('Slide Top/Bottom', mtb)
+                    // console.log('Slide Top/Bottom', mtb)
                     animations.push(mtb);
                     break;
                 case "Rotate":
                     var start = layer.attributes.animation.animations[i].start;
                     var end = layer.attributes.animation.animations[i].end;
                     var rotate = templates.rotate.toRotate(layer.id, this.getFlowsArr(animFlow), ts, start, end);
-                    console.log('rotate', rotate)
+                    // console.log('rotate', rotate)
                     animations.push(rotate);
                     break;
                     break;
@@ -60,7 +60,7 @@ export default {
         this.addAnimation(layer.id, animations, ts, layer.attributes.animation.loop, layer.attributes.animation.custom)
     },
     addAnimation(id, animations, ts, loop, custom) {
-        console.log(id, animations, ts, loop, custom)
+        // console.log(id, animations, ts, loop, custom)
         if (loop === 'Once') loop = 1;
         if (loop === 'Custom') loop = custom;
 
