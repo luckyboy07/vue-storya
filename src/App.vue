@@ -238,7 +238,7 @@ export default {
       // console.log('---------------------- lastLayerAddTime changes');
       if (this.layers.length > 0) {
         var newLayer = this.layers[this.layers.length -1];
-        this.setSelectedLayerId(newLayer.id);
+        // this.setSelectedLayerId(newLayer.id);
         animation.stopActiveAnimations(this.layers); // stoppping currently palying animation
         undoRedo.add(newLayer, 'create');
       }
