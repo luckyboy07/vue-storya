@@ -120,7 +120,19 @@ export const store = new Vuex.Store({
                     backgroundImageRepeat: 'none',
                     backgroundImagePosition: 'Left',
                     backgroundImageAttachment: 'none',
-                    filterBlur: 0
+                    filterBlur: 0,
+                    animation: {
+                        loop: null,
+                        animationFlow: {
+                            ds: 0, // delay start
+                            fxs: 0, // fx start
+                            e: 0, // elapse
+                            fxe: 0, // fx end
+                            de: 0, // delay end
+                        },
+                        animations: [],
+                        playing: false,
+                    },
                 }
             },
             // image
@@ -325,8 +337,8 @@ export const store = new Vuex.Store({
             Vue.localStorage.set('layers', JSON.stringify(state.layers))
         },
         selectTemplate: (state, payload) => {
-            console.log('payload;',payload)
-            let template = state.canvasData 
+            console.log('payload;', payload)
+            let template = state.canvasData
             template.bgColor = payload.bgColor
             template.file_name = payload.file_name
             template.project_name = payload.project_name

@@ -806,6 +806,14 @@ a {
     content: url(../assets/icons/icon_plus.png)
 }
 
+.si-playing {
+    width: 40px;
+    height: 25px;
+    margin: auto;
+    left: 30px;
+    position: relative;
+}
+
 
 /* storya defaults */
 
@@ -932,4 +940,8 @@ input[type='number'] {
 
 .mu-slider-fill {
     background-color: #fff;
+}
+
+input:focus {
+    outline: none;
 }
