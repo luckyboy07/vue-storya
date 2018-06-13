@@ -514,6 +514,8 @@ export default {
                 width: this.ratioSelected.width
             }
             this.template.selectedRatio = this.ratioSelected.name
+           var index = this.template.ratios.findIndex((e)=>{return this.template.selectedRatio === e.name})
+           this.updateLayers(this.template.ratios[index].layers)
             this.template.tabSelected = this.ratioSelected.tabSelected
             this.$localStorage.set('canvas',JSON.stringify(this.template))
             this.closeModal()

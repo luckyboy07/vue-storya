@@ -1,5 +1,6 @@
 import appHelper from './app.helper'
-import {JSZip} from 'JSZip'
+// import {JSZip} from 'JSZip'
+// import VueLocalStorage from 'vue-localstorage'
 export default {
     exportHtmlTemplatePart1: `
   <!DOCTYPE html>
@@ -935,15 +936,10 @@ export default {
     $_download(filename, htmlContent) {
         // console.log('filename:', filename)
         // console.log('htmlContent:', htmlContent)
-        var zip = new JSZip();
-        var folder = zip.folder(filename);
-        var data = JSON.parse(this.$localStorage.get('canvas'));
-        folder.file(filename + '.html', htmlContent);
-        folder.file('data.json', data);
-        zip.generateAsync('string').then(function(content) {
-          // see FileSaver.js
-          saveAs(content, 'example.zip');
-      });
+        // var zip = new JSZip();
+        // var folder = zip.folder(filename);
+        // var data = JSON.parse(VueLocalStorage.get('canvas'))
+
         // var element = document.createElement('a')
         // element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(htmlContent))
         // element.setAttribute('download', filename)
