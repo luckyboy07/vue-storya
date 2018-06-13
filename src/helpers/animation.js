@@ -131,7 +131,7 @@ export default {
         }
         this.$_animatedLayers[id] = {
             class: 'animation-' + id,
-            style: 'style' + id
+            style: 'style-' + id
         };
     },
     $_sumFlow(obj) {
