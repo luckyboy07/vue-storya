@@ -23,7 +23,7 @@ export const store = new Vuex.Store({
             selectedRatio: '',
             activeSize: {},
             ratios: [],
-            layers: [],
+            originalLayers: [],
             templateSelected: {},
             tabSelected: ''
         },
@@ -272,6 +272,7 @@ export const store = new Vuex.Store({
             // if not, assign a new id for this item
             // indicating that this item is created
             let layers = state.layers
+            
             if (!payload.fromUndoRedo) {
                 payload = appHelper.createLayer(payload);
                 payload.order = layers.length > 0 ? $.from(layers).max(l => l.order) + 1 : 1;
@@ -289,6 +290,9 @@ export const store = new Vuex.Store({
             let sam = layers.sort((a, b) => {
                 return b.order - a.order
             })
+            if(!state.canvasData.isResponsive) {
+                state.canvasData.originalLayers = layers
+            }
             Vue.localStorage.set('layers', JSON.stringify(sam))
             Vue.set(state, 'layers', sam)
                 // this is for the undo manager to

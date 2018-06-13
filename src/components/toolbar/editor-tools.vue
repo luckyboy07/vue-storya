@@ -259,21 +259,20 @@ export default {
     },
     watchChanges(evt) {
       this.selectedtemplate.isResponsive = evt.value
-      console.log('this.layer:',this.selectedtemplate)
-      let layers = this.selectedtemplate.layers
+      let layers = this.dataLayer
       let ratios = this.selectedtemplate.ratios
       if (!this.selectedtemplate.isResponsive && this.selectedtemplate.selectedRatio) {
-          for (let i=0;i<layers.length;i++) {
-              layers[i].x = 100
-              layers[i].y = 100
-          }
+          // for (let i=0;i<this.selectedtemplate.originalLayers.length;i++) {
+          //     this.selectedtemplate.originalLayers[i].x = 100
+          //     this.selectedtemplate.originalLayers[i].y = 100
+          // }
+      this.updateLayers(this.selectedtemplate.originalLayers)
       }else if(this.selectedtemplate.isResponsive && this.selectedtemplate.selectedRatio) {
           for (let i=0;i<ratios.length;i++) {
              if(this.selectedtemplate.selectedRatio === ratios[i].name){
-                  this.selectedtemplate.layers = JSON.parse(JSON.stringify(ratios[i].layers))
-                  console.log('ratios[i].layers:',ratios[i].layers)
-                  console.log('this.selectedtemplate:',this.selectedtemplate)
-                  this.updateLayers(this.selectedtemplate.layers)
+               console.log(';ASDASD',ratios[i].layers)
+                // this.selectedtemplate.layers = JSON.parse(JSON.stringify(ratios[i].layers))
+                this.updateLayers(ratios[i].layers)
              } 
           }
       }

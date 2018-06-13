@@ -1,5 +1,8 @@
 import appHelper from './app.helper'
+import animation from './animation';
+
 // import {JSZip} from 'JSZip'
+// import VueLocalStorage from 'vue-localstorage'
 export default {
     exportHtmlTemplatePart1: `
   <!DOCTYPE html>
@@ -741,6 +744,8 @@ export default {
           width: 100%;
           height: 100%;
         }
+
+        --CUSTOM_STYLES--
       </style>
     </head>
     <body onload="_p()">
@@ -901,16 +906,20 @@ export default {
         // var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
         // editorElem = this.$_responsiveness(editorElem);
         return new Promise((res, rej) => {
-            var htmlContent = this.getExportingElement().outerHTML;
+            var animatedElements = animation.getAnimatedLayers();
+            var htmlContent = this.getExportingElement(animatedElements).outerHTML;
+            var cssText = this.getAnimationCss(animatedElements);
+            // apped amination css
+            this.exportHtmlTemplatePart1 = this.exportHtmlTemplatePart1.replace('--CUSTOM_STYLES--', cssText);
             this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
             setTimeout(() => {
                 res(true);
             }, 100);
         })
     },
-    getExportingElement() {
+    getExportingElement(animatedData) {
         var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
-        editorElem = this.$_responsiveness(editorElem);
+        editorElem = this.$_responsiveness(editorElem, animatedData);
         return editorElem;
     },
     getHtmlString() {
@@ -921,9 +930,9 @@ export default {
      * Generates a responsive version of the exported HTML
      * @param {The source element} elem 
      */
-    $_responsiveness(elem) {
+    $_responsiveness(elem, animatedData) {
         var canvasContainer = elem.children[0].children[0];
-        canvasContainer = this.$_cleanHTML(canvasContainer);
+        canvasContainer = this.$_cleanHTML(canvasContainer, animatedData);
 
         return elem;
     },
@@ -935,31 +944,31 @@ export default {
     $_download(filename, htmlContent) {
         // console.log('filename:', filename)
         // console.log('htmlContent:', htmlContent)
-        var zip = new JSZip();
-        var folder = zip.folder(filename);
-        var data = JSON.parse(this.$localStorage.get('canvas'));
-        folder.file(filename + '.html', htmlContent);
-        folder.file('data.json', data);
-        zip.generateAsync('string').then(function(content) {
-            // see FileSaver.js
-            saveAs(content, 'example.zip');
-        });
-        // var element = document.createElement('a')
-        // element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(htmlContent))
-        // element.setAttribute('download', filename)
+        // var zip = new JSZip();
+        // var folder = zip.folder(filename);
+        // var data = JSON.parse(this.$localStorage.get('canvas'));
+        // folder.file(filename + '.html', htmlContent);
+        // folder.file('data.json', data);
+        // zip.generateAsync('string').then(function(content) {
+        //     // see FileSaver.js
+        //     saveAs(content, 'example.zip');
+        // });
+        var element = document.createElement('a')
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(htmlContent))
+        element.setAttribute('download', filename)
 
-        // element.style.display = 'none'
-        // document.body.appendChild(element)
+        element.style.display = 'none'
+        document.body.appendChild(element)
 
-        // element.click()
+        element.click()
 
-        // document.body.removeChild(element);
+        document.body.removeChild(element);
     },
     /**
      * Removes unnecessary html elements
      * @param {The source parent element} elem 
      */
-    $_cleanHTML(elem) {
+    $_cleanHTML(elem, animatedData) {
         var _rclass = ['rr-bar', 'rr-rotate-handle', 'rr-handle', 'p-d-g', 'layer-action-info'];
         var layerElems = elem.querySelectorAll('.rr-resizer');
         for (var i = 0; i < layerElems.length; i++) {
@@ -977,7 +986,27 @@ export default {
                     ld = layerElems[i].querySelectorAll('.' + _rclass[j]);
                 }
             }
+
+            if (animatedData) {
+                for (var key in animatedData) {
+                    if (key === layerElems[i].id) {
+                        layerElems[i].classList.add(animatedData[key].class);
+                    }
+                }
+            }
         }
         return elem;
+    },
+    getAnimationCss(srcObj) {
+        var cssText = '';
+        for (var key in srcObj) {
+            console.log()
+            var style = document.getElementById(srcObj[key].style);
+            if (!style) continue;
+
+            cssText += style.innerHTML;
+        }
+
+        return cssText;
     },
 }
