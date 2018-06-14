@@ -56,6 +56,11 @@
         @onRenameOrDelete="onRenameOrDelete"
         @mousedown.native="selectLayer(layer, $event)">
       </component>
+             <mu-flexbox>
+                  <mu-flexbox-item class="flex-container" > 
+                      + Add Background Image
+                  </mu-flexbox-item>
+             </mu-flexbox>
     </mu-list>
   </mu-drawer>
   <div class="layer-menu" ref="layerMenu" v-show="menuVisible">
@@ -532,5 +537,15 @@ export default {
 }
 .activeIcon {
     border: 1px solid #1da675 ;
+}
+.flex-container {
+  flex: 1 1 auto;
+    order: 0;
+    height: 35px;
+    background-color: #3333339c;
+    text-align: center;
+    line-height: 32px;
+    border: 1px dashed;
+    border-color: #5d5b5b;
 }
 </style>

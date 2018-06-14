@@ -940,16 +940,16 @@ export default {
         // var folder = zip.folder(filename);
         // var data = JSON.parse(VueLocalStorage.get('canvas'))
 
-        // var element = document.createElement('a')
-        // element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(htmlContent))
-        // element.setAttribute('download', filename)
+        var element = document.createElement('a')
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(htmlContent))
+        element.setAttribute('download', filename)
 
-        // element.style.display = 'none'
-        // document.body.appendChild(element)
+        element.style.display = 'none'
+        document.body.appendChild(element)
 
-        // element.click()
+        element.click()
 
-        // document.body.removeChild(element);
+        document.body.removeChild(element);
     },
     /**
      * Removes unnecessary html elements

@@ -254,10 +254,26 @@ export const store = new Vuex.Store({
             let sam = layers.sort((a, b) => {
                 return b.order - a.order
             })
+            let ratios = state.canvasData.ratios
+            console.log('ratios:', ratios)
+            if (ratios.length > 0){
+                for (let i = 0;i<ratios.length;i++) {
+                    // let ratiolayer = ratios[i].layers
+                    if(ratios[i].layers.length >0) {
+                        ratios[i].layers = JSON.parse(JSON.stringify(sam))
+                    console.log('ratios[i].layers:', ratios[i].layers)
+                    // for(let j=0;j< ratiolayer.length;j++){
+                        //     ratiolayer = sam
+                        // }
+                    }
+                }
+            console.log('state:', state.canvasData)
+        }
             if(!state.canvasData.isResponsive) {
                 state.canvasData.originalLayers = layers
             }
             Vue.localStorage.set('layers', JSON.stringify(sam))
+            Vue.set(state, 'canvasData', state.canvasData)
             Vue.set(state, 'layers', sam)
                 // this is for the undo manager to
                 // watch the changes of the layers
