@@ -27,5 +27,16 @@ export default {
             b = (255 - parseInt(hex.slice(4, 6), 16)).toString(16);
         // pad each with zeros and return
         return '#' + padZero(r) + padZero(g) + padZero(b);
-    }
+    },
+    /**
+     * Returns a randomized color
+     */
+    getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    },
 }

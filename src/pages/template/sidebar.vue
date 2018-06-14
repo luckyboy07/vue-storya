@@ -17,7 +17,7 @@
             <mu-divider style="margin-left: 10px;width: 315px;" />
             <mu-menu value="" title="">
               <div class="pop-content">
-                <div v-for="(item, i) in items"  :key="i" class="content-btn" @click.stop="addLayer(item);toggle($event)">
+                <div v-for="(item, i) in items"  :key="i" class="content-btn" @click.stop="createLayer(item, $event)">
                 <mu-raised-button  ref="iconbtn"  class="raised-btn"  :icon="item.icon" @hover="hoverLayer(i)"/>
                 <br>
                 <span>{{item.title}}</span> 
@@ -105,6 +105,7 @@ import appHelper from '../../helpers/app.helper.js'
 import undoRedo from '../../helpers/undo-redo.js'
 import browserHelper from '../../helpers/browser.js'
 import snackBar from '../../helpers/snackbar.js'
+import colorHelper from '../../helpers/color-helper';
 export default {
   name: 'Sidebar',
   data () {
@@ -262,6 +263,13 @@ export default {
     ...mapMutations(['updateLayers', 'removeSelectedLayer', 'broadCastStatus']),
     ...mapActions(['addLayer']),
     ...mapGetters(['getShapeLayer', 'getSelectedLayerId','sortLayer']),
+    createLayer(item, evt) {
+      if (item.type === 'shape') {
+        item.attributes.color = colorHelper.getRandomColor();
+      }
+      this.addLayer(item);
+      this.toggle(evt)
+    },
     hoverBtn () {
       this.showhover = true
     },
@@ -289,7 +297,7 @@ export default {
       //  _sl.attributes.borderSize = 5;
       //    _sl.attributes.shape_type = ' '
       // }
-      _sl.attributes.color = 'red';
+      _sl.attributes.color = colorHelper.getRandomColor();
       _sl.attributes.shape_type = shape.shape
       _sl.attributes.shape = shape.indexOf(' ') !== -1 ? shape.split(' ')[0].trim() : shape.trim();
       _sl.attributes.borderStyle = 'solid'

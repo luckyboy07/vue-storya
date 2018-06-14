@@ -23,7 +23,7 @@
           </mu-flat-button>
            <div :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}" style="display: flex; width: 106px;">
              <div class="label-item p-r">H:</div> 
-              <input :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}" :disabled="editorData.isResponsive || selectedtemplate.zoom !== 100" v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
+              <input :disabled="editorData.isResponsive || selectedtemplate.zoom !== 100" v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
           </div>
           <!-- <div class="tool-item-group-content">
             <input ref="zoomInp" @blur="zoom()" @keydown.enter="zoom()" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'"/>

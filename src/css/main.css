@@ -806,6 +806,14 @@ a {
     content: url(../assets/icons/icon_plus.png)
 }
 
+.si-playing {
+    width: 40px;
+    height: 25px;
+    margin: auto;
+    left: 30px;
+    position: relative;
+}
+
 
 /* storya defaults */
 
@@ -911,9 +919,10 @@ input[type='number'] {
     cursor: not-allowed;
 }
 
-input[disabled="disabled"] {
+
+/* input[disabled="disabled"] {
     opacity: 0.21!important;
-}
+} */
 
 .div-inp {
     background-color: #333333;
@@ -931,4 +940,25 @@ input[disabled="disabled"] {
 
 .mu-slider-fill {
     background-color: #fff;
+}
+
+input:focus {
+    outline: none;
+}
+
+.subheader-chckbox {
+    position: relative;
+    top: 12px;
+    float: right;
+    left: 0;
+    padding-right: 12px;
+}
+
+input,
+label {
+    display: block;
+}
+
+.ics {
+    font-size: 10px
 }

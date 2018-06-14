@@ -25,7 +25,9 @@ import undoRedo from './helpers/undo-redo'
 import fontHelper from './helpers/fonts.helper.js'
 import { mapMutations, mapGetters, mapState } from 'vuex'
 import* as $ from 'linq'
-  import API from './helpers/API.js'
+import snackbar from './helpers/snackbar.js';
+import animation from './helpers/animation.js';
+import API from './helpers/API.js'
 export default {
   data () {
     return {
@@ -72,7 +74,8 @@ export default {
       'setSelectedLayerId', 
       'updateUndoRedoAction', 
       'setAutosaveData',
-      'setLayer'
+      'setLayer',
+      'broadCastStatus'
       ]),
     keydownEventHandler(evt) {
       // resetting idle time in key activities
@@ -126,6 +129,11 @@ export default {
         if (evt.key === 'Delete') {
           var item = this.getSelectedLayerId();
           if (item) {
+            if (item.sourceLayer.islocked) {
+              snackbar.show("Layer is locked");
+              this.broadCastStatus({action: 'notify', layerId: item.sourceLayer.id});
+              return;
+            }
             undoRedo.add(appHelper.cloneLayer(item.sourceLayer), 'delete');
             this.$_removeFromArray(this.layers, item.id)
           }
@@ -221,7 +229,8 @@ export default {
   computed: {
     ...mapGetters({
       layers: 'getLayers',
-      lastLayerAddTime: 'getLastLayerAddTime'
+      lastLayerAddTime: 'getLastLayerAddTime',
+      selectedLayer: 'getSelectedLayerId'
     })
   },
   watch: {
@@ -229,7 +238,8 @@ export default {
       // console.log('---------------------- lastLayerAddTime changes');
       if (this.layers.length > 0) {
         var newLayer = this.layers[this.layers.length -1];
-        this.setSelectedLayerId(newLayer.id);
+        // this.setSelectedLayerId(newLayer.id);
+        animation.stopActiveAnimations(this.layers); // stoppping currently palying animation
         undoRedo.add(newLayer, 'create');
       }
     },
@@ -238,6 +248,11 @@ export default {
         this.setAutosaveData("1");
       },
       deep: true
+    },
+    selectedLayer: function(val) {
+      // stopping animations
+      // removing class
+       animation.stopActiveAnimations(this.layers); // stoppping currently palying animation
     }
   }
 }
