@@ -56,7 +56,7 @@
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
                   <div class="input-size colorPicka div-inp">{{data.attributes.color}}</div>
-                  <input spellcheck="false" id="colour" class="input-size sliderInput" :style="{backgroundColor:data.attributes.color}"  @click="showPicker($event,'')">
+                  <input spellcheck="false" id="colour" class="input-size sliderInput" :style="{backgroundColor:data.attributes.color, border: 'thin ' + invertColor(data.attributes.color) + ' solid'}"  @click="showPicker($event,'')">
                 </mu-grid-list>
                 <!-- <div ref="colorPicker" v-show="selectedPicker === 'colorPicker'" class="item-color-picker">
                   <color-picker v-model="colors" @input="colorSelected" 
@@ -89,7 +89,7 @@
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Colour</mu-grid-list>
                 <mu-grid-list class="right">
                 <div :class="{'disabled':!data.attributes.isGradient}" class="div-inp input-size colorPicka">{{data.attributes.gradientBackgroundData.sliderStyle[selectedHandle].backgroundColor}}</div>
-                <input :disabled="!data.attributes.isGradient" style="cursor: pointer" id="gradcolour" @click="showPicker($event,'gradient')" spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:selectedGradientColor}" >
+                <input :disabled="!data.attributes.isGradient" style="cursor: pointer" id="gradcolour" @click="showPicker($event,'gradient')" spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:selectedGradientColor, border: 'thin ' + invertColor(selectedGradientColor) + ' solid'}" >
                 </mu-grid-list>
               </div>
               <div ref="gradientPicker" v-show="selectedPicker === 'gradientPicker'" class="item-color-picker">
@@ -130,7 +130,7 @@
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
                 <div class="input-size colorPicka div-inp" :class="{'disabled':!hasBorder()}">{{data.attributes.borderColor}}</div>
-                <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.borderColor}" @click="showPicker($event,'border')">
+                <input :disabled="!hasBorder()"  spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.borderColor, border: 'thin ' + invertColor(data.attributes.borderColor) + ' solid'}" @click="showPicker($event,'border')">
                 </mu-grid-list>
               </div>
               <div ref="borderColor" v-show="selectedPicker === 'borderColor'" class="item-color-picker">
@@ -153,7 +153,7 @@
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
                 <div class="div-inp input-size colorPicka">{{data.attributes.shadowColor}}</div>
-                <input spellcheck="false" class="input-size sliderInput" style="background-color:white" @click="showPicker($event,'shadow')">
+                <input spellcheck="false" class="input-size sliderInput" :style="{backgroundColor: data.attributes.shadowColor, border: 'thin ' + invertColor(data.attributes.shadowColor) + ' solid'}" @click="showPicker($event,'shadow')">
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -190,10 +190,13 @@
                   </mu-grid-list> -->
               </div>
             </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
-            <mu-raised-button  v-no-ripple label="Animation Flow(seconds)" fullWidth style="text-transform: none;background-color: #000000;"/>
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg">
+              <!-- <mu-raised-button :disableRipple="true" v-no-ripple label="Animation Flow(seconds)" fullWidth style="text-transform: none;background-color: #000000;"/> -->
+              <div style="margin-left: 10px; margin-right: 10px; text-align: center;height: 40px; text-transform: none;background-color: #000000;">
+                <div style="padding-top: 10px;">Animation Flow(seconds)</div> 
+              </div>
             </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero diBlackbg" v-no-ripple  style="height: 70px;margin-left: 15px;">
+            <mu-list-item  slot="nested" class="paddingZero demiBlackbg" v-no-ripple  style="height: 70px;margin-left: 15px;">
                   <div style="float:left;margin-right:3px;text-align:center">
                        <label for="name" style="font-size:10px;">Delay Start</label>
                       <input v-model="data.attributes.animation.animationFlow.ds" v-digitsonly spellcheck="false" class="input-size sliderInput" style="text-align: center;">
@@ -204,7 +207,7 @@
                   </div>
                    <div style="float:left;margin-right:3px;text-align:center; width: 100px;">
                        <label for="name" style="font-size:10px;">Elapsed</label>
-                      <input  v-model="data.attributes.animation.animationFlow.e" v-digitsonly spellcheck="false" class="input-size sliderInput" style="width: 100%!important;text-align: center;">
+                      <input v-model="data.attributes.animation.animationFlow.e" v-digitsonly spellcheck="false" class="input-size sliderInput" style="width: 100%!important;text-align: center;">
                   </div>
                    <div style="float:left;margin-right:3px;text-align:center">
                        <label for="name" style="font-size:10px;">FX End</label>
@@ -223,7 +226,7 @@
                </mu-grid-list>
                 <!-- <mu-icon-button slot="right" icon="keyboard_arrow_down"/> -->
               <!-- FADE PROPERTY -->
-             <mu-list-item v-if="anim.animation === 'Fade'" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+             <mu-list-item :disableRipple="true" v-if="anim.animation === 'Fade'" slot="nested" class="paddingZero demiBlackbg">
               <div class="gridlist-demo-container">
                   <mu-grid-list class="gridlist-demo" slot="right">Start</mu-grid-list>
                   <mu-grid-list class="right">
@@ -232,7 +235,7 @@
                   </mu-grid-list>
               </div>
             </mu-list-item>
-            <mu-list-item style="margin-bottom: 50px;" v-if="anim.animation === 'Fade'" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+            <mu-list-item :disableRipple="true" v-if="anim.animation === 'Fade'" slot="nested" class="paddingZero demiBlackbg" style="margin-bottom: 50px;" >
               <div class="gridlist-demo-container">
                   <mu-grid-list class="gridlist-demo" slot="right">End</mu-grid-list>
                   <mu-grid-list class="right">
@@ -247,37 +250,37 @@
             <mu-list-item v-if="anim.animation === 'Rotate'" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Rotate Start</mu-grid-list>
-                <mu-grid-list class="right">
-                <mu-slider v-model="anim.start" :max="360" class="mmslider" :step="1"/>
-                <input style="width: 57px!important;" :value="anim.start + '°'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
+                <mu-grid-list class="right" style="padding-top: 5px;">
+                <mu-slider @mouseover.native="createPreview(anim, 'start')" @mouseout.native="removePreview()" @input="createPreview(anim, 'start')" v-model="anim.start" :max="360" class="mmslider" :step="1"/>
+                <input disabled style="width: 57px!important;" :value="anim.start + '°'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
             </mu-list-item>
             <mu-list-item v-if="anim.animation === 'Rotate'" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Rotate End</mu-grid-list>
-                <mu-grid-list class="right">
-                <mu-slider v-model="anim.end" :max="360" class="mmslider" :step="1"/>
+                <mu-grid-list class="right" style="padding-top: 5px;">
+                <mu-slider @mouseover.native="createPreview(anim, 'end')" @mouseout.native="removePreview()" @input="createPreview(anim, 'end')" v-model="anim.end" :max="360" class="mmslider" :step="1"/>
                 <input style="width: 57px!important;" :value="anim.end + '°'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
             </mu-list-item>
             <!-- ---------------------------------------------- -->
             <!-- SLIDE -->
-            <mu-list-item v-if="anim.animation && anim.animation.indexOf('Slide') !== -1" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+            <mu-list-item  tabindex="-1" v-if="anim.animation && anim.animation.indexOf('Slide') !== -1" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Start Position</mu-grid-list>
-                <mu-grid-list class="right">
-                  <input style="width: 155px!important;" v-digitsonly v-model="anim.start" spellcheck="false" class="input-size colorPicka">
+                <mu-grid-list class="right" style="padding-top: 5px">
+                  <input @focus="createPreview(anim, 'start')" @blur="removePreview()" @keyup="createPreview(anim, 'start')" style="width: 155px!important;" v-digitsonly v-model="anim.start" spellcheck="false" class="input-size colorPicka">
                   <input :value="data.attributes.animation.animationFlow.fxs" disabled spellcheck="false" class="input-size sliderInput" style="border: 1px solid #CC785A; text-align: center;width:35px !important;">
                   </mu-grid-list>
               </div>
             </mu-list-item>
-            <mu-list-item v-if="anim.animation && anim.animation.indexOf('Slide') !== -1" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
+            <mu-list-item :disableRipple="true" v-tabindex-override="-1" v-if="anim.animation && anim.animation.indexOf('Slide') !== -1" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">End Position</mu-grid-list>
-                <mu-grid-list class="right">
-                  <input style="width: 155px!important;" v-append-unit="'px'" v-digitsonly v-model="anim.end" spellcheck="false" class="input-size colorPicka">
+                <mu-grid-list class="right" style="padding-top: 5px">
+                  <input @focus="createPreview(anim, 'end')" @blur="removePreview()" @keyup="createPreview(anim, 'end')" style="width: 155px!important;" v-append-unit="'px'" v-digitsonly v-model="anim.end" spellcheck="false" class="input-size colorPicka">
                   <input :value="data.attributes.animation.animationFlow.fxe" disabled spellcheck="false" class="input-size sliderInput" style="border: 1px solid #44C5B5; text-align: center;width:35px !important;">
                   </mu-grid-list>
               </div>
@@ -287,7 +290,7 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Start Scale</mu-grid-list>
                 <mu-grid-list class="right">
-                <mu-slider v-model="anim.start" :max="1000" class="mmslider" :step="0.1"/>
+                <mu-slider @mouseover.native="createPreview(anim, 'start')" @mouseout.native="removePreview()" @input="createPreview(anim, 'start')" v-model="anim.start" :max="1000" class="mmslider" :step="0.1"/>
                 <input style="width: 57px!important;" :value="anim.start + '%'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
@@ -296,7 +299,7 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">End Scale</mu-grid-list>
                 <mu-grid-list class="right">
-                <mu-slider v-model="anim.end" :max="1000" class="mmslider" :step="0.1"/>
+                <mu-slider @mouseover.native="createPreview(anim, 'end')" @mouseout.native="removePreview()" @input="createPreview(anim, 'end')" v-model="anim.end" :max="1000" class="mmslider" :step="0.1"/>
                 <input style="width: 57px!important;" :value="anim.end + '%'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
@@ -352,6 +355,7 @@ import {mapGetters,mapMutations} from 'vuex'
 import { Photoshop, Chrome } from "vue-color";
 import vueSlider from 'vue-slider-component';
 import animationHelper from '../../../helpers/animation'
+import colorHelper from '../../../helpers/color-helper';
 export default {
   name: "ShapeLayer",
   props: ["data", "openpanel"],
@@ -578,6 +582,23 @@ export default {
       } else {
         animationHelper.stopAnimation(this.data);
       }
+    },
+    createPreview(anim, changed) {
+      if (this.data.attributes.animation.playing) {
+        animationHelper.stopAnimation(this.data);
+        this.data.attributes.animation.playing = false;
+      }
+      animationHelper.createShadow(this.data, anim, changed);
+    },
+    removePreview() {
+      if (this.data.attributes.animation.playing) {
+        animationHelper.stopAnimation(this.data);
+        this.data.attributes.animation.playing = false;
+      }
+      animationHelper.removePreview(this.data);
+    },
+    invertColor(hex) {
+      return colorHelper.invertColor(hex);
     },
   }
 }

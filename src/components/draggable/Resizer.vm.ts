@@ -310,27 +310,9 @@ export default {
             top: bounds.top + bounds.height / 2
           };
 
-          // add zoom value to left and top if > 100
-          // decrease  left and top to zoom if < 100
-          // if (self.zoom > 100) {
-          //   if (browserHelper.isChrome()) {
-          //     center.left += self.zoom * 2;
-          //     center.top += self.zoom;
-          //   } else if (browserHelper.isFirefox()) {
-          //      // TODO: handle firefox
-          //   }
-          // } else if (self.zoom < 100) {
-          //   if (browserHelper.isChrome()) {
-          //     center.left -= self.zoom * 2;
-          //     center.top -= self.zoom;
-          //   } else if (browserHelper.isFirefox()) {
-          //      // TODO: handle firefox
-          //   }
-          // }
-
           var degree = (Math.atan2(event.clientY - center.top, event.clientX - center.left) * 180 / Math.PI + 90) % 360;
           self.setOctantValue(self.value.rotation);
-          // added grid lines (same as canva)
+          
           if (degree - 1 >= -5 && degree + 1 <= 5) {
             degree = 0;
           }
