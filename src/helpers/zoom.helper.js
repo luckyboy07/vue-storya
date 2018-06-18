@@ -32,7 +32,7 @@ export default {
             // layers[i].attributes.shadowSize /= this.scale;
             if (layers[i].type === 'shape') {
                 // only circle and rectangle is currenly supported with border
-                if (layers[i].attributes.shape === 'Circle' || layers[i].attributes.shape === 'Reactangle') {
+                if (layers[i].attributes.shape === 'Circle' || layers[i].attributes.shape === 'Reactangle' && layers[i].attributes.borderWidth > 0) {
                     layers[i].attributes.borderWidth /= this.scale;
                 }
             } else if (layers[i].type === 'text') {
