@@ -69,8 +69,8 @@ export default {
                         }
                     }
                     if (canExecute) {
-                        var scale_start = layer.attributes.animation.animations[i].start;
-                        var scale_end = layer.attributes.animation.animations[i].end;
+                        var scale_start = layer.attributes.animation.animations[i].start || '100';
+                        var scale_end = layer.attributes.animation.animations[i].end || '100';
                         var scaled = templates.scale.getScale(layer.id, this.getFlowsArr(animFlow), ts, scale_start, scale_end);
                         animations.push(scaled);
                     }
