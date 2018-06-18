@@ -12,7 +12,6 @@ export default {
         this.zoom = Math.max(this.zoom, -30);
         this.scale = Math.pow(1.09, (this.zoom / 30));
 
-        console.log(canvasData)
         if (!canvasData.isResponsive) {
             canvasData.width = Math.round(canvasData.width / this.scale);
             canvasData.height = Math.round(canvasData.height / this.scale);

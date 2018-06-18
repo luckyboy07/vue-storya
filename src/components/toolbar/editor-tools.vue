@@ -239,7 +239,7 @@ export default {
       //   zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
       // }
       // console.log(JSON.stringify( this.getExportContent()));
-      exportHelper.exportTemplate().then((val) => {
+      exportHelper.exportTemplate(this.layers).then((val) => {
         console.log('Export finished', true)
         // if (zoom !== 100) {
         //     alert('1')

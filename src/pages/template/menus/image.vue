@@ -223,7 +223,7 @@
             <!-- SLIDE -->
             <mu-list-item  tabindex="-1" v-if="anim.animation && anim.animation.indexOf('Slide') !== -1" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
-                <mu-grid-list class="gridlist-demo left">Start Position</mu-grid-list>
+                <mu-grid-list class="gridlist-demo left">Start Position(px)</mu-grid-list>
                 <mu-grid-list class="right" style="padding-top: 5px">
                   <input @focus="createPreview(anim, 'start')" @blur="removePreview()" @keyup="createPreview(anim, 'start')" style="width: 155px!important;" v-digitsonly v-model="anim.start" spellcheck="false" class="input-size colorPicka">
                   <input :value="data.attributes.animation.animationFlow.fxs" disabled spellcheck="false" class="input-size sliderInput" style="border: 1px solid #CC785A; text-align: center;width:35px !important;">
@@ -232,7 +232,7 @@
             </mu-list-item>
             <mu-list-item :disableRipple="true" v-tabindex-override="-1" v-if="anim.animation && anim.animation.indexOf('Slide') !== -1" slot="nested" class="paddingZero demiBlackbg" v-no-ripple>
               <div class="gridlist-demo-container">
-                <mu-grid-list class="gridlist-demo left">End Position</mu-grid-list>
+                <mu-grid-list class="gridlist-demo left">End Position(px)</mu-grid-list>
                 <mu-grid-list class="right" style="padding-top: 5px">
                   <input @focus="createPreview(anim, 'end')" @blur="removePreview()" @keyup="createPreview(anim, 'end')" style="width: 155px!important;" v-append-unit="'px'" v-digitsonly v-model="anim.end" spellcheck="false" class="input-size colorPicka">
                   <input :value="data.attributes.animation.animationFlow.fxe" disabled spellcheck="false" class="input-size sliderInput" style="border: 1px solid #44C5B5; text-align: center;width:35px !important;">

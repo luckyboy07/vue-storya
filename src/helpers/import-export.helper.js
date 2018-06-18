@@ -897,7 +897,7 @@ export default {
     /**
      * Exports the current editor content into a packed html file (.html)
      */
-    exportTemplate() {
+    exportTemplate(layerData) {
         // var editorElem = document.getElementsByClassName('editor-box')[0]; // clone the div element
         // var htmlContent = editorElem.outerHTML;
         // this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
@@ -908,6 +908,8 @@ export default {
         return new Promise((res, rej) => {
             var animatedElements = animation.getAnimatedLayers();
             var htmlContent = this.getExportingElement(animatedElements).outerHTML;
+            this.createAnimation(layerData);
+            console.log(layerData)
             var cssText = this.getAnimationCss(animatedElements);
             // apped amination css
             this.exportHtmlTemplatePart1 = this.exportHtmlTemplatePart1.replace('--CUSTOM_STYLES--', cssText);
@@ -1009,4 +1011,9 @@ export default {
 
         return cssText;
     },
+    createAnimation(layerDataArr) {
+        for (var i = 0; i < layerDataArr.length; i++) {
+            animation.applyAnimation(layerDataArr[i], false)
+        }
+    }
 }

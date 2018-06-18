@@ -3,7 +3,7 @@ import templates from './animation-templates'
 export default {
     currentTimeout: 0,
     $_animatedLayers: {},
-    applyAnimation(layer) {
+    applyAnimation(layer, inject = true) {
         var animFlow = layer.attributes.animation.animationFlow;
         var ts = this.$_sumFlow(animFlow);
         // keyframes
@@ -82,9 +82,9 @@ export default {
 
         // console.log('layer', layer);
         // previewing
-        this.addAnimation(layer.id, animations, ts, layer.attributes.animation.loop, layer.attributes.animation.custom)
+        this.addAnimation(layer.id, animations, ts, layer.attributes.animation.loop, layer.attributes.animation.custom, inject)
     },
-    addAnimation(id, animations, ts, loop, custom) {
+    addAnimation(id, animations, ts, loop, custom, inject) {
         if (animations.length <= 0) return;
 
         // console.log(id, animations, ts, loop, custom)
@@ -125,7 +125,9 @@ export default {
             }
         }
         // console.log(elem.classList)
-        elem.className += ' animation-' + id;
+        if (inject) {
+            elem.className += ' animation-' + id;
+        }
 
         if (this.$_animatedLayers[id]) {
             delete this.$_animatedLayers[id];
