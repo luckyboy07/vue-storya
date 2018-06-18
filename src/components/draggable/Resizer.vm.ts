@@ -405,6 +405,35 @@ export default {
            rect.top = mY;
           }
 
+          // pilit2 style XD
+          var cX = rect.left + rect.width / 2;
+          var cY = rect.top + rect.height / 2;
+          // X
+          if (cX - 15 <=  (pW / 4) && (cX + 15 >=  (pW / 4))) {
+            rect.left = (pW / 4) - rect.width / 2;
+          }
+
+          if (cX - 15 <=  (pW / 2) && (cX + 15 >=  (pW / 2))) {
+            rect.left = (pW / 2) - rect.width / 2;
+          }
+
+          if (cX - 15 <= pW - (pW / 4) && (cX + 15 >= pW - (pW / 4))) {
+            rect.left = pW - (pW / 4) - rect.width / 2;
+          }
+
+          // Y
+          if (cY - 15 <=  (pH / 4) && (cY + 15 >=  (pH / 4))) {
+            rect.top = (pH / 4) - rect.height / 2;
+          }
+
+          if (cY - 10 <=  (pH / 2) && (cY + 10 >=  (pH / 2))) {
+            rect.top = (pH / 2) - rect.height / 2;
+          }
+
+          if (cY - 15 <= pH - (pH / 4) && (cY + 15 >= pH - (pH / 4))) {
+            rect.top = pH - (pH / 4) - rect.height / 2;
+          }
+
           dom.style.left = rect.left + 'px';
           dom.style.top = rect.top + 'px';
           dom.style.width = rect.width + 'px';
