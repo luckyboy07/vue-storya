@@ -12,9 +12,14 @@ export default {
         this.zoom = Math.max(this.zoom, -30);
         this.scale = Math.pow(1.09, (this.zoom / 30));
 
-        canvasData.width = Math.round(canvasData.width / this.scale);
-        canvasData.height = Math.round(canvasData.height / this.scale);
-
+        console.log(canvasData)
+        if (!canvasData.isResponsive) {
+            canvasData.width = Math.round(canvasData.width / this.scale);
+            canvasData.height = Math.round(canvasData.height / this.scale);
+        } else {
+            canvasData.activeSize.width = Math.round(canvasData.activeSize.width / this.scale);
+            canvasData.activeSize.height = Math.round(canvasData.activeSize.height / this.scale);
+        }
 
         for (var i = 0; i < layers.length; i++) {
             // dimensions
