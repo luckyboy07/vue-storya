@@ -213,7 +213,7 @@ export default {
       if(this.selectedtemplate.isResponsive){
         for(let i = 0;i < ratios.length;i++){
             if(this.selectedtemplate.selectedRatio === ratios[i].name) {
-              ratios[i].layers = JSON.parse(JSON.stringify(this.selectedtemplate.layers))
+              // ratios[i].layers = JSON.parse(JSON.stringify(this.selectedtemplate.layers))
               this.updateLayers(ratios[i].layers)
             }
         }
@@ -230,7 +230,8 @@ export default {
     },
     exportContent() {
       var zoom = 100;
-      console.log('Exporting....')
+      console.log('Exporting....',this.$localStorage.get('canvas'))
+
       // if (this.editorData.zoom !== 100) {
       //   alert('fdf')
       //   zoom = this.editorData.zoom;
