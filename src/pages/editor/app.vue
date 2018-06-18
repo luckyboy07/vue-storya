@@ -132,11 +132,11 @@ export default {
           // upper
           this.$refs.hhl1.style.display="block";
           this.$refs.hhl1.style.left = (bounds2.left - 200) + 'px';
-          this.$refs.hhl1.style.top = (actualBounds.y) + 'px';
+          this.$refs.hhl1.style.top = (actualBounds.y + 1) + 'px';
           // lower
           this.$refs.hhl2.style.display="block";
           this.$refs.hhl2.style.left = (bounds2.left - 200) + 'px';
-          this.$refs.hhl2.style.top = (actualBounds.y + actualBounds.height) + 'px';
+          this.$refs.hhl2.style.top = (actualBounds.y + actualBounds.height - 1) + 'px';
 
           // vertical lines
           // left

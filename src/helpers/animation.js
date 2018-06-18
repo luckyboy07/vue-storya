@@ -217,6 +217,7 @@ export default {
         // console.log('--------------------------------', containerBounds)
 
         var cloned = elem.cloneNode(true);
+        this.$_clean(cloned);
         // console.log('--------------------------------', cloned)
         cloned.id = 'animaiton-preview-' + layer.id;
         cloned.style.cssText += 'z-index: 9999; opacity: 0.7;';
@@ -237,4 +238,15 @@ export default {
 
         document.body.appendChild(cloned);
     },
+    $_clean(elem) {
+        var _rclass = ['rr-bar', 'rr-handle', 'p-d-g', 'layer-action-info'];
+        for (var i = 0; i < _rclass.length; i++) {
+            var elems = elem.querySelectorAll('.' + _rclass[i]);
+            for (var j = 0; j < elems.length; j++) {
+                elems[j].parentElement.removeChild(elems[j]);
+            }
+        }
+
+        elem.style.border = '2px violet dashed';
+    }
 }
