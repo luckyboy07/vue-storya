@@ -83,6 +83,12 @@ export default {
         // console.log('layer', layer);
         // previewing
         this.addAnimation(layer.id, animations, ts, layer.attributes.animation.loop, layer.attributes.animation.custom, inject)
+
+        return {
+            animations: animations,
+            ts: ts + 's',
+            loop: layer.attributes.animation.loop !== 'Custom' ? layer.attributes.animation.loop : layer.attributes.animation.custom,
+        };
     },
     addAnimation(id, animations, ts, loop, custom, inject) {
         if (animations.length <= 0) return;
@@ -127,15 +133,15 @@ export default {
         // console.log(elem.classList)
         if (inject) {
             elem.className += ' animation-' + id;
-        }
 
-        if (this.$_animatedLayers[id]) {
-            delete this.$_animatedLayers[id];
+            if (this.$_animatedLayers[id]) {
+                delete this.$_animatedLayers[id];
+            }
+            this.$_animatedLayers[id] = {
+                class: 'animation-' + id,
+                style: 'style-' + id
+            };
         }
-        this.$_animatedLayers[id] = {
-            class: 'animation-' + id,
-            style: 'style-' + id
-        };
     },
     $_sumFlow(obj) {
         var sum = 0;

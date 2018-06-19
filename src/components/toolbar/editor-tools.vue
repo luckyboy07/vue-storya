@@ -230,8 +230,6 @@ export default {
     },
     exportContent() {
       var zoom = 100;
-      console.log('Exporting....',this.$localStorage.get('canvas'))
-
       // if (this.editorData.zoom !== 100) {
       //   alert('fdf')
       //   zoom = this.editorData.zoom;

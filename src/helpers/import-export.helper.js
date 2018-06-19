@@ -906,14 +906,13 @@ export default {
         // var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
         // editorElem = this.$_responsiveness(editorElem);
         return new Promise((res, rej) => {
-            var animatedElements = animation.getAnimatedLayers();
+            var animatedElements = this.createAnimation(layerData);
             var htmlContent = this.getExportingElement(animatedElements).outerHTML;
-            this.createAnimation(layerData);
-            console.log(layerData)
+            // console.log('animatedElements', htmlContent)
             var cssText = this.getAnimationCss(animatedElements);
-            // apped amination css
-            this.exportHtmlTemplatePart1 = this.exportHtmlTemplatePart1.replace('--CUSTOM_STYLES--', cssText);
-            this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
+            // console.log(cssText)
+            // // apped amination css
+            this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1.replace('--CUSTOM_STYLES--', cssText) + htmlContent + this.exportHtmlTemplatePart2);
             setTimeout(() => {
                 res(true);
             }, 100);
@@ -992,7 +991,15 @@ export default {
             if (animatedData) {
                 for (var key in animatedData) {
                     if (key === layerElems[i].id) {
-                        layerElems[i].classList.add(animatedData[key].class);
+                        // console.log('----------------------------------------', key)
+                        // for (var f = 0; f < animatedData[key].animations.length; f++) {
+                        //     console.log(key, animatedData[key].animations[f])
+                        // }
+                        // console.log(key, animatedData[key])
+                        // layerElems[i].classList.add(animatedData[key].class);
+                        // console.log(layerElems[i].classList)
+                        layerElems[i].classList.add('animate-' + key);
+                        // console.log(layerElems[i].classList)
                     }
                 }
             }
@@ -1000,20 +1007,38 @@ export default {
         return elem;
     },
     getAnimationCss(srcObj) {
+        // console.log(srcObj)
         var cssText = '';
         for (var key in srcObj) {
-            console.log()
-            var style = document.getElementById(srcObj[key].style);
-            if (!style) continue;
+            var keyframes = '';
+            var classes = '.animate-' + key + ' { \n';
+            var loop = srcObj[key].loop === 'Once' ? '1' : srcObj[key].loop;
+            // console.log(loop);
+            classes += 'animation: ';
+            for (var i = 0; i < srcObj[key].animations.length; i++) {
+                // console.log(srcObj[key])
+                keyframes += srcObj[key].animations[i].css + '\n';
+                classes += srcObj[key].animations[i].kfn;
+                classes += ' ' + srcObj[key].ts + ' ' + loop;
+                if (srcObj[key].animations[i + 1]) {
+                    classes += ',';
+                }
+            }
+            classes += '} \n';
+            // console.log(classes)
+            // console.log(key, srcObj[key].animations)
 
-            cssText += style.innerHTML;
+            cssText += keyframes + classes;
         }
 
         return cssText;
     },
     createAnimation(layerDataArr) {
+        var animations = {};
         for (var i = 0; i < layerDataArr.length; i++) {
-            animation.applyAnimation(layerDataArr[i], false)
+            animations[layerDataArr[i].id] = animation.applyAnimation(layerDataArr[i], false);
         }
+
+        return animations;
     }
 }
