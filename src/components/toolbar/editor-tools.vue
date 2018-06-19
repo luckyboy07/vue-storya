@@ -188,7 +188,7 @@ export default {
       this.$emit('onResize', {with:  this.$refs.width.value, height:  this.$refs.height.value});
     },
     zoom(zoomType) {
-      if (zoomType === 'out' && this.selectedtemplate.zoom <= 0 || zoomType === 'in' && this.selectedtemplate.zoom >= 300) return;
+      if (zoomType === 'out' && this.selectedtemplate.zoom <= 0 || zoomType === 'in' && this.selectedtemplate.zoom >= 500) return;
 
       var value = !this.$refs.zoomInp.value ?  this.selectedtemplate.zoom :  parseInt(this.$refs.zoomInp.value.replace('%', ''));
       if (!zoomType) {
@@ -230,8 +230,6 @@ export default {
     },
     exportContent() {
       var zoom = 100;
-      console.log('Exporting....',this.$localStorage.get('canvas'))
-
       // if (this.editorData.zoom !== 100) {
       //   alert('fdf')
       //   zoom = this.editorData.zoom;
@@ -239,7 +237,7 @@ export default {
       //   zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
       // }
       // console.log(JSON.stringify( this.getExportContent()));
-      exportHelper.exportTemplate().then((val) => {
+      exportHelper.exportTemplate(this.layers).then((val) => {
         console.log('Export finished', true)
         // if (zoom !== 100) {
         //     alert('1')

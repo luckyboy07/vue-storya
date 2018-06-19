@@ -52,7 +52,6 @@ import shape from "../../components/editor/shape.vue"
 import cssShape from '../../components/editor/css-shape.vue'
 import { mapActions, mapGetters, mapMutations } from "vuex"
 import image from "../../components/editor/image"
-import {TimelineMax} from 'gsap'
 export default {
   name: "selectionBox",
   props: ["layers"],
@@ -125,7 +124,12 @@ export default {
       this.resetFocus();
     },
     handleCanvasKeydown(evt) {
-      if (!this.selectedLayer) return;
+      if (!this.selectedLayer) {
+        if (this.getSelectedLayerId && this.getSelectedLayerId.sourceLayer) {
+          this.selectedLayer = this.getSelectedLayerId.sourceLayer;
+           this.selectedLayer.selected = true;
+        }
+      }
 
       var val = evt.shiftKey ? 10 : 1;
       this.shiftKeyOn = evt.shiftKey;

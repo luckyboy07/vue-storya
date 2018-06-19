@@ -12,9 +12,13 @@ export default {
         this.zoom = Math.max(this.zoom, -30);
         this.scale = Math.pow(1.09, (this.zoom / 30));
 
-        canvasData.width = Math.round(canvasData.width / this.scale);
-        canvasData.height = Math.round(canvasData.height / this.scale);
-
+        if (!canvasData.isResponsive) {
+            canvasData.width = Math.round(canvasData.width / this.scale);
+            canvasData.height = Math.round(canvasData.height / this.scale);
+        } else {
+            canvasData.activeSize.width = Math.round(canvasData.activeSize.width / this.scale);
+            canvasData.activeSize.height = Math.round(canvasData.activeSize.height / this.scale);
+        }
 
         for (var i = 0; i < layers.length; i++) {
             // dimensions
@@ -27,7 +31,7 @@ export default {
             // layers[i].attributes.shadowSize /= this.scale;
             if (layers[i].type === 'shape') {
                 // only circle and rectangle is currenly supported with border
-                if (layers[i].attributes.shape === 'Circle' || layers[i].attributes.shape === 'Reactangle') {
+                if (layers[i].attributes.shape === 'Circle' || layers[i].attributes.shape === 'Reactangle' && layers[i].attributes.borderWidth > 0) {
                     layers[i].attributes.borderWidth /= this.scale;
                 }
             } else if (layers[i].type === 'text') {

@@ -26,16 +26,16 @@
   <preview-modal></preview-modal>
   <!-- Ruler Lines -->
   <div class="h-lrl1 g-lines" ref="hhl1"
-    :style="{width: (parseInt(canvasData.width) + parseInt(400)) + 'px', height: '2px'}">
+    :style="{width: (parseInt(!canvasData.isResponsive ? canvasData.width : canvasData.activeSize.width) + parseInt(400)) + 'px', height: '2px'}">
   </div>
   <div class="h-lrl2 g-lines" ref="hhl2"
-    :style="{width: (parseInt(canvasData.width) + parseInt(400)) + 'px', height: '2px'}">
+    :style="{width: (parseInt(!canvasData.isResponsive ? canvasData.width : canvasData.activeSize.width) + parseInt(400)) + 'px', height: '2px'}">
   </div>
   <div class="v-lrl1 g-lines" ref="vlrl1"
-    :style="{width: '2px', height: (parseInt(canvasData.height) + parseInt(100)) + 'px'}">
+    :style="{width: '2px', height: (parseInt(!canvasData.isResponsive ? canvasData.height : canvasData.activeSize.height) + parseInt(100)) + 'px'}">
   </div>
   <div class="v-lrl2 g-lines" ref="vlrl2"
-    :style="{width: '2px', height: (parseInt(canvasData.height) + (100)) + 'px'}">
+    :style="{width: '2px', height: (parseInt(!canvasData.isResponsive ? canvasData.height : canvasData.activeSize.height) + parseInt(100)) + 'px'}">
   </div>
   <!-- <div class="offset-line" ref="vlrl3"
     :style="{width: '2px', height: (parseInt(canvasData.height) + parseInt(100)) + 'px'}">
@@ -126,24 +126,26 @@ export default {
       setTimeout(() => {
         // console.log(layerData, bounds);
         if (layerData) {
+          // the actual width and height
+          var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
           // horizontal lines
           // upper
           this.$refs.hhl1.style.display="block";
           this.$refs.hhl1.style.left = (bounds2.left - 200) + 'px';
-          this.$refs.hhl1.style.top = (layerData.y + bounds1.top + 23) + 'px';
+          this.$refs.hhl1.style.top = (actualBounds.y + 1) + 'px';
           // lower
           this.$refs.hhl2.style.display="block";
           this.$refs.hhl2.style.left = (bounds2.left - 200) + 'px';
-          this.$refs.hhl2.style.top = (layerData.y + bounds1.top + 21 + layerData.height) + 'px';
+          this.$refs.hhl2.style.top = (actualBounds.y + actualBounds.height - 1) + 'px';
 
           // vertical lines
           // left
           this.$refs.vlrl1.style.display="block";
-          this.$refs.vlrl1.style.left = ((layerData.x + bounds2.left) + 1) + 'px';
+          this.$refs.vlrl1.style.left = (actualBounds.x + 1) + 'px';
           this.$refs.vlrl1.style.top = (bounds2.top - 50) + 'px';
           // right
           this.$refs.vlrl2.style.display="block";
-          this.$refs.vlrl2.style.left = ((layerData.x + bounds2.left + layerData.width) - 1) + 'px';
+          this.$refs.vlrl2.style.left = ((actualBounds.x + actualBounds.width) - 1) + 'px';
           this.$refs.vlrl2.style.top = (bounds2.top - 50) + 'px';
 
           layerCloner.cloneElement(layerData);
