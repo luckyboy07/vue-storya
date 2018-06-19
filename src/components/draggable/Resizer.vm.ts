@@ -310,27 +310,9 @@ export default {
             top: bounds.top + bounds.height / 2
           };
 
-          // add zoom value to left and top if > 100
-          // decrease  left and top to zoom if < 100
-          // if (self.zoom > 100) {
-          //   if (browserHelper.isChrome()) {
-          //     center.left += self.zoom * 2;
-          //     center.top += self.zoom;
-          //   } else if (browserHelper.isFirefox()) {
-          //      // TODO: handle firefox
-          //   }
-          // } else if (self.zoom < 100) {
-          //   if (browserHelper.isChrome()) {
-          //     center.left -= self.zoom * 2;
-          //     center.top -= self.zoom;
-          //   } else if (browserHelper.isFirefox()) {
-          //      // TODO: handle firefox
-          //   }
-          // }
-
           var degree = (Math.atan2(event.clientY - center.top, event.clientX - center.left) * 180 / Math.PI + 90) % 360;
           self.setOctantValue(self.value.rotation);
-          // added grid lines (same as canva)
+          
           if (degree - 1 >= -5 && degree + 1 <= 5) {
             degree = 0;
           }
@@ -421,6 +403,35 @@ export default {
           // bottom
           if (self.parent && ((rect.top + dom.offsetHeight) - 2) >= pH) {
            rect.top = mY;
+          }
+
+          // pilit2 style XD
+          var cX = rect.left + rect.width / 2;
+          var cY = rect.top + rect.height / 2;
+          // X
+          if (cX - 15 <=  (pW / 4) && (cX + 15 >=  (pW / 4))) {
+            rect.left = (pW / 4) - rect.width / 2;
+          }
+
+          if (cX - 15 <=  (pW / 2) && (cX + 15 >=  (pW / 2))) {
+            rect.left = (pW / 2) - rect.width / 2;
+          }
+
+          if (cX - 15 <= pW - (pW / 4) && (cX + 15 >= pW - (pW / 4))) {
+            rect.left = pW - (pW / 4) - rect.width / 2;
+          }
+
+          // Y
+          if (cY - 15 <=  (pH / 4) && (cY + 15 >=  (pH / 4))) {
+            rect.top = (pH / 4) - rect.height / 2;
+          }
+
+          if (cY - 10 <=  (pH / 2) && (cY + 10 >=  (pH / 2))) {
+            rect.top = (pH / 2) - rect.height / 2;
+          }
+
+          if (cY - 15 <= pH - (pH / 4) && (cY + 15 >= pH - (pH / 4))) {
+            rect.top = pH - (pH / 4) - rect.height / 2;
           }
 
           dom.style.left = rect.left + 'px';

@@ -266,6 +266,9 @@ export default {
     ...mapActions(['addLayer','setBackgroundImage']),
     ...mapGetters(['getShapeLayer', 'getSelectedLayerId','sortLayer']),
     createLayer(item, evt) {
+      // temporary; do not continue if video or audio
+      if (item.type === 'video' || item.type === 'audio') return;
+      
       if (item.type === 'shape') {
         item.attributes.color = colorHelper.getRandomColor();
       }

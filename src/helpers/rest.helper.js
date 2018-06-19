@@ -2,8 +2,8 @@ import axious from 'axios'
 export default {
     cancelTokens: [], // cancel tokens, use for cancelling a request
     config: {
-        baseUrl: 'http://192.168.254.114',
-        port: 3000,
+        baseUrl: 'http://206.189.153.177',
+        port: 4000,
         isSecure: false,
     },
     get(url, param = {}) {
@@ -22,19 +22,32 @@ export default {
     delete() {
 
     },
-    post(url, param) {
+    post(url, param, contentType = 'application/json') {
         if (typeof param !== 'object') {
             console.warn('Object is require for http post');
         }
-        const CancelToken = axious.CancelToken;
         return new Promise((resolve, reject) => {
-            axious.post(this.$_getCompeleteUrl(url), param)
-                .then((response) => {
+
+            return axios({
+                    method: 'post',
+                    url: this.getCompleteUrl(url),
+                    data: contentType == "multipart/form-data" ? formBox : _data,
+                    headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': contentType }
+                })
+                .then(function(response) {
                     resolve(this.$_getReponseData(response));
                 })
-                .catch((err) => {
+                .catch(function(error) {
                     reject(err)
-                })
+                });
+
+            // axious.post(this.getCompleteUrl(url), param)
+            //     .then((response) => {
+            //         resolve(this.$_getReponseData(response));
+            //     })
+            //     .catch((err) => {
+            //         reject(err)
+            //     })
         });
     },
     put() {
@@ -83,7 +96,7 @@ export default {
         return this.config.baseUrl + ':' + this.config.port + '/'
         url + urlParams;
     },
-    $_getCompeleteUrl(url) {
+    getCompleteUrl(url) {
         if (!url) {
             throw new Error('Invalid URL');
         }

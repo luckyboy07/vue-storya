@@ -3,7 +3,7 @@ import templates from './animation-templates'
 export default {
     currentTimeout: 0,
     $_animatedLayers: {},
-    applyAnimation(layer) {
+    applyAnimation(layer, inject = true) {
         var animFlow = layer.attributes.animation.animationFlow;
         var ts = this.$_sumFlow(animFlow);
         // keyframes
@@ -69,8 +69,8 @@ export default {
                         }
                     }
                     if (canExecute) {
-                        var scale_start = layer.attributes.animation.animations[i].start;
-                        var scale_end = layer.attributes.animation.animations[i].end;
+                        var scale_start = layer.attributes.animation.animations[i].start || '100';
+                        var scale_end = layer.attributes.animation.animations[i].end || '100';
                         var scaled = templates.scale.getScale(layer.id, this.getFlowsArr(animFlow), ts, scale_start, scale_end);
                         animations.push(scaled);
                     }
@@ -82,14 +82,21 @@ export default {
 
         // console.log('layer', layer);
         // previewing
-        this.addAnimation(layer.id, animations, ts, layer.attributes.animation.loop, layer.attributes.animation.custom)
+        this.addAnimation(layer.id, animations, ts, layer.attributes.animation.loop, layer.attributes.animation.custom, inject)
+
+        return {
+            animations: animations,
+            ts: ts + 's',
+            loop: layer.attributes.animation.loop !== 'Custom' ? layer.attributes.animation.loop : layer.attributes.animation.custom,
+        };
     },
-    addAnimation(id, animations, ts, loop, custom) {
+    addAnimation(id, animations, ts, loop, custom, inject) {
+        if (animations.length <= 0) return;
+
         // console.log(id, animations, ts, loop, custom)
         if (!loop) loop = 'Infinite';
         if (loop === 'Once') loop = 1;
         if (loop === 'Custom') loop = custom;
-
 
         var oldStyle = document.getElementById('style-' + id);
         if (oldStyle) {
@@ -124,15 +131,17 @@ export default {
             }
         }
         // console.log(elem.classList)
-        elem.className += ' animation-' + id;
+        if (inject) {
+            elem.className += ' animation-' + id;
 
-        if (this.$_animatedLayers[id]) {
-            delete this.$_animatedLayers[id];
+            if (this.$_animatedLayers[id]) {
+                delete this.$_animatedLayers[id];
+            }
+            this.$_animatedLayers[id] = {
+                class: 'animation-' + id,
+                style: 'style-' + id
+            };
         }
-        this.$_animatedLayers[id] = {
-            class: 'animation-' + id,
-            style: 'style-' + id
-        };
     },
     $_sumFlow(obj) {
         var sum = 0;
@@ -197,4 +206,55 @@ export default {
     getAnimatedLayers() {
         return this.$_animatedLayers;
     },
+    removePreview(layer) {
+        if (document.getElementById('animaiton-preview-' + layer.id)) {
+            document.body.removeChild(document.getElementById('animaiton-preview-' + layer.id));
+        }
+    },
+    createShadow(layer, anim, changed) {
+        if (!layer) return;
+        if (document.getElementById('animaiton-preview-' + layer.id)) {
+            document.body.removeChild(document.getElementById('animaiton-preview-' + layer.id));
+        }
+        var elem = document.getElementById(layer.id);
+        if (!elem) return;
+        var bounds = elem.getBoundingClientRect();
+
+        var containerBounds = (document.getElementsByClassName('editor-box')[0]).getBoundingClientRect();
+
+        // console.log('--------------------------------', containerBounds)
+
+        var cloned = elem.cloneNode(true);
+        this.$_clean(cloned);
+        // console.log('--------------------------------', cloned)
+        cloned.id = 'animaiton-preview-' + layer.id;
+        cloned.style.cssText += 'z-index: 9999; opacity: 0.7;';
+        cloned.style.left = bounds.left + 'px';
+        cloned.style.top = bounds.top + 'px';
+
+        // console.log(cloned)
+        // console.log(layer, anim)
+        if (anim.animation === "Slide Top/Bottom") {
+            cloned.style.top = changed === 'start' ? (containerBounds.top + parseInt(anim.start)) + 'px' : (containerBounds.top + parseInt(anim.end)) + 'px';
+        } else if (anim.animation === "Slide Left/Right") {
+            cloned.style.left = changed === 'start' ? (containerBounds.left + parseInt(anim.start)) + 'px' : (containerBounds.left + parseInt(anim.end)) + 'px';
+        } else if (anim.animation === 'Rotate') {
+            cloned.style.cssText += changed === 'start' ? 'transform: rotateZ(' + anim.start + 'deg);' : 'transform: rotateZ(' + anim.end + 'deg);';
+        } else if (anim.animation === 'Size') {
+            cloned.style.cssText += changed === 'start' ? 'transform: scale(' + parseInt(anim.start) / 100 + ');' : 'transform: scale(' + parseInt(anim.end) / 100 + ');';
+        }
+
+        document.body.appendChild(cloned);
+    },
+    $_clean(elem) {
+        var _rclass = ['rr-bar', 'rr-handle', 'p-d-g', 'layer-action-info'];
+        for (var i = 0; i < _rclass.length; i++) {
+            var elems = elem.querySelectorAll('.' + _rclass[i]);
+            for (var j = 0; j < elems.length; j++) {
+                elems[j].parentElement.removeChild(elems[j]);
+            }
+        }
+
+        elem.style.border = '2px violet dashed';
+    }
 }

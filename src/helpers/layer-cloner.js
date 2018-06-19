@@ -18,8 +18,8 @@ export default {
                 elems[i].style.display = 'none';
             }
 
-            this.clonedElement.style.zIndex = 0;
-            document.body.appendChild(this.clonedElement);
+            this.clonedElement.style.zIndex = -1;
+            document.getElementsByClassName('editor-container')[0].appendChild(this.clonedElement);
         } else {
             var elem = document.getElementById(layer.id);
             if (elem) {
@@ -37,7 +37,7 @@ export default {
     },
     removeElement() {
         if (this.clonedElement) {
-            document.body.removeChild(this.clonedElement);
+            document.getElementsByClassName('editor-container')[0].removeChild(this.clonedElement);
             this.clonedElement = null;
         }
     },
