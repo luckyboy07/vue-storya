@@ -124,7 +124,12 @@ export default {
       this.resetFocus();
     },
     handleCanvasKeydown(evt) {
-      if (!this.selectedLayer) return;
+      if (!this.selectedLayer) {
+        if (this.getSelectedLayerId && this.getSelectedLayerId.sourceLayer) {
+          this.selectedLayer = this.getSelectedLayerId.sourceLayer;
+           this.selectedLayer.selected = true;
+        }
+      }
 
       var val = evt.shiftKey ? 10 : 1;
       this.shiftKeyOn = evt.shiftKey;
