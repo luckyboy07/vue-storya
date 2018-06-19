@@ -1040,5 +1040,5 @@ export default {
         }
 
         return animations;
-    }
+    },
 }
