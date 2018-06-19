@@ -16,7 +16,7 @@ export const store = new Vuex.Store({
             width: 900,
             height: 500,
             zoom: 100,
-            zoomIncrease: 20,
+            zoomIncrease: 10,
             bgColor: '#fff',
             gridLines: true,
             isResponsive: false,
@@ -292,20 +292,20 @@ export const store = new Vuex.Store({
             })
             let ratios = state.canvasData.ratios
             console.log('ratios:', ratios)
-            if (ratios.length > 0){
-                for (let i = 0;i<ratios.length;i++) {
+            if (ratios.length > 0) {
+                for (let i = 0; i < ratios.length; i++) {
                     // let ratiolayer = ratios[i].layers
-                    if(ratios[i].layers.length >0) {
+                    if (ratios[i].layers.length > 0) {
                         ratios[i].layers = JSON.parse(JSON.stringify(sam))
-                    console.log('ratios[i].layers:', ratios[i].layers)
-                    // for(let j=0;j< ratiolayer.length;j++){
-                        //     ratiolayer = sam
-                        // }
+                        console.log('ratios[i].layers:', ratios[i].layers)
+                            // for(let j=0;j< ratiolayer.length;j++){
+                            //     ratiolayer = sam
+                            // }
                     }
                 }
-            console.log('state:', state.canvasData)
-        }
-            if(!state.canvasData.isResponsive) {
+                console.log('state:', state.canvasData)
+            }
+            if (!state.canvasData.isResponsive) {
                 state.canvasData.originalLayers = layers
             }
             Vue.localStorage.set('layers', JSON.stringify(sam))
