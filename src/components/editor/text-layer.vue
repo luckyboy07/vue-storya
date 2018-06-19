@@ -90,7 +90,7 @@ export default {
       var layerData = this.data.attributes;
       return {
         // position: 'absolute',
-        'user-select':'none',
+        'user-select':'text',
         opacity: layerData.opacity,
         fontFamily: layerData.fontFamily,
         fontSize: layerData.fontSize + 'px',
