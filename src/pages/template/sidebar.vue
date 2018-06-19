@@ -56,11 +56,13 @@
         @onRenameOrDelete="onRenameOrDelete"
         @mousedown.native="selectLayer(layer, $event)">
       </component>
-             <mu-flexbox>
+      <div @click="setBackgroundImage()" v-show="checkBackgroundImage(layers)">
+             <mu-flexbox >
                   <mu-flexbox-item class="flex-container" > 
                       + Add Background Image
                   </mu-flexbox-item>
              </mu-flexbox>
+      </div>
     </mu-list>
   </mu-drawer>
   <div class="layer-menu" ref="layerMenu" v-show="menuVisible">
@@ -261,7 +263,7 @@ export default {
   },
   methods: {
     ...mapMutations(['updateLayers', 'removeSelectedLayer', 'broadCastStatus']),
-    ...mapActions(['addLayer']),
+    ...mapActions(['addLayer','setBackgroundImage']),
     ...mapGetters(['getShapeLayer', 'getSelectedLayerId','sortLayer']),
     createLayer(item, evt) {
       if (item.type === 'shape') {
@@ -452,6 +454,21 @@ export default {
         }
       }
     },
+    checkBackgroundImage (layers) {
+      console.log('layers:',layers)
+      if(layers.length > 0) {
+       layers.forEach((value) => {
+         console.log('value:',value)
+         if (value.isBackground) {
+           return false
+         }else {
+           return true
+         }
+        })
+      }else {
+        return true
+      }
+    }
   }
 }
 </script>

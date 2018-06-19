@@ -448,13 +448,23 @@ export default {
                 height: this.ratioSelected.height,
                 width: this.ratioSelected.width
             }
+            let newLayer = []
+            this.layers.forEach(val => {
+                    if(val.isBackground) {
+                        val.width = parseInt(this.ratioSelected.width)
+                        val.height = parseInt(this.ratioSelected.height)
+                       
+                    }
+                    newLayer.push(val)
+                })
+                console.log('newLayer:',newLayer)
             if(this.template.selectedRatio !== '') {
                 var index = this.template.ratios.findIndex((e)=>{return this.template.selectedRatio === e.name})
                 this.ratioSelected.layers = JSON.parse(JSON.stringify(this.template.ratios[index].layers))
                 console.log('this.ratioSelected:',this.ratioSelected)
             }else{
                 // let newlayer = this.template.layers
-                this.ratioSelected.layers = JSON.parse(JSON.stringify(this.layers))
+                this.ratioSelected.layers = JSON.parse(JSON.stringify(newLayer))
             }
 
             this.updateLayers(this.ratioSelected.layers)

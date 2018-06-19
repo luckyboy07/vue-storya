@@ -8,7 +8,7 @@
     <!-- start: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
       <div class="tool-item-group-content label-item">File Name</div> 
-      <input @change="filenameChanged" ref="filename" v-model="selectedtemplate.file_name" spellcheck="false" style="width: 140px" class="tool-item-group-content default-inp">
+      <input @change="filenameChanged" ref="filename" v-model="selectedtemplate.canvas_name" spellcheck="false" style="width: 140px" class="tool-item-group-content default-inp">
     </div>
     <!-- end: Project Name -->
     <div class="tool-item tool-item-group" slot="left" >
@@ -230,8 +230,8 @@ export default {
     },
     exportContent() {
       var zoom = 100;
-      console.log('Exporting....',this.$localStorage.get('canvas'))
-
+      // console.log('Exporting....',this.$localStorage.get('canvas'))
+    
       // if (this.editorData.zoom !== 100) {
       //   alert('fdf')
       //   zoom = this.editorData.zoom;
@@ -239,7 +239,8 @@ export default {
       //   zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
       // }
       // console.log(JSON.stringify( this.getExportContent()));
-      exportHelper.exportTemplate().then((val) => {
+      this.selectedtemplate.layers = JSON.parse(JSON.stringify(this.dataLayer))
+      exportHelper.exportTemplate(this.selectedtemplate).then((val) => {
         console.log('Export finished', true)
         // if (zoom !== 100) {
         //     alert('1')

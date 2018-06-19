@@ -11,7 +11,7 @@ export const store = new Vuex.Store({
     state: {
         // for editor toolbar
         canvasData: {
-            file_name: 'New File 1',
+            canvas_name: 'New File 1',
             project_name: 'New File 1',
             width: 900,
             height: 500,
@@ -272,7 +272,7 @@ export const store = new Vuex.Store({
             // if not, assign a new id for this item
             // indicating that this item is created
             let layers = state.layers
-
+            console.log(payload)
             if (!payload.fromUndoRedo) {
                 payload = appHelper.createLayer(payload);
                 payload.order = layers.length > 0 ? $.from(layers).max(l => l.order) + 1 : 1;
@@ -304,7 +304,7 @@ export const store = new Vuex.Store({
                     }
                 }
             console.log('state:', state.canvasData)
-        }
+            }
             if(!state.canvasData.isResponsive) {
                 state.canvasData.originalLayers = layers
             }
@@ -322,6 +322,7 @@ export const store = new Vuex.Store({
         // to select the layer from other modules
         // watch this value as it changes
         setSelectedLayerId: (state, _newSelectedLayerId) => {
+            console.log('_newSelectedLayerId:',_newSelectedLayerId)
             // added
             // id is remain the same to avoid conflicts to other modules
             var srcLayer = $.from(state.layers).firstOrDefault(l => l.id === _newSelectedLayerId);
@@ -418,6 +419,54 @@ export const store = new Vuex.Store({
                 state.broadcastedStatuses = null;
             }, 500);
         },
+        setBackgroundImage: (state) => {
+            console.log('sate:",',state.canvasData)
+            let layers = state.layers
+            let payload = {}
+            if (!payload.fromUndoRedo) {
+                payload = appHelper.createLayer(payload);
+                payload.order = layers.length > 0 ? $.from(layers).max(l => l.order) + 1 : 1;
+                payload.x = 0;
+                payload.y = 0;
+                payload.open = true;
+                console.log('payload:',payload)
+            }
+            for (let i = 0; i < layers.length; i++) {
+                layers[i].selected = false
+            }
+
+            payload.component = 'background-layer';
+            payload.type = 'background';
+            payload.visible = true;
+            payload.animation = null;
+            payload.selected = true;
+            payload.isBackground = true;
+            payload.image = {},
+            payload.width = state.canvasData.width,
+            payload.height = state.canvasData.height,
+            payload.attributes = {
+                rotation: 0,
+                color: '#333',
+                isGradient: false,
+                gradientBackgroundData: state.items[0].attributes.gradientBackgroundData,
+                backgroundBlendMode: 'lighten',
+                backgroundSize: 'cover',
+                backgroundPosition: '50% 50%'
+            }
+            layers.push(payload)
+            let sam = layers.sort((a, b) => {
+                return b.order - a.order
+            })
+            Vue.localStorage.set('layers', JSON.stringify(sam))
+            Vue.set(state, 'layers', sam)
+                // this is for the undo manager to
+                // watch the changes of the layers
+                // check if the source of the data
+                // is not from redo/undo module
+            if (!payload.fromUndoRedo) {
+                Vue.set(state, 'lastItemAdd', appHelper.generateTimestamp())
+            }
+        },
     },
     getters: {
         getItems: state => {
@@ -495,7 +544,10 @@ export const store = new Vuex.Store({
         },
         updateLayers: ({ commit }, payload) => {
             commit('updateLayers', payload)
-        }
+        },
+        setBackgroundImage: ({ commit }, payload) => {
+            commit('setBackgroundImage', payload)
+        },
     }
     //   strict: process.env.NODE_ENV !== 'production'
 })

@@ -10,7 +10,7 @@
     <div class="zoom-container" tabindex="0">
         <!-- zoom: (canvasData.zoom / 100),
           '-moz-transform': 'scale(' + (canvasData.zoom / 100) +')', -->
-        <div class="editor-box" ref="editorBox" @contextmenu="openContextMenu"
+        <div class="editor-box" id="parent1" ref="editorBox" @contextmenu="openContextMenu"
           :style="{width: canvasData.isResponsive ? canvasData.activeSize.width + 'px': canvasData.width + 'px', 
           height: canvasData.isResponsive ? canvasData.activeSize.height + 'px':canvasData.height + 'px', 
         

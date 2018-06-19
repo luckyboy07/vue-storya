@@ -10,6 +10,7 @@ export default {
     <head>
       <title></title>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.0/TweenMax.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <style type="text/css">
       @font-face {
         font-family: 'Amatic SC';
@@ -751,14 +752,131 @@ export default {
     <body onload="_p()">
     <!-- REPLACE THIS PART -->
   `,
-    exportHtmlTemplatePart2: `
+    exportHtmlTemplatePart2: function (array) {
+    return  `
     <!-- REPLACE THIS PART -->
       <!-- DO NOT REMOVE ME -->
       <script type="text/javascript">
       var defaultW, 
-        defaultH = 0;
+        defaultH = 0
+        arr =`+JSON.stringify(array)+`;\n
       var defaultLayerValues = [];
-        
+      function fnResize() {
+        console.log('ASDASD')
+        var bw = window.innerWidth;
+        var bh = window.innerHeight;
+        var origwidth = 300;
+        var origheight = 300;
+        console.log('bw:', bw)
+        console.log('bh:', bh)
+        console.log('bw:', bw)
+        console.log('bh:', bh)
+        var maxNum = Math.max(bw, bh);
+        var minNum = Math.min(bw, bh);
+        var minR = minNum / maxNum;
+        console.log('maxNum:', maxNum);
+        console.log('minNum:', minNum);
+        var ratio = '';
+        if (minR <= 1 && minR > 0.8) {
+            console.log('1:1');
+            ratio = '1-1';
+        }
+        // 4:3 and 3:4 ratio
+        else if (minR <= 0.8 && minR > 0.75) {
+            if (bw > bh) {
+                ratio = '4-3';
+            } else {
+                ratio = '3-4';
+            }
+        }
+        // 3:2 and 2:3 ratio
+        else if (minR <= 0.75 && minR > 0.6667) {
+            if (bw > bh) {
+                ratio = '2-3';
+            } else {
+                ratio = '3-2';
+            }
+        }
+        // 5:3 and 3:5 ratio
+        else if (minR <= 0.6667 && minR > 0.6) {
+            if (bw > bh) {
+                ratio = '5-3';
+            } else {
+                ratio = '3-5';
+            }
+        }
+        // 16:9 and 9:16 ratio
+        else if (minR <= 0.6 && minR > 0.5625) {
+            if (bw > bh) {
+                ratio = '16-9';
+            } else {
+                ratio = '9-16';
+            }
+        }
+        // 16:10 and 10:16 ratio
+        else if (minR <= 0.5625 && minR > 0.4864) {
+            if (bw > bh) {
+                ratio = '16-10';
+            } else {
+                ratio = '10-16';
+            }
+        }
+        // 1:2 and 2:1 ratio
+        else if (minR <= 0.4864 && minR > 0.3333) {
+            if (bw > bh) {
+                ratio = '2-1';
+            } else {
+                ratio = '1-2';
+            }
+        }
+        // 1:4 and 4:1 ratio
+        else if (minR <= 0.3333 && minR > 0.2) {
+            if (bw > bh) {
+                ratio = '4-1';
+            } else {
+                ratio = '1-4';
+            }
+        }
+        // 1:6 and 6:1 ratio
+        else if (minR <= 0.2 && minR > 0.1428) {
+            if (bw > bh) {
+                ratio = '6-1';
+            } else {
+                ratio = '1-6';
+            }
+        }
+        // 1:8 and 8:1 ratio
+        else if (minR <= 0.1428 && minR > 0.1111) {
+            if (bw > bh) {
+                ratio = '8-1';
+            } else {
+                ratio = '1-8';
+            }
+        }
+        // 1:10 and 10:1 ratio
+        else if (minR <= 0.1111 && minR > 0) {
+            if (bw > bh) {
+                ratio = '10-1';
+            } else {
+                ratio = '1-10';
+            }
+        }
+        for (var i = 0; i < arr.ratios.length; i++) {
+          if (arr.ratios[i].name == ratio) {
+              var layers = arr.ratios[i].layers
+              for (var j = 0; j < layers.length; j++) {
+                  var elem = document.getElementById(layers[j].id)
+                  elem.style.top = layers[j].y + 'px';
+                  elem.style.left = layers[j].x + 'px';
+                  if (layers[j].isBackground) {
+                      elem.style.height = bh + 'px';
+                      elem.style.width = bw + 'px';
+                      console.log('elem:', elem)
+                  }
+              }
+          }
+        }
+      }
       function setDefault() {
         var pElem = document.getElementsByClassName('editor-box')[0];
         var bounds = pElem.getBoundingClientRect();
@@ -827,6 +945,9 @@ export default {
           }
         }
       }
+
+     
+
       function isPolygon(elem) {
         console.log('isSVG', elem)
         var p = elem.children[0];
@@ -872,8 +993,6 @@ export default {
         // var gsap = new TimelineMax();
         // var elem1 = document.getElementsByClassName('rr-resizer');
         // gsap.from(elem1[0],1,{left:100,opacity:0,repeat: -1, yoyo: true});
-        myStorage = window.localStorage;
-          console.log('myStorage',myStorage);
         var editable_elements = document.querySelectorAll("[contenteditable=true]");
         for (var i = 0; i < editable_elements.length; i++) {
         editable_elements[i].setAttribute("contenteditable", false);
@@ -886,18 +1005,25 @@ export default {
         }
         window.onload = function() {
           _p();
+        fnResize();
         }
+        timeout = false, // holder for timeout id
+        delay = 250;
+        window.addEventListener('resize', function() {
+          clearTimeout(timeout);
+          timeout = setTimeout(fnResize, delay);
+      });
       </script>
       <!-- DO NOT REMOVE ME -->
     </body>
     </html>
-  `,
+  `},
     loaderTemplate: `
   `,
     /**
      * Exports the current editor content into a packed html file (.html)
      */
-    exportTemplate() {
+    exportTemplate(array) {
         // var editorElem = document.getElementsByClassName('editor-box')[0]; // clone the div element
         // var htmlContent = editorElem.outerHTML;
         // this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
@@ -906,18 +1032,30 @@ export default {
         // var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
         // editorElem = this.$_responsiveness(editorElem);
         return new Promise((res, rej) => {
+          // for(let i=0;i<child.length;i++){
+          //   console.log('child:',child[i])
+          //   if(child[i].){
+          //   }
+          // } 
             var animatedElements = animation.getAnimatedLayers();
-            var htmlContent = this.getExportingElement(animatedElements).outerHTML;
+            var htmlContent = this.getExportingElement(array,animatedElements).outerHTML;
             var cssText = this.getAnimationCss(animatedElements);
             // apped amination css
             this.exportHtmlTemplatePart1 = this.exportHtmlTemplatePart1.replace('--CUSTOM_STYLES--', cssText);
-            this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2);
+            this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2(array));
             setTimeout(() => {
                 res(true);
             }, 100);
         })
     },
-    getExportingElement(animatedData) {
+    getExportingElement(array, animatedData) {
+        array.layers.forEach(e =>{
+        var layerelem = document.getElementById(e.id)
+        if(layerelem) {
+          layerelem.style.transition = 'all 400ms ease'
+        }
+        })
+
         var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
         editorElem = this.$_responsiveness(editorElem, animatedData);
         return editorElem;

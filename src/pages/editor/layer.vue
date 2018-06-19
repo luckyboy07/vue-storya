@@ -3,11 +3,11 @@
     <!-- :handles="'nw,ne,se,sw'" -->
     <rotatable-resizer 
       :id="elem.id"
-      :islocked="elem.islocked"
+      :islocked="elem.isBackground ? false :elem.islocked"
       :disabled="!elem.selected" 
       :rotatable="!elem.islocked"
       :draggable="!elem.islocked"
-      :rotation="elem.attributes.rotation.toString()"
+      :rotation="elem.isBackground ? '0' : elem.attributes.rotation.toString()"
       :fixedProportion="false"
       :left="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.x : -7 : elem.x"
       :top="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.y : -7 : elem.y"
@@ -15,7 +15,7 @@
       :height="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.height : parentH : elem.height"
       v-for="(elem, i) in layers" :key="i"
       v-show="elem.visible"
-      :z="elem.order"
+      :z="elem.isBackground ? 1:elem.order"
       :zoom="zoom"
       @focused="focused"
       @activated="activated(elem)"
@@ -37,6 +37,7 @@
       
       <!-- text layer -->
       <text-layer v-if="elem.type ==='text'" id="text" :data="elem" v-model="elem.id" :dragging="isDragging"></text-layer>
+      <background-layer v-if="elem.type ==='background'" id="background" :layerData="elem" v-model="elem.id" ></background-layer>
       <!-- text layer -->
       
     </rotatable-resizer>
@@ -50,6 +51,7 @@ import snackBar from '../../helpers/snackbar.js'
 import textLayer from '../../components/editor/text-layer'
 import shape from "../../components/editor/shape.vue"
 import cssShape from '../../components/editor/css-shape.vue'
+import backgroundLayer from '../../components/editor/background'
 import { mapActions, mapGetters, mapMutations } from "vuex"
 import image from "../../components/editor/image"
 import {TimelineMax} from 'gsap'
@@ -61,6 +63,7 @@ export default {
     imageLayer: image,
     'text-layer': textLayer,
     'c-shape': cssShape,
+    backgroundLayer
   },
   data() {
     return {
