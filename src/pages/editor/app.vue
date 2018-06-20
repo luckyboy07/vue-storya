@@ -16,7 +16,12 @@
         
           backgroundColor:canvasData.backgroundcolor,}">
         <div class="canvas-wrap">
-            <layer @scaling="layerScaling" :layers="filterLayer(layers)"></layer>
+            <layer 
+            :layers="filterLayer(layers)"
+            @scaling="layerScaling" 
+            @onShowXGridLine="onShowXGridLine"
+            @onShowYGridLine="onShowYGridLine"
+            @onshowZGridLine="onshowZGridLine"></layer>
         </div>
       </div>
     </div>
@@ -127,36 +132,36 @@ export default {
         // console.log(layerData, bounds);
         if (layerData) {
           // the actual width and height
-          var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
-          // horizontal lines
-          // upper
-          this.$refs.hhl1.style.display="block";
-          this.$refs.hhl1.style.left = (bounds2.left - 200) + 'px';
-          this.$refs.hhl1.style.top = (actualBounds.y + 1) + 'px';
-          // lower
-          this.$refs.hhl2.style.display="block";
-          this.$refs.hhl2.style.left = (bounds2.left - 200) + 'px';
-          this.$refs.hhl2.style.top = (actualBounds.y + actualBounds.height - 1) + 'px';
+          // var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
+          // // horizontal lines
+          // // upper
+          // // this.$refs.hhl1.style.display="block";
+          // this.$refs.hhl1.style.left = (bounds2.left - 200) + 'px';
+          // this.$refs.hhl1.style.top = (actualBounds.y + 1) + 'px';
+          // // lower
+          // // this.$refs.hhl2.style.display="block";
+          // this.$refs.hhl2.style.left = (bounds2.left - 200) + 'px';
+          // this.$refs.hhl2.style.top = (actualBounds.y + actualBounds.height - 1) + 'px';
 
-          // vertical lines
-          // left
-          this.$refs.vlrl1.style.display="block";
-          this.$refs.vlrl1.style.left = (actualBounds.x + 1) + 'px';
-          this.$refs.vlrl1.style.top = (bounds2.top - 50) + 'px';
-          // right
-          this.$refs.vlrl2.style.display="block";
-          this.$refs.vlrl2.style.left = ((actualBounds.x + actualBounds.width) - 1) + 'px';
-          this.$refs.vlrl2.style.top = (bounds2.top - 50) + 'px';
+          // // vertical lines
+          // // left
+          // // this.$refs.vlrl1.style.display="block";
+          // this.$refs.vlrl1.style.left = (actualBounds.x + 1) + 'px';
+          // this.$refs.vlrl1.style.top = (bounds2.top - 50) + 'px';
+          // // right
+          // // this.$refs.vlrl2.style.display="block";
+          // this.$refs.vlrl2.style.left = ((actualBounds.x + actualBounds.width) - 1) + 'px';
+          // this.$refs.vlrl2.style.top = (bounds2.top - 50) + 'px';
 
           layerCloner.cloneElement(layerData);
 
           // show the offset limit border
           // this.$refs.vlrl3.style.visi
         } else {
-          this.$refs.hhl1.style.display="none";
-          this.$refs.hhl2.style.display="none";
-          this.$refs.vlrl1.style.display="none";
-          this.$refs.vlrl2.style.display="none";
+          // this.$refs.hhl1.style.display="none";
+          // this.$refs.hhl2.style.display="none";
+          // this.$refs.vlrl1.style.display="none";
+          // this.$refs.vlrl2.style.display="none";
 
           //  this.$refs.vlrl3.style.display = 'none';
 
@@ -237,6 +242,40 @@ export default {
       setTimeout(()=>{
       this.topPopup = false
       },2000)
+    },
+    onShowXGridLine(layerData, show, val) {
+      if (show) {
+        var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
+        var bounds2 = this.$refs.editorBox.getBoundingClientRect();
+        this.$refs.vlrl1.style.display="block";
+        this.$refs.vlrl1.style.left = (actualBounds.x + 1 + actualBounds.width / 2) + 'px';
+        this.$refs.vlrl1.style.top = (bounds2.top - 50) + 'px';
+      } else {
+        this.$refs.vlrl1.style.display="none";
+      }
+    },
+    onShowYGridLine(layerData, show, val) {
+      if (show) {
+        var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
+        var bounds2 = this.$refs.editorBox.getBoundingClientRect();
+        this.$refs.hhl1.style.display="block";
+        this.$refs.hhl1.style.left = (bounds2.left - 200) + 'px';
+        this.$refs.hhl1.style.top = (actualBounds.y + 1 + actualBounds.height / 2) + 'px';
+      } else {
+          this.$refs.hhl1.style.display="none";
+      }
+    },
+    onshowZGridLine(layerData, show, z) {
+      if (show) {
+        var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
+        var bounds2 = this.$refs.editorBox.getBoundingClientRect();
+        this.$refs.vlrl2.style.display="block";
+        this.$refs.vlrl2.style.left = actualBounds.x + 'px';
+        this.$refs.vlrl2.style.top = (actualBounds.top / 2) + 'px';
+        this.$refs.vlrl2.style.transform = 'rotateZ(' + z + 'deg)';
+      } else {
+        this.$refs.vlrl2.style.display="none";
+      }
     }
   },
 }

@@ -230,23 +230,22 @@ export default {
     },
     exportContent() {
       var zoom = 100;
-      // if (this.editorData.zoom !== 100) {
-      //   alert('fdf')
-      //   zoom = this.editorData.zoom;
-      //   this.editorData.zoom = 100;
-      //   zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
-      // }
-      // console.log(JSON.stringify( this.getExportContent()));
+      var type = '';
       this.selectedtemplate.layers = JSON.parse(JSON.stringify(this.dataLayer))
-      exportHelper.exportTemplate(this.selectedtemplate,this.layers).then((val) => {
-        console.log('Export finished', true)
-        // if (zoom !== 100) {
-        //     alert('1')
-        //   this.editorData.zoom = zoom;
-        //   zoomHelper.execZoom(this.editorData.zoom < 100 ? 'in' : 'out', this.editorData, this.layers);
-        // }
-      });
-      
+      if (this.editorData.zoom !== 100) {
+        zoom = this.editorData.zoom;
+        type = zoom < 100 ? 'in' : 'out';
+        zoomHelper.gotoZoom(this.editorData, this.layers, zoom, 100, type).then((resp) => {
+          exportHelper.exportTemplate( this.selectedtemplate,this.layers).then((val) => {
+            console.log('Export finished', val)
+            if (zoom !== 100) {
+              zoomHelper.gotoZoom(this.editorData, this.layers, zoom, 100, type === 'in' ? 'out' : type === 'out' ? 'in' : '');
+            }
+          });
+        });
+      } else {
+        exportHelper.exportTemplate(this.selectedtemplate, this.layers);
+      }
     },
     savetoLocalstorage () {
       this.$localStorage.set('canvas',JSON.stringify(this.selectedtemplate))

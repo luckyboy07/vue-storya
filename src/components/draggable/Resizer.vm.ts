@@ -230,6 +230,18 @@ export default {
       this.$emit('resizeEnded', left, top, width, height);
     },
 
+    emitShowLeftGridLine(showLeft, left) {
+      this.$emit('showXGridLine', showLeft, left);
+    },
+
+    emitShowRightGridLine(showRight, right) {
+      this.$emit('showYGridLine', showRight, right);
+    },
+
+    emitShowRotationGridLine(show, rotation) {
+      this.$emit('showZGridLine', show, rotation);
+    },
+
     setOctantValue(deg) {
       if(deg >= 31 && deg <= 68) {
         this.state.octant = 1
@@ -310,32 +322,42 @@ export default {
             top: bounds.top + bounds.height / 2
           };
 
+          self.emitShowRotationGridLine(false);
+
           var degree = (Math.atan2(event.clientY - center.top, event.clientX - center.left) * 180 / Math.PI + 90) % 360;
           self.setOctantValue(self.value.rotation);
           
-          if (degree - 1 >= -5 && degree + 1 <= 5) {
+          if (degree - 3 >= -5 && degree + 3 <= 5) {
             degree = 0;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 >= 40 && degree + 1 <= 50) {
+          if (degree - 3 >= 40 && degree + 3 <= 50) {
             degree = 45;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 >= 85 && degree + 1 <= 95) {
+          if (degree - 3 >= 85 && degree + 3 <= 95) {
             degree = 90;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 >= 130 && degree + 1 <= 140) {
+          if (degree - 3 >= 130 && degree + 3 <= 140) {
             degree = 135;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 >= 175 && degree + 1 <= 185) {
+          if (degree - 3 >= 175 && degree + 3 <= 185) {
             degree = 180;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 >= 220 && degree + 1 <= 230) {
+          if (degree - 3 >= 220 && degree + 3 <= 230) {
             degree = 225;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 >= 265 && degree + 1 >= -85) {
+          if (degree - 3 >= 265 && degree + 3 >= -85) {
             degree = 270;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 <= -40 && degree + 1 >= -50) {
+          if (degree - 3 <= -40 && degree + 3 >= -50) {
             degree = -45;
+            self.emitShowRotationGridLine(true, degree);
           }
           
           self.state.rotation = degree;
@@ -350,6 +372,7 @@ export default {
           self.emitRotateEnded();
           self.hideDraggableLines();
           self.isRotating = false;
+          self.emitShowRotationGridLine(false);
         }
       });
     },
@@ -406,32 +429,41 @@ export default {
           }
 
           // pilit2 style XD
+          self.emitShowLeftGridLine(false);
+          self.emitShowRightGridLine(false);
+
           var cX = rect.left + rect.width / 2;
           var cY = rect.top + rect.height / 2;
           // X
           if (cX - 15 <=  (pW / 4) && (cX + 15 >=  (pW / 4))) {
             rect.left = (pW / 4) - rect.width / 2;
+            self.emitShowLeftGridLine(true, (pW / 4));
           }
 
           if (cX - 15 <=  (pW / 2) && (cX + 15 >=  (pW / 2))) {
             rect.left = (pW / 2) - rect.width / 2;
+            self.emitShowLeftGridLine(true, (pW / 2));
           }
 
           if (cX - 15 <= pW - (pW / 4) && (cX + 15 >= pW - (pW / 4))) {
             rect.left = pW - (pW / 4) - rect.width / 2;
+            self.emitShowLeftGridLine(true, pW - (pW / 4));
           }
 
           // Y
           if (cY - 15 <=  (pH / 4) && (cY + 15 >=  (pH / 4))) {
             rect.top = (pH / 4) - rect.height / 2;
+            self.emitShowRightGridLine(true,  (pH / 4));
           }
 
           if (cY - 10 <=  (pH / 2) && (cY + 10 >=  (pH / 2))) {
             rect.top = (pH / 2) - rect.height / 2;
+            self.emitShowRightGridLine(true,  (pH / 2));
           }
 
           if (cY - 15 <= pH - (pH / 4) && (cY + 15 >= pH - (pH / 4))) {
             rect.top = pH - (pH / 4) - rect.height / 2;
+            self.emitShowRightGridLine(true,  pH - (pH / 4));
           }
 
           dom.style.left = rect.left + 'px';
@@ -452,6 +484,8 @@ export default {
           // throw drag-ended event
           self.emitDragEnd();
           self.isDragging = false;
+          self.emitShowLeftGridLine(false);
+          self.emitShowRightGridLine(false);
         }
       });
     },

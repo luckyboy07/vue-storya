@@ -21,7 +21,9 @@
       @activated="activated(elem)"
       @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
       @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
-      @resizeStarted="resizeStarted" @resizing="resizing" @resizeEnded="resizeEnded">
+      @resizeStarted="resizeStarted" @resizing="resizing" @resizeEnded="resizeEnded"
+      @showXGridLine="onShowXGridLine" @showYGridLine="onShowYGridLine"
+      @showZGridLine="onshowZGridLine">
 
       <!-- shape layer :shape="[elem.attributes[0].value.split(' ')[0].toLowerCase(),elem.attributes]" -->
       <!-- <shape id="shape"  v-if="elem.type ==='shape'" :data="elem">
@@ -76,7 +78,6 @@ export default {
       parentW: 0,
       parentH: 0,
       isDragging: false,
-      // GSAP: new TimelineMax()
     };
   },
   beforeDestroy() {
@@ -263,6 +264,15 @@ export default {
     },
     resizeEnded(left, top, width, height) {
       this.$_recordEvent();
+    },
+    onShowXGridLine(show, x) {
+      this.$emit('onShowXGridLine', this.selectedLayer, show, x);
+    },
+    onShowYGridLine(show, y) {
+       this.$emit('onShowYGridLine', this.selectedLayer, show, y);
+    },
+    onshowZGridLine(show, z) {
+      this.$emit('onshowZGridLine', this.selectedLayer, show, z);
     },
     // record event to undo/redo module
     $_recordEvent() {

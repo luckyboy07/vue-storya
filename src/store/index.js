@@ -18,8 +18,8 @@ export const store = new Vuex.Store({
             width: 900,
             height: 500,
             zoom: 100,
-            zoomIncrease: 20,
-            backgroundcolor: '#fff',
+            zoomIncrease: 10,
+            bgColor: '#fff',
             gridLines: true,
             isResponsive: false,
             selectedRatio: '',
@@ -157,6 +157,7 @@ export const store = new Vuex.Store({
                 open: false,
                 image: {},
                 content: 'Image Layer',
+                loaded: true,
                 attributes: {
                     src: 'http://via.placeholder.com/140x100',
                     sizeOption: 'Auto',
@@ -292,22 +293,22 @@ export const store = new Vuex.Store({
             let sam = layers.sort((a, b) => {
                 return b.order - a.order
             })
-            console.log('state.canvasData.ratios:',state.canvasData)
+            console.log('state.canvasData.ratios:', state.canvasData)
             let ratios = state.canvasData.ratios
-            if (ratios.length > 0){
-                for (let i = 0;i<ratios.length;i++) {
+            if (ratios.length > 0) {
+                for (let i = 0; i < ratios.length; i++) {
                     let ratiolayers = ratios[i].layers
-            console.log('ratiolayers:',ratiolayers)
-            if(state.canvasData.selectedRatio === ratios[i].name) {
-                    // ratiolayers.push(payload)
+                    console.log('ratiolayers:', ratiolayers)
+                    if (state.canvasData.selectedRatio === ratios[i].name) {
+                        // ratiolayers.push(payload)
                         // ratiolayers.sort((a, b) => {
                         //     return b.order - a.order
                         // })
                         ratios[i].layers = sam
-                    }else {
+                    } else {
                         ratios[i].layers.selected = false
                         ratios[i].layers.open = false
-                        if(ratios[i].layers.length >0) {
+                        if (ratios[i].layers.length > 0) {
                             let les = JSON.parse(JSON.stringify(ratios[i].layers))
                             payload.x = 100;
                             payload.y = 100;
@@ -316,15 +317,15 @@ export const store = new Vuex.Store({
                                 return b.order - a.order
                             })
                             ratios[i].layers = JSON.parse(JSON.stringify(les))
-                        }else{
-                        ratios[i].layers = JSON.parse(JSON.stringify(sam))
+                        } else {
+                            ratios[i].layers = JSON.parse(JSON.stringify(sam))
                         }
                     }
                 }
             }
-            if(!state.canvasData.isResponsive) {
+            if (!state.canvasData.isResponsive) {
                 state.canvasData.originalLayers = JSON.parse(JSON.stringify(layers))
-            }else {
+            } else {
                 let orig = state.canvasData.originalLayers
                 orig.push(payload)
                 orig.sort((a, b) => {
@@ -336,18 +337,21 @@ export const store = new Vuex.Store({
             Vue.localStorage.set('layers', JSON.stringify(sam))
             Vue.set(state, 'canvasData', state.canvasData)
             Vue.set(state, 'layers', sam)
-            // this is for the undo manager to
+                // this is for the undo manager to
                 // watch the changes of the layers
                 // check if the source of the data
                 // is not from redo/undo module
             if (!payload.fromUndoRedo) {
-                Vue.set(state, 'lastItemAdd', appHelper.generateTimestamp())
+                Vue.set(state, 'lastItemAdd', {
+                    time: appHelper.generateTimestamp(),
+                    layer: payload
+                })
             }
         },
         // to select the layer from other modules
         // watch this value as it changes
         setSelectedLayerId: (state, _newSelectedLayerId) => {
-            console.log('_newSelectedLayerId:',_newSelectedLayerId)
+            // console.log('_newSelectedLayerId:', _newSelectedLayerId)
             // added
             // id is remain the same to avoid conflicts to other modules
             var srcLayer = $.from(state.layers).firstOrDefault(l => l.id === _newSelectedLayerId);
@@ -406,6 +410,7 @@ export const store = new Vuex.Store({
             Vue.localStorage.set('layers', JSON.stringify(state.layers))
         },
         selectTemplate: (state, payload) => {
+            // console.log('payload;', payload)
             let template = state.canvasData
             template.backgroundcolor = payload.backgroundcolor
             template.canvas_name = payload.canvas_name
@@ -416,12 +421,12 @@ export const store = new Vuex.Store({
             template.description = 'asdasd'
             template.is_public = false
             console.log('template;', template)
-            // store.dispatch('saveCanvas', template).then(response =>{
-            //     console.log('response:',response)
-            // })
-            // return apiService.saveCavas(template).then(response =>{
-            //     console.log('resop:',response)
-            // })
+                // store.dispatch('saveCanvas', template).then(response =>{
+                //     console.log('response:',response)
+                // })
+                // return apiService.saveCavas(template).then(response =>{
+                //     console.log('resop:',response)
+                // })
             Vue.localStorage.set('canvas', JSON.stringify(template))
         },
         setAutosaveData: (state, data) => {
@@ -452,7 +457,7 @@ export const store = new Vuex.Store({
             }, 500);
         },
         setBackgroundImage: (state) => {
-            console.log('sate:",',state.canvasData)
+            console.log('sate:",', state.canvasData)
             let layers = state.layers
             let payload = {}
             if (!payload.fromUndoRedo) {
@@ -461,7 +466,7 @@ export const store = new Vuex.Store({
                 payload.x = 0;
                 payload.y = 0;
                 payload.open = true;
-                console.log('payload:',payload)
+                console.log('payload:', payload)
             }
             for (let i = 0; i < layers.length; i++) {
                 layers[i].selected = false
@@ -474,17 +479,17 @@ export const store = new Vuex.Store({
             payload.selected = true;
             payload.isBackground = true;
             payload.image = {},
-            payload.width = state.canvasData.width,
-            payload.height = state.canvasData.height,
-            payload.attributes = {
-                rotation: 0,
-                color: '#333',
-                isGradient: false,
-                gradientBackgroundData: state.items[0].attributes.gradientBackgroundData,
-                backgroundBlendMode: 'lighten',
-                backgroundSize: 'cover',
-                backgroundPosition: '50% 50%'
-            }
+                payload.width = state.canvasData.width,
+                payload.height = state.canvasData.height,
+                payload.attributes = {
+                    rotation: 0,
+                    color: '#333',
+                    isGradient: false,
+                    gradientBackgroundData: state.items[0].attributes.gradientBackgroundData,
+                    backgroundBlendMode: 'lighten',
+                    backgroundSize: 'cover',
+                    backgroundPosition: '50% 50%'
+                }
             layers.push(payload)
             let sam = layers.sort((a, b) => {
                 return b.order - a.order
@@ -582,11 +587,11 @@ export const store = new Vuex.Store({
         },
         saveCanvas: ({ commit }, payload) => {
             return apiService.saveCanvas(payload,
-            data =>{
-                commit(data)
-            },errors =>{
-                commit(errors)
-            })
+                data => {
+                    commit(data)
+                }, errors => {
+                    commit(errors)
+                })
         }
     }
     //   strict: process.env.NODE_ENV !== 'production'
