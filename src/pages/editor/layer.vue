@@ -3,11 +3,11 @@
     <!-- :handles="'nw,ne,se,sw'" -->
     <rotatable-resizer 
       :id="elem.id"
-      :islocked="elem.islocked"
+      :islocked="elem.isBackground ? false :elem.islocked"
       :disabled="!elem.selected" 
       :rotatable="!elem.islocked"
       :draggable="!elem.islocked"
-      :rotation="elem.attributes.rotation.toString()"
+      :rotation="elem.isBackground ? '0' : elem.attributes.rotation.toString()"
       :fixedProportion="false"
       :left="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.x : -7 : elem.x"
       :top="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.y : -7 : elem.y"
@@ -15,13 +15,14 @@
       :height="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.height : parentH : elem.height"
       v-for="(elem, i) in layers" :key="i"
       v-show="elem.visible"
-      :z="elem.order"
+      :z="elem.isBackground ? 1:elem.order"
       :zoom="zoom"
       @focused="focused"
       @activated="activated(elem)"
       @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
       @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
-      @resizeStarted="resizeStarted" @resizing="resizing" @resizeEnded="resizeEnded">
+      @resizeStarted="resizeStarted" @resizing="resizing" @resizeEnded="resizeEnded"
+      @showXGridLine="onShowXGridLine" @showYGridLine="onShowYGridLine">
 
       <!-- shape layer :shape="[elem.attributes[0].value.split(' ')[0].toLowerCase(),elem.attributes]" -->
       <!-- <shape id="shape"  v-if="elem.type ==='shape'" :data="elem">
@@ -37,6 +38,7 @@
       
       <!-- text layer -->
       <text-layer v-if="elem.type ==='text'" id="text" :data="elem" v-model="elem.id" :dragging="isDragging"></text-layer>
+      <background-layer v-if="elem.type ==='background'" id="background" :layerData="elem" v-model="elem.id" ></background-layer>
       <!-- text layer -->
       
     </rotatable-resizer>
@@ -50,6 +52,7 @@ import snackBar from '../../helpers/snackbar.js'
 import textLayer from '../../components/editor/text-layer'
 import shape from "../../components/editor/shape.vue"
 import cssShape from '../../components/editor/css-shape.vue'
+import backgroundLayer from '../../components/editor/background'
 import { mapActions, mapGetters, mapMutations } from "vuex"
 import image from "../../components/editor/image"
 export default {
@@ -60,6 +63,7 @@ export default {
     imageLayer: image,
     'text-layer': textLayer,
     'c-shape': cssShape,
+    backgroundLayer
   },
   data() {
     return {
@@ -241,14 +245,14 @@ export default {
       this.selectedLayer.y = top;
 
       // to be able to show a ruler guideline
-      this.$emit('scaling', this.selectedLayer)
+      // this.$emit('scaling', this.selectedLayer)
     },
     dragEnded() {
       this.isDragging = false;
       // record for undoo redo event
       // this.$localStorage.set('layers',JSON.stringify(this.layers))
       this.$_recordEvent();
-      this.$emit('scaling', null)
+      // this.$emit('scaling', null)
     },
     resizeStarted() {
       this.$_recordEvent();
@@ -259,6 +263,12 @@ export default {
     },
     resizeEnded(left, top, width, height) {
       this.$_recordEvent();
+    },
+    onShowXGridLine(show, x) {
+      this.$emit('onShowXGridLine', this.selectedLayer, show, x);
+    },
+    onShowYGridLine(show, y) {
+       this.$emit('onShowYGridLine', this.selectedLayer, show, y);
     },
     // record event to undo/redo module
     $_recordEvent() {

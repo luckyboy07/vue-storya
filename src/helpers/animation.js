@@ -170,7 +170,7 @@ export default {
     },
     stopActiveAnimations(layers) {
         for (var i = 0; i < layers.length; i++) {
-            if (layers[i].attributes.animation.playing) {
+            if (layers[i].attributes.animation && layers[i].attributes.animation.playing) {
                 this.updateAnimations(layers[i]);
                 this.stopAnimation(layers[i]);
                 layers[i].attributes.animation.playing = false;

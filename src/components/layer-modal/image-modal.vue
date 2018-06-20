@@ -199,9 +199,9 @@ export default {
         })
       },
       getImages () {
-        API.getImages().then(response=>{
-          this.medias = response
-        })
+        // API.getImages().then(response=>{
+        //   this.medias = response
+        // })
       }
   },
   // upated () {

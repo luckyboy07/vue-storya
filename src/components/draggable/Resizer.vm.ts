@@ -230,6 +230,14 @@ export default {
       this.$emit('resizeEnded', left, top, width, height);
     },
 
+    emitShowLeftGridLine(showLeft, left) {
+      this.$emit('showXGridLine', showLeft, left);
+    },
+
+    emitShowRightGridLine(showRight, right) {
+      this.$emit('showYGridLine', showRight, right);
+    },
+
     setOctantValue(deg) {
       if(deg >= 31 && deg <= 68) {
         this.state.octant = 1
@@ -406,32 +414,41 @@ export default {
           }
 
           // pilit2 style XD
+          self.emitShowLeftGridLine(false);
+          self.emitShowRightGridLine(false);
+
           var cX = rect.left + rect.width / 2;
           var cY = rect.top + rect.height / 2;
           // X
           if (cX - 15 <=  (pW / 4) && (cX + 15 >=  (pW / 4))) {
             rect.left = (pW / 4) - rect.width / 2;
+            self.emitShowLeftGridLine(true, (pW / 4));
           }
 
           if (cX - 15 <=  (pW / 2) && (cX + 15 >=  (pW / 2))) {
             rect.left = (pW / 2) - rect.width / 2;
+            self.emitShowLeftGridLine(true, (pW / 2));
           }
 
           if (cX - 15 <= pW - (pW / 4) && (cX + 15 >= pW - (pW / 4))) {
             rect.left = pW - (pW / 4) - rect.width / 2;
+            self.emitShowLeftGridLine(true, pW - (pW / 4));
           }
 
           // Y
           if (cY - 15 <=  (pH / 4) && (cY + 15 >=  (pH / 4))) {
             rect.top = (pH / 4) - rect.height / 2;
+            self.emitShowRightGridLine(true,  (pH / 4));
           }
 
           if (cY - 10 <=  (pH / 2) && (cY + 10 >=  (pH / 2))) {
             rect.top = (pH / 2) - rect.height / 2;
+            self.emitShowRightGridLine(true,  (pH / 2));
           }
 
           if (cY - 15 <= pH - (pH / 4) && (cY + 15 >= pH - (pH / 4))) {
             rect.top = pH - (pH / 4) - rect.height / 2;
+            self.emitShowRightGridLine(true,  pH - (pH / 4));
           }
 
           dom.style.left = rect.left + 'px';
@@ -452,6 +469,8 @@ export default {
           // throw drag-ended event
           self.emitDragEnd();
           self.isDragging = false;
+          self.emitShowLeftGridLine(false);
+          self.emitShowRightGridLine(false);
         }
       });
     },

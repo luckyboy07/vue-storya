@@ -10,13 +10,17 @@
     <div class="zoom-container" tabindex="0">
         <!-- zoom: (canvasData.zoom / 100),
           '-moz-transform': 'scale(' + (canvasData.zoom / 100) +')', -->
-        <div class="editor-box" ref="editorBox" @contextmenu="openContextMenu"
+        <div class="editor-box" id="parent1" ref="editorBox" @contextmenu="openContextMenu"
           :style="{width: canvasData.isResponsive ? canvasData.activeSize.width + 'px': canvasData.width + 'px', 
           height: canvasData.isResponsive ? canvasData.activeSize.height + 'px':canvasData.height + 'px', 
         
           backgroundColor:canvasData.bgColor,}">
         <div class="canvas-wrap">
-            <layer @scaling="layerScaling" :layers="filterLayer(layers)"></layer>
+            <layer 
+            :layers="filterLayer(layers)"
+            @scaling="layerScaling" 
+            @onShowXGridLine="onShowXGridLine"
+            @onShowYGridLine="onShowYGridLine"></layer>
         </div>
       </div>
     </div>
@@ -130,21 +134,21 @@ export default {
           var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
           // horizontal lines
           // upper
-          this.$refs.hhl1.style.display="block";
+          // this.$refs.hhl1.style.display="block";
           this.$refs.hhl1.style.left = (bounds2.left - 200) + 'px';
           this.$refs.hhl1.style.top = (actualBounds.y + 1) + 'px';
           // lower
-          this.$refs.hhl2.style.display="block";
+          // this.$refs.hhl2.style.display="block";
           this.$refs.hhl2.style.left = (bounds2.left - 200) + 'px';
           this.$refs.hhl2.style.top = (actualBounds.y + actualBounds.height - 1) + 'px';
 
           // vertical lines
           // left
-          this.$refs.vlrl1.style.display="block";
+          // this.$refs.vlrl1.style.display="block";
           this.$refs.vlrl1.style.left = (actualBounds.x + 1) + 'px';
           this.$refs.vlrl1.style.top = (bounds2.top - 50) + 'px';
           // right
-          this.$refs.vlrl2.style.display="block";
+          // this.$refs.vlrl2.style.display="block";
           this.$refs.vlrl2.style.left = ((actualBounds.x + actualBounds.width) - 1) + 'px';
           this.$refs.vlrl2.style.top = (bounds2.top - 50) + 'px';
 
@@ -237,6 +241,28 @@ export default {
       setTimeout(()=>{
       this.topPopup = false
       },2000)
+    },
+    onShowXGridLine(layerData, show, val) {
+      if (show) {
+        var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
+        var bounds2 = this.$refs.editorBox.getBoundingClientRect();
+        this.$refs.vlrl1.style.display="block";
+        this.$refs.vlrl1.style.left = (actualBounds.x + 1 + actualBounds.width / 2) + 'px';
+        this.$refs.vlrl1.style.top = (bounds2.top - 50) + 'px';
+      } else {
+        this.$refs.vlrl1.style.display="none";
+      }
+    },
+    onShowYGridLine(layerData, show, val) {
+      if (show) {
+        var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
+        var bounds2 = this.$refs.editorBox.getBoundingClientRect();
+        this.$refs.hhl1.style.display="block";
+        this.$refs.hhl1.style.left = (bounds2.left - 200) + 'px';
+        this.$refs.hhl1.style.top = (actualBounds.y + 1 + actualBounds.height / 2) + 'px';
+      } else {
+          this.$refs.hhl1.style.display="none";
+      }
     }
   },
 }

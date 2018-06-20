@@ -66,7 +66,7 @@
             </div>
             <div class="item inp">
               File Name <span class="error-msg" v-if="isFile">*Required</span>
-              <input class="default-inp" type="text" v-model="setupData.file_name"/>
+              <input class="default-inp" type="text" v-model="setupData.canvas_name"/>
             </div>
             <div class="item inp" style="display: flex;">
               <div style="width: 50%; padding">
@@ -174,7 +174,7 @@ export default {
         height: '',
         width: '',
         project_name: '',
-        file_name: '',
+        canvas_name: '',
         canvasBackground: ''
       },
       isProject: false,
@@ -248,10 +248,10 @@ export default {
       selected.templateSelected = this.setupData.templateSelected
       selected.zoom = 100;
       selected.zoomIncrease = 20;
-      selected.file_name = this.setupData.file_name;
+      selected.canvas_name = this.setupData.canvas_name;
       selected.project_name = this.setupData.project_name;
       selected.bgColor = this.setupData.canvasBackground || '#fff';
-      if(this.setupData.file_name && this.setupData.project_name){
+      if(this.setupData.canvas_name && this.setupData.project_name){
           this.isFile = false
           this.isProject = false
           this.selectTemplate(selected)
@@ -260,7 +260,7 @@ export default {
         if(this.setupData.project_name === '' ){
           this.isProject = true
         }
-        if (this.setupData.file_name === ''){
+        if (this.setupData.canvas_name === ''){
           this.isFile = true
         }
         this.handleviewScroll()
