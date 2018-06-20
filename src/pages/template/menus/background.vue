@@ -129,7 +129,6 @@ export default {
     },
     setGradientColors(evt) {
        this.selectedHandle = evt.currentSlider.toString();
-        console.log('this.selectedHandle:',this.selectedHandle)
       // var p = evt.$el.children[0];
       // var c1 = p.children[0];
       // var c2 = p.children[1];     
@@ -145,7 +144,6 @@ export default {
       // etc...
     },
     handleDrag(evt) {
-      console.log("evt", evt)
       this.data.attributes.gradientBackgroundData.value[0] = evt[0];
       this.data.attributes.gradientBackgroundData.value[1] = evt[1];
     },
@@ -172,9 +170,7 @@ export default {
     },
     showPicker(picker,name) {
       // this.selectedPicker = picker;
-      console.log('this.data.attributes:',this.selectedHandle)
       this.selectedGradientColor = this.data.attributes.gradientBackgroundData.sliderStyle[this.selectedHandle].backgroundColor
-      console.log('selectedGradientColor:',this.selectedGradientColor)
        this.$emit('isOpen',[true,picker.target,this.data,name,this.selectedHandle])
     },
     hidePicker(evt) {
@@ -202,7 +198,6 @@ export default {
             let URL = window.URL || window.webkitURL
                 if (URL && URL.createObjectURL) {
                     // newFile.url = newFile.response.statusCode === 201 ? API_URL+newFile.response.response.data.media_path: URL.createObjectURL(newFile.file)
-                    console.log("DIRI",newFile)
                     newFile.url = URL.createObjectURL(newFile.file)
                     let reader = new Image()
                     reader.src = newFile.url
@@ -225,7 +220,6 @@ export default {
           // remove
         }
         setTimeout(()=>{
-          console.log('file:',this.files)
           this.data.image = this.files[0]
         },1000)
       },

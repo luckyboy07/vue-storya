@@ -6,6 +6,8 @@ import Vuex from 'vuex'
 import appHelper from '../helpers/app.helper'
 import zoomHelper from '../helpers/zoom.helper'
 import * as $ from 'linq'
+import axios from 'axios'
+import apiService from '../helpers/API.js'
 Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
@@ -155,6 +157,7 @@ export const store = new Vuex.Store({
                 open: false,
                 image: {},
                 content: 'Image Layer',
+                loaded: false,
                 attributes: {
                     src: 'http://via.placeholder.com/140x100',
                     sizeOption: 'Auto',
@@ -291,23 +294,31 @@ export const store = new Vuex.Store({
                 return b.order - a.order
             })
             let ratios = state.canvasData.ratios
-                // console.log('ratios:', ratios)
             if (ratios.length > 0) {
                 for (let i = 0; i < ratios.length; i++) {
-                    // let ratiolayer = ratios[i].layers
+                    console.log('payload:', payload)
                     if (ratios[i].layers.length > 0) {
-                        ratios[i].layers = JSON.parse(JSON.stringify(sam))
-                            // console.log('ratios[i].layers:', ratios[i].layers)
-                            // for(let j=0;j< ratiolayer.length;j++){
-                            //     ratiolayer = sam
-                            // }
+                        let ratiolayers = ratios[i].layers
+                        console.log('ratiolayers:', ratiolayers)
+                            // ratiolayers.push(payload)
+                            // ratiolayers.sort((a, b) => {
+                            //     return b.order - a.order
+                            // })
+                        ratios[i].layers = sam
                     }
                 }
-                // console.log('state:', state.canvasData)
             }
             if (!state.canvasData.isResponsive) {
-                state.canvasData.originalLayers = layers
+                state.canvasData.originalLayers = JSON.parse(JSON.stringify(layers))
+            } else {
+                let orig = state.canvasData.originalLayers
+                orig.push(payload)
+                orig.sort((a, b) => {
+                    return b.order - a.order
+                })
+                state.canvasData.originalLayers = JSON.parse(JSON.stringify(orig))
             }
+            console.log('sam:', sam)
             Vue.localStorage.set('layers', JSON.stringify(sam))
             Vue.set(state, 'canvasData', state.canvasData)
             Vue.set(state, 'layers', sam)
@@ -357,9 +368,8 @@ export const store = new Vuex.Store({
         },
         // updates the layer list
         updateLayers: (state, layers) => {
-            console.log('SET NEW LAYER')
             let newLayers = layers
-            Vue.set(state, 'layers', newLayers)
+            Vue.set(state, 'layers', layers)
         },
         removeGlobalLayer: (state, _layerId) => {
             Vue.set(state, 'removableId', _layerId)
@@ -387,12 +397,21 @@ export const store = new Vuex.Store({
         selectTemplate: (state, payload) => {
             // console.log('payload;', payload)
             let template = state.canvasData
-            template.bgColor = payload.bgColor
-            template.file_name = payload.file_name
+            template.backgroundcolor = payload.backgroundcolor
+            template.canvas_name = payload.canvas_name
             template.project_name = payload.project_name
             template.height = payload.height
             template.width = payload.width
             template.templateSelected = payload.templateSelected
+            template.description = 'asdasd'
+            template.is_public = false
+            console.log('template;', template)
+                // store.dispatch('saveCanvas', template).then(response =>{
+                //     console.log('response:',response)
+                // })
+                // return apiService.saveCavas(template).then(response =>{
+                //     console.log('resop:',response)
+                // })
             Vue.localStorage.set('canvas', JSON.stringify(template))
         },
         setAutosaveData: (state, data) => {
@@ -551,6 +570,14 @@ export const store = new Vuex.Store({
         setBackgroundImage: ({ commit }, payload) => {
             commit('setBackgroundImage', payload)
         },
+        saveCanvas: ({ commit }, payload) => {
+            return apiService.saveCanvas(payload,
+                data => {
+                    commit(data)
+                }, errors => {
+                    commit(errors)
+                })
+        }
     }
     //   strict: process.env.NODE_ENV !== 'production'
 })

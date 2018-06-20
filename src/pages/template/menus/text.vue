@@ -101,7 +101,9 @@
         </mu-list-item>  
         <mu-list-item  slot="nested" class="paddingZero" v-no-ripple>
           <div class="gridlist-demo-container" style="margin-top: -6px;">
-            <mu-grid-list class="gridlist-demo left">Background</mu-grid-list>
+            <i class="material-icons" style="margin-top: 5px;" @click="removeBackground" v-if="data.attributes.backgroundColor">close</i>
+            <!-- <mu-icon-button icon="close" slot=""/> -->
+            <mu-grid-list class="gridlist-demo left"> Background</mu-grid-list>
             <mu-grid-list class="right">
             <div class="div-inp input-size colorPicka">{{data.attributes.backgroundColor}}</div>
             <input @click="showPicker($event,'backgroundColor')" spellcheck="false" class="input-size sliderInput" :style="{backgroundColor:data.attributes.backgroundColor, border: 'thin ' + invertColor(data.attributes.backgroundColor) + ' solid'}">
@@ -567,6 +569,10 @@ export default {
     invertColor(hex) {
       return colorHelper.invertColor(hex);
     },
+    removeBackground () {
+      this.data.attributes.backgroundColor = ''
+    
+    }
   },
   watch: {
     "data.attributes.fontFamily": {

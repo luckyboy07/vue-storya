@@ -448,25 +448,30 @@ export default {
                 height: this.ratioSelected.height,
                 width: this.ratioSelected.width
             }
-            let newLayer = []
-            this.layers.forEach(val => {
+            let clone = JSON.parse(JSON.stringify(this.layers))
+              let newLayer = []
+                clone.forEach(val => {
                     if(val.isBackground) {
-                        val.width = parseInt(this.ratioSelected.width)
-                        val.height = parseInt(this.ratioSelected.height)
-                       
+                        val.width = parseInt(this.ratioSelected.width)+8
+                        val.height = parseInt(this.ratioSelected.height)+5
+                        val.x = -5
+                        val.y = -2
                     }
                     newLayer.push(val)
                 })
-                console.log('newLayer:',newLayer)
+                console.log('selectedRatio:',this.template)
             if(this.template.selectedRatio !== '') {
                 var index = this.template.ratios.findIndex((e)=>{return this.template.selectedRatio === e.name})
-                this.ratioSelected.layers = JSON.parse(JSON.stringify(this.template.ratios[index].layers))
-                console.log('this.ratioSelected:',this.ratioSelected)
-            }else{
+                console.log('index:',index)
+                console.log('this.template.ratios[index].layers:',this.template.ratios[index].layers)
+                this.ratioSelected.layers = JSON.parse(JSON.stringify(newLayer))
+            }
+            else{
                 // let newlayer = this.template.layers
                 this.ratioSelected.layers = JSON.parse(JSON.stringify(newLayer))
             }
 
+            console.log('this.ratioSelected:',this.ratioSelected)
             this.updateLayers(this.ratioSelected.layers)
             this.ratioSelected.isPick = true
             this.template.ratios.push(this.ratioSelected)
@@ -474,6 +479,7 @@ export default {
             this.showMenu = false
             this.template.selectedRatio = this.ratioSelected.name
             this.template.tabSelected = this.ratioSelected.tabSelected
+            console.log('this.template:',this.template)
             this.$localStorage.set('canvas',JSON.stringify(this.template))
             this.closeModal()
         },
@@ -485,17 +491,24 @@ export default {
             }else {
                 arr = this.screens
             }
+            console.log('arr:',arr)
             for(let i = 0;i < arr.length;i++){
-                for(let i = 0;i < ratios.length;i++) {
-                    if(this.ratioSelected.name === arr[i].name && this.ratioSelected.id === arr[i].id){
+                 if(this.ratioSelected.name === arr[i].name && this.ratioSelected.id === arr[i].id){
                         arr[i].selected = false
                         arr[i].isPick = false
                     }
-                }
             }
             var index = ratios.findIndex((e)=>{return this.ratioSelected.name === e.name})
             ratios.splice(index,1)
             this.template.ratios = ratios
+            if(ratios.length === 0) {
+                this.template.activeSize.height = this.template.height
+                this.template.activeSize.width = this.template.width
+                this.template.selectedRatio= ''
+                // this.template.layers = this.template.originalLayers
+                this.updateLayers(this.template.originalLayers)
+            }
+            console.log('this.template:',this.template)
             this.$localStorage.set('canvas',JSON.stringify(this.template))
             this.showMenu = false
         },
@@ -524,7 +537,9 @@ export default {
                 width: this.ratioSelected.width
             }
             this.template.selectedRatio = this.ratioSelected.name
+            console.log('this.ratioSelected:',this.ratioSelected)
            var index = this.template.ratios.findIndex((e)=>{return this.template.selectedRatio === e.name})
+            console.log('this.template.ratios[index].layers:',this.template.ratios[index].layers)
            this.updateLayers(this.template.ratios[index].layers)
             this.template.tabSelected = this.ratioSelected.tabSelected
             this.$localStorage.set('canvas',JSON.stringify(this.template))

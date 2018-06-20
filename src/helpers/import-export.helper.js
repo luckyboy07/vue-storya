@@ -1045,7 +1045,7 @@ export default {
         })
     },
     getExportingElement(array, animatedData) {
-        array.layers.forEach(e =>{
+        array.layers.forEach(e => {
         var layerelem = document.getElementById(e.id)
         if(layerelem) {
           layerelem.style.transition = 'all 400ms ease'

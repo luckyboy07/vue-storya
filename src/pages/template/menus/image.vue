@@ -16,11 +16,12 @@
                 :multiple="false"
                 :drop="true"
                 :drop-directory="true"
-                :post-action="'http://206.189.153.177:4000/media'" style="width: 100%">
+                ref="upload"
+                :post-action="'http://206.189.153.177:4000/canvas/4/media'" style="width: 100%">
             <mu-flexbox class="flx">
               <mu-flexbox-item class="flex-container"> 
-               <mu-linear-progress style="display: inline-flex;" v-show="isUploadingImage"></mu-linear-progress>
-                <span v-show="!isUploadingImage">+ Drag and Drop Images</span>
+               <mu-linear-progress style="display: inline-flex;" v-show="!data.loaded"></mu-linear-progress>
+                <span v-show="data.loaded">+ Drag and Drop Images</span>
               </mu-flexbox-item>
           </mu-flexbox>
         </file-upload>
@@ -280,10 +281,14 @@
 </div>
 </template>
 <script>
+ import Vue from 'vue'
+  import FileUpload from 'vue-upload-component'
 import { mapGetters, mapMutations} from 'vuex'
 import animationHelper from '../../../helpers/animation'
 import restHelper from '../../../helpers/rest.helper'
 import colorHelper from '../../../helpers/color-helper';
+import axios from 'axios';
+Vue.component('file-upload', FileUpload)
 export default {
   name: 'ImageLayer',
   props:['openpanel','data'],
@@ -312,12 +317,12 @@ export default {
         ],
         dialog: '',
         detail: {},
-        isUploadingImage: false,
       }
   },
   mounted (){
      // for the context menu to show only on the title part
     this.$el.querySelector(".mu-item-wrapper").addEventListener('contextmenu', this.showMenu)
+    this.$refs.upload.$el.addEventListener('click', this.checkUploadingStatus);
   },
    computed: {
     ...mapGetters(['getLayers']),
@@ -417,11 +422,11 @@ export default {
       }
     },
     fileInputted() {
-      console.log('fileInputted')
+      // console.log('fileInputted')
     },
     inputFilter(newFile, oldFile, prevent) {
-      this.isUploadingImage = true;
-      console.log('inputFilter')
+      this.data.loaded = false;
+      // console.log('inputFilter',)
       if (newFile && !oldFile) {
         if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
           this.alert('Your choice is not a picture')
@@ -431,14 +436,13 @@ export default {
       // this.save(newFile)
       //  && (!oldFile || newFile.file !== oldFile.file)
       if (newFile) {
-       console.log('uploaded', newFile)   
-        // newFile.response.response.data.media_path
+       if (newFile.progress === '100.00' && newFile.response.statusCode === 201) {
+        this.data.image = newFile.response.response.data;
+       } 
       }
     },
     inputFile(newFile, oldFile,prevent) {
-      console.log('inputFile')
-      window.setTimeout(() => this.isUploadingImage = false, 1000)
-      // console.log('inputFile', newFile, oldFile,prevent)      
+         this.$refs.upload.active = true
     },
     createPreview(anim, changed) {
       if (this.data.attributes.animation.playing) {
@@ -457,6 +461,9 @@ export default {
     invertColor(hex) {
       return colorHelper.invertColor(hex);
     },
+    checkUploadingStatus(e) {
+      if (!this.data.loaded)  e.preventDefault()
+    }
   },
 }
 </script>

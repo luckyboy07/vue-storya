@@ -9,6 +9,13 @@ export default {
             })
         })
     },
+    saveCanvas (payload) {
+        return new Promise((resolve, reject)=> {
+            axios.post(API_URL + 'canvas', payload).then(response => {
+                resolve(response)
+            })
+         })
+    },
     getImages() {
         var medias = []
         return new Promise((resolve, reject) => {

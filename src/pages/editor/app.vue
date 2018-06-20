@@ -14,7 +14,7 @@
           :style="{width: canvasData.isResponsive ? canvasData.activeSize.width + 'px': canvasData.width + 'px', 
           height: canvasData.isResponsive ? canvasData.activeSize.height + 'px':canvasData.height + 'px', 
         
-          backgroundColor:canvasData.bgColor,}">
+          backgroundColor:canvasData.backgroundcolor,}">
         <div class="canvas-wrap">
             <layer 
             :layers="filterLayer(layers)"
