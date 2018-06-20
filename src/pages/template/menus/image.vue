@@ -321,8 +321,12 @@ export default {
   },
   mounted (){
      // for the context menu to show only on the title part
-    this.$el.querySelector(".mu-item-wrapper").addEventListener('contextmenu', this.showMenu)
-    this.$refs.upload.$el.addEventListener('click', this.checkUploadingStatus);
+    this.$el.querySelector(".mu-item-wrapper").addEventListener('contextmenu', this.showMenu);
+    this.$nextTick(() => {
+      if (this.$refs.upload) {
+        this.$refs.upload.$el.addEventListener('click', this.checkUploadingStatus);
+      }
+    });
   },
    computed: {
     ...mapGetters(['getLayers']),
@@ -399,7 +403,7 @@ export default {
        end: null,
      };
 
-      console.log('cuur', this.data.attributes.animation.animations)
+      // console.log('cuur', this.data.attributes.animation.animations)
       this.data.attributes.animation.animations.push(animData);
     },
     removeAnimation(index) {

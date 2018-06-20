@@ -157,7 +157,7 @@ export const store = new Vuex.Store({
                 open: false,
                 image: {},
                 content: 'Image Layer',
-                loaded: false,
+                loaded: true,
                 attributes: {
                     src: 'http://via.placeholder.com/140x100',
                     sizeOption: 'Auto',
