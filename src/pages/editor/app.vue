@@ -131,36 +131,36 @@ export default {
         // console.log(layerData, bounds);
         if (layerData) {
           // the actual width and height
-          var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
-          // horizontal lines
-          // upper
-          // this.$refs.hhl1.style.display="block";
-          this.$refs.hhl1.style.left = (bounds2.left - 200) + 'px';
-          this.$refs.hhl1.style.top = (actualBounds.y + 1) + 'px';
-          // lower
-          // this.$refs.hhl2.style.display="block";
-          this.$refs.hhl2.style.left = (bounds2.left - 200) + 'px';
-          this.$refs.hhl2.style.top = (actualBounds.y + actualBounds.height - 1) + 'px';
+          // var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
+          // // horizontal lines
+          // // upper
+          // // this.$refs.hhl1.style.display="block";
+          // this.$refs.hhl1.style.left = (bounds2.left - 200) + 'px';
+          // this.$refs.hhl1.style.top = (actualBounds.y + 1) + 'px';
+          // // lower
+          // // this.$refs.hhl2.style.display="block";
+          // this.$refs.hhl2.style.left = (bounds2.left - 200) + 'px';
+          // this.$refs.hhl2.style.top = (actualBounds.y + actualBounds.height - 1) + 'px';
 
-          // vertical lines
-          // left
-          // this.$refs.vlrl1.style.display="block";
-          this.$refs.vlrl1.style.left = (actualBounds.x + 1) + 'px';
-          this.$refs.vlrl1.style.top = (bounds2.top - 50) + 'px';
-          // right
-          // this.$refs.vlrl2.style.display="block";
-          this.$refs.vlrl2.style.left = ((actualBounds.x + actualBounds.width) - 1) + 'px';
-          this.$refs.vlrl2.style.top = (bounds2.top - 50) + 'px';
+          // // vertical lines
+          // // left
+          // // this.$refs.vlrl1.style.display="block";
+          // this.$refs.vlrl1.style.left = (actualBounds.x + 1) + 'px';
+          // this.$refs.vlrl1.style.top = (bounds2.top - 50) + 'px';
+          // // right
+          // // this.$refs.vlrl2.style.display="block";
+          // this.$refs.vlrl2.style.left = ((actualBounds.x + actualBounds.width) - 1) + 'px';
+          // this.$refs.vlrl2.style.top = (bounds2.top - 50) + 'px';
 
           layerCloner.cloneElement(layerData);
 
           // show the offset limit border
           // this.$refs.vlrl3.style.visi
         } else {
-          this.$refs.hhl1.style.display="none";
-          this.$refs.hhl2.style.display="none";
-          this.$refs.vlrl1.style.display="none";
-          this.$refs.vlrl2.style.display="none";
+          // this.$refs.hhl1.style.display="none";
+          // this.$refs.hhl2.style.display="none";
+          // this.$refs.vlrl1.style.display="none";
+          // this.$refs.vlrl2.style.display="none";
 
           //  this.$refs.vlrl3.style.display = 'none';
 

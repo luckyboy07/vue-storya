@@ -18,7 +18,7 @@ export default {
                 elems[i].style.display = 'none';
             }
 
-            this.clonedElement.style.zIndex = -1;
+            this.clonedElement.style.zIndex = 0;
             document.getElementsByClassName('editor-container')[0].appendChild(this.clonedElement);
         } else {
             var elem = document.getElementById(layer.id);
