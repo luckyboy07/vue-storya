@@ -76,7 +76,7 @@ export default {
       parentW: 0,
       parentH: 0,
       isDragging: false,
-      GSAP: new TimelineMax()
+      // GSAP: new TimelineMax()
     };
   },
   beforeDestroy() {

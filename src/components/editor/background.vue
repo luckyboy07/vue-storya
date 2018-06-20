@@ -19,7 +19,6 @@ export default {
       getStyle () {
           let att = this.layerData.attributes
           let url = 'url('+this.layerData.image.url +') 50% 50% / cover'
-          console.log('att:',att)
           return {
               width: '100%',
               height: '100%',

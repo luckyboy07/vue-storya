@@ -266,6 +266,7 @@ export default {
           //     this.selectedtemplate.originalLayers[i].x = 100
           //     this.selectedtemplate.originalLayers[i].y = 100
           // }
+       console.log('originalLayers:',this.selectedtemplate.originalLayers)
       this.updateLayers(this.selectedtemplate.originalLayers)
       }else if(this.selectedtemplate.isResponsive && this.selectedtemplate.selectedRatio) {
           for (let i=0;i<ratios.length;i++) {

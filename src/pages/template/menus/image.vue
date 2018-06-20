@@ -16,7 +16,8 @@
                 :multiple="false"
                 :drop="true"
                 :drop-directory="true"
-                :post-action="'http://206.189.153.177:4000/media'" style="width: 100%">
+                ref="upload"
+                :post-action="'http://206.189.153.177:4000/canvas/4/media'" style="width: 100%">
             <mu-flexbox class="flx">
               <mu-flexbox-item class="flex-container"> 
                <mu-linear-progress style="display: inline-flex;" v-show="isUploadingImage"></mu-linear-progress>
@@ -280,10 +281,14 @@
 </div>
 </template>
 <script>
+ import Vue from 'vue'
+  import FileUpload from 'vue-upload-component'
 import { mapGetters, mapMutations} from 'vuex'
 import animationHelper from '../../../helpers/animation'
 import restHelper from '../../../helpers/rest.helper'
 import colorHelper from '../../../helpers/color-helper';
+import axios from 'axios';
+Vue.component('file-upload', FileUpload)
 export default {
   name: 'ImageLayer',
   props:['openpanel','data'],
@@ -421,7 +426,7 @@ export default {
     },
     inputFilter(newFile, oldFile, prevent) {
       this.isUploadingImage = true;
-      console.log('inputFilter')
+      console.log('inputFilter',)
       if (newFile && !oldFile) {
         if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
           this.alert('Your choice is not a picture')
@@ -437,6 +442,7 @@ export default {
     },
     inputFile(newFile, oldFile,prevent) {
       console.log('inputFile')
+         this.$refs.upload.active = true
       window.setTimeout(() => this.isUploadingImage = false, 1000)
       // console.log('inputFile', newFile, oldFile,prevent)      
     },

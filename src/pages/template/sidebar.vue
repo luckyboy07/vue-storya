@@ -458,10 +458,8 @@ export default {
       }
     },
     checkBackgroundImage (layers) {
-      console.log('layers:',layers)
       if(layers.length > 0) {
        layers.forEach((value) => {
-         console.log('value:',value)
          if (value.isBackground) {
            return false
          }else {

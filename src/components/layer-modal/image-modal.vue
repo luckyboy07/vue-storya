@@ -12,7 +12,7 @@
                 :size="1024 * 1024 * 10"
                 @input-filter="inputFilter"
                 @input-file="inputFile"
-                :multiple="false"
+                :multiple="true"
                 :drop="true"
                 :drop-directory="true"
                 v-model="files"
@@ -119,44 +119,44 @@ export default {
       ...mapMutations(['addImage']),
         inputFilter(newFile, oldFile, prevent) {
           if (newFile && !oldFile) {
-            if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
-              this.alert('Your choice is not a picture')
-              return prevent()
-            }
+          if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
+            this.alert('Your choice is not a picture')
+            return prevent()
           }
+        }
           // this.save(newFile)
           //  && (!oldFile || newFile.file !== oldFile.file)
-          if (newFile) {
-            newFile.url = ''
-            newFile.selected = false
-            let URL = window.URL || window.webkitURL
-            if (URL && URL.createObjectURL) {
-              newFile.url = newFile.response.statusCode === 201 ? API_URL+newFile.response.response.data.media_path: URL.createObjectURL(newFile.file)
-              console.log("DIRI",newFile)
-              let reader = new Image()
-              reader.src = newFile.url
-              reader.onload = function(){
-                newFile.originalWidth = reader.naturalWidth
-                newFile.originalHeight = reader.naturalHeight
-              }
+        if (newFile) {
+          newFile.url = ''
+          newFile.selected = false
+          let URL = window.URL || window.webkitURL
+          if (URL && URL.createObjectURL) {
+            newFile.url = newFile.response.statusCode === 201 ? API_URL+newFile.response.response.data.media_path: URL.createObjectURL(newFile.file)
+            console.log("DIRI",newFile)
+            let reader = new Image()
+            reader.src = newFile.url
+            reader.onload = function(){
+              newFile.originalWidth = reader.naturalWidth
+              newFile.originalHeight = reader.naturalHeight
             }
           }
-        },
-        inputFile(newFile, oldFile,prevent) {
+        }
+      },
+      inputFile(newFile, oldFile,prevent) {
          this.$refs.upload.active = true
-          if (newFile && !oldFile) {
-            // add
-          }
-          if (newFile && oldFile) {
-            // update
-          }
-          if (!newFile && oldFile) {
-            // remove
-          }
-          setTimeout(()=>{
-            this.getImages()
-          },1000)
-        },
+        if (newFile && !oldFile) {
+          // add
+        }
+        if (newFile && oldFile) {
+          // update
+        }
+        if (!newFile && oldFile) {
+          // remove
+        }
+        setTimeout(()=>{
+          this.getImages()
+        },1000)
+      },
       closeModal () {
         // console.log('files"',this.files)
           // this.$emit('')

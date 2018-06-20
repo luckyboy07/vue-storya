@@ -100,9 +100,9 @@
                   style="width: 100%; height: 100%; border: 1px solid #4A574B;"></color-picker>
               </div>
               Canvas Background Colour
-              <div :style="{backgroundColor: setupData.canvasBackground, color: getInvertedColor(setupData.canvasBackground)}" 
+              <div :style="{backgroundColor: setupData.backgroundcolor, color: getInvertedColor(setupData.backgroundcolor)}" 
                 class="color-div" @click="showPicker">
-                <span class="color-value">{{setupData.canvasBackground || '#FFFFFF'}}</span>
+                <span class="color-value">{{setupData.backgroundcolor || '#FFFFFF'}}</span>
               </div>
             </div>
           </div>
@@ -149,6 +149,7 @@ import { Photoshop, Chrome } from "vue-color";
 import colorHelper from '../../helpers/color-helper'
 import header from '../../pages/template/header'
 import {mapActions} from 'vuex'
+// const service = new sampleService()
 export default {
   name: "new-project",
   components: {
@@ -175,7 +176,7 @@ export default {
         width: '',
         project_name: '',
         canvas_name: '',
-        canvasBackground: ''
+        backgroundcolor: ''
       },
       isProject: false,
       isFile: false, 
@@ -213,7 +214,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['selectTemplate']),
+    ...mapActions(['selectTemplate','saveCanvas']),
     showPicker(evt) {
       this.pickerisShow = true
     },
@@ -250,10 +251,14 @@ export default {
       selected.zoomIncrease = 20;
       selected.canvas_name = this.setupData.canvas_name;
       selected.project_name = this.setupData.project_name;
-      selected.bgColor = this.setupData.canvasBackground || '#fff';
+      selected.backgroundcolor = this.setupData.backgroundcolor || '#fff';
       if(this.setupData.canvas_name && this.setupData.project_name){
           this.isFile = false
           this.isProject = false
+          console.log('this.setupData:',this.setupData)
+          // apiService.saveCanvas(this.setupData).then((response)=>{
+          //   console.log('response:',response)
+          // })
           this.selectTemplate(selected)
           this.$router.push({name: 'EditorApp'})
       }else {
@@ -311,7 +316,7 @@ export default {
       }
     },
     colorSelected(val) {
-      this.setupData.canvasBackground = val.hex;
+      this.setupData.backgroundcolor = val.hex;
     },
     $_getItemsFromType(type) {
       if (!type) {
