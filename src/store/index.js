@@ -293,18 +293,33 @@ export const store = new Vuex.Store({
             let sam = layers.sort((a, b) => {
                 return b.order - a.order
             })
+            console.log('state.canvasData.ratios:', state.canvasData)
             let ratios = state.canvasData.ratios
             if (ratios.length > 0) {
                 for (let i = 0; i < ratios.length; i++) {
-                    console.log('payload:', payload)
-                    if (ratios[i].layers.length > 0) {
-                        let ratiolayers = ratios[i].layers
-                        console.log('ratiolayers:', ratiolayers)
-                            // ratiolayers.push(payload)
-                            // ratiolayers.sort((a, b) => {
-                            //     return b.order - a.order
-                            // })
+                    let ratiolayers = ratios[i].layers
+                    console.log('ratiolayers:', ratiolayers)
+                    if (state.canvasData.selectedRatio === ratios[i].name) {
+                        // ratiolayers.push(payload)
+                        // ratiolayers.sort((a, b) => {
+                        //     return b.order - a.order
+                        // })
                         ratios[i].layers = sam
+                    } else {
+                        ratios[i].layers.selected = false
+                        ratios[i].layers.open = false
+                        if (ratios[i].layers.length > 0) {
+                            let les = JSON.parse(JSON.stringify(ratios[i].layers))
+                            payload.x = 100;
+                            payload.y = 100;
+                            les.push(payload)
+                            les.sort((a, b) => {
+                                return b.order - a.order
+                            })
+                            ratios[i].layers = JSON.parse(JSON.stringify(les))
+                        } else {
+                            ratios[i].layers = JSON.parse(JSON.stringify(sam))
+                        }
                     }
                 }
             }

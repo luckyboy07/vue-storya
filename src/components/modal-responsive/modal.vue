@@ -539,7 +539,10 @@ export default {
             this.template.selectedRatio = this.ratioSelected.name
             console.log('this.ratioSelected:',this.ratioSelected)
            var index = this.template.ratios.findIndex((e)=>{return this.template.selectedRatio === e.name})
-            console.log('this.template.ratios[index].layers:',this.template.ratios[index].layers)
+            this.template.ratios[index].layers.forEach(e=>{
+                e.selected = false
+                e.open = false
+            })
            this.updateLayers(this.template.ratios[index].layers)
             this.template.tabSelected = this.ratioSelected.tabSelected
             this.$localStorage.set('canvas',JSON.stringify(this.template))

@@ -752,14 +752,14 @@ export default {
     <body onload="_p()">
     <!-- REPLACE THIS PART -->
   `,
-    exportHtmlTemplatePart2: function (array) {
-    return  `
+    exportHtmlTemplatePart2: function(array) {
+        return `
     <!-- REPLACE THIS PART -->
       <!-- DO NOT REMOVE ME -->
       <script type="text/javascript">
       var defaultW, 
         defaultH = 0
-        arr =`+JSON.stringify(array)+`;\n
+        arr =` + JSON.stringify(array) + `;\n
       var defaultLayerValues = [];
       function fnResize() {
         console.log('ASDASD')
@@ -1017,7 +1017,8 @@ export default {
       <!-- DO NOT REMOVE ME -->
     </body>
     </html>
-  `},
+  `
+    },
     loaderTemplate: `
   `,
     /**
@@ -1033,7 +1034,7 @@ export default {
         // editorElem = this.$_responsiveness(editorElem);
         return new Promise((res, rej) => {
             var animatedElements = this.createAnimation(layerData);
-            var htmlContent = this.getExportingElement(array,animatedElements).outerHTML;
+            var htmlContent = this.getExportingElement(array, animatedElements).outerHTML;
             // console.log('animatedElements', htmlContent)
             var cssText = this.getAnimationCss(animatedElements);
             // console.log(cssText)
@@ -1046,10 +1047,10 @@ export default {
     },
     getExportingElement(array, animatedData) {
         array.layers.forEach(e => {
-        var layerelem = document.getElementById(e.id)
-        if(layerelem) {
-          layerelem.style.transition = 'all 400ms ease'
-        }
+            var layerelem = document.getElementById(e.id)
+            if (layerelem) {
+                layerelem.style.transition = 'all 400ms ease'
+            }
         })
 
         var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element

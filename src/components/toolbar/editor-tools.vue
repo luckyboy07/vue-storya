@@ -231,11 +231,11 @@ export default {
     exportContent() {
       var zoom = 100;
       var type = '';
+      this.selectedtemplate.layers = JSON.parse(JSON.stringify(this.dataLayer))
       if (this.editorData.zoom !== 100) {
         zoom = this.editorData.zoom;
         type = zoom < 100 ? 'in' : 'out';
         zoomHelper.gotoZoom(this.editorData, this.layers, zoom, 100, type).then((resp) => {
-          this.selectedtemplate.layers = JSON.parse(JSON.stringify(this.dataLayer))
           exportHelper.exportTemplate( this.selectedtemplate,this.layers).then((val) => {
             console.log('Export finished', val)
             if (zoom !== 100) {
@@ -244,7 +244,7 @@ export default {
           });
         });
       } else {
-        exportHelper.exportTemplate(this.layers);
+        exportHelper.exportTemplate(this.selectedtemplate, this.layers);
       }
     },
     savetoLocalstorage () {
