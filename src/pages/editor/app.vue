@@ -20,7 +20,8 @@
             :layers="filterLayer(layers)"
             @scaling="layerScaling" 
             @onShowXGridLine="onShowXGridLine"
-            @onShowYGridLine="onShowYGridLine"></layer>
+            @onShowYGridLine="onShowYGridLine"
+            @onshowZGridLine="onshowZGridLine"></layer>
         </div>
       </div>
     </div>
@@ -262,6 +263,18 @@ export default {
         this.$refs.hhl1.style.top = (actualBounds.y + 1 + actualBounds.height / 2) + 'px';
       } else {
           this.$refs.hhl1.style.display="none";
+      }
+    },
+    onshowZGridLine(layerData, show, z) {
+      if (show) {
+        var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
+        var bounds2 = this.$refs.editorBox.getBoundingClientRect();
+        this.$refs.vlrl2.style.display="block";
+        this.$refs.vlrl2.style.left = actualBounds.x + 'px';
+        this.$refs.vlrl2.style.top = (actualBounds.top / 2) + 'px';
+        this.$refs.vlrl2.style.transform = 'rotateZ(' + z + 'deg)';
+      } else {
+        this.$refs.vlrl2.style.display="none";
       }
     }
   },

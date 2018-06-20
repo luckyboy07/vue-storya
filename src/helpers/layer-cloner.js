@@ -6,6 +6,7 @@ export default {
             this.clonedElement.id = 'cloned-' + layer.id;
             // this.clonedElement.style.zIndex = '1';
             this.clonedElement.style.opacity = 0;
+            this.clonedElement.style.border = 'thin white dashed';
             // if text eelement, change color to white
             // var textElement = this.clonedElement.querySelector('.tl-container');
             // if (textElement) {
@@ -16,6 +17,10 @@ export default {
             var elems = this.clonedElement.querySelectorAll('.layer-action-info');
             for (var i = 0; i < elems.length; i++) {
                 elems[i].style.display = 'none';
+            }
+            var handle = this.clonedElement.querySelector('.rr-rotate-handle');
+            if (handle) {
+                handle.parentElement.removeChild(handle);
             }
 
             this.clonedElement.style.zIndex = 0;

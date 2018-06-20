@@ -238,6 +238,10 @@ export default {
       this.$emit('showYGridLine', showRight, right);
     },
 
+    emitShowRotationGridLine(show, rotation) {
+      this.$emit('showZGridLine', show, rotation);
+    },
+
     setOctantValue(deg) {
       if(deg >= 31 && deg <= 68) {
         this.state.octant = 1
@@ -318,32 +322,42 @@ export default {
             top: bounds.top + bounds.height / 2
           };
 
+          self.emitShowRotationGridLine(false);
+
           var degree = (Math.atan2(event.clientY - center.top, event.clientX - center.left) * 180 / Math.PI + 90) % 360;
           self.setOctantValue(self.value.rotation);
           
-          if (degree - 1 >= -5 && degree + 1 <= 5) {
+          if (degree - 3 >= -5 && degree + 3 <= 5) {
             degree = 0;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 >= 40 && degree + 1 <= 50) {
+          if (degree - 3 >= 40 && degree + 3 <= 50) {
             degree = 45;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 >= 85 && degree + 1 <= 95) {
+          if (degree - 3 >= 85 && degree + 3 <= 95) {
             degree = 90;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 >= 130 && degree + 1 <= 140) {
+          if (degree - 3 >= 130 && degree + 3 <= 140) {
             degree = 135;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 >= 175 && degree + 1 <= 185) {
+          if (degree - 3 >= 175 && degree + 3 <= 185) {
             degree = 180;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 >= 220 && degree + 1 <= 230) {
+          if (degree - 3 >= 220 && degree + 3 <= 230) {
             degree = 225;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 >= 265 && degree + 1 >= -85) {
+          if (degree - 3 >= 265 && degree + 3 >= -85) {
             degree = 270;
+            self.emitShowRotationGridLine(true, degree);
           }
-          if (degree - 1 <= -40 && degree + 1 >= -50) {
+          if (degree - 3 <= -40 && degree + 3 >= -50) {
             degree = -45;
+            self.emitShowRotationGridLine(true, degree);
           }
           
           self.state.rotation = degree;
@@ -358,6 +372,7 @@ export default {
           self.emitRotateEnded();
           self.hideDraggableLines();
           self.isRotating = false;
+          self.emitShowRotationGridLine(false);
         }
       });
     },
