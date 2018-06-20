@@ -50,11 +50,17 @@ export default {
     }),
   },
   watch: {
-    addTime: function(val) {
-      this.addToUndoRedo = false;
+    addTime: {
+      handler(val) {
+        this.addToUndoRedo = false;
+      },
+      deep: true
     },
-    redoUndoTime: function(val) {
-       this.addToUndoRedo = false;
+    redoUndoTime: {
+      handler(val) {
+        this.addToUndoRedo = false;
+      },
+      deep: true
     },
     "layerData.attributes.rotation": {
       handler() {

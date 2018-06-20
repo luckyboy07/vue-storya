@@ -1,23 +1,26 @@
 import UndoManager from 'undo-manager';
-import appHelper from './app.helper.js'
-import * as $ from 'linq'
+import appHelper from './app.helper.js';
+import { store } from '../store'
 
 export default {
     undoManager: new UndoManager(),
     layers: [],
     lastLayer: null,
     $_addLayer: function(id, layerDetail, lastAction) {
+        var screen = this.$_getScreen();
         this.layers.push({
             'id': id,
             'layer': layerDetail,
-            'lastAction': lastAction
+            'lastAction': lastAction,
+            screen: screen,
         });
 
-        // console.log("layers", this.layers)
+        // console.log("undo redo, _addLayer", this.layers.length)
     },
     $_removeLayer: function(id) {
+        var screen = this.$_getScreen();
         for (var i = 0; i < this.layers.length; i++) {
-            if (this.layers[i].id === id) {
+            if (this.layers[i].id === id && this.layers[i].screen === screen) {
                 this.layers.splice(i, 1)
                 break;
             }
@@ -31,9 +34,8 @@ export default {
      * @param  {} lastAction
      */
     add(layerDetail, lastAction, ownerScreen) {
-        // if (!ownerScreen) {
-        //     throw new Error("Owner must be specified");
-        // }
+        if (!this.$_canExecute()) return;
+
         let id = appHelper.generateGUID();
         this.$_addLayer(id, layerDetail, lastAction);
         var _removeItem = (_layerId) => {
@@ -58,17 +60,19 @@ export default {
      * Undo the last action
      */
     undo() {
-        // appply the last item to the layer
-        // specified by id
-        if (this.layers.length > 0) {
-            // get the last layer before the undo action
-            let layer = this.layers[this.layers.length - 1];
-            this.lastLayer = layer;
-            this.undoManager.undo();
-            return {
-                layer: layer.layer,
-                lastAction: layer.lastAction
-            };
+        if (!this.$_canExecute()) {
+            return null;
+        }
+        if (this.undoManager.hasUndo()) {
+            let layer = this.$_getLastLayerAtScreen();
+            if (layer) {
+                // console.log('undo', layer)
+                this.undoManager.undo();
+                return {
+                    layer: layer.layer,
+                    lastAction: layer.lastAction
+                };
+            }
         }
 
         return null;
@@ -77,17 +81,16 @@ export default {
      * Redo the last action
      */
     redo() {
-        this.undoManager.redo();
-        if (this.layers.length > 0) {
-            let layer = this.layers[this.layers.length - 1].layer;
-            // console.log('redo: last and curr not equal?', layer !== this.lastLayer);
-            // check if redo reaches its limit
-            // or redo action is the output from the last action
-            if (!this.$_layerEqual(layer, this.lastLayer)) {
-                this.lastLayer = layer;
+        if (!this.$_canExecute()) {
+            return null;
+        }
+        if (this.undoManager.hasRedo()) {
+            this.undoManager.redo();
+            let layer = this.$_getLastLayerAtScreen();
+            if (layer) {
                 return {
-                    layer: layer,
-                    lastAction: this.layers[this.layers.length - 1].lastAction
+                    layer: layer.layer,
+                    lastAction: layer.lastAction
                 };
             }
         }
@@ -96,5 +99,30 @@ export default {
     },
     $_layerEqual(a, b) {
         return JSON.stringify(a) === JSON.stringify(b)
-    }
+    },
+    $_getScreen() {
+        var canvasData = store.getters.getCanvasData;
+        if (!canvasData.isResponsive) return 'default';
+
+        return canvasData.selectedRatio || 'excludeMe';
+    },
+    $_canExecute() {
+        var canvasData = store.getters.getCanvasData;
+        if (canvasData.isResponsive && !canvasData.isResponsive) return false;
+
+        return true;
+    },
+    $_getLastLayerAtScreen() {
+        // console.log('_getLastLayerAtScreen')
+        var screen = this.$_getScreen();
+        // console.log('screen', screen)
+        var _layers = [];
+        for (var i = 0; i < this.layers.length; i++) {
+            if (screen === this.layers[i].screen) {
+                _layers.push(this.layers[i]);
+            }
+        }
+        // console.log(' _layers', _layers)
+        return _layers[_layers.length - 1]
+    },
 }

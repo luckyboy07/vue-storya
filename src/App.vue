@@ -90,18 +90,18 @@ export default {
       if (evt.ctrlKey) {
         if (evt.key === 'y') {
            var redoData = undoRedo.redo();
-          //  if (redoData && redoData.lastAction === 'scale') {
-          //   redoData = undoRedo.redo();
-          // }
+           if (redoData && redoData.lastAction === 'scale') {
+            redoData = undoRedo.redo();
+          }
           if (redoData) {
            this.$_handleRedo(redoData.layer, redoData.lastAction);
           }
           this.$_debugLogger("key action: redo");
         } else if (evt.key === 'z') {
           var undoData = undoRedo.undo();
-          // if (undoData && undoData.lastAction === 'scale') {
-          //   undoData = undoRedo.undo();
-          // }
+          if (undoData && undoData.lastAction === 'scale') {
+            undoData = undoRedo.undo();
+          }
           if (undoData) {
              this.$_handleUndo(undoData.layer, undoData.lastAction)
           }
@@ -153,7 +153,7 @@ export default {
           // trigger the idle time event
           this.$_debugLogger('Call auto save here (App.vue:113)');
           this.setAutosaveData("2");
-          // move to save only at every 3 seconds idle
+          // moved to save only at every 3 seconds idle
           this.$localStorage.set('layers',JSON.stringify(this.layers))
         } 
         // else {
@@ -185,6 +185,7 @@ export default {
       } else if (action === 'scale') {
         this.setLayerValue(item);
       } else if (action === 'delete') {
+        this.$_removeDuplicates(item.id)
         this.addLayer(item);
       } 
 
@@ -203,7 +204,7 @@ export default {
         // if the last action was create and it will be redo,
         // re-create the layer on the list
         item.fromUndoRedo = true;
-        
+        this.$_removeDuplicates(item.id);
         this.addLayer(item);
       } else if (action === 'scale') {
         // console.log('_handleUndoRedo', item, action);
@@ -222,6 +223,13 @@ export default {
 
       return arr;
     },
+    $_removeDuplicates(id) {
+      for (var i = 0; i < this.layers.length; i++) {
+        if (this.layers[i].id === id) {
+          this.layers.splice(i, 1);
+        }
+      }
+    },
     $_debugLogger(log) {
        console.log('%c ' + log, 'background: green; color: #fff');
     }
@@ -234,14 +242,11 @@ export default {
     })
   },
   watch: {
-    lastLayerAddTime: function() {
-      // console.log('---------------------- lastLayerAddTime changes');
-      if (this.layers.length > 0) {
-        var newLayer = this.layers[this.layers.length -1];
-        // this.setSelectedLayerId(newLayer.id);
-        animation.stopActiveAnimations(this.layers); // stoppping currently palying animation
-        undoRedo.add(newLayer, 'create');
-      }
+     lastLayerAddTime: function(data) {
+      // console.log('---------------------- lastLayerAddTime changes', data);
+      var newLayer = data.layer;
+      animation.stopActiveAnimations(this.layers); // stoppping currently palying animation
+      undoRedo.add(newLayer, 'create');
     },
     layers: {
       handler() {

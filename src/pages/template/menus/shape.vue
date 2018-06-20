@@ -414,7 +414,6 @@ export default {
   methods: {
     ...mapMutations(['setSelectedLayerId', 'broadCastStatus']),
     setGradientColors(evt) {
-      console.log('setGradientColors:',evt)
       // var p = evt.$el.children[0];
       // var c1 = p.children[0];
       // var c2 = p.children[1];     

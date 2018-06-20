@@ -291,19 +291,19 @@ export const store = new Vuex.Store({
                 return b.order - a.order
             })
             let ratios = state.canvasData.ratios
-            console.log('ratios:', ratios)
+                // console.log('ratios:', ratios)
             if (ratios.length > 0) {
                 for (let i = 0; i < ratios.length; i++) {
                     // let ratiolayer = ratios[i].layers
                     if (ratios[i].layers.length > 0) {
                         ratios[i].layers = JSON.parse(JSON.stringify(sam))
-                        console.log('ratios[i].layers:', ratios[i].layers)
+                            // console.log('ratios[i].layers:', ratios[i].layers)
                             // for(let j=0;j< ratiolayer.length;j++){
                             //     ratiolayer = sam
                             // }
                     }
                 }
-                console.log('state:', state.canvasData)
+                // console.log('state:', state.canvasData)
             }
             if (!state.canvasData.isResponsive) {
                 state.canvasData.originalLayers = layers
@@ -316,7 +316,10 @@ export const store = new Vuex.Store({
                 // check if the source of the data
                 // is not from redo/undo module
             if (!payload.fromUndoRedo) {
-                Vue.set(state, 'lastItemAdd', appHelper.generateTimestamp())
+                Vue.set(state, 'lastItemAdd', {
+                    time: appHelper.generateTimestamp(),
+                    layer: payload
+                })
             }
         },
         // to select the layer from other modules
@@ -381,7 +384,7 @@ export const store = new Vuex.Store({
             Vue.localStorage.set('layers', JSON.stringify(state.layers))
         },
         selectTemplate: (state, payload) => {
-            console.log('payload;', payload)
+            // console.log('payload;', payload)
             let template = state.canvasData
             template.bgColor = payload.bgColor
             template.file_name = payload.file_name

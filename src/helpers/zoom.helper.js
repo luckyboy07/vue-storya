@@ -21,9 +21,7 @@ export default {
             var newFrom = Math.max(from, to);
 
             while (newFrom > newTo) {
-                console.log(newFrom);
                 newFrom -= canvasData.zoomIncrease;
-
                 this.scale = this.$_getScale(type);
                 this.$_scale(canvasData, layers);
             }
