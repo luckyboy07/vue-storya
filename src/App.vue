@@ -91,6 +91,7 @@ export default {
       }
       // for keys with ctrl
       if (evt.ctrlKey) {
+        evt.preventDefault();
         if (evt.key === 'y') {
            var redoData = undoRedo.redo();
            if (redoData && redoData.lastAction === 'scale') {
