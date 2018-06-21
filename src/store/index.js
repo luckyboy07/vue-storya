@@ -20,7 +20,6 @@ export const store = new Vuex.Store({
             zoom: 100,
             zoomIncrease: 10,
             bgColor: '#fff',
-            bgImageDominantColor: '',
             gridLines: true,
             isResponsive: false,
             selectedRatio: '',
@@ -421,14 +420,14 @@ export const store = new Vuex.Store({
             template.templateSelected = payload.templateSelected
             template.description = 'asdasd'
             template.is_public = false
-            let project= {
+            let project = {
                 project_name: template.project_name,
                 description: 'asd',
                 is_public: template.is_public,
                 orientation: '',
                 project_attributes: null,
                 backgroundcolor: template.backgroundcolor,
-                canvas:[]
+                canvas: []
             }
             console.log('template;', template)
                 // store.dispatch('saveCanvas', project).then(response =>{
