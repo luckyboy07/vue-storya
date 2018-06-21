@@ -1,6 +1,6 @@
 <template>
   <div :class="{'noselect':isDragging}" ref="editable" class="tl-container" :contenteditable="!data.islocked" spellcheck="false" 
-    :style="getStyle()" @keydown="_p" @keyup="_sc()">
+    :style="getStyle()" @keydown="_p" @keyup="_sc()" :id="data.id">
   </div>
 </template>
 <script>

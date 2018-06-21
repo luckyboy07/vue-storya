@@ -29,6 +29,12 @@ export const store = new Vuex.Store({
             templateSelected: {},
             tabSelected: ''
         },
+        projects: {
+            project_id: 0,
+            project_name: '',
+            is_public: false,
+            orientation: ''
+        },
         // auto save status
         // 0: no changes
         // 1: data changes
@@ -411,32 +417,35 @@ export const store = new Vuex.Store({
         },
         selectTemplate: (state, payload) => {
             // console.log('payload;', payload)
-            let template = state.canvasData
-            template.backgroundcolor = payload.backgroundcolor
-            template.canvas_name = payload.canvas_name
-            template.project_name = payload.project_name
-            template.height = payload.height
-            template.width = payload.width
-            template.templateSelected = payload.templateSelected
-            template.description = 'asdasd'
-            template.is_public = false
-            let project = {
-                project_name: template.project_name,
-                description: 'asd',
-                is_public: template.is_public,
-                orientation: '',
-                project_attributes: null,
-                backgroundcolor: template.backgroundcolor,
-                canvas: []
-            }
-            console.log('template;', template)
-                // store.dispatch('saveCanvas', project).then(response =>{
-                //     console.log('response:',response)
-                // })
-                // return apiService.saveCavas(template).then(response =>{
-                //     console.log('resop:',response)
-                // })
-            Vue.localStorage.set('canvas', JSON.stringify(template))
+            // return new Promise((resolve, reject)=> {
+            //     let template = state.canvasData
+            //     template.backgroundcolor = payload.backgroundcolor
+            //     template.canvas_name = payload.canvas_name
+            //     template.project_name = payload.project_name
+            //     template.height = payload.height
+            //     template.width = payload.width
+            //     template.templateSelected = payload.templateSelected
+            //     template.description = 'asdasd'
+            //     template.is_public = false
+            //     let project= {
+            //         project_name: template.project_name,
+            //         is_public: template.is_public,
+            //         orientation: 'asdasd',
+            //     }
+
+            //     store.dispatch('saveProject', project).then(response =>{
+            //         if(response.data.response.statusCode === 201){
+            //             console.log("ASDASDASD")
+            //             Vue.localStorage.set('canvas', JSON.stringify(template))
+            //             resolve(response)
+            //         }
+            //     }).catch(err=>{
+            //         reject(err)
+            //     })
+            // })
+            // return apiService.saveCavas(template).then(response =>{
+            //     console.log('resop:',response)
+            // })
         },
         setAutosaveData: (state, data) => {
             if (data !== '0' && data !== '1' && data !== '2') {
@@ -515,6 +524,10 @@ export const store = new Vuex.Store({
                 Vue.set(state, 'lastItemAdd', appHelper.generateTimestamp())
             }
         },
+        updatecanvasData: (state, payload) => {
+            let pay = payload
+            Vue.set(state, 'canvasData', pay)
+        }
     },
     getters: {
         getItems: state => {
@@ -589,9 +602,47 @@ export const store = new Vuex.Store({
         },
         editLayer: ({ commit }, payload) => {
             commit('editLayer', payload)
+
         },
-        selectTemplate: ({ commit }, payload) => {
-            commit('selectTemplate', payload)
+        selectTemplate: ({ commit, state }, payload) => {
+            return new Promise((resolve, reject) => {
+                    let template = state.canvasData
+                    template.backgroundcolor = payload.backgroundcolor
+                    template.canvas_name = payload.canvas_name
+                    template.project_name = payload.project_name
+                    template.height = payload.height
+                    template.width = payload.width
+                    template.templateSelected = payload.templateSelected
+                    template.description = 'asdasd'
+                    template.is_public = false
+                    let project = {
+                        project_name: template.project_name,
+                        is_public: template.is_public,
+                        orientation: 'asdasd',
+                    }
+
+                    store.dispatch('saveProject', project).then(response => {
+                        if (response.data.response.statusCode === 201) {
+                            let proj = response.data.response.data
+                            let stateproj = state.projects
+                            stateproj.project_id = proj.project_id
+                            stateproj.project_name = proj.project_name
+                            stateproj.is_public = proj.is_public
+                            stateproj.orientation = proj.orientation
+                            console.log(stateproj)
+                            Vue.set(state, 'projects', stateproj)
+                            Vue.localStorage.set('canvas', JSON.stringify(template))
+                            resolve(response)
+                        }
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+                // commit('selectTemplate',payload)
+                // return store.dispatch('selectTemplate',payload).then((response)=>{
+
+            // })
+
         },
         updateLayers: ({ commit }, payload) => {
             commit('updateLayers', payload)
@@ -599,13 +650,16 @@ export const store = new Vuex.Store({
         setBackgroundImage: ({ commit }, payload) => {
             commit('setBackgroundImage', payload)
         },
-        saveCanvas: ({ commit }, payload) => {
-            return apiService.saveCanvas(payload,
+        saveProject: ({ commit }, payload) => {
+            return apiService.saveProject(payload,
                 data => {
                     commit(data)
                 }, errors => {
                     commit(errors)
                 })
+        },
+        updatecanvasData: ({ commit }, payload) => {
+            commit('updatecanvasData', payload)
         }
     }
     //   strict: process.env.NODE_ENV !== 'production'

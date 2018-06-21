@@ -9,13 +9,36 @@ export default {
             })
         })
     },
-    saveCanvas (payload) {
+    saveProject (payload) {
         return new Promise((resolve, reject)=> {
-            console.log('pay:',payload)
+            console.log('pay:', payload)
             axios.post(API_URL + 'projects', payload).then(response => {
                 resolve(response)
             })
          })
+    },
+    saveCanvas (payload) {
+        return new Promise((resolve, reject)=> {
+            axios.post(API_URL + 'canvas', payload).then(response => {
+                resolve(response)
+            })
+         })
+    },
+    saveRatio (payload, id) {
+        return new Promise((resolve, reject) => {
+            axios.post(API_URL + 'canvas/' + id + '/ratios',payload).then(response =>{
+                resolve(response)
+            })
+        })
+    },
+    saveLayer (payload) {
+        return new Promise((resolve ,reject)=> {
+            axios.post(API_URL+ 'layers',payload).then(response =>{
+                resolve(response)
+            }).catch(error =>{
+                reject(error)
+            })
+        })
     },
     getImages() {
         var medias = []
@@ -33,5 +56,6 @@ export default {
                 reject(err)
             })
         })
-    }
+    },
+    
 }

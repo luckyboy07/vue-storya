@@ -115,14 +115,14 @@ export default {
     <body onload="_p()">
     <!-- REPLACE THIS PART -->
   `,
-    exportHtmlTemplatePart2: function(array) {
+    exportHtmlTemplatePart2: function(array, original) {
         return `
     <!-- REPLACE THIS PART -->
       <!-- DO NOT REMOVE ME -->
       <script type="text/javascript">
       var defaultW, 
         defaultH = 0
-        arr =` + JSON.stringify(array) + `;\n
+        arr =` + JSON.stringify(array) + `, original = ` + JSON.stringify(original) + `;\n
       var defaultLayerValues = [];
       function fnResize() {
         console.log('ASDASD')
@@ -230,6 +230,7 @@ export default {
           if (arr.ratios[i].name == ratio) {
             console.log('applying', arr.ratios[i].name)
               var layers = arr.ratios[i].layers
+             
               for (var j = 0; j < layers.length; j++) {
                 console.log('layers[j]:',layers[j]);
                   var elem = document.getElementById(layers[j].id)
@@ -237,7 +238,13 @@ export default {
                   elem.style.left = layers[j].x + 'px';
                   elem.style.width = layers[j].width + 'px';
                   elem.style.height = layers[j].height + 'px';
-                  elem.style.background = !layers[j].isGradient ? !layers[j].color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
+                  var shape = elem.querySelector('.shape');
+                  if (shape) {
+                    shape.style.background = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
+                  }
+                  // if(layers[j].type == 'text') {
+                    
+                  // }
                   if (layers[j].isBackground) {
                       elem.style.height = bh + 'px';
                       elem.style.width = bw + 'px';
@@ -250,21 +257,25 @@ export default {
 
         if (!hasRatio) {
           // apply original ratio here
-          var layers = arr.layers
+          var layers = original;
           console.log('default layer', layers)
           for (var j = 0; j < layers.length; j++) {
             console.log('layers[j]:',layers[j]);
-              var elem = document.getElementById(layers[j].id)
-              elem.style.top = layers[j].y + 'px';
-              elem.style.left = layers[j].x + 'px';
-              elem.style.width = layers[j].width + 'px';
-              elem.style.height = layers[j].height + 'px';
-              elem.style.background = !layers[j].isGradient ? !layers[j].color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
-              if (layers[j].isBackground) {
-                  elem.style.height = bh + 'px';
-                  elem.style.width = bw + 'px';
-                  console.log('elem:', elem)
-              }
+            var elem = document.getElementById(layers[j].id)
+            elem.style.top = layers[j].y + 'px';
+            elem.style.left = layers[j].x + 'px';
+            elem.style.width = layers[j].width + 'px';
+            elem.style.height = layers[j].height + 'px';
+            var shape = elem.querySelector('.shape');
+            if (shape) {
+                console.log(layers[j].attributes.isGradient, shape)
+                shape.style.background = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
+            }
+            if (layers[j].isBackground) {
+                elem.style.height = bh + 'px';
+                elem.style.width = bw + 'px';
+                console.log('elem:', elem)
+            }
           }
         }
       }
@@ -293,7 +304,9 @@ export default {
         // var elem1 = document.getElementsByClassName('rr-resizer');
         // gsap.from(elem1[0],1,{left:100,opacity:0,repeat: -1, yoyo: true});
         var editable_elements = document.querySelectorAll("[contenteditable=true]");
-        
+        var editor = document.getElementById('parent1')
+        editor.style.width = '100%';
+        editor.style.height = '100%';
         for (var i = 0; i < editable_elements.length; i++) {
         editable_elements[i].setAttribute("contenteditable", false);
         }
@@ -344,7 +357,7 @@ export default {
             var content = this.exportHtmlTemplatePart1.replace('--CUSTOM_STYLES--', cssText);
             content = content.replace('--FONTS_HERE--', fonts);
             content = content.replace('--RESPONSIVE_CSS_HERE--', responsiveCss);
-            this.$_download('export-' + appHelper.generateTimestamp() + '.html', content + htmlContent + this.exportHtmlTemplatePart2(array));
+            this.$_download('export-' + appHelper.generateTimestamp() + '.html', content + htmlContent + this.exportHtmlTemplatePart2(array, layerData));
             setTimeout(() => {
                 res(true);
             }, 100);
