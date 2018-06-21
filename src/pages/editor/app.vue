@@ -20,8 +20,7 @@
             :layers="filterLayer(layers)"
             @scaling="layerScaling" 
             @onShowXGridLine="onShowXGridLine"
-            @onShowYGridLine="onShowYGridLine"
-            @onshowZGridLine="onshowZGridLine"></layer>
+            @onShowYGridLine="onShowYGridLine"></layer>
         </div>
       </div>
     </div>
@@ -31,16 +30,16 @@
   <preview-modal></preview-modal>
   <!-- Ruler Lines -->
   <div class="h-lrl1 g-lines" ref="hhl1"
-    :style="{width: (parseInt(!canvasData.isResponsive ? canvasData.width : canvasData.activeSize.width) + parseInt(400)) + 'px', height: '2px'}">
+    :style="{width: (parseInt(!canvasData.isResponsive ? canvasData.width : canvasData.activeSize.width) + parseInt(400)) + 'px', height: '1px'}">
   </div>
   <div class="h-lrl2 g-lines" ref="hhl2"
-    :style="{width: (parseInt(!canvasData.isResponsive ? canvasData.width : canvasData.activeSize.width) + parseInt(400)) + 'px', height: '2px'}">
+    :style="{width: (parseInt(!canvasData.isResponsive ? canvasData.width : canvasData.activeSize.width) + parseInt(400)) + 'px', height: '1px'}">
   </div>
   <div class="v-lrl1 g-lines" ref="vlrl1"
-    :style="{width: '2px', height: (parseInt(!canvasData.isResponsive ? canvasData.height : canvasData.activeSize.height) + parseInt(100)) + 'px'}">
+    :style="{width: '1px', height: (parseInt(!canvasData.isResponsive ? canvasData.height : canvasData.activeSize.height) + parseInt(100)) + 'px'}">
   </div>
   <div class="v-lrl2 g-lines" ref="vlrl2"
-    :style="{width: '2px', height: (parseInt(!canvasData.isResponsive ? canvasData.height : canvasData.activeSize.height) + parseInt(100)) + 'px'}">
+    :style="{width: '1px', height: (parseInt(!canvasData.isResponsive ? canvasData.height : canvasData.activeSize.height) + parseInt(100)) + 'px'}">
   </div>
   <!-- <div class="offset-line" ref="vlrl3"
     :style="{width: '2px', height: (parseInt(canvasData.height) + parseInt(100)) + 'px'}">
@@ -265,18 +264,6 @@ export default {
           this.$refs.hhl1.style.display="none";
       }
     },
-    onshowZGridLine(layerData, show, z) {
-      if (show) {
-        var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
-        var bounds2 = this.$refs.editorBox.getBoundingClientRect();
-        this.$refs.vlrl2.style.display="block";
-        this.$refs.vlrl2.style.left = actualBounds.x + 'px';
-        this.$refs.vlrl2.style.top = (actualBounds.top / 2) + 'px';
-        this.$refs.vlrl2.style.transform = 'rotateZ(' + z + 'deg)';
-      } else {
-        this.$refs.vlrl2.style.display="none";
-      }
-    }
   },
 }
 </script>
@@ -300,21 +287,25 @@ export default {
 }
 .h-lrl1 {
  border-top: thin dashed violet; 
+ border-bottom: thin dashed white; 
  top: 300px;
  left: 100px;
 }
 .h-lrl2 {
  border-top: thin dashed violet; 
+ border-bottom: thin dashed white; 
  top: 600px;
  left: 100px;
 }
 .v-lrl1 {
   border-left: thin dashed violet; 
+  border-right: thin dashed white; 
   top: 100px;
   left: 300px;
 }
 .v-lrl2 {
   border-left: thin dashed violet; 
+  border-right: thin dashed white; 
   top: 100px;
   left: 600px;
 }

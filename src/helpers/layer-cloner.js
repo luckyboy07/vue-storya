@@ -1,29 +1,32 @@
+import browserHelper from './browser'
 export default {
     clonedElement: null,
     cloneElement(layer) {
         if (!document.getElementById('cloned-' + layer.id)) {
             this.clonedElement = document.getElementById(layer.id).cloneNode(true);
             this.clonedElement.id = 'cloned-' + layer.id;
-            // this.clonedElement.style.zIndex = '1';
             this.clonedElement.style.opacity = 0;
-            this.clonedElement.style.border = 'thin white dashed';
+            if (browserHelper.isFirefox()) {
+                this.clonedElement.style.border = 'thin white dashed';
+            } else {
+                this.clonedElement.style.outline = 'thin white dashed';
+            }
             // if text eelement, change color to white
             // var textElement = this.clonedElement.querySelector('.tl-container');
             // if (textElement) {
             //     textElement.style.color = '#fff';
             // }
             // removing unnecessary elements
-            // removing: layer info when dragging, resize or rotate
-            var elems = this.clonedElement.querySelectorAll('.layer-action-info');
-            for (var i = 0; i < elems.length; i++) {
-                elems[i].style.display = 'none';
-            }
-            var handle = this.clonedElement.querySelector('.rr-rotate-handle');
-            if (handle) {
-                handle.parentElement.removeChild(handle);
+            var classes = ['.h-l-g', '.rr-content', '.rr-bar', '.layer-action-info', '.rr-rotate-handle', '.layer-action-info'];
+            for (var i = 0; i < classes.length; i++) {
+                var elems = this.clonedElement.querySelectorAll(classes[i]);
+                for (var j = 0; j < elems.length; j++) {
+                    elems[j].parentElement.removeChild(elems[j]);
+                }
             }
 
             this.clonedElement.style.zIndex = 0;
+            this.clonedElement.style.cursor = 'move';
             document.getElementsByClassName('editor-container')[0].appendChild(this.clonedElement);
         } else {
             var elem = document.getElementById(layer.id);

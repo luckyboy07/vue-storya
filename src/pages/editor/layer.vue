@@ -22,8 +22,7 @@
       @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
       @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
       @resizeStarted="resizeStarted" @resizing="resizing" @resizeEnded="resizeEnded"
-      @showXGridLine="onShowXGridLine" @showYGridLine="onShowYGridLine"
-      @showZGridLine="onshowZGridLine">
+      @showXGridLine="onShowXGridLine" @showYGridLine="onShowYGridLine">
 
       <!-- shape layer :shape="[elem.attributes[0].value.split(' ')[0].toLowerCase(),elem.attributes]" -->
       <!-- <shape id="shape"  v-if="elem.type ==='shape'" :data="elem">
@@ -270,9 +269,6 @@ export default {
     },
     onShowYGridLine(show, y) {
        this.$emit('onShowYGridLine', this.selectedLayer, show, y);
-    },
-    onshowZGridLine(show, z) {
-      this.$emit('onshowZGridLine', this.selectedLayer, show, z);
     },
     // record event to undo/redo module
     $_recordEvent() {
