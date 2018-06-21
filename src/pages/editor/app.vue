@@ -177,6 +177,7 @@ export default {
         if(canvas.ratios.length > 0) {
           var index = canvas.ratios.findIndex((e)=>{return canvas.selectedRatio === e.name})
           layers = canvas.ratios[index].layers
+          console.log('layers:',layers)
           return layers
         } else{
           return layers

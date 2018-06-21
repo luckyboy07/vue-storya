@@ -259,8 +259,11 @@ export default {
           // apiService.saveCanvas(this.setupData).then((response)=>{
           //   console.log('response:',response)
           // })
-          this.selectTemplate(selected)
-          this.$router.push({name: 'EditorApp'})
+          this.$store.dispatch('selectTemplate',selected).then(response =>{
+             if (response.data.response.statusCode === 201) {
+              this.$router.push({name: 'EditorApp'})
+            }
+          })
       }else {
         if(this.setupData.project_name === '' ){
           this.isProject = true

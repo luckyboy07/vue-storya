@@ -103,7 +103,7 @@
                                             <img :src="item.image" class="avatar"/>
                                         </div>
                                         <span class="img-detail">
-                                            Landscape
+                                            Portrait
                                             <br>
                                             {{item.name}}
                                         </span>
@@ -163,7 +163,7 @@ export default {
             screens: [
                 {
                     id:1,
-                    name:'2:3',
+                    name:'2-3',
                     image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
                     category: 'portrait',
                     selected: false,
@@ -174,7 +174,7 @@ export default {
                 },
                 {
                     id:2,
-                    name:'3:4',
+                    name:'3-4',
                     image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
                     category: 'portrait',
                     selected: false,
@@ -185,7 +185,7 @@ export default {
                 },
                 {
                     id:3,
-                    name:'3:5',
+                    name:'3-5',
                     image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
                     category: 'portrait',
                     selected: false,
@@ -195,7 +195,7 @@ export default {
                 
                 },{
                     id:4,
-                    name:'9:16',
+                    name:'9-16',
                     image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
                     category: 'portrait',
                     selected: false,
@@ -205,7 +205,7 @@ export default {
                 
                 },{
                     id:5,
-                    name:'10:16',
+                    name:'10-16',
                     image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
                     category: 'portrait',
                     selected: false,
@@ -215,7 +215,7 @@ export default {
                 
                 },{
                     id:6,
-                    name:'9:18.5',
+                    name:'9-18.5',
                     image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
                     category: 'portrait',
                     selected: false,
@@ -225,7 +225,7 @@ export default {
                 
                 },{
                     id:7,
-                    name:'3:2',
+                    name:'3-2',
                     image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
                     category: 'landscape',
                     selected: false,
@@ -236,7 +236,7 @@ export default {
                 },
                 {
                     id:8,
-                    name:'4:3',
+                    name:'4-3',
                     image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
                     category: 'landscape',
                     selected: false,
@@ -246,7 +246,7 @@ export default {
                 
                 },{
                     id:9,
-                    name:'5:3',
+                    name:'5-3',
                     image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
                     category: 'landscape',
                     selected: false,
@@ -256,7 +256,7 @@ export default {
                 
                 },{
                     id:10,
-                    name:'16:9',
+                    name:'16-9',
                     image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
                     category: 'landscape',
                     selected: false,
@@ -266,7 +266,7 @@ export default {
                 
                 },{
                     id:11,
-                    name:'16:10',
+                    name:'16-10',
                     image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
                     category: 'landscape',
                     selected: false,
@@ -378,7 +378,7 @@ export default {
         let grid = document.getElementsByClassName('list-container')
     },
     methods: {
-        ...mapActions(['updateLayers']),
+        ...mapActions(['updateLayers','updatecanvasData']),
         beforeOpen (event) {
             console.log('evenmt:',event)
             this.modal = event
@@ -484,14 +484,13 @@ export default {
             this.closeModal()
         },
         removeDesign (){
-            let ratios = this.template.ratios
+            let ratios = JSON.parse(JSON.stringify(this.template.ratios))
             let arr = []
             if(this.template.tabSelected === 'banners'){
                 arr = this.banners
             }else {
                 arr = this.screens
             }
-            console.log('arr:',arr)
             for(let i = 0;i < arr.length;i++){
                  if(this.ratioSelected.name === arr[i].name && this.ratioSelected.id === arr[i].id){
                         arr[i].selected = false
@@ -508,7 +507,10 @@ export default {
                 // this.template.layers = this.template.originalLayers
                 this.updateLayers(this.template.originalLayers)
             }
-            console.log('this.template:',this.template)
+            if(this.ratioSelected.name === this.template.selectedRatio) {
+                 this.template.selectedRatio = this.template.ratios[ratios.length-1].name
+            }
+            this.updatecanvasData(this.template);
             this.$localStorage.set('canvas',JSON.stringify(this.template))
             this.showMenu = false
         },
