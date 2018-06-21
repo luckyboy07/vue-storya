@@ -1,4 +1,5 @@
 import axios from 'axios';
+import $ from 'linq'
 export default {
     fonts: [
         "Fjalla",
@@ -37,8 +38,16 @@ export default {
         "Londrina Shadow"
     ],
     processedFonts: [],
-    getFonts: function() {
-        return this.processedFonts;
+    getFonts: function(includeCss = false) {
+        if (!includeCss) {
+            var arr = [];
+            for (var i = 0; i < this.processedFonts.length; i++) {
+                arr.push(this.processedFonts[i].name);
+            }
+            return arr;
+        } else {
+            return this.processedFonts;
+        }
     },
     appendFont() {
         let head = document.head;
@@ -53,19 +62,35 @@ export default {
         axios.get(req_url)
             .then(response => {
                 styleElem.innerHTML = response.data;
-                this.fonts = [];
-                let d = response.data.split('\n');
-                for (let i = 0; i < d.length; i++) {
-                    let f = d[i].replace(';', '');
-                    if (f.includes('font-family')) {
-                        let name = f.split(':')[1];
-                        name = name.trim().replace("'", "");
-                        name = name.slice(0, name.length - 1);
-                        if (!this.processedFonts.includes(name)) {
-                            this.processedFonts.push(name);
+                this.fonts = null;
+                var fontCss = response.data.split('@');
+                for (let i = 0; i < fontCss.length; i++) {
+                    var d = fontCss[i].split('\n');
+                    // console.log(i, d)
+                    for (var j = 0; j < d.length; j++) {
+                        let f = d[j].replace(';', '');
+                        if (f.includes('font-family')) {
+                            let name = f.split(':')[1];
+                            name = name.trim().replace("'", "");
+                            name = name.slice(0, name.length - 1);
+
+                            var include = true;
+                            for (var k = 0; k < this.processedFonts.length; k++) {
+                                if (name === this.processedFonts[k].name) {
+                                    include = false;
+                                    break;
+                                }
+                            }
+                            if (include) {
+                                this.processedFonts.push({
+                                    name: name,
+                                    css: '@' + fontCss[i]
+                                });
+                            }
                         }
                     }
                 }
+                console.log('fonts proc', this.processedFonts)
 
                 head.appendChild(styleElem);
             });
@@ -86,5 +111,8 @@ export default {
             return fontName.split(' ').join('+');
         }
         return fontName;
-    }
+    },
+    getFont(name) {
+        return this.processedFonts.length > 0 ? $.from(this.processedFonts).firstOrDefault(f => f.name === name) : '';
+    },
 }
