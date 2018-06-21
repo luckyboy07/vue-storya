@@ -861,6 +861,7 @@ export default {
                 ratio = '1-10';
             }
         }
+        console.log('ratio', ratio)
         for (var i = 0; i < arr.ratios.length; i++) {
           if (arr.ratios[i].name == ratio) {
               var layers = arr.ratios[i].layers
@@ -1046,12 +1047,12 @@ export default {
         })
     },
     getExportingElement(array, animatedData) {
-        array.layers.forEach(e => {
-            var layerelem = document.getElementById(e.id)
-            if (layerelem) {
-                layerelem.style.transition = 'all 400ms ease'
-            }
-        })
+        // array.layers.forEach(e => {
+        //     var layerelem = document.getElementById(e.id).cloneNode(true);
+        //     if (layerelem) {
+        //         layerelem.style.transition = 'all 400ms ease'
+        //     }
+        // })
 
         var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
         editorElem = this.$_responsiveness(editorElem, animatedData);
@@ -1107,7 +1108,8 @@ export default {
         var _rclass = ['rr-bar', 'rr-rotate-handle', 'rr-handle', 'p-d-g', 'layer-action-info'];
         var layerElems = elem.querySelectorAll('.rr-resizer');
         for (var i = 0; i < layerElems.length; i++) {
-            // removing by class names
+            layerElems[i].style.transition = 'all 400ms ease'
+                // removing by class names
             for (var j = 0; j < _rclass.length; j++) {
                 // do not stop until all elements having the same classnames as specified above 
                 // are removed from the exported HTML file
