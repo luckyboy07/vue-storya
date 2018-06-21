@@ -11,7 +11,8 @@ export default {
     },
     saveCanvas (payload) {
         return new Promise((resolve, reject)=> {
-            axios.post(API_URL + 'canvas', payload).then(response => {
+            console.log('pay:',payload)
+            axios.post(API_URL + 'projects', payload).then(response => {
                 resolve(response)
             })
          })

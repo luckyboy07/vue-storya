@@ -15,8 +15,8 @@
                 :drop-directory="true"
                 v-model="files"
                 ref="upload"
-                >
-                <!-- :post-action="'http://206.189.153.177:4000/media'" -->
+                :post-action="'http://206.189.153.177:4000/canvas/4/media'">
+                <!-- :post-action="'http://206.189.153.177:4000/canvas/4/media'" -->
                     <mu-flexbox class="flx">
                         <mu-flexbox-item class="flex-container" > 
                                     + Drag and Drop Images
@@ -195,17 +195,13 @@ export default {
         if (newFile) {
             newFile.url = ''
             newFile.selected = false
-            let URL = window.URL || window.webkitURL
-                if (URL && URL.createObjectURL) {
-                    // newFile.url = newFile.response.statusCode === 201 ? API_URL+newFile.response.response.data.media_path: URL.createObjectURL(newFile.file)
-                    newFile.url = URL.createObjectURL(newFile.file)
-                    let reader = new Image()
-                    reader.src = newFile.url
-                    reader.onload = function(){
-                    newFile.originalWidth = reader.naturalWidth
-                    newFile.originalHeight = reader.naturalHeight
-                    }
-                }
+                console.log('newFile:',newFile)
+                this.data.image = newFile
+            if (newFile.progress === '100.00' && newFile.response.statusCode === 201) {
+                this.data.image = newFile.response.response.data;
+                console.log('newFile:',newFile.response.response.data)
+                console.log('this.data:',this.data)
+            } 
         }
       },
        inputFile(newFile, oldFile,prevent) {
@@ -220,7 +216,8 @@ export default {
           // remove
         }
         setTimeout(()=>{
-          this.data.image = this.files[0]
+          console.log('this.files[0]:',this.files[0])
+          // this.data.image = this.files[0]
         },1000)
       },
   }

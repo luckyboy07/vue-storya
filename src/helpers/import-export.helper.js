@@ -866,9 +866,11 @@ export default {
           if (arr.ratios[i].name == ratio) {
               var layers = arr.ratios[i].layers
               for (var j = 0; j < layers.length; j++) {
+                console.log('layers[j]:',layers[j]);
                   var elem = document.getElementById(layers[j].id)
                   elem.style.top = layers[j].y + 'px';
                   elem.style.left = layers[j].x + 'px';
+                  elem.style.background = !layers[j].isGradient ? !layers[j].color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
                   if (layers[j].isBackground) {
                       elem.style.height = bh + 'px';
                       elem.style.width = bw + 'px';
@@ -991,10 +993,12 @@ export default {
         // }
       }
         function _p() {
+        document.getElementsByTagName('body')[0].style.overflow = 'hidden';
         // var gsap = new TimelineMax();
         // var elem1 = document.getElementsByClassName('rr-resizer');
         // gsap.from(elem1[0],1,{left:100,opacity:0,repeat: -1, yoyo: true});
         var editable_elements = document.querySelectorAll("[contenteditable=true]");
+        
         for (var i = 0; i < editable_elements.length; i++) {
         editable_elements[i].setAttribute("contenteditable", false);
         }
@@ -1048,7 +1052,7 @@ export default {
     },
     getExportingElement(array, animatedData) {
         // array.layers.forEach(e => {
-        //     var layerelem = document.getElementById(e.id).cloneNode(true);
+        //     var layerelem = document.getElementById(e.id)
         //     if (layerelem) {
         //         layerelem.style.transition = 'all 400ms ease'
         //     }

@@ -421,8 +421,17 @@ export const store = new Vuex.Store({
             template.templateSelected = payload.templateSelected
             template.description = 'asdasd'
             template.is_public = false
+            let project= {
+                project_name: template.project_name,
+                description: 'asd',
+                is_public: template.is_public,
+                orientation: '',
+                project_attributes: null,
+                backgroundcolor: template.backgroundcolor,
+                canvas:[]
+            }
             console.log('template;', template)
-                // store.dispatch('saveCanvas', template).then(response =>{
+                // store.dispatch('saveCanvas', project).then(response =>{
                 //     console.log('response:',response)
                 // })
                 // return apiService.saveCavas(template).then(response =>{
@@ -489,7 +498,9 @@ export const store = new Vuex.Store({
                     gradientBackgroundData: state.items[0].attributes.gradientBackgroundData,
                     backgroundBlendMode: 'lighten',
                     backgroundSize: 'cover',
-                    backgroundPosition: '50% 50%'
+                    backgroundPosition: '50% 50%',
+                    animation: state.items[0].attributes.animation,
+                    animations: []
                 }
             layers.push(payload)
             let sam = layers.sort((a, b) => {
