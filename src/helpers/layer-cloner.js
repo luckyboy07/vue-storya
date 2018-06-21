@@ -25,7 +25,7 @@ export default {
                 }
             }
 
-            this.clonedElement.style.zIndex = 0;
+            this.clonedElement.style.zIndex = -1;
             this.clonedElement.style.cursor = 'move';
             document.getElementsByClassName('editor-container')[0].appendChild(this.clonedElement);
         } else {

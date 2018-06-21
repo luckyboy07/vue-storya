@@ -1109,7 +1109,7 @@ export default {
      * @param {The source parent element} elem 
      */
     $_cleanHTML(elem, animatedData) {
-        var _rclass = ['rr-bar', 'rr-rotate-handle', 'rr-handle', 'p-d-g', 'layer-action-info'];
+        var _rclass = ['rr-bar', 'rr-rotate-handle', 'rr-handle', 'h-l-g', 'layer-action-info'];
         var layerElems = elem.querySelectorAll('.rr-resizer');
         for (var i = 0; i < layerElems.length; i++) {
             layerElems[i].style.transition = 'all 400ms ease'
@@ -1181,4 +1181,5 @@ export default {
 
         return animations;
     },
+
 }
