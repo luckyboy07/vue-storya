@@ -316,8 +316,17 @@ export default {
   computed: {
     ...mapGetters({
       editorData: 'getCanvasData',
-      layers: 'getLayers'
+      layers: 'getLayers',
+      getBackground: 'getImageBackground'
     }),
+  },
+  watch: {
+    getBackground: {
+      handler(val) {
+        console.log('finidng dominant color', val.image.url)
+      },
+      deep: true
+    }
   },
 }
 </script>

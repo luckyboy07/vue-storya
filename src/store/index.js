@@ -5,7 +5,7 @@ import Vuex from 'vuex'
 
 import appHelper from '../helpers/app.helper'
 import zoomHelper from '../helpers/zoom.helper'
-import * as $ from 'linq'
+import $ from 'linq'
 import axios from 'axios'
 import apiService from '../helpers/API.js'
 Vue.use(Vuex)
@@ -20,6 +20,7 @@ export const store = new Vuex.Store({
             zoom: 100,
             zoomIncrease: 10,
             bgColor: '#fff',
+            bgImageDominantColor: '',
             gridLines: true,
             isResponsive: false,
             selectedRatio: '',
@@ -567,6 +568,9 @@ export const store = new Vuex.Store({
         },
         getBroadcastedStatuses: state => {
             return state.broadcastedStatuses;
+        },
+        getImageBackground: state => {
+            return $.from(state.layers).firstOrDefault(l => l.type === 'background');
         },
     },
     actions: {
