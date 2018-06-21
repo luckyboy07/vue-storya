@@ -284,8 +284,7 @@ export default {
     ExportImage() {
       this.isExporting = this.hasBackgroundProcess = true;
       var htmlStr = exportHelper.getHtmlString();
-      rest.post('renderimage', 
-      {
+      rest.post('renderimage', {
         width: this.editorData.width,
         height: this.editorData.height,
         html: htmlStr

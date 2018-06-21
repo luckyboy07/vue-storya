@@ -1,6 +1,7 @@
 import appHelper from './app.helper'
 import animation from './animation';
 import fontHelper from './fonts.helper'
+import responsiveHelper from './responsive-helper'
 
 // import {JSZip} from 'JSZip'
 // import VueLocalStorage from 'vue-localstorage'
@@ -13,6 +14,11 @@ export default {
       <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.0/TweenMax.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <style type="text/css">
+      @media (aspect-ratio: 2/1) {
+        body {
+          background-color: red;
+        }
+      }
       
       .tl-container {
         width: 100%;
@@ -103,6 +109,7 @@ export default {
 
         --CUSTOM_STYLES--
         --FONTS_HERE--
+        --RESPONSIVE_CSS_HERE--
       </style>
     </head>
     <body onload="_p()">
@@ -123,15 +130,15 @@ export default {
         var bh = window.innerHeight;
         var origwidth = 300;
         var origheight = 300;
-        console.log('bw:', bw)
-        console.log('bh:', bh)
-        console.log('bw:', bw)
-        console.log('bh:', bh)
+        // console.log('bw:', bw)
+        // console.log('bh:', bh)
+        // console.log('bw:', bw)
+        // console.log('bh:', bh)
         var maxNum = Math.max(bw, bh);
         var minNum = Math.min(bw, bh);
         var minR = minNum / maxNum;
-        console.log('maxNum:', maxNum);
-        console.log('minNum:', minNum);
+        // console.log('maxNum:', maxNum);
+        // console.log('minNum:', minNum);
         var ratio = '';
         if (minR <= 1 && minR > 0.8) {
             console.log('1:1');
@@ -218,14 +225,18 @@ export default {
             }
         }
         console.log('ratio', ratio)
+        var hasRatio = false;
         for (var i = 0; i < arr.ratios.length; i++) {
           if (arr.ratios[i].name == ratio) {
+            console.log('applying', arr.ratios[i].name)
               var layers = arr.ratios[i].layers
               for (var j = 0; j < layers.length; j++) {
                 console.log('layers[j]:',layers[j]);
                   var elem = document.getElementById(layers[j].id)
                   elem.style.top = layers[j].y + 'px';
                   elem.style.left = layers[j].x + 'px';
+                  elem.style.width = layers[j].width + 'px';
+                  elem.style.height = layers[j].height + 'px';
                   elem.style.background = !layers[j].isGradient ? !layers[j].color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
                   if (layers[j].isBackground) {
                       elem.style.height = bh + 'px';
@@ -233,103 +244,31 @@ export default {
                       console.log('elem:', elem)
                   }
               }
+              hasRatio = true;
           }
         }
-      }
-      function setDefault() {
-        var pElem = document.getElementsByClassName('editor-box')[0];
-        var bounds = pElem.getBoundingClientRect();
-        console.log(bounds);
-        defaultW = bounds.width;
-        defaultH = bounds.height;
 
-        // making height and width to 100%
-        pElem.style.width = '100%';
-        pElem.style.height = '100%';
-
-        var layers = pElem.querySelectorAll('.rr-resizer');
-        for (var i = 0; i < layers.length; i++) {
-          var layer = layers[i];
-          var content = getContent(layer);
-          var b = layer.getBoundingClientRect();
-          defaultLayerValues.push({
-            w: b.width,
-            h: b.height,
-            l: b.left,
-            t: b.top,
-            fontSize: getFontSize(content),
-          });
-        }
-
-        _p();
-        updateElements();
-      }
-
-      function updateElements() {
-         console.log('----------------------------------------------', defaultLayerValues)
-        var pElem = document.getElementsByClassName('editor-box')[0];
-        var bounds = pElem.getBoundingClientRect();
-
-        console.log('defaults', defaultW, defaultH)
-        console.log('bounds', bounds.width, bounds.height);
-
-        var multiplierW = 
-          bounds.width / defaultW > 0 ?  bounds.width / defaultW : 1;
-        var multiplierH = 
-          bounds.height / defaultH > 0 ?  bounds.height / defaultH : 1;
-
-        console.log('msfdf', multiplierW, multiplierH)
-
-        var layers = pElem.querySelectorAll('.rr-resizer');
-        for (var i = 0; i < layers.length; i++) {
-          var layer = layers[i];
-          console.log('layer', layer)
-          console.log('layer lBound', defaultLayerValues[i])
-          layer.style.width = (defaultLayerValues[i].w * multiplierW) + 'px';
-          layer.style.height = (defaultLayerValues[i].h * multiplierH) + 'px';
-          layer.style.left = (defaultLayerValues[i].l * multiplierW) + 'px'; 
-          layer.style.top = (defaultLayerValues[i].t * multiplierH) + 'px';
-
-          var content = getContent(layer);
-          var type = getLayerType(content);
-          console.log('type', getLayerType(content));
-          if (type === 'text') {
-            console.log('**************',  content.children[0].style.fontSize);
-            content.children[0].style.fontSize = (defaultLayerValues[i].fontSize * multiplierW) + 'px';
-          } else if (type === 'shape') {
-            console.log('isPolygon(content)', isPolygon(content));
-            if (isPolygon(content)) {
-              // triangle
-            }
-          }
-        }
-      }
-
-     
-
-      function isPolygon(elem) {
-        console.log('isSVG', elem)
-        var p = elem.children[0];
-        for (var i = 0; i < p.children.length; i++) {
-         // if svg, look for polygon tag
-         if (p.children[i].nodeName === 'svg') {
-            for (var j = 0; j < p.children[i].children.length; j++) {
-              if (p.children[i].children[j].nodeName === 'polygon') {
-                return true;
+        if (!hasRatio) {
+          // apply original ratio here
+          var layers = arr.layers
+          console.log('default layer', layers)
+          for (var j = 0; j < layers.length; j++) {
+            console.log('layers[j]:',layers[j]);
+              var elem = document.getElementById(layers[j].id)
+              elem.style.top = layers[j].y + 'px';
+              elem.style.left = layers[j].x + 'px';
+              elem.style.width = layers[j].width + 'px';
+              elem.style.height = layers[j].height + 'px';
+              elem.style.background = !layers[j].isGradient ? !layers[j].color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
+              if (layers[j].isBackground) {
+                  elem.style.height = bh + 'px';
+                  elem.style.width = bw + 'px';
+                  console.log('elem:', elem)
               }
-            }
-         }
-        }
-        return false;
-      }
-      function getContent(elem) {
-        for (var i = 0; i < elem.children.length; i++) {
-          if (elem.children[i].className === 'rr-content') {
-            return elem.children[i];
           }
         }
-        return null;
       }
+
       function getLayerType(elem) {
         if (elem.className !== 'rr-content') {
           throw new Error('rr content expeected');
@@ -394,19 +333,22 @@ export default {
         // var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
         // editorElem = this.$_responsiveness(editorElem);
 
-        var fonts = this.getUsedFonts(array, layerData);
         return new Promise((res, rej) => {
             var animatedElements = this.createAnimation(layerData);
             var htmlContent = this.getExportingElement(array, animatedElements).outerHTML;
-            // console.log('animatedElements', htmlContent)
+            var fonts = this.getUsedFonts(array, layerData); // filter font
+            var responsiveCss = responsiveHelper.generateCssToAllLayers(array.ratios, layerData);
             var cssText = this.getAnimationCss(animatedElements);
             // console.log(cssText)
-            // // apped amination css
-            this.$_download('export-' + appHelper.generateTimestamp() + '.html', this.exportHtmlTemplatePart1.replace('--CUSTOM_STYLES--', cssText).replace('--FONTS_HERE--', fonts) + htmlContent + this.exportHtmlTemplatePart2(array));
+            // // apped amination css  
+            var content = this.exportHtmlTemplatePart1.replace('--CUSTOM_STYLES--', cssText);
+            content = content.replace('--FONTS_HERE--', fonts);
+            content = content.replace('--RESPONSIVE_CSS_HERE--', responsiveCss);
+            this.$_download('export-' + appHelper.generateTimestamp() + '.html', content + htmlContent + this.exportHtmlTemplatePart2(array));
             setTimeout(() => {
                 res(true);
             }, 100);
-        })
+        });
     },
     getExportingElement(array, animatedData) {
         // array.layers.forEach(e => {
