@@ -11,15 +11,7 @@ export default {
   <html>
     <head>
       <title></title>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.0/TweenMax.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <style type="text/css">
-      @media (aspect-ratio: 2/1) {
-        body {
-          background-color: red;
-        }
-      }
-      
       .tl-container {
         width: 100%;
         cursor: auto;
@@ -109,7 +101,6 @@ export default {
 
         --CUSTOM_STYLES--
         --FONTS_HERE--
-        --RESPONSIVE_CSS_HERE--
       </style>
     </head>
     <body onload="_p()">
@@ -510,6 +501,6 @@ export default {
             }
         }
 
-        return fonts;
+        return fonts.join(' ');
     },
 }
