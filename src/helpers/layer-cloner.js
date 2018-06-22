@@ -39,6 +39,9 @@ export default {
                 var oT = cloneBounds.top - bounds.top;
                 this.clonedElement.style.top = cloneBounds.top + -oT * 2 + 'px';
                 this.clonedElement.style.left = cloneBounds.left - oL * 2 + 'px';
+                this.clonedElement.style.width = elem.style.width;
+                this.clonedElement.style.height = elem.style.height;
+                this.clonedElement.style.transform = elem.style.transform;
                 this.clonedElement.style.opacity = 1;
             }
         }

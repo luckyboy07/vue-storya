@@ -45,13 +45,13 @@
       <div v-show="!isResizing" class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
     <div id="hGLine" class="h-l-g" style="display: none"></div>
-     <div v-show="isRotating" class="layer-action-info info-top" :style="{transform: 'rotateZ(' + (this.rotation * -1) + 'deg)'}">
-        {{parseInt(this.rotation)}}°
+     <div v-show="isRotating" class="layer-action-info info-top" :style="{transform: 'rotateZ(' + (-state.rotation) + 'deg)'}">
+        {{parseInt(state.rotation)}}°
       </div>
-    <div v-show="isResizing" class="layer-action-info info-top" :style="{top: '-65px', transform: 'rotateZ(' + (this.rotation * -1) + 'deg)',}">
+    <div v-show="isResizing" class="layer-action-info info-top" :style="{top: '-65px', transform: 'rotateZ(' + (-state.rotation) + 'deg)',}">
         {{parseInt(this.width) + ' x ' + parseInt(this.height)}}
       </div>
-    <div v-show="isDragging" class="layer-action-info info-top" :style="{transform: 'rotateZ(' + (this.rotation * -1) + 'deg)',}">
+    <div v-show="isDragging" class="layer-action-info info-top" :style="{transform: 'rotateZ(' + (-state.rotation) + 'deg)',}">
       {{parseInt(this.left) + ', ' + parseInt(this.top)}}
     </div>
     <div class="rr-content" :class="[!islocked ? 's-layer-movable' : 's-layer-unmovable']">

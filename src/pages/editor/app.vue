@@ -30,16 +30,16 @@
   <preview-modal></preview-modal>
   <!-- Ruler Lines -->
   <div class="h-lrl1 g-lines" ref="hhl1"
-    :style="{width: (parseInt(!canvasData.isResponsive ? canvasData.width : canvasData.activeSize.width) + parseInt(400)) + 'px', height: '1px'}">
+    :style="{width: (parseInt(!canvasData.isResponsive ? canvasData.width : canvasData.activeSize.width) + parseInt(400)) + 'px', height: '0.5px'}">
   </div>
   <div class="h-lrl2 g-lines" ref="hhl2"
-    :style="{width: (parseInt(!canvasData.isResponsive ? canvasData.width : canvasData.activeSize.width) + parseInt(400)) + 'px', height: '1px'}">
+    :style="{width: (parseInt(!canvasData.isResponsive ? canvasData.width : canvasData.activeSize.width) + parseInt(400)) + 'px', height: '0.5px'}">
   </div>
   <div class="v-lrl1 g-lines" ref="vlrl1"
-    :style="{width: '1px', height: (parseInt(!canvasData.isResponsive ? canvasData.height : canvasData.activeSize.height) + parseInt(100)) + 'px'}">
+    :style="{width: '0.5px', height: (parseInt(!canvasData.isResponsive ? canvasData.height : canvasData.activeSize.height) + parseInt(100)) + 'px'}">
   </div>
   <div class="v-lrl2 g-lines" ref="vlrl2"
-    :style="{width: '1px', height: (parseInt(!canvasData.isResponsive ? canvasData.height : canvasData.activeSize.height) + parseInt(100)) + 'px'}">
+    :style="{width: '0.5px', height: (parseInt(!canvasData.isResponsive ? canvasData.height : canvasData.activeSize.height) + parseInt(100)) + 'px'}">
   </div>
   <!-- <div class="offset-line" ref="vlrl3"
     :style="{width: '2px', height: (parseInt(canvasData.height) + parseInt(100)) + 'px'}">
