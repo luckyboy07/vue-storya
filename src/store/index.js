@@ -72,6 +72,7 @@ export const store = new Vuex.Store({
                 component: 'shape-layer',
                 zindex: null,
                 content: 'Shape Layer',
+                isBackground: false,
                 attributes: {
                     shape: 'Circle',
                     shape_type: '',
@@ -163,6 +164,7 @@ export const store = new Vuex.Store({
                 open: false,
                 image: {},
                 content: 'Image Layer',
+                isBackground: false,
                 loaded: true,
                 attributes: {
                     src: 'http://via.placeholder.com/140x100',
@@ -211,6 +213,7 @@ export const store = new Vuex.Store({
                 zindex: null,
                 open: false,
                 content: 'Text Layer',
+                isBackground: false,
                 attributes: {
                     rotation: 0,
                     fontFamily: "Lato",

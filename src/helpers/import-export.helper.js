@@ -869,13 +869,27 @@ export default {
              
               for (var j = 0; j < layers.length; j++) {
                 console.log('layers[j]:',layers[j]);
+                let attr = layers[j].attributes;
                   var elem = document.getElementById(layers[j].id)
+                  // var cont = documenbt.getElement
                   elem.style.top = layers[j].y + 'px';
                   elem.style.left = layers[j].x + 'px';
-                  elem.style.background = !layers[j].isGradient ? !layers[j].color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
-                  // if(layers[j].type == 'text') {
-                    
-                  // }
+                  
+                  if(layers[j].type == 'image') {
+                    var im = elem.querySelector('.img-sel');
+                    console.log('image', im);
+                    var shadows = attr.shadowSize > 0 ? '1px 12px '+attr.shadowSize+'px '+attr.shadowColor : ''
+                    im.style.borderColor = attr.borderColor;
+                    im.style.borderWidth = attr.borderWidth;
+                    im.style.borderStyle = attr.borderStyle;
+                    im.style.objectFit = attr.objectFit.toLowerCase();
+                    im.style.opacity =  layers[j].loaded ? attr.opacity : 0.5
+                    im.style.rotation = attr.rotation;
+                    im.style.shadowColor = attr.shadowColor;
+                    im.style.sizeOption = attr.sizeOption;
+                    im.style.boxShadow = attr.shadowColor ? shadows : '';
+                    im.style.filter = "blur(" + attr.filterBlur + "px)";
+                  }
                   if (layers[j].isBackground) {
                       elem.style.height = bh + 'px';
                       elem.style.width = bw + 'px';
