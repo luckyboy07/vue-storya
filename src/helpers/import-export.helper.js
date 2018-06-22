@@ -448,8 +448,20 @@ export default {
                 }
             }
         }
+        if (ratioArr) {
+            for (var i = 0; i < ratioArr.ratios.length; i++) {
+                for (var j = 0; j < ratioArr.ratios[i].layers.length; j++) {
+                    if (ratioArr.ratios[i].layers[j].type === 'text') {
+                        console.log(ratioArr.ratios[i].layers[j])
+                        var f = fontHelper.getFont(ratioArr.ratios[i].layers[j].attributes.fontFamily);
+                        if (!fonts.includes(f.css)) {
+                            fonts.push(f.css);
+                        }
+                    }
+                }
+            }
+        }
 
-        console.log('used fonts', fonts)
         return fonts;
     },
 }
