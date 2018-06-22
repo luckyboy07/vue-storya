@@ -410,11 +410,32 @@ export const store = new Vuex.Store({
             if (!layerId) {
                 return;
             }
+            let canvas = state.canvasData
+                        console.log('layerId:',layerId)
+                        console.log('canvasasdasd;',canvas)
             for (var i = 0; i < state.layers.length; i++) {
                 if (state.layers[i].id === layerId) {
                     state.layers.splice(i, 1);
                     break;
                 }
+            }
+            if (canvas.ratios.length > 0) {
+                canvas.ratios.forEach(row =>{
+                    if (row.name !== canvas.selectedRatio) {
+                        row.layers.forEach((row2,index) => {
+                            if (row2.id === layerId) {
+                                row.layers.splice(index,1)
+                            }
+                        })
+                    }
+                })
+            }
+            if(canvas.isResponsive) {
+                canvas.originalLayers.forEach((row, index) =>{
+                    if(row.id === layerId){
+                        canvas.originalLayers.splice(index,1)
+                    }
+                })
             }
             Vue.localStorage.set('layers', JSON.stringify(state.layers))
         },
