@@ -21,6 +21,8 @@ export default {
         'boxShadow': att.shadowSize > 0 ? att.shadowColor ? '1px 12px '+att.shadowSize+'px '+att.shadowColor : '' : '',
         'opacity': this.data.attributes.opacity,
         border: att.borderWidth + 'px ' + att.borderColor + ' ' + att.borderStyle,
+        "-webkit-filter": "blur(" + att.filterBlur + "px)",
+        filter: "blur(" + att.filterBlur + "px)",
         'background-size': 'cover',
       }
     },
