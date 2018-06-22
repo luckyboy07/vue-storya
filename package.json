@@ -16,6 +16,7 @@
   "dependencies": {
     "@hscmap/vue-window": "^1.8.2",
     "axios": "^0.18.0",
+    "colour-extractor": "^0.2.1",
     "jszip": "^3.1.5",
     "less": "^2.7.2",
     "less-loader": "^2.2.3",

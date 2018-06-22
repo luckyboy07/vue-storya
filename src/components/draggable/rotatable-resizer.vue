@@ -44,9 +44,7 @@
     <div v-show="!islocked" class="rr-handle rr-ord-sw" v-if="hasHandle('sw')" key="ord-sw">
       <div v-show="!isResizing" class="handle-tt" :style="{transform:'rotate(' + (state.rotation * -1) + 'deg)'}">Resize</div>
     </div>
-    <div class="p-d-g">
-      <div id="hGLine" class="h-l-g" style="display: none"></div>
-    </div>
+    <div id="hGLine" class="h-l-g" style="display: none"></div>
      <div v-show="isRotating" class="layer-action-info info-top" :style="{transform: 'rotateZ(' + (this.rotation * -1) + 'deg)'}">
         {{parseInt(this.rotation)}}°
       </div>
@@ -91,12 +89,13 @@
 .h-l-g {
   height:100%;
   width: 1px;
-  border-left: black 1px dashed;
+  border-left: violet thin dashed;
+  border-right: white thin dashed;
   position: absolute;
   margin: auto;
   left: 0;
   right: 0;
-  z-index: 9999;
+  z-index: 1;
 }
 .p-d-g {
   width: 100%;

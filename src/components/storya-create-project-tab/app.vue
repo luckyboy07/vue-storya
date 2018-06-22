@@ -387,6 +387,7 @@ export default {
   font-weight: bold;
   color: #111111;
   display: table;
+  text-align: center;
 }
 .blank-template > :first-child {
   display: table-cell;

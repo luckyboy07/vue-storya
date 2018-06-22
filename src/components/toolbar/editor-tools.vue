@@ -304,7 +304,7 @@ export default {
         zoom = this.editorData.zoom;
         type = zoom < 100 ? 'in' : 'out';
         zoomHelper.gotoZoom(this.editorData, this.layers, zoom, 100, type).then((resp) => {
-          exportHelper.exportTemplate( this.selectedtemplate,this.layers).then((val) => {
+          exportHelper.exportTemplate( this.selectedtemplate,this.editorData.originalLayers).then((val) => {
             console.log('Export finished', val)
             if (zoom !== 100) {
               zoomHelper.gotoZoom(this.editorData, this.layers, zoom, 100, type === 'in' ? 'out' : type === 'out' ? 'in' : '');
@@ -312,7 +312,7 @@ export default {
           });
         });
       } else {
-        exportHelper.exportTemplate(this.selectedtemplate, this.layers);
+        exportHelper.exportTemplate(this.selectedtemplate, this.editorData.originalLayers);
       }
     },
     savetoLocalstorage () {
@@ -352,8 +352,7 @@ export default {
     ExportImage() {
       this.isExporting = this.hasBackgroundProcess = true;
       var htmlStr = exportHelper.getHtmlString();
-      rest.post('renderimage', 
-      {
+      rest.post('renderimage', {
         width: this.editorData.width,
         height: this.editorData.height,
         html: htmlStr
@@ -384,7 +383,7 @@ export default {
   computed: {
     ...mapGetters({
       editorData: 'getCanvasData',
-      layers: 'getLayers'
+      layers: 'getLayers',
     }),
   },
 }
