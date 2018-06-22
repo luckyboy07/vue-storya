@@ -90,7 +90,8 @@ export default {
         return;
       }
       // for keys with ctrl
-      if (evt.ctrlKey) {
+      // metaKey for MAC
+      if (evt.ctrlKey || evt.metaKey) {
         evt.preventDefault();
         if (evt.key === 'y') {
            var redoData = undoRedo.redo();

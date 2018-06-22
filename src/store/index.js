@@ -5,7 +5,7 @@ import Vuex from 'vuex'
 
 import appHelper from '../helpers/app.helper'
 import zoomHelper from '../helpers/zoom.helper'
-import * as $ from 'linq'
+import $ from 'linq'
 import axios from 'axios'
 import apiService from '../helpers/API.js'
 Vue.use(Vuex)
@@ -435,7 +435,7 @@ export const store = new Vuex.Store({
             //         is_public: template.is_public,
             //         orientation: 'asdasd',
             //     }
-                
+
             //     store.dispatch('saveProject', project).then(response =>{
             //         if(response.data.response.statusCode === 201){
             //             console.log("ASDASDASD")
@@ -446,9 +446,9 @@ export const store = new Vuex.Store({
             //         reject(err)
             //     })
             // })
-                // return apiService.saveCavas(template).then(response =>{
-                //     console.log('resop:',response)
-                // })
+            // return apiService.saveCavas(template).then(response =>{
+            //     console.log('resop:',response)
+            // })
         },
         setAutosaveData: (state, data) => {
             if (data !== '0' && data !== '1' && data !== '2') {
@@ -527,10 +527,10 @@ export const store = new Vuex.Store({
                 Vue.set(state, 'lastItemAdd', appHelper.generateTimestamp())
             }
         },
-        updatecanvasData: (state,payload) => {
+        updatecanvasData: (state, payload) => {
             let pay = payload
-            Vue.set(state,'canvasData',pay)
-        } 
+            Vue.set(state, 'canvasData', pay)
+        }
     },
     getters: {
         getItems: state => {
@@ -595,6 +595,9 @@ export const store = new Vuex.Store({
         getBroadcastedStatuses: state => {
             return state.broadcastedStatuses;
         },
+        getImageBackground: state => {
+            return $.from(state.layers).firstOrDefault(l => l.type === 'background');
+        },
     },
     actions: {
         addLayer: ({ commit }, payload) => {
@@ -602,47 +605,47 @@ export const store = new Vuex.Store({
         },
         editLayer: ({ commit }, payload) => {
             commit('editLayer', payload)
-            
+
         },
-        selectTemplate: ({ commit,state }, payload) => {
+        selectTemplate: ({ commit, state }, payload) => {
             return new Promise((resolve, reject) => {
-                let template = state.canvasData
-                template.backgroundcolor = payload.backgroundcolor
-                template.canvas_name = payload.canvas_name
-                template.project_name = payload.project_name
-                template.height = payload.height
-                template.width = payload.width
-                template.templateSelected = payload.templateSelected
-                template.description = 'asdasd'
-                template.is_public = false
-                let project= {
-                    project_name: template.project_name,
-                    is_public: template.is_public,
-                    orientation: 'asdasd',
-                }
-                
-                store.dispatch('saveProject', project).then(response =>{
-                    if(response.data.response.statusCode === 201){
-                        let proj = response.data.response.data
-                        let stateproj = state.projects
-                        stateproj.project_id = proj.project_id
-                        stateproj.project_name = proj.project_name
-                        stateproj.is_public = proj.is_public
-                        stateproj.orientation = proj.orientation
-                        console.log(stateproj)
-                        Vue.set(state, 'projects', stateproj)
-                        Vue.localStorage.set('canvas', JSON.stringify(template))
-                        resolve(response)
+                    let template = state.canvasData
+                    template.backgroundcolor = payload.backgroundcolor
+                    template.canvas_name = payload.canvas_name
+                    template.project_name = payload.project_name
+                    template.height = payload.height
+                    template.width = payload.width
+                    template.templateSelected = payload.templateSelected
+                    template.description = 'asdasd'
+                    template.is_public = false
+                    let project = {
+                        project_name: template.project_name,
+                        is_public: template.is_public,
+                        orientation: 'asdasd',
                     }
-                }).catch(err=>{
-                    reject(err)
+
+                    store.dispatch('saveProject', project).then(response => {
+                        if (response.data.response.statusCode === 201) {
+                            let proj = response.data.response.data
+                            let stateproj = state.projects
+                            stateproj.project_id = proj.project_id
+                            stateproj.project_name = proj.project_name
+                            stateproj.is_public = proj.is_public
+                            stateproj.orientation = proj.orientation
+                            console.log(stateproj)
+                            Vue.set(state, 'projects', stateproj)
+                            Vue.localStorage.set('canvas', JSON.stringify(template))
+                            resolve(response)
+                        }
+                    }).catch(err => {
+                        reject(err)
+                    })
                 })
-            })
-            // commit('selectTemplate',payload)
-            // return store.dispatch('selectTemplate',payload).then((response)=>{
-               
+                // commit('selectTemplate',payload)
+                // return store.dispatch('selectTemplate',payload).then((response)=>{
+
             // })
-          
+
         },
         updateLayers: ({ commit }, payload) => {
             commit('updateLayers', payload)
@@ -658,8 +661,8 @@ export const store = new Vuex.Store({
                     commit(errors)
                 })
         },
-        updatecanvasData: ({commit}, payload) => {
-            commit('updatecanvasData',payload)
+        updatecanvasData: ({ commit }, payload) => {
+            commit('updatecanvasData', payload)
         }
     }
     //   strict: process.env.NODE_ENV !== 'production'

@@ -238,10 +238,6 @@ export default {
       this.$emit('showYGridLine', showRight, right);
     },
 
-    emitShowRotationGridLine(show, rotation) {
-      this.$emit('showZGridLine', show, rotation);
-    },
-
     setOctantValue(deg) {
       if(deg >= 31 && deg <= 68) {
         this.state.octant = 1
@@ -264,36 +260,29 @@ export default {
 
     // for vertical lines
     $_getDraggableGuideline() {
-      for (var i = 0;i < this.$el.children.length; i++) {
-        if (this.$el.children[i].className === 'p-d-g')
-        return this.$el.children[i].children[0]
-      }
+      return this.$el.querySelector('.h-l-g');
     },
     $_toggleDraggableLines(show, line) {
       line.style.display = show ? 'block' : 'none';
     },
-    showGridLine(deg) {
-      return;
-      // if (!this.id) {
-      //   return;
-      // }
-      // var line = this.$_getDraggableGuideline();
-      // this.$_toggleDraggableLines(false, line);
-      // // 0 degree & 180
-      // // show the horizontal ruler line
-      // // 90 degrees and 270
-      // // show the vertical ruler line 
-      // if ((deg - 1 >= -2 && deg + 1 <= 2) ||
-      //     (deg - 1 >= 178 && deg + 1 <= 182) ||
-      //     (deg - 1 >= 88 && deg + 1 <= 91) ||
-      //     (deg - 1 >= 268 && deg + 1 >= -88)) {
-      //     this.$_toggleDraggableLines(true, line);
-      // }
+    showGridLine(degree) {
+      var line = this.$_getDraggableGuideline();
+      this.$_toggleDraggableLines(false, line);
+      if ( (degree - 3 >= -5 && degree + 3 <= 5) ||
+           (degree - 3 >= 40 && degree + 3 <= 50) || 
+           (degree - 3 >= 85 && degree + 3 <= 95) ||
+           (degree - 3 >= 130 && degree + 3 <= 140) ||
+           (degree - 3 >= 175 && degree + 3 <= 185) ||
+           (degree - 3 >= 220 && degree + 3 <= 230) ||
+           (degree - 3 >= 265 && degree + 3 >= -85) || 
+           (degree - 3 <= -40 && degree + 3 >= -50)) {
+          this.$_toggleDraggableLines(true, line);
+      }
     },
 
     hideDraggableLines: function() {
-      // var line = this.$_getDraggableGuideline(this.id);
-      // this.$_toggleDraggableLines(false, line);
+      var line = this.$_getDraggableGuideline();
+      this.$_toggleDraggableLines(false, line);
     },
 
     hasHandle(ord) {
@@ -322,42 +311,32 @@ export default {
             top: bounds.top + bounds.height / 2
           };
 
-          self.emitShowRotationGridLine(false);
-
           var degree = (Math.atan2(event.clientY - center.top, event.clientX - center.left) * 180 / Math.PI + 90) % 360;
           self.setOctantValue(self.value.rotation);
           
           if (degree - 3 >= -5 && degree + 3 <= 5) {
             degree = 0;
-            self.emitShowRotationGridLine(true, degree);
           }
           if (degree - 3 >= 40 && degree + 3 <= 50) {
             degree = 45;
-            self.emitShowRotationGridLine(true, degree);
           }
           if (degree - 3 >= 85 && degree + 3 <= 95) {
             degree = 90;
-            self.emitShowRotationGridLine(true, degree);
           }
           if (degree - 3 >= 130 && degree + 3 <= 140) {
             degree = 135;
-            self.emitShowRotationGridLine(true, degree);
           }
           if (degree - 3 >= 175 && degree + 3 <= 185) {
             degree = 180;
-            self.emitShowRotationGridLine(true, degree);
           }
           if (degree - 3 >= 220 && degree + 3 <= 230) {
             degree = 225;
-            self.emitShowRotationGridLine(true, degree);
           }
           if (degree - 3 >= 265 && degree + 3 >= -85) {
             degree = 270;
-            self.emitShowRotationGridLine(true, degree);
           }
           if (degree - 3 <= -40 && degree + 3 >= -50) {
             degree = -45;
-            self.emitShowRotationGridLine(true, degree);
           }
           
           self.state.rotation = degree;
@@ -372,7 +351,6 @@ export default {
           self.emitRotateEnded();
           self.hideDraggableLines();
           self.isRotating = false;
-          self.emitShowRotationGridLine(false);
         }
       });
     },
