@@ -4,7 +4,6 @@ export default {
     currentTimeout: 0,
     $_animatedLayers: {},
     applyAnimation(layer, inject = true) {
-        console.log('layer:',layer)
         var animFlow = layer.attributes.animation.animationFlow;
         var ts = this.$_sumFlow(animFlow);
         // keyframes

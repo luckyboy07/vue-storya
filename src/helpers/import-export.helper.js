@@ -294,13 +294,11 @@ export default {
             var animatedElements = this.createAnimation(layerData);
             var htmlContent = this.getExportingElement(array, animatedElements).outerHTML;
             var fonts = this.getUsedFonts(array, layerData); // filter font
-            var responsiveCss = responsiveHelper.generateCssToAllLayers(array.ratios, layerData);
             var cssText = this.getAnimationCss(animatedElements);
             // console.log(cssText)
             // // apped amination css  
             var content = this.exportHtmlTemplatePart1.replace('--CUSTOM_STYLES--', cssText);
             content = content.replace('--FONTS_HERE--', fonts);
-            content = content.replace('--RESPONSIVE_CSS_HERE--', responsiveCss);
             this.$_download('export-' + appHelper.generateTimestamp() + '.html', content + htmlContent + this.exportHtmlTemplatePart2(array, layerData));
             setTimeout(() => {
                 res(true);
@@ -450,8 +448,20 @@ export default {
                 }
             }
         }
+        if (ratioArr) {
+            for (var i = 0; i < ratioArr.ratios.length; i++) {
+                for (var j = 0; j < ratioArr.ratios[i].layers.length; j++) {
+                    if (ratioArr.ratios[i].layers[j].type === 'text') {
+                        console.log(ratioArr.ratios[i].layers[j])
+                        var f = fontHelper.getFont(ratioArr.ratios[i].layers[j].attributes.fontFamily);
+                        if (!fonts.includes(f.css)) {
+                            fonts.push(f.css);
+                        }
+                    }
+                }
+            }
+        }
 
-        console.log('used fonts', fonts)
         return fonts;
     },
 }

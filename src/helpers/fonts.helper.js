@@ -90,8 +90,6 @@ export default {
                         }
                     }
                 }
-                console.log('fonts proc', this.processedFonts)
-
                 head.appendChild(styleElem);
             });
     },
