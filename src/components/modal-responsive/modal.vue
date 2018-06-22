@@ -456,14 +456,15 @@ export default {
                         val.height = parseInt(this.ratioSelected.height)+5
                         val.x = -5
                         val.y = -2
+                    }else {
+                        val.x = 100
+                        val.y = 100
                     }
                     newLayer.push(val)
                 })
                 console.log('selectedRatio:',this.template)
             if(this.template.selectedRatio !== '') {
                 var index = this.template.ratios.findIndex((e)=>{return this.template.selectedRatio === e.name})
-                console.log('index:',index)
-                console.log('this.template.ratios[index].layers:',this.template.ratios[index].layers)
                 this.ratioSelected.layers = JSON.parse(JSON.stringify(newLayer))
             }
             else{
