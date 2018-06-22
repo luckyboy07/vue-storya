@@ -125,105 +125,7 @@ export default {
         arr =` + JSON.stringify(array) + `, original = ` + JSON.stringify(original) + `;\n
       var defaultLayerValues = [];
       function fnResize() {
-        console.log('ASDASD')
-        var bw = window.innerWidth;
-        var bh = window.innerHeight;
-        var origwidth = 300;
-        var origheight = 300;
-        // console.log('bw:', bw)
-        // console.log('bh:', bh)
-        // console.log('bw:', bw)
-        // console.log('bh:', bh)
-        var maxNum = Math.max(bw, bh);
-        var minNum = Math.min(bw, bh);
-        var minR = minNum / maxNum;
-        // console.log('maxNum:', maxNum);
-        // console.log('minNum:', minNum);
-        var ratio = '';
-        if (minR <= 1 && minR > 0.8) {
-            console.log('1:1');
-            ratio = '1-1';
-        }
-        // 4:3 and 3:4 ratio
-        else if (minR <= 0.8 && minR > 0.75) {
-            if (bw > bh) {
-                ratio = '4-3';
-            } else {
-                ratio = '3-4';
-            }
-        }
-        // 3:2 and 2:3 ratio
-        else if (minR <= 0.75 && minR > 0.6667) {
-            if (bw > bh) {
-                ratio = '2-3';
-            } else {
-                ratio = '3-2';
-            }
-        }
-        // 5:3 and 3:5 ratio
-        else if (minR <= 0.6667 && minR > 0.6) {
-            if (bw > bh) {
-                ratio = '5-3';
-            } else {
-                ratio = '3-5';
-            }
-        }
-        // 16:9 and 9:16 ratio
-        else if (minR <= 0.6 && minR > 0.5625) {
-            if (bw > bh) {
-                ratio = '16-9';
-            } else {
-                ratio = '9-16';
-            }
-        }
-        // 16:10 and 10:16 ratio
-        else if (minR <= 0.5625 && minR > 0.4864) {
-            if (bw > bh) {
-                ratio = '16-10';
-            } else {
-                ratio = '10-16';
-            }
-        }
-        // 1:2 and 2:1 ratio
-        else if (minR <= 0.4864 && minR > 0.3333) {
-            if (bw > bh) {
-                ratio = '2-1';
-            } else {
-                ratio = '1-2';
-            }
-        }
-        // 1:4 and 4:1 ratio
-        else if (minR <= 0.3333 && minR > 0.2) {
-            if (bw > bh) {
-                ratio = '4-1';
-            } else {
-                ratio = '1-4';
-            }
-        }
-        // 1:6 and 6:1 ratio
-        else if (minR <= 0.2 && minR > 0.1428) {
-            if (bw > bh) {
-                ratio = '6-1';
-            } else {
-                ratio = '1-6';
-            }
-        }
-        // 1:8 and 8:1 ratio
-        else if (minR <= 0.1428 && minR > 0.1111) {
-            if (bw > bh) {
-                ratio = '8-1';
-            } else {
-                ratio = '1-8';
-            }
-        }
-        // 1:10 and 10:1 ratio
-        else if (minR <= 0.1111 && minR > 0) {
-            if (bw > bh) {
-                ratio = '10-1';
-            } else {
-                ratio = '1-10';
-            }
-        }
+        var ratio = getRatio();
         console.log('ratio', ratio)
         var hasRatio = false;
         for (var i = 0; i < arr.ratios.length; i++) {
@@ -232,12 +134,13 @@ export default {
               var layers = arr.ratios[i].layers
              
               for (var j = 0; j < layers.length; j++) {
-                console.log('layers[j]:',layers[j]);
+                // console.log('layers[j]:',layers[j]);
                   var elem = document.getElementById(layers[j].id)
-                  elem.style.top = layers[j].y + 'px';
-                  elem.style.left = layers[j].x + 'px';
-                  elem.style.width = layers[j].width + 'px';
-                  elem.style.height = layers[j].height + 'px';
+                  elem.style.top = getPercInH(arr.ratios[i].height, layers[j].y) + 'px';
+                  elem.style.left = getPercInW(arr.ratios[i].width, layers[j].x) + 'px';
+                  elem.style.width = getPercInW(arr.ratios[i].width, layers[j].width) + 'px';
+                  elem.style.height = getPercInH(arr.ratios[i].height, layers[j].height) + 'px';
+                  
                   var shape = elem.querySelector('.shape');
                   if (shape) {
                     shape.style.background = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
@@ -248,7 +151,7 @@ export default {
                   if (layers[j].isBackground) {
                       elem.style.height = bh + 'px';
                       elem.style.width = bw + 'px';
-                      console.log('elem:', elem)
+                      // console.log('elem:', elem)
                   }
               }
               hasRatio = true;
@@ -268,37 +171,70 @@ export default {
             elem.style.height = layers[j].height + 'px';
             var shape = elem.querySelector('.shape');
             if (shape) {
-                console.log(layers[j].attributes.isGradient, shape)
+                // console.log(layers[j].attributes.isGradient, shape)
                 shape.style.background = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
             }
             if (layers[j].isBackground) {
                 elem.style.height = bh + 'px';
                 elem.style.width = bw + 'px';
-                console.log('elem:', elem)
+                // console.log('elem:', elem)
             }
           }
         }
-      }
+    }
 
-      function getLayerType(elem) {
+    function getPercInW(bV, eV) {
+      // console.log('getPercInW', bV, eV)
+      var perc = (eV / parseInt(bV));
+      // console.log('perc', perc);
+      var cW = window.innerWidth;
+     // console.log('cW', cW);
+      // console.log(cW * perc);
+      return Math.round(cW * perc);
+    }
+
+    function getPercInH(bV, eV) {
+      var perc = (eV / parseInt(bV));
+      var cH = window.innerHeight;
+      return Math.round(cH * perc);
+    }
+
+    function getRatio () {
+       var gcd = function(a, b) {
+         return (b == 0) ? a : gcd (b, a%b);
+       };
+
+       var w = window.innerWidth, h = window.innerHeight;
+       return w/gcd(w, h) + '-' + h/gcd(w, h); 
+    }
+
+    function toWPercent(val) {
+        return val / window.innerWidth * 100;
+    }
+
+    function toHPercent(val) {
+        return val / window.innerHeight * 100;
+    }
+
+    function getLayerType(elem) {
         if (elem.className !== 'rr-content') {
           throw new Error('rr content expeected');
         }
         return elem.children[0].id;
-      }
-      function getFontSize(elemContent) {
+    }
+    function getFontSize(elemContent) {
         if (elemContent.children[0].id !== 'text') return 0;
 
         return parseInt(elemContent.children[0].style.fontSize.replace('px', ''));
-      }
-      function _clean(elem) {
+    }
+    function _clean(elem) {
         var count = 1;
         console.log("elem.getElementsByTagName('comment')", elem.getElementsByTagName('comment'))
         // while (count > 0) {
         //   count = elem.getElementsByTagName('comment');
         // }
-      }
-        function _p() {
+    }
+    function _p() {
         document.getElementsByTagName('body')[0].style.overflow = 'hidden';
         // var gsap = new TimelineMax();
         // var elem1 = document.getElementsByClassName('rr-resizer');
@@ -308,21 +244,16 @@ export default {
         editor.style.width = '100%';
         editor.style.height = '100%';
         for (var i = 0; i < editable_elements.length; i++) {
-        editable_elements[i].setAttribute("contenteditable", false);
+          editable_elements[i].setAttribute("contenteditable", false);
         }
-        // removing editor's data
-        // var tohide = document.getElementsByClassName('handle-tt');
-        // for (var i = 0; i < tohide.length; i++) {
-        //   tohide[i].style.display="none"
-        //   }
-        }
-        window.onload = function() {
-          _p();
+      }
+      window.onload = function() {
+        _p();
         fnResize();
-        }
-        timeout = false, // holder for timeout id
-        delay = 250;
-        window.addEventListener('resize', function() {
+      }
+      timeout = false, // holder for timeout id
+      delay = 250;
+      window.addEventListener('resize', function() {
           clearTimeout(timeout);
           timeout = setTimeout(fnResize, delay);
       });
