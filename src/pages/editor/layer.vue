@@ -228,13 +228,16 @@ export default {
     },
     rotateStarted() {
       // starting point 
-       this.$_recordEvent();
+      this.$_recordEvent();
+      this.$emit('scaling', this.selectedLayer)
     },
     rotated(deg) {
-      this.selectedLayer.attributes.rotation = deg;
+      // this.selectedLayer.attributes.rotation = deg;
+      this.$emit('scaling', this.selectedLayer)
     },
     rotateEnded() {
-       this.$_recordEvent();
+      this.$_recordEvent();
+      this.$emit('scaling', null)
     },
     dragStarted() {
       this.isDragging = true;
@@ -256,13 +259,16 @@ export default {
     },
     resizeStarted() {
       this.$_recordEvent();
+      this.$emit('scaling', this.selectedLayer)
     },
     resizing(left, top, width, height) {
       this.selectedLayer.width = width;
       this.selectedLayer.height = height;
+      this.$emit('scaling', this.selectedLayer)
     },
     resizeEnded(left, top, width, height) {
       this.$_recordEvent();
+      this.$emit('scaling', null)
     },
     onShowXGridLine(show, x) {
       this.$emit('onShowXGridLine', this.selectedLayer, show, x);
