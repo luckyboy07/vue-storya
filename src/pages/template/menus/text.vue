@@ -343,7 +343,9 @@ export default {
   },
   beforeMount() {
     this.attrs = this.data.attributes;
-    this.availableFonts = fontHelper.getFonts();
+    window.setTimeout(() => {
+      this.availableFonts = fontHelper.getFonts();
+    }, 1000);
     // for the color picker to hide
     document.addEventListener('mousedown', this.hidePicker);
   },
@@ -386,7 +388,8 @@ export default {
         value: '',
         value1: '',
         value3: '',
-        options:['Manual','Automatic','test','TEst 2']
+        options:['Manual','Automatic','test','TEst 2'],
+        availableFonts: [],
       }
   },
   computed: {
