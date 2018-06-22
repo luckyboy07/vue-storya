@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%; height: 100%;position: absolute;">
-    <img ref="img" :src="layerData.image.url ? layerData.image.url : require('../../assets/img_default.jpeg')"  :style="getStyle()"/>
+    <img ref="img" class="img-sel" :src="layerData.image.url ? layerData.image.url : require('../../assets/img_default.jpeg')"  :style="getStyle()"/>
     <div class="img-layer-cover">
       <mu-circular-progress v-show="!layerData.loaded" :size="40" style="position: absolute;margin: auto;left: 0;right: 0;top: 0;bottom: 0;"/>
     </div>

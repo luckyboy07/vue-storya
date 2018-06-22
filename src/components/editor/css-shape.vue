@@ -1,6 +1,6 @@
 <template>
   <div class="shape-container" id="sp1">
-    <div v-if="data.attributes.shape === 'Rectangle'" class="shape" :style="getRectangleStyle()"></div>
+    <div v-if="data.attributes.shape === 'Rectangle'" class="shape" :style="getRectangleStyle()" ></div>
     <div v-if="data.attributes.shape === 'Circle'" class="shape" :style="getCircleStyle()"></div>
     <div v-if="data.attributes.shape === 'Triangle'" class="shape" :style="getTriangleStyle()"></div>
     <div v-if="data.attributes.shape === 'Trapezoid'" :style="getTrapeziodStyle()"></div>

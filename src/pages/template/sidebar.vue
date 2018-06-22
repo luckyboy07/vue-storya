@@ -56,7 +56,7 @@
         @onRenameOrDelete="onRenameOrDelete"
         @mousedown.native="selectLayer(layer, $event)">
       </component>
-      <div @click="setBackgroundImage()" v-show="checkBackgroundImage(layers)">
+      <div @click="setBackgroundImage()" v-if="checkBackgroundImage(layers)">
              <mu-flexbox >
                   <mu-flexbox-item class="flex-container" > 
                       + Add Background Image
@@ -459,13 +459,24 @@ export default {
     },
     checkBackgroundImage (layers) {
       if(layers.length > 0) {
-       layers.forEach((value) => {
-         if (value.isBackground) {
-           return false
-         }else {
-           return true
-         }
-        })
+      let bol = layers.filter(e=> e.isBackground);
+      console.log('bol:',bol)
+      if(bol.length >0) {
+          return false
+      }else{
+        return true
+      }
+      //  layers.forEach((value) => {
+      //    console.log('value:',value)
+      //    if (value.isBackground) {
+      //      bol= false
+      //      return 
+      //    }else {
+      //     bol =  true
+      //     return
+      //    }
+      //   })
+      //    return bol
       }else {
         return true
       }

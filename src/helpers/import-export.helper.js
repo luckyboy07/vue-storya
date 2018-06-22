@@ -135,6 +135,7 @@ export default {
              
               for (var j = 0; j < layers.length; j++) {
                 // console.log('layers[j]:',layers[j]);
+                 let attr = layers[j].attributes;
                   var elem = document.getElementById(layers[j].id)
                   elem.style.top = getPercInH(arr.ratios[i].height, layers[j].y) + 'px';
                   elem.style.left = getPercInW(arr.ratios[i].width, layers[j].x) + 'px';
@@ -142,12 +143,24 @@ export default {
                   elem.style.height = getPercInH(arr.ratios[i].height, layers[j].height) + 'px';
                   
                   var shape = elem.querySelector('.shape');
+                  var im = elem.querySelector('.img-sel');
                   if (shape) {
                     shape.style.background = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
                   }
-                  // if(layers[j].type == 'text') {
-                    
-                  // }
+                  if(layers[j].type == 'image') {
+                    console.log('image', im);
+                    var shadows = attr.shadowSize > 0 ? '1px 12px '+attr.shadowSize+'px '+attr.shadowColor : ''
+                    im.style.borderColor = attr.borderColor;
+                    im.style.borderWidth = attr.borderWidth;
+                    im.style.borderStyle = attr.borderStyle;
+                    im.style.objectFit = attr.objectFit.toLowerCase();
+                    im.style.opacity =  layers[j].loaded ? attr.opacity : 0.5
+                    im.style.rotation = attr.rotation;
+                    im.style.shadowColor = attr.shadowColor;
+                    im.style.sizeOption = attr.sizeOption;
+                    im.style.boxShadow = attr.shadowColor ? shadows : '';
+                    im.style.filter = "blur(" + attr.filterBlur + "px)";
+                  }
                   if (layers[j].isBackground) {
                       elem.style.height = bh + 'px';
                       elem.style.width = bw + 'px';
