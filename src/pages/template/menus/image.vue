@@ -6,25 +6,12 @@
           <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
         <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.selected && !data.islocked ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
         <mu-list-item  slot="nested"  class="paddingZero minHytZero">
-             <file-upload
-                extensions="gif,jpg,jpeg,png,webp"
-                accept="image/png,image/gif,image/jpeg,image/webp"
-                :size="1024 * 1024 * 10"
-                @input="fileInputted"
-                @input-filter="inputFilter"
-                @input-file="inputFile"
-                :multiple="false"
-                :drop="true"
-                :drop-directory="true"
-                ref="upload"
-                :post-action="'http://206.189.153.177:4000/canvas/4/media'" style="width: 100%">
-            <mu-flexbox class="flx">
-              <mu-flexbox-item class="flex-container"> 
-               <mu-linear-progress style="display: inline-flex;" v-show="!data.loaded"></mu-linear-progress>
-                <span v-show="data.loaded">+ Drag and Drop Images</span>
-              </mu-flexbox-item>
-          </mu-flexbox>
-        </file-upload>
+        <div class="inp-container">
+         <input accept="image/x-png,image/gif,image/jpeg" id="file" name="file" class="inp-upload" type="file" @change="uploadFile"/>
+         <label for="file" @click="checkUploadingStatus" @dragover="handleDrag" @drop="handleDrop">
+           + Drag and Drop
+          </label>
+        </div>
         </mu-list-item>
          <!-- <mu-list-item  slot="nested"  class="paddingZero" v-no-ripple>
             <div class="gridlist-demo-container">
@@ -285,8 +272,9 @@
   import FileUpload from 'vue-upload-component'
 import { mapGetters, mapMutations} from 'vuex'
 import animationHelper from '../../../helpers/animation'
-import restHelper from '../../../helpers/rest.helper'
+import uploadHelper from '../../../helpers/image-upload-helper'
 import colorHelper from '../../../helpers/color-helper';
+import $ from 'linq'
 import axios from 'axios';
 Vue.component('file-upload', FileUpload)
 export default {
@@ -322,11 +310,6 @@ export default {
   mounted (){
      // for the context menu to show only on the title part
     this.$el.querySelector(".mu-item-wrapper").addEventListener('contextmenu', this.showMenu);
-    this.$nextTick(() => {
-      if (this.$refs.upload) {
-        this.$refs.upload.$el.addEventListener('click', this.checkUploadingStatus);
-      }
-    });
   },
    computed: {
     ...mapGetters(['getLayers']),
@@ -425,29 +408,6 @@ export default {
         animationHelper.stopAnimation(this.data);
       }
     },
-    fileInputted() {
-      // console.log('fileInputted')
-    },
-    inputFilter(newFile, oldFile, prevent) {
-      this.data.loaded = false;
-      // console.log('inputFilter',)
-      if (newFile && !oldFile) {
-        if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
-          this.alert('Your choice is not a picture')
-          return prevent()
-        }
-      }
-      // this.save(newFile)
-      //  && (!oldFile || newFile.file !== oldFile.file)
-      if (newFile) {
-       if (newFile.progress === '100.00' && newFile.response.statusCode === 201) {
-        this.data.image = newFile.response.response.data;
-       } 
-      }
-    },
-    inputFile(newFile, oldFile,prevent) {
-         this.$refs.upload.active = true
-    },
     createPreview(anim, changed) {
       if (this.data.attributes.animation.playing) {
         animationHelper.stopAnimation(this.data);
@@ -465,10 +425,28 @@ export default {
     invertColor(hex) {
       return colorHelper.invertColor(hex);
     },
+    updateStatus(e) {
+      this.data.loaded= false;
+    },
     checkUploadingStatus(e) {
       if (!this.data.loaded)  e.preventDefault()
-    }
-  },
+    },
+    uploadFile(e) {
+      this.data.loaded= false;
+      uploadHelper.upload(this.data.id, e.target.files[0], '/canvas/4/media', this.getLayers);
+    },
+    handleDrag(e) {
+      e.preventDefault();
+    },
+    handleDrop(e) {
+      e.preventDefault();
+      if (e.dataTransfer.items[0].kind === 'file') {
+        var file = e.dataTransfer.items[0].getAsFile();
+        this.data.loaded= false;
+        uploadHelper.upload(this.data.id, file, '/canvas/4/media', this.getLayers);
+      }
+    },
+  }
 }
 </script>
 <style scoped>

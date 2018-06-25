@@ -1,4 +1,4 @@
-import axious from 'axios'
+import axios from 'axios'
 export default {
     cancelTokens: [], // cancel tokens, use for cancelling a request
     config: {
@@ -8,7 +8,7 @@ export default {
     },
     get(url, param = {}) {
         return new Promise((resolve, reject) => {
-            axious.get(url)
+            axios.get(url)
                 .then((response) => {
                     console.log('success', response)
                     resolve(response)
@@ -23,22 +23,26 @@ export default {
 
     },
     post(url, param, contentType = 'application/json') {
-        if (typeof param !== 'object') {
-            console.warn('Object is require for http post');
+        // if (typeof param !== 'object') {
+        //     console.warn('Object is require for http post');
+        // }
+        var formBox = new FormData();
+        if (contentType == "multipart/form-data") {
+            formBox.append('file', param);
         }
+        console.log('formBox', formBox)
         return new Promise((resolve, reject) => {
-
             return axios({
                     method: 'post',
                     url: this.getCompleteUrl(url),
-                    data: contentType == "multipart/form-data" ? formBox : _data,
+                    data: contentType == "multipart/form-data" ? formBox : param,
                     headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': contentType }
                 })
-                .then(function(response) {
+                .then((response) => {
                     resolve(this.$_getReponseData(response));
                 })
-                .catch(function(error) {
-                    reject(err)
+                .catch((error) => {
+                    reject(error)
                 });
 
             // axious.post(this.getCompleteUrl(url), param)
