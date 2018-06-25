@@ -2,11 +2,22 @@
   <div style="width: 100%; height: 100%;position: absolute;">
     <img ref="img" class="img-sel" :src="layerData.image.url ? layerData.image.url : require('../../assets/img_default.jpeg')"  :style="getStyle()"/>
     <div class="img-layer-cover">
-      <!-- <mu-circular-progress v-show="!layerData.loaded" :size="40" style="position: absolute;margin: auto;left: 0;right: 0;top: 0;bottom: 0;"/> -->
+      <loading-progress v-show="!layerData.loaded && layerData.width > 60 && layerData.height > 30"
+        style="position: absolute;margin: auto;left: 0;right: 0;top: 0;bottom: 0;"
+        :progress="100"
+        :indeterminate="true"
+        :counter-clockwise="false"
+        :hide-background="false"
+        :size="getSize()"
+        rotate
+        fillDuration="2"
+        rotationDuration="1"
+      />
     </div>
   </div>
 </template>
 <script>
+
 import {mapGetters} from 'vuex'
 import appHelper from '../../helpers/app.helper.js'
 import undoRedo from '../../helpers/undo-redo.js'
@@ -21,9 +32,12 @@ export default {
   },
   mounted () {
     this.oldLayerData = appHelper.cloneLayer(this.layerData);
-    this.$refs.img.onload = () => {
-      this.layerData.loaded = true;
-    }
+    // this.$refs.img.onload = () => {
+    //   this.layerData.loaded = true;
+    // }
+    //  this.$el.querySelector('.img-sel').addEventListener('load', () => {
+    //    console.log('loaded', this.layerData.id)
+    //  });
   },
   methods: {
       getStyle () {
@@ -46,6 +60,22 @@ export default {
           }
         //   return this.layer
         //   return this.layerData 
+      },
+      bindLoadedEvent(data) {
+        var img = this.$el.querySelector('.img-sel');
+        img.addEventListener('load', () => {
+          console.log('img loaded', this.layerData.id)
+           this.layerData.loaded = true;
+        });
+        // this.$nextTick(() => {
+        //   var img = this.$el.querySelector('.img-sel');
+        //   console.log(img, this.layerData.id);
+        //   this.layerData.loaded = true;
+        // });
+      },
+      getSize() {
+        var min = Math.min(this.layerData.width, this.layerData.height);
+        return min / 2;
       },
   },
   computed: {
@@ -86,6 +116,12 @@ export default {
         this.oldLayerData = this.layerData;
       },
       deep: true
+    },
+    "layerData.image.url": function(e) {
+      this.bindLoadedEvent(this.layerData)
+    },
+    "layerData.loaded": function(val) {
+      console.log('layerData.loaded', val)
     },
   },
 }

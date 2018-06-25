@@ -36,6 +36,10 @@ Vue.use(ToggleButton)
 Vue.use(LayerComponent)
 Vue.component('multiselect', Multiselect)
 Vue.component('rotatable-resizer', RotatableResizer)
+    // custom circle progress
+import VueProgress from 'vue-progress-path'
+import 'vue-progress-path/dist/vue-progress-path.css'
+Vue.use(VueProgress)
     /* eslint-disable no-new */
     // filter if mobile
     // just show something abno hahaha

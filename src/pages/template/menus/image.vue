@@ -6,7 +6,7 @@
           <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
         <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.selected && !data.islocked ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
         <mu-list-item  slot="nested"  class="paddingZero minHytZero">
-             <file-upload
+             <file-upload @click.native="checkUploadingStatus" @change.native="updateStatus"
                 extensions="gif,jpg,jpeg,png,webp"
                 accept="image/png,image/gif,image/jpeg,image/webp"
                 :size="1024 * 1024 * 10"
@@ -322,11 +322,6 @@ export default {
   mounted (){
      // for the context menu to show only on the title part
     this.$el.querySelector(".mu-item-wrapper").addEventListener('contextmenu', this.showMenu);
-    this.$nextTick(() => {
-      if (this.$refs.upload) {
-        this.$refs.upload.$el.addEventListener('click', this.checkUploadingStatus);
-      }
-    });
   },
    computed: {
     ...mapGetters(['getLayers']),
@@ -425,11 +420,9 @@ export default {
         animationHelper.stopAnimation(this.data);
       }
     },
-    fileInputted() {
-      // console.log('fileInputted')
+    fileInputted(v, v1, v2) {
     },
     inputFilter(newFile, oldFile, prevent) {
-      this.data.loaded = false;
       // console.log('inputFilter',)
       if (newFile && !oldFile) {
         if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
@@ -446,7 +439,7 @@ export default {
       }
     },
     inputFile(newFile, oldFile,prevent) {
-         this.$refs.upload.active = true
+        this.$refs.upload.active = true
     },
     createPreview(anim, changed) {
       if (this.data.attributes.animation.playing) {
@@ -464,6 +457,9 @@ export default {
     },
     invertColor(hex) {
       return colorHelper.invertColor(hex);
+    },
+    updateStatus(e) {
+      this.data.loaded= false;
     },
     checkUploadingStatus(e) {
       if (!this.data.loaded)  e.preventDefault()
