@@ -10,8 +10,8 @@
       top: state.top + 'px',
       width: state.width + 'px',
       height: state.height + 'px',
-      zIndex: state.z
-     }">
+      zIndex: state.z,
+     }" @mouseover="onFocus(active)" @mouseout="onFocusOut">
     <div class="rr-bar rr-ord-n" key="bar-n">
     </div>
     <div class="rr-bar rr-ord-s" key="bar-s"></div>
