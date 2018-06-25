@@ -40,10 +40,10 @@
             <mu-grid-list class="right">
               <div class="input-container">
                     <span class="labelSpyker">W:</span>
-                    <input spellcheck="false" class="inputSpyker" v-model="data.width">
+                    <input spellcheck="false" class="inputSpyker" v-model.number="data.width" type="number">
                     <mu-icon slot="left" value="link" class="iconSpyker"/>
                     <span class="labelSpyker">H:</span>
-                    <input spellcheck="false" class="inputSpyker"  v-model="data.height">
+                    <input spellcheck="false" class="inputSpyker"  v-model.number="data.height" type="number">
               </div>
             </mu-grid-list>
           </div>

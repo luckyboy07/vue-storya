@@ -4,6 +4,7 @@
     <rotatable-resizer 
       :id="elem.id"
       :islocked="elem.isBackground ? false :elem.islocked"
+      :active="elem.selected"
       :disabled="!elem.selected" 
       :rotatable="!elem.islocked"
       :draggable="!elem.islocked"
@@ -22,7 +23,8 @@
       @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
       @dragStarted="dragStarted" @dragging="dragging" @dragEnded="dragEnded"
       @resizeStarted="resizeStarted" @resizing="resizing" @resizeEnded="resizeEnded"
-      @showXGridLine="onShowXGridLine" @showYGridLine="onShowYGridLine">
+      @showXGridLine="onShowXGridLine" @showYGridLine="onShowYGridLine"
+      @onItemOutOfTheBox="onItemOutOfTheBox">
 
       <!-- shape layer :shape="[elem.attributes[0].value.split(' ')[0].toLowerCase(),elem.attributes]" -->
       <!-- <shape id="shape"  v-if="elem.type ==='shape'" :data="elem">
@@ -270,11 +272,14 @@ export default {
       this.$_recordEvent();
       this.$emit('scaling', null)
     },
-    onShowXGridLine(show, x) {
-      this.$emit('onShowXGridLine', this.selectedLayer, show, x);
+    onShowXGridLine(show, x, precise) {
+      this.$emit('onShowXGridLine', this.selectedLayer, show, x, precise);
     },
-    onShowYGridLine(show, y) {
-       this.$emit('onShowYGridLine', this.selectedLayer, show, y);
+    onShowYGridLine(show, y, precise) {
+       this.$emit('onShowYGridLine', this.selectedLayer, show, y, precise);
+    },
+    onItemOutOfTheBox(show) {
+      this.$emit('onItemOutOfTheBox', show)
     },
     // record event to undo/redo module
     $_recordEvent() {

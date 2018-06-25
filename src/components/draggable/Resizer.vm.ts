@@ -75,6 +75,7 @@ export default {
   },
   data() {
     const state: ResizerState = new ResizerState({
+      active: this.active,
       left: this.left,
       top: this.top,
       width: this.width,
@@ -103,7 +104,7 @@ export default {
       this.$nextTick(() => this.bindResizeEvent());
     });
 
-    const STATE_PROPS = ['width', 'height', 'rotation', 'left', 'top','z', 'zoom'];
+    const STATE_PROPS = ['active', 'width', 'height', 'rotation', 'left', 'top','z', 'zoom'];
     STATE_PROPS.forEach((prop) => {
       this.$watch(prop, function(val) {
         if (!this.dragging) {
@@ -178,6 +179,16 @@ export default {
     }
   },
   methods: {
+    onFocus(e: any) {
+      if (!e) {
+        this.$el.style.outline = 'thin grey dashed';
+      }
+    },
+
+    onFocusOut(e: any) {
+      this.$el.style.outline = null;
+    },
+    
     emitInputEvent(rect: Rect) {
       this.$emit('input', rect);
     },
@@ -193,6 +204,9 @@ export default {
     emitActivated() {
       this.$emit("activated");
       this.$emit("focused", this.$el, {id: this.$el.id, islocked: this.islocked});
+
+      // removing mouseover focus outline
+      this.$el.style.outline = null;
     },
 
     emitRotateStated() {
@@ -230,12 +244,16 @@ export default {
       this.$emit('resizeEnded', left, top, width, height);
     },
 
-    emitShowLeftGridLine(showLeft, left) {
-      this.$emit('showXGridLine', showLeft, left);
+    emitShowLeftGridLine(showLeft, left, precise) {
+      this.$emit('showXGridLine', showLeft, left, precise);
     },
 
-    emitShowRightGridLine(showRight, right) {
-      this.$emit('showYGridLine', showRight, right);
+    emitShowRightGridLine(showRight, right, precise) {
+      this.$emit('showYGridLine', showRight, right, precise);
+    },
+
+    emitOnItemOutOfTheBox(show) {
+      this.$emit('onItemOutOfTheBox', show);
     },
 
     setOctantValue(deg) {
@@ -409,27 +427,48 @@ export default {
           // pilit2 style XD
           self.emitShowLeftGridLine(false);
           self.emitShowRightGridLine(false);
+          self.emitOnItemOutOfTheBox(false);
 
           var cX = rect.left + rect.width / 2;
           var cY = rect.top + rect.height / 2;
           // X
-          if (cX - 15 <=  (pW / 4) && (cX + 15 >=  (pW / 4))) {
+          if (rect.left <= 3 && rect.left >= -3) {
+            rect.left = 0;
+            self.emitShowLeftGridLine(true, 0);
+          }
+          if (rect.left + rect.width >= pW - 3 && rect.left + rect.width <= pW + 3) {
+            rect.left = pW - rect.width;
+            self.emitShowLeftGridLine(true,rect.width, true);
+          }
+
+          if (cX - 10 <=  (pW / 4) && (cX + 10 >=  (pW / 4))) {
             rect.left = (pW / 4) - rect.width / 2;
             self.emitShowLeftGridLine(true, (pW / 4));
           }
 
-          if (cX - 15 <=  (pW / 2) && (cX + 15 >=  (pW / 2))) {
+          if (cX - 10 <=  (pW / 2) && (cX + 10 >=  (pW / 2))) {
             rect.left = (pW / 2) - rect.width / 2;
             self.emitShowLeftGridLine(true, (pW / 2));
           }
 
-          if (cX - 15 <= pW - (pW / 4) && (cX + 15 >= pW - (pW / 4))) {
+          if (cX - 10 <= pW - (pW / 4) && (cX + 10 >= pW - (pW / 4))) {
             rect.left = pW - (pW / 4) - rect.width / 2;
             self.emitShowLeftGridLine(true, pW - (pW / 4));
           }
 
           // Y
-          if (cY - 15 <=  (pH / 4) && (cY + 15 >=  (pH / 4))) {
+          // console.log(rect.left, pW - 3, pW + 3)
+          if (rect.top <= 3 && rect.top >= -3) {
+            rect.top = 0;
+            self.emitShowRightGridLine(true, 0, true);
+          }
+
+          if (rect.top + rect.height >= pH - 3 && rect.top + rect.height <= pH + 3) {
+            rect.top = pH - rect.height;
+            self.emitShowRightGridLine(true,rect.height, true);
+          }
+
+          if (cY - 10 <=  (pH / 4) && (cY + 10 >=  (pH / 4))) {
             rect.top = (pH / 4) - rect.height / 2;
             self.emitShowRightGridLine(true,  (pH / 4));
           }
@@ -439,9 +478,16 @@ export default {
             self.emitShowRightGridLine(true,  (pH / 2));
           }
 
-          if (cY - 15 <= pH - (pH / 4) && (cY + 15 >= pH - (pH / 4))) {
+          if (cY - 10 <= pH - (pH / 4) && (cY + 10 >= pH - (pH / 4))) {
             rect.top = pH - (pH / 4) - rect.height / 2;
             self.emitShowRightGridLine(true,  pH - (pH / 4));
+          }
+
+          // showing a border when an element is out of the box when dragging
+          if ( (rect.left + rect.width < 0) || 
+               (rect.top + rect.height < 0) || 
+               (rect.left > pW) || (rect.top > pH) ) {
+            self.emitOnItemOutOfTheBox(true);
           }
 
           dom.style.left = rect.left + 'px';
@@ -464,6 +510,7 @@ export default {
           self.isDragging = false;
           self.emitShowLeftGridLine(false);
           self.emitShowRightGridLine(false);
+          self.emitOnItemOutOfTheBox(false);
         }
       });
     },

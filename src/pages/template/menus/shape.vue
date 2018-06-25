@@ -23,12 +23,12 @@
                         <span class="labelSpyker">W:</span>
                         <input :class="[{'inp-edit-disabled':data.attributes.sizeOption === 'Auto'}]" 
                           :disabled="data.attributes.sizeOption === 'Auto'" spellcheck="false" class="inputSpyker"
-                          v-digitsonly v-model="data.width">
+                          v-digitsonly v-model.number="data.width" type="number">
                         <mu-icon slot="left" value="link" class="iconSpyker"/>
                         <span class="labelSpyker">H:</span>
                         <input :class="[{'inp-edit-disabled':data.attributes.sizeOption === 'Auto'}]" 
                           :disabled="data.attributes.sizeOption === 'Auto'" spellcheck="false" class="inputSpyker"
-                          v-digitsonly v-model="data.height">
+                          v-digitsonly v-model.number="data.height" type="number">
                   </div>
                 </mu-grid-list>
                 </div>
