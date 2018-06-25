@@ -62,16 +62,15 @@ export default {
         //   return this.layerData 
       },
       bindLoadedEvent(data) {
-        var img = this.$el.querySelector('.img-sel');
-        img.addEventListener('load', () => {
-          console.log('img loaded', this.layerData.id)
-           this.layerData.loaded = true;
-        });
-        // this.$nextTick(() => {
-        //   var img = this.$el.querySelector('.img-sel');
-        //   console.log(img, this.layerData.id);
-        //   this.layerData.loaded = true;
-        // });
+        var img = new Image();
+         img.onload = () => {
+          this.layerData.loaded = true;
+         };
+          img.onerror = () => {
+            this.layerData.loaded = true;
+          };
+
+          img.src = data.image.url;
       },
       getSize() {
         var min = Math.min(this.layerData.width, this.layerData.height);
@@ -119,9 +118,6 @@ export default {
     },
     "layerData.image.url": function(e) {
       this.bindLoadedEvent(this.layerData)
-    },
-    "layerData.loaded": function(val) {
-      console.log('layerData.loaded', val)
     },
   },
 }

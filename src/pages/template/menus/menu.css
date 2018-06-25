@@ -100,3 +100,26 @@ input {
         transform: rotate(0);
     }
 }
+
+.inp-container {
+    display: inline;
+}
+
+.inp-upload {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    /* position: absolute; */
+    z-index: -1;
+}
+
+.inp-upload+label {
+    color: white;
+    display: inline-block;
+    outline: thin dashed #616161;
+    text-align: center;
+    width: 100%;
+    height: 32px;
+    padding-top: 3px;
+}
