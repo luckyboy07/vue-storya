@@ -434,7 +434,7 @@ export default {
           // X
           if (rect.left <= 3 && rect.left >= -3) {
             rect.left = 0;
-            self.emitShowLeftGridLine(true, 0);
+            self.emitShowLeftGridLine(true, 0, true);
           }
           if (rect.left + rect.width >= pW - 3 && rect.left + rect.width <= pW + 3) {
             rect.left = pW - rect.width;
