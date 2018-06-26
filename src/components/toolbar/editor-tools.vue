@@ -341,8 +341,8 @@ export default {
       } else if (this.editorData.isResponsive && this.editorData.selectedRatio) {
           for (let i=0;i<ratios.length;i++) {
              if (this.editorData.selectedRatio === ratios[i].name){
-               console.log(';ASDASD',ratios[i].layers)
-               this.editorData.zoom = ratios[i].zoom;
+               console.log(';ASDASD',ratios[i].zoom)
+               this.editorData.zoom = 100;
                zoom = this.editorData.zoom;
                 // this.editorData.layers = JSON.parse(JSON.stringify(ratios[i].layers))
                 this.updateLayers(ratios[i].layers)
@@ -350,6 +350,7 @@ export default {
              } 
           }
       }
+      zoom = zoom > 0 ? zoom : 100
        this.$refs.zoomInp.value = zoom + '%';
       this.savetoLocalstorage()
     },
@@ -410,7 +411,6 @@ export default {
       deep: true
     },
     "editorData.zoom": function(val) {
-      // console.log('this.editorData.zoom', this.editorData.zoom, this.editorData.isResponsive);
       if (!this.editorData.isResponsive) {
         this.editorData.originalZoom = val;
       } else {

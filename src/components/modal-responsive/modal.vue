@@ -449,7 +449,7 @@ export default {
                 width: this.ratioSelected.width
             }
             let clone = JSON.parse(JSON.stringify(this.layers))
-              let newLayer = []
+            let newLayer = []
                 clone.forEach(val => {
                     if(val.isBackground) {
                         val.width = parseInt(this.ratioSelected.width)+8
@@ -473,8 +473,8 @@ export default {
             }
 
             console.log('this.ratioSelected:',this.ratioSelected)
-            this.updateLayers(this.ratioSelected.layers)
              this.ratioSelected.zoom = 100
+            this.updateLayers(this.ratioSelected.layers)
             this.ratioSelected.isPick = true
             this.template.ratios.push(this.ratioSelected)
             this.currentElement.target.removeAttribute('style')
