@@ -491,7 +491,7 @@ export default {
   opacity: 0.21;
 }
 .rename-inp {
-  position: absolute !important;
+  position: absolute;
   top: -20px;
   width: 150px;
   z-index: 9999;
@@ -516,10 +516,10 @@ export default {
     font-size: 14px;
 }
 .custom-icon-button{
-  width: 43px;
+  width: 43px ;
 }
 .pop-title{
-    margin-left: 50px;
+    margin-left: 50px ;
     font-size: 15px;
 }
 .mu-appbar-title {
@@ -549,9 +549,9 @@ export default {
 
 }
 .mu-popover {
-  left: 345px !important;
-  top: 115px !important;
-  background-color: #171616 !important;
+  left: 345px;
+  top: 115px;
+  background-color: #171616;
 }
 .mu-menu-list{
   width: 330px;

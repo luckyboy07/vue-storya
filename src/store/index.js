@@ -302,12 +302,10 @@ export const store = new Vuex.Store({
             let sam = layers.sort((a, b) => {
                 return b.order - a.order
             })
-            console.log('state.canvasData.ratios:', state.canvasData)
             let ratios = state.canvasData.ratios
             if (ratios.length > 0) {
                 for (let i = 0; i < ratios.length; i++) {
                     let ratiolayers = ratios[i].layers
-                    console.log('ratiolayers:', ratiolayers)
                     if (state.canvasData.selectedRatio === ratios[i].name) {
                         // ratiolayers.push(payload)
                         // ratiolayers.sort((a, b) => {
