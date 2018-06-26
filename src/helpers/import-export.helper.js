@@ -338,74 +338,154 @@ export default {
       var defaultLayerValues = [];
       function fnResize() {
         var ratio = getRatio();
-        console.log('ratio', ratio)
         var hasRatio = false;
         for (var i = 0; i < arr.ratios.length; i++) {
-          if (arr.ratios[i].name == ratio) {
-            console.log('applying', arr.ratios[i].name)
-              var layers = arr.ratios[i].layers
-             
-              for (var j = 0; j < layers.length; j++) {
-                // console.log('layers[j]:',layers[j]);
-                 let attr = layers[j].attributes;
-                  var elem = document.getElementById(layers[j].id)
-                  elem.style.top = getPercInH(arr.ratios[i].height, layers[j].y) + 'px';
-                  elem.style.left = getPercInW(arr.ratios[i].width, layers[j].x) + 'px';
-                  elem.style.width = getPercInW(arr.ratios[i].width, layers[j].width) + 'px';
-                  elem.style.height = getPercInH(arr.ratios[i].height, layers[j].height) + 'px';
-                  
-                  var shape = elem.querySelector('.shape');
-                  var im = elem.querySelector('.img-sel');
-                  var tex = elem.querySelector('.tl-container');
-                  console.log('shape:',shape);
-                  console.log('im:',im);
-                  console.log('tex:',tex);
-                  if (shape) {
-                    var bg = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')';
+            if (arr.ratios[i].name == ratio) {
+                console.log('applying', arr.ratios[i].name)
+                var layers = arr.ratios[i].layers
+
+                for (var j = 0; j < layers.length; j++) {
+                    // console.log('layers[j]:',layers[j]);
+                    let attr = layers[j].attributes;
+                    var elem = document.getElementById(layers[j].id)
+                    elem.style.top = getPercInH(arr.ratios[i].height, layers[j].y) + 'px';
+                    elem.style.left = getPercInW(arr.ratios[i].width, layers[j].x) + 'px';
+                    elem.style.width = getPercInW(arr.ratios[i].width, layers[j].width) + 'px';
+                    elem.style.height = getPercInH(arr.ratios[i].height, layers[j].height) + 'px';
+
+                    var shape = elem.querySelector('.shape');
+                    var im = elem.querySelector('.img-sel');
+                    var tex = elem.querySelector('.tl-container');
+                    if (shape) {
+                        var bg = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient(' + layers[j].attributes.gradientBackgroundData.rotation + 'deg,' + layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor + ' ' + layers[j].attributes.gradientBackgroundData.value[0] + '%,' + layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor + ' ' + layers[j].attributes.gradientBackgroundData.value[1] + '%)' + ', url(' + layers[j].attributes.backgroundImageUri.url + ')';
+                        shape.style.opacity = attr.opacity;
+                        shape.style.filter = "blur(" + attr.filterBlur + "px)";
+                        if (attr.shape === 'Rectangle' || attr.shape === 'Circle') {
+                            shape.style.background = bg
+                                // shape.style.backgroundBlendMode = 'multiply';
+                            shape.style.boxShadow = attr.shadowSize > 0 ? attr.shadowColor ? '1px 12px ' + attr.shadowSize + 'px ' + attr.shadowColor : '' : '';
+                            shape.style.border = attr.borderWidth + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
+                            // shape.style.backgroundSize = 'cover
+                        } else if (attr.shape === 'Triangle') {
+                            shape.style.borderLeft = (layers[j].width / 2) - .5 + 'px solid transparent';
+                            shape.style.borderRight = (layers[j].width / 2) + 'px solid transparent';
+                            shape.style.borderBottom = layers[j].height - 1 + 'px solid ' + bg;
+                        } else if (attr.shape === 'Trapezoid') {
+                            shape.style.borderBottom = layers[j].height - 1 + 'px solid' + bg;
+                            shape.style.borderLeft = layers[j].width / 3 + 'px solid transparent';
+                            shape.style.borderRight = layers[j].width / 3 + 'px solid transparent';
+                        } else if (attr.shape === 'Parallelogram') {
+                            shape.style.width = layers[j].width - 40 + 'px';
+                            shape.style.height = layers[j].height - 1 + 'px';
+                            shape.style.background = bg;
+                            shape.style.border = attr.borderWidth + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
+                        } else if (attr.shape === 'Diamond') {
+                            shape.style.width = Math.max(layers[j].height, layers[j].width) + 'px';
+                            shape.style.height = Math.max(layers[j].height, layers[j].width) + 'px';
+                            shape.backgroundColor = bg;
+                            shape.style.marginTop = Math.max(this.data.height, this.data.width) / 2 + 'px'
+                            shape.style.marginBottom = Math.max(this.data.height, this.data.width) / 2 + 'px'
+                        }
+                    }
+                    if (layers[j].type == 'image') {
+                        console.log('image', im);
+                        var shadows = attr.shadowSize > 0 ? '1px 12px ' + attr.shadowSize + 'px ' + attr.shadowColor : ''
+                        im.style.borderColor = attr.borderColor;
+                        im.style.borderWidth = attr.borderWidth;
+                        im.style.borderStyle = attr.borderStyle;
+                        im.style.objectFit = attr.objectFit.toLowerCase();
+                        im.style.opacity = layers[j].loaded ? attr.opacity : 0.5
+                        im.style.rotation = attr.rotation;
+                        im.style.shadowColor = attr.shadowColor;
+                        im.style.sizeOption = attr.sizeOption;
+                        im.style.boxShadow = attr.shadowColor ? shadows : '';
+                        im.style.filter = "blur(" + attr.filterBlur + "px)";
+                    }
+                    if (layers[j].type == 'text') {
+                        tex.style.opacity = attr.opacity;
+                        tex.style.fontFamily = attr.fontFamily;
+                        tex.style.fontSize = attr.fontSize;
+                        tex.style.fontWeight = attr.fontWeight;
+                        tex.style.fontStyle = attr.fontStyle;
+                        tex.style.textDecoration = attr.textDecoration;
+                        tex.style.textAlign = attr.textAlign;
+                        tex.style.lineHeight = attr.lineHeight;
+                        tex.style.color = attr.color;
+                        tex.style.filter = "blur(" + attr.filterBlur + "px)";
+                        tex.style.backgroundColor = attr.backgroundColor;
+                        tex.style.border = attr.borderSize + 'px ' + attr.borderStyle + ' ' + attr.borderColor;
+                        tex.style.textShadow = '' + attr.shadowSize + 'px' + ' ' + attr.shadowSize + 'px ' + attr.shadowSize + 'px ' + attr.shadowColor + ',' + attr.shadowSize + 'px ' + attr.shadowSize + 'px ' + attr.shadowSize + 'px ' + attr.shadowColor;
+                    }
+                    if (layers[j].isBackground) {
+                        elem.style.height = window.innerHeight + 'px';
+                        elem.style.width = window.innerWidth + 'px';
+                        // console.log('elem:', elem)
+                    }
+                }
+                hasRatio = true;
+            }
+        }
+        if (!hasRatio || ratio === '1-1') {
+            // apply original ratio here
+            var layers = original;
+            console.log('default layer', layers)
+            for (var j = 0; j < layers.length; j++) {
+                let attr = layers[j].attributes;
+                var elem = document.getElementById(layers[j].id)
+                elem.style.top = layers[j].y + 'px';
+                elem.style.left = layers[j].x + 'px';
+                elem.style.width = layers[j].width + 'px';
+                elem.style.height = layers[j].height + 'px';
+
+                var shape = elem.querySelector('.shape');
+                var im = elem.querySelector('.img-sel');
+                var tex = elem.querySelector('.tl-container');
+                if (shape) {
+                    var bg = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient(' + layers[j].attributes.gradientBackgroundData.rotation + 'deg,' + layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor + ' ' + layers[j].attributes.gradientBackgroundData.value[0] + '%,' + layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor + ' ' + layers[j].attributes.gradientBackgroundData.value[1] + '%)' + ', url(' + layers[j].attributes.backgroundImageUri.url + ')';
                     shape.style.opacity = attr.opacity;
                     shape.style.filter = "blur(" + attr.filterBlur + "px)";
-                    if(attr.shape === 'Rectangle' || attr.shape === 'Circle' ) {
-                      shape.style.background = bg
-                      // shape.style.backgroundBlendMode = 'multiply';
-                      shape.style.boxShadow = attr.shadowSize > 0 ? attr.shadowColor ? '1px 12px '+attr.shadowSize+'px '+attr.shadowColor : '' : '';
-                      shape.style.border = attr.borderWidth + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
-                      // shape.style.backgroundSize = 'cover
-                    }else if (attr.shape === 'Triangle') {
-                      shape.style.borderLeft = (layers[j].width / 2) - .5 + 'px solid transparent';
-                      shape.style.borderRight = (layers[j].width / 2) + 'px solid transparent';
-                      shape.style.borderBottom = layers[j].height - 1 + 'px solid ' + bg;
-                    }else if (attr.shape === 'Trapezoid') {
-                      shape.style.borderBottom = layers[j].height -1 + 'px solid'+bg;
-                      shape.style.borderLeft = layers[j].width / 3 + 'px solid transparent';
-                      shape.style.borderRight = layers[j].width / 3 + 'px solid transparent';
-                    }else if (attr.shape === 'Parallelogram') {
-                      shape.style.width = layers[j].width - 40 + 'px';
-                      shape.style.height = layers[j].height - 1 + 'px';
-                      shape.style.background = bg;
-                      shape.style.border = attr.borderWidth + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
-                    }else if (attr.shape === 'Diamond') {
-                      shape.style.width = Math.max(layers[j].height, layers[j].width)+ 'px';
-                      shape.style.height = Math.max(layers[j].height, layers[j].width)+ 'px';
-                      shape.backgroundColor = bg;
-                      shape.style.marginTop = Math.max(this.data.height, this.data.width) / 2 + 'px'
-                      shape.style.marginBottom = Math.max(this.data.height, this.data.width) / 2 + 'px'
+                    if (attr.shape === 'Rectangle' || attr.shape === 'Circle') {
+                        shape.style.background = bg
+                            // shape.style.backgroundBlendMode = 'multiply';
+                        shape.style.boxShadow = attr.shadowSize > 0 ? attr.shadowColor ? '1px 12px ' + attr.shadowSize + 'px ' + attr.shadowColor : '' : '';
+                        shape.style.border = attr.borderWidth + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
+                        // shape.style.backgroundSize = 'cover
+                    } else if (attr.shape === 'Triangle') {
+                        shape.style.borderLeft = (layers[j].width / 2) - .5 + 'px solid transparent';
+                        shape.style.borderRight = (layers[j].width / 2) + 'px solid transparent';
+                        shape.style.borderBottom = layers[j].height - 1 + 'px solid ' + bg;
+                    } else if (attr.shape === 'Trapezoid') {
+                        shape.style.borderBottom = layers[j].height - 1 + 'px solid' + bg;
+                        shape.style.borderLeft = layers[j].width / 3 + 'px solid transparent';
+                        shape.style.borderRight = layers[j].width / 3 + 'px solid transparent';
+                    } else if (attr.shape === 'Parallelogram') {
+                        shape.style.width = layers[j].width - 40 + 'px';
+                        shape.style.height = layers[j].height - 1 + 'px';
+                        shape.style.background = bg;
+                        shape.style.border = attr.borderWidth + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
+                    } else if (attr.shape === 'Diamond') {
+                        shape.style.width = Math.max(layers[j].height, layers[j].width) + 'px';
+                        shape.style.height = Math.max(layers[j].height, layers[j].width) + 'px';
+                        shape.backgroundColor = bg;
+                        shape.style.marginTop = Math.max(this.data.height, this.data.width) / 2 + 'px'
+                        shape.style.marginBottom = Math.max(this.data.height, this.data.width) / 2 + 'px'
                     }
-                  }
-                  if(layers[j].type == 'image') {
+                }
+                if (layers[j].type == 'image') {
                     console.log('image', im);
-                    var shadows = attr.shadowSize > 0 ? '1px 12px '+attr.shadowSize+'px '+attr.shadowColor : ''
+                    var shadows = attr.shadowSize > 0 ? '1px 12px ' + attr.shadowSize + 'px ' + attr.shadowColor : ''
                     im.style.borderColor = attr.borderColor;
                     im.style.borderWidth = attr.borderWidth;
                     im.style.borderStyle = attr.borderStyle;
                     im.style.objectFit = attr.objectFit.toLowerCase();
-                    im.style.opacity =  layers[j].loaded ? attr.opacity : 0.5
+                    im.style.opacity = layers[j].loaded ? attr.opacity : 0.5
                     im.style.rotation = attr.rotation;
                     im.style.shadowColor = attr.shadowColor;
                     im.style.sizeOption = attr.sizeOption;
                     im.style.boxShadow = attr.shadowColor ? shadows : '';
                     im.style.filter = "blur(" + attr.filterBlur + "px)";
-                  }
-                  if(layers[j].type == 'text') {
+                }
+                if (layers[j].type == 'text') {
                     tex.style.opacity = attr.opacity;
                     tex.style.fontFamily = attr.fontFamily;
                     tex.style.fontSize = attr.fontSize;
@@ -419,66 +499,85 @@ export default {
                     tex.style.backgroundColor = attr.backgroundColor;
                     tex.style.border = attr.borderSize + 'px ' + attr.borderStyle + ' ' + attr.borderColor;
                     tex.style.textShadow = '' + attr.shadowSize + 'px' + ' ' + attr.shadowSize + 'px ' + attr.shadowSize + 'px ' + attr.shadowColor + ',' + attr.shadowSize + 'px ' + attr.shadowSize + 'px ' + attr.shadowSize + 'px ' + attr.shadowColor;
-                  }
-                  if (layers[j].isBackground) {
-                      elem.style.height = window.innerHeight + 'px';
-                      elem.style.width = window.innerWidth + 'px';
-                      // console.log('elem:', elem)
-                  }
-              }
-              hasRatio = true;
-          }
-        }
-
-        if (!hasRatio) {
-          // apply original ratio here
-          var layers = original;
-          console.log('default layer', layers)
-          for (var j = 0; j < layers.length; j++) {
-            var elem = document.getElementById(layers[j].id)
-            console.log('layers[j]:',layers[j]);
-            console.log('elem:',elem);
-            elem.style.top = layers[j].y + 'px';
-            elem.style.left = layers[j].x + 'px';
-            elem.style.width = layers[j].width + 'px';
-            elem.style.height = layers[j].height + 'px';
-            var shape = elem.querySelector('.shape');
-            if (shape) {
-                // console.log(layers[j].attributes.isGradient, shape)
-                shape.style.background = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
+                }
+                if (layers[j].isBackground) {
+                    elem.style.height = window.innerHeight + 'px';
+                    elem.style.width = window.innerWidth + 'px';
+                    // console.log('elem:', elem)
+                }
             }
-            if (layers[j].isBackground) {
-                elem.style.height = window.innerHeight + 'px';
-                elem.style.width = window.innerWidth + 'px';
-                // console.log('elem:', elem)
-            }
-          }
         }
     }
 
     function getPercInW(bV, eV) {
-      // console.log('getPercInW', bV, eV)
-      var perc = (eV / parseInt(bV));
-      // console.log('perc', perc);
-      var cW = window.innerWidth;
-     // console.log('cW', cW);
-      // console.log(cW * perc);
-      return Math.round(cW * perc);
+        // console.log('getPercInW', bV, eV)
+        var perc = (eV / parseInt(bV));
+        // console.log('perc', perc);
+        var cW = window.innerWidth;
+        // console.log('cW', cW);
+        // console.log(cW * perc);
+        return Math.round(cW * perc);
     }
 
     function getPercInH(bV, eV) {
-      var perc = (eV / parseInt(bV));
-      var cH = window.innerHeight;
-      return Math.round(cH * perc);
+        var perc = (eV / parseInt(bV));
+        var cH = window.innerHeight;
+        return Math.round(cH * perc);
     }
 
-    function getRatio () {
-       var gcd = function(a, b) {
-         return (b == 0) ? a : gcd (b, a%b);
-       };
+    function getRatio() {
+        var gcd = function(a, b) {
+            if (b === 0) return a;
 
-       var w = screen.width, h = screen.height;
-       return w/gcd(w, h) + '-' + h/gcd(w, h); 
+            return gcd(b, a % b);
+        }
+        var closestRatio = function(w, h) {
+            var _gcd = gcd(w, h)
+            var x = parseFloat(w / _gcd)
+            var y = parseFloat(h / _gcd)
+            var d = parseFloat(x / y)
+
+            return {
+                x: x,
+                y: y,
+                d: Math.round(d)
+            }
+        }
+
+        var w = Math.round(window.innerWidth),
+            h = Math.round(window.innerHeight);
+
+        var closest = closestRatio(w, h);
+        console.log('closest', closest)
+        var ratio = closest.x + '-' + closest.y;
+        console.log('ratio', ratio)
+        if (!ratioExisted(ratio)) {
+            console.log('ratio not found')
+            ratio = getRatioFromAspectPerc(closest);
+            console.log('new ratio', ratio)
+        }
+        return ratio;
+    }
+
+    function ratioExisted(ratio) {
+        var ratios = [
+            '1-1', '2-1', '4-1', '6-1', '8-1', '10-1',
+            '1-2', '1-4', '1-6', '1-8', '1-10',
+            '2-3', '3-4', '3-5', '9-16', '10-16',
+            '9-18.5', '3-2', '4-3', '5-3', '16-9', '16-10'
+        ];
+
+        return ratios.includes(ratio);
+    }
+
+    function getRatioFromAspectPerc(val) {
+        if (val.x === val.y) {
+            return val.x + '-' + val.d;
+        } else if (val.x > val.y) {
+            return parseInt(val.x / val.y) + '-1'
+        } else {
+            return '1-' + parseInt(val.y / val.x);
+        }
     }
 
     function toWPercent(val) {
@@ -491,22 +590,24 @@ export default {
 
     function getLayerType(elem) {
         if (elem.className !== 'rr-content') {
-          throw new Error('rr content expeected');
+            throw new Error('rr content expeected');
         }
         return elem.children[0].id;
     }
+
     function getFontSize(elemContent) {
         if (elemContent.children[0].id !== 'text') return 0;
-
         return parseInt(elemContent.children[0].style.fontSize.replace('px', ''));
     }
+
     function _clean(elem) {
         var count = 1;
         console.log("elem.getElementsByTagName('comment')", elem.getElementsByTagName('comment'))
-        // while (count > 0) {
-        //   count = elem.getElementsByTagName('comment');
-        // }
+            // while (count > 0) {
+            //   count = elem.getElementsByTagName('comment');
+            // }
     }
+
     function _p() {
         document.getElementsByTagName('body')[0].style.overflow = 'hidden';
         // var gsap = new TimelineMax();
@@ -517,19 +618,19 @@ export default {
         editor.style.width = '100%';
         editor.style.height = '100%';
         for (var i = 0; i < editable_elements.length; i++) {
-          editable_elements[i].setAttribute("contenteditable", false);
+            editable_elements[i].setAttribute("contenteditable", false);
         }
-      }
-      window.onload = function() {
+    }
+    window.onload = function() {
         _p();
         fnResize();
-      }
-      timeout = false, // holder for timeout id
-      delay = 250;
-      window.addEventListener('resize', function() {
-          clearTimeout(timeout);
-          timeout = setTimeout(fnResize, delay);
-      });
+    }
+    timeout = false, // holder for timeout id
+        delay = 250;
+    window.addEventListener('resize', function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(fnResize, delay);
+    });
       </script>
       <!-- DO NOT REMOVE ME -->
     </body>
