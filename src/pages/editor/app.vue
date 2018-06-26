@@ -20,7 +20,8 @@
             :layers="filterLayer(layers)"
             @scaling="layerScaling" 
             @onShowXGridLine="onShowXGridLine"
-            @onShowYGridLine="onShowYGridLine"></layer>
+            @onShowYGridLine="onShowYGridLine"
+            @onItemOutOfTheBox="onItemOutOfTheBox"></layer>
         </div>
       </div>
     </div>
@@ -74,6 +75,7 @@ import editorCanvasHelper  from '../../helpers/editor-canvas.helper.js'
 import snackbar from '../../helpers/snackbar';
 import appHelper from '../../helpers/app.helper';
 import * as $ from 'linq'
+import colorHelper from '../../helpers/color-helper';
 export default {
   name: 'Editor',
   data (){
@@ -83,7 +85,7 @@ export default {
       targetElement: null,
       showContextMenu: false,
       selectedLayer: null,
-      topPopup: false
+      topPopup: false,
     }
   },
   components: {
@@ -107,7 +109,7 @@ export default {
   },
   methods: {
     ...mapMutations(['addLayer', 'setSelectedLayerId', 'broadCastStatus']), 
-    ...mapGetters(['getSelectedLayerId']),
+    ...mapGetters(['getSelectedLayerId', 'getCanvasData']),
     openWindow (val) {
         this.targetElement = val
         setTimeout(()=>{
@@ -243,26 +245,34 @@ export default {
       this.topPopup = false
       },2000)
     },
-    onShowXGridLine(layerData, show, val) {
+    onShowXGridLine(layerData, show, val, precise) {
       if (show) {
         var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
         var bounds2 = this.$refs.editorBox.getBoundingClientRect();
         this.$refs.vlrl1.style.display="block";
-        this.$refs.vlrl1.style.left = (actualBounds.x + 1 + actualBounds.width / 2) + 'px';
+        this.$refs.vlrl1.style.left = (precise ? actualBounds.x - 1 + val : (actualBounds.x + 1 + actualBounds.width / 2)) + 'px';
         this.$refs.vlrl1.style.top = (bounds2.top - 50) + 'px';
       } else {
         this.$refs.vlrl1.style.display="none";
       }
     },
-    onShowYGridLine(layerData, show, val) {
+    onShowYGridLine(layerData, show, val, precise) {
       if (show) {
         var actualBounds = document.getElementById(layerData.id).getBoundingClientRect();
         var bounds2 = this.$refs.editorBox.getBoundingClientRect();
         this.$refs.hhl1.style.display="block";
         this.$refs.hhl1.style.left = (bounds2.left - 200) + 'px';
-        this.$refs.hhl1.style.top = (actualBounds.y + 1 + actualBounds.height / 2) + 'px';
+        this.$refs.hhl1.style.top = (precise ? actualBounds.y + val  : (actualBounds.y + 1 + actualBounds.height / 2)) + 'px';
       } else {
           this.$refs.hhl1.style.display="none";
+      }
+    },
+    onItemOutOfTheBox(show) {
+      if (show) {
+        this.$refs.editorBox.classList.add('notif-elem-drag');
+      } else {
+        //  this.$refs.editorBox.style.border = null;
+        this.$refs.editorBox.classList.remove('notif-elem-drag');
       }
     },
   },
@@ -381,5 +391,27 @@ export default {
   justify-content: center;
   max-width: 375px;
 }
+@-webkit-keyframes borderBlink {    
+    from, to {    
+      border: 3px solid #009d70;   
+    }    
+    50% {    
+        
+          border: none;     
+    }    
+}    
+@keyframes borderBlink {    
+    from, to {   
+       border: 3px solid #009d70;  
+        
+    }    
+    50% {    
+      border: none;    
+    }    
+}
+.notif-elem-drag {
+  -webkit-animation: borderBlink 1s step-end infinite;    
+    animation: borderBlink 1s step-end infinite;    
+}    
 </style>
 
