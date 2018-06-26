@@ -392,7 +392,7 @@ export default {
                         console.log('image', im);
                         var shadows = attr.shadowSize > 0 ? '1px 12px ' + attr.shadowSize + 'px ' + attr.shadowColor : ''
                         im.style.borderColor = attr.borderColor;
-                        im.style.borderWidth = attr.borderWidth;
+                        im.style.borderWidth = getPercInW(arr.ratios[i].width, attr.borderWidth) + 'px';
                         im.style.borderStyle = attr.borderStyle;
                         im.style.objectFit = attr.objectFit.toLowerCase();
                         im.style.opacity = layers[j].loaded ? attr.opacity : 0.5
@@ -403,19 +403,19 @@ export default {
                         im.style.filter = "blur(" + attr.filterBlur + "px)";
                     }
                     if (layers[j].type == 'text') {
-                        tex.style.opacity = attr.opacity;
-                        tex.style.fontFamily = attr.fontFamily;
-                        tex.style.fontSize = attr.fontSize;
-                        tex.style.fontWeight = attr.fontWeight;
-                        tex.style.fontStyle = attr.fontStyle;
-                        tex.style.textDecoration = attr.textDecoration;
-                        tex.style.textAlign = attr.textAlign;
-                        tex.style.lineHeight = attr.lineHeight;
-                        tex.style.color = attr.color;
-                        tex.style.filter = "blur(" + attr.filterBlur + "px)";
-                        tex.style.backgroundColor = attr.backgroundColor;
-                        tex.style.border = attr.borderSize + 'px ' + attr.borderStyle + ' ' + attr.borderColor;
-                        tex.style.textShadow = '' + attr.shadowSize + 'px' + ' ' + attr.shadowSize + 'px ' + attr.shadowSize + 'px ' + attr.shadowColor + ',' + attr.shadowSize + 'px ' + attr.shadowSize + 'px ' + attr.shadowSize + 'px ' + attr.shadowColor;
+                      tex.style.opacity = attr.opacity;
+                      tex.style.fontFamily = attr.fontFamily;
+                      tex.style.fontSize = getPercInW(arr.ratios[i].width, parseInt(attr.fontSize)) + 'px';
+                      tex.style.fontWeight = attr.fontWeight;
+                      tex.style.fontStyle = attr.fontStyle;
+                      tex.style.textDecoration = attr.textDecoration;
+                      tex.style.textAlign = attr.textAlign;
+                      tex.style.lineHeight = attr.lineHeight;
+                      tex.style.color = attr.color;
+                      tex.style.filter = "blur(" + attr.filterBlur + "px)";
+                      tex.style.backgroundColor = attr.backgroundColor;
+                      tex.style.border = getPercInW(arr.ratios[i].width, attr.borderSize) + 'px ' + attr.borderStyle + ' ' + attr.borderColor;
+                      tex.style.textShadow = '' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px' + ' ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + attr.shadowColor + ',' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + attr.shadowColor;
                     }
                     if (layers[j].isBackground) {
                         elem.style.height = window.innerHeight + 'px';
