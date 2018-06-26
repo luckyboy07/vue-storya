@@ -8,22 +8,22 @@
     <!-- start: Project Name -->
     <div class="tool-item tool-item-group" slot="left">
       <div class="tool-item-group-content label-item">File Name</div> 
-      <input @change="filenameChanged" ref="filename" v-model="selectedtemplate.canvas_name" spellcheck="false" style="width: 140px" class="tool-item-group-content default-inp">
+      <input @change="filenameChanged" ref="filename" v-model="editorData.canvas_name" spellcheck="false" style="width: 140px" class="tool-item-group-content default-inp">
     </div>
     <!-- end: Project Name -->
     <div class="tool-item tool-item-group" slot="left" >
-       <div class="label-item" :class="{'disabled':editorData.isResponsive|| selectedtemplate.zoom !== 100}">Selected Canvas Size</div>
+       <div class="label-item" :class="{'disabled':editorData.isResponsive|| editorData.zoom !== 100}">Selected Canvas Size</div>
        <div class="tool-item-group-content" style="display: flex">
-          <div :class="{'disabled':editorData.isResponsive|| selectedtemplate.zoom !== 100}" style="display: flex; width: 106px;">
+          <div :class="{'disabled':editorData.isResponsive|| editorData.zoom !== 100}" style="display: flex; width: 106px;">
              <div class="label-item p-r">W:</div> 
-              <input v-model="selectedtemplate.width" :disabled="editorData.isResponsive || selectedtemplate.zoom !== 100" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
+              <input v-model="editorData.width" :disabled="editorData.isResponsive || editorData.zoom !== 100" @change="filenameChanged" ref="width" style="width: 100%; text-align: right" class="default-inp"  spellcheck="false" v-digitsonly type="number"/>
           </div>
-          <mu-flat-button id="secretDKoMagsaba" style="padding: 0  10px;" class="s-editor-btn-zoom-ctrl" :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}">
+          <mu-flat-button id="secretDKoMagsaba" style="padding: 0  10px;" class="s-editor-btn-zoom-ctrl" :class="{'disabled':editorData.isResponsive || editorData.zoom !== 100}">
             <i class="si-link" style="height: 90%"></i>
           </mu-flat-button>
-           <div :class="{'disabled':editorData.isResponsive || selectedtemplate.zoom !== 100}" style="display: flex; width: 106px;">
+           <div :class="{'disabled':editorData.isResponsive || editorData.zoom !== 100}" style="display: flex; width: 106px;">
              <div class="label-item p-r">H:</div> 
-              <input :disabled="editorData.isResponsive || selectedtemplate.zoom !== 100" v-model="selectedtemplate.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
+              <input :disabled="editorData.isResponsive || editorData.zoom !== 100" v-model="editorData.height" @change="filenameChanged" ref="height" style="width: 100%; text-align: right" class="default-inp" spellcheck="false" v-digitsonly type="number"/>
           </div>
           <!-- <div class="tool-item-group-content">
             <input ref="zoomInp" @blur="zoom()" @keydown.enter="zoom()" style="width: 100%; text-align: center" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'"/>
@@ -49,15 +49,15 @@
      </div>
      <div slot="right" class="s-responsive-right">
        <div style="margin-right: 10px; user-select: none; margin-top: 5px;">Responsive</div> 
-       <toggle-button  style="height: 100%; margin-right: 10px; margin-top: 5px;" @change="watchChanges" :value="selectedtemplate.isResponsive" :sync="true" :color="{checked: '#009d70',unchecked:'#333333'}"/>
+       <toggle-button  style="height: 100%; margin-right: 10px; margin-top: 5px;" @change="watchChanges" :value="editorData.isResponsive" :sync="true" :color="{checked: '#009d70',unchecked:'#333333'}"/>
         <!-- <mu-switch label="Responsive" labelLeft class="thumbs"/> -->
-        <mu-raised-button style="font-size: 10px; height: 100%;" :disabled="!selectedtemplate.isResponsive" :label="selectedtemplate.selectedRatio !== '' ? selectedtemplate.selectedRatio : 'Original Size'" @click="openModal"/> 
+        <mu-raised-button style="font-size: 10px; height: 100%;" :disabled="!editorData.isResponsive" :label="editorData.selectedRatio !== '' ? editorData.selectedRatio : 'Original Size'" @click="openModal"/> 
      </div>
     <!-- <mu-flat-button 
       slot="right"
       style="padding: 0 5px; text-transform: none; background-color: #222222; margin-right: 20px; height: 70%" 
-      @click="selectedtemplate.gridLines = !selectedtemplate.gridLines">
-      <i class="material-icons">{{selectedtemplate.gridLines ? 'grid_on' :  'grid_off'}}</i>
+      @click="editorData.gridLines = !editorData.gridLines">
+      <i class="material-icons">{{editorData.gridLines ? 'grid_on' :  'grid_off'}}</i>
     </mu-flat-button> -->
   </mu-appbar>
   <mu-icon-menu icon="" @change="handleChange" :anchorOrigin="rightTop"
@@ -128,7 +128,7 @@ import browserHelper from '../../helpers/browser.js'
 import apiService from '../../helpers/API.js'
 export default {
   name: 'editor-tools',
-  props:['selectedtemplate','dataLayer'],
+  props:['dataLayer'],
   components: {
     'custom-menu':customMenu,
     ToggleButton
@@ -146,10 +146,10 @@ export default {
     }
   },
   // beforeMount() {
-  //   zoomHelper.adjustCanvasAndLayerDimension(this.selectedtemplate);
+  //   zoomHelper.adjustCanvasAndLayerDimension(this.editorData);
   // },
   mounted() {
-    this.$refs.zoomInp.value = this.selectedtemplate.zoom + '%';
+    this.$refs.zoomInp.value = this.editorData.zoom + '%';
     if (browserHelper.isFirefox()) {
       this.$el.querySelector('#secretDKoMagsaba').style.marginLeft = '20px';
     }
@@ -181,7 +181,7 @@ export default {
       }
     },
     filenameChanged() {
-      console.log('this.selectedtemplate:',this.selectedtemplate)
+      console.log('this.editorData:',this.editorData)
       this.savetoLocalstorage()
       this.$emit('filenameChanged' , this.$refs.filename.value)
     },
@@ -189,56 +189,56 @@ export default {
       this.$emit('onResize', {with:  this.$refs.width.value, height:  this.$refs.height.value});
     },
     zoom(zoomType) {
-      if (zoomType === 'out' && this.selectedtemplate.zoom <= 0 || zoomType === 'in' && this.selectedtemplate.zoom >= 500) return;
+      if (zoomType === 'out' && this.editorData.zoom <= 0 || zoomType === 'in' && this.editorData.zoom >= 500) return;
 
-      var value = !this.$refs.zoomInp.value ?  this.selectedtemplate.zoom :  parseInt(this.$refs.zoomInp.value.replace('%', ''));
+      var value = !this.$refs.zoomInp.value ?  this.editorData.zoom :  parseInt(this.$refs.zoomInp.value.replace('%', ''));
       if (!zoomType) {
         // handle enter or unfocus (blur)
-         this.selectedtemplate.zoom = value;
+         this.editorData.zoom = value;
       } else {
         if (zoomType === 'in') {
-          this.selectedtemplate.zoom = value + this.selectedtemplate.zoomIncrease;
+          this.editorData.zoom = value + this.editorData.zoomIncrease;
         } else {
-          if (this.selectedtemplate.zoom > 0) {
-            this.selectedtemplate.zoom = value - this.selectedtemplate.zoomIncrease;
+          if (this.editorData.zoom > 0) {
+            this.editorData.zoom = value - this.editorData.zoomIncrease;
           }
         }
       }
       zoomHelper.execZoom(zoomType, this.editorData, this.layers);
       
-      this.$refs.zoomInp.value = this.selectedtemplate.zoom + '%';
+      this.$refs.zoomInp.value = this.editorData.zoom + '%';
       this.savetoLocalstorage()
     },
     SaveContent() {
-      // let ratios = this.selectedtemplate.ratios
-        console.log('selectedtemplate:',this.selectedtemplate)
+      // let ratios = this.editorData.ratios
+        console.log('editorData:',this.editorData)
         apiService.saveCanvas({
-          canvas_name: this.selectedtemplate.canvas_name,
-          description: this.selectedtemplate.description,
-          height: this.selectedtemplate.height,
-          width: this.selectedtemplate.width,
-          backgroundcolor: this.selectedtemplate.backgroundcolor,
-          // project_name: this.selectedtemplate.project_name,
-          is_responsive: this.selectedtemplate.isResponsive,
-          zoom: this.selectedtemplate.zoom,
-          zoom_increase: this.selectedtemplate.zoomIncrease,
-          thumbnail: this.selectedtemplate.thumbnail,
+          canvas_name: this.editorData.canvas_name,
+          description: this.editorData.description,
+          height: this.editorData.height,
+          width: this.editorData.width,
+          backgroundcolor: this.editorData.backgroundcolor,
+          // project_name: this.editorData.project_name,
+          is_responsive: this.editorData.isResponsive,
+          zoom: this.editorData.zoom,
+          zoom_increase: this.editorData.zoomIncrease,
+          thumbnail: this.editorData.thumbnail,
           ratio: 'string',
         }).then(response=>{
           console.log('response:',response)
           if(response.data.response.statusCode === 201) {
             let data = response.data.response.data
-            this.selectedtemplate.ratios.forEach(val =>{
+            this.editorData.ratios.forEach(val =>{
               console.log('vaal:',val)
               let obj = {
-                canvas_name: this.selectedtemplate.canvas_name,
+                canvas_name: this.editorData.canvas_name,
                 width: val.width,
                 height: val.height,
-                backgroundcolor: this.selectedtemplate.backgroundcolor,
-                height: this.selectedtemplate.height,
-                is_responsive: this.selectedtemplate.isResponsive,
-                zoom: this.selectedtemplate.zoom,
-                zoom_increase: this.selectedtemplate.zoomIncrease,
+                backgroundcolor: this.editorData.backgroundcolor,
+                height: this.editorData.height,
+                is_responsive: this.editorData.isResponsive,
+                zoom: this.editorData.zoom,
+                zoom_increase: this.editorData.zoomIncrease,
                 ratio: val.name,
               }
               apiService.saveRatio(obj,data.canvas_id).then((data)=>{
@@ -280,10 +280,10 @@ export default {
            
           }
         })
-      // if(this.selectedtemplate.isResponsive){
+      // if(this.editorData.isResponsive){
         // for(let i = 0;i < ratios.length;i++){
-        //     if(this.selectedtemplate.selectedRatio === ratios[i].name) {
-        //       // ratios[i].layers = JSON.parse(JSON.stringify(this.selectedtemplate.layers))
+        //     if(this.editorData.selectedRatio === ratios[i].name) {
+        //       // ratios[i].layers = JSON.parse(JSON.stringify(this.editorData.layers))
         //       this.updateLayers(ratios[i].layers)
         //     }
         // }
@@ -299,12 +299,12 @@ export default {
     exportContent() {
       var zoom = 100;
       var type = '';
-      this.selectedtemplate.layers = JSON.parse(JSON.stringify(this.dataLayer))
+      this.editorData.layers = JSON.parse(JSON.stringify(this.dataLayer))
       if (this.editorData.zoom !== 100) {
         zoom = this.editorData.zoom;
         type = zoom < 100 ? 'in' : 'out';
         zoomHelper.gotoZoom(this.editorData, this.layers, zoom, 100, type).then((resp) => {
-          exportHelper.exportTemplate( this.selectedtemplate,this.editorData.originalLayers).then((val) => {
+          exportHelper.exportTemplate( this.editorData,this.editorData.originalLayers).then((val) => {
             console.log('Export finished', val)
             if (zoom !== 100) {
               zoomHelper.gotoZoom(this.editorData, this.layers, zoom, 100, type === 'in' ? 'out' : type === 'out' ? 'in' : '');
@@ -312,35 +312,36 @@ export default {
           });
         });
       } else {
-        exportHelper.exportTemplate(this.selectedtemplate, this.editorData.originalLayers);
+        exportHelper.exportTemplate(this.editorData, this.editorData.originalLayers);
       }
     },
     savetoLocalstorage () {
-      this.$localStorage.set('canvas',JSON.stringify(this.selectedtemplate))
+      this.$localStorage.set('canvas',JSON.stringify(this.editorData))
     },
     openModal () {
     console.log('laeyers:', this.dataLayer)
-      this.$modal.show('responsive-modal',{data: this.selectedtemplate,layers:this.dataLayer},{
+      this.$modal.show('responsive-modal',{data: this.editorData,layers:this.dataLayer},{
         'closed': this.beforeClose
       })
     },
     watchChanges(evt) {
-      this.selectedtemplate.isResponsive = evt.value
+      this.editorData.isResponsive = evt.value
       let layers = this.dataLayer
-      let ratios = this.selectedtemplate.ratios
-      if (!this.selectedtemplate.isResponsive && this.selectedtemplate.selectedRatio) {
-          // for (let i=0;i<this.selectedtemplate.originalLayers.length;i++) {
-          //     this.selectedtemplate.originalLayers[i].x = 100
-          //     this.selectedtemplate.originalLayers[i].y = 100
+      let ratios = this.editorData.ratios
+      if (!this.editorData.isResponsive && this.editorData.selectedRatio) {
+          // for (let i=0;i<this.editorData.originalLayers.length;i++) {
+          //     this.editorData.originalLayers[i].x = 100
+          //     this.editorData.originalLayers[i].y = 100
           // }
-       console.log('originalLayers:',this.selectedtemplate.originalLayers)
-      this.updateLayers(this.selectedtemplate.originalLayers)
-      }else if(this.selectedtemplate.isResponsive && this.selectedtemplate.selectedRatio) {
+        console.log('originalLayers:', this.editorData.originalLayers)
+        this.updateLayers(this.editorData.originalLayers)
+      } else if (this.editorData.isResponsive && this.editorData.selectedRatio) {
           for (let i=0;i<ratios.length;i++) {
-             if(this.selectedtemplate.selectedRatio === ratios[i].name){
+             if (this.editorData.selectedRatio === ratios[i].name){
                console.log(';ASDASD',ratios[i].layers)
-                // this.selectedtemplate.layers = JSON.parse(JSON.stringify(ratios[i].layers))
+                // this.editorData.layers = JSON.parse(JSON.stringify(ratios[i].layers))
                 this.updateLayers(ratios[i].layers)
+                break;
              } 
           }
       }
@@ -386,6 +387,16 @@ export default {
       layers: 'getLayers',
     }),
   },
+  watch: {
+    layers: {
+      handler(val) {
+        if (!this.editorData.isResponsive) {
+          this.editorData.originalLayers = val;
+        }
+      },
+      deep: true
+    }
+  }
 }
 </script>
 <style scoped>

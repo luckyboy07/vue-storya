@@ -23,7 +23,7 @@
       </div>
   </mu-appbar>
   <mu-divider/>
-  <editor-tools v-if="!hideSecondHeader" :selectedtemplate="getCanvasData" :dataLayer="getLayers" @openPopup="openPopup"></editor-tools>
+  <editor-tools v-if="!hideSecondHeader" :dataLayer="getLayers" @openPopup="openPopup"></editor-tools>
   <!-- alert modal -->
   <mu-dialog :open="confirmOpen" :title="popupTitle">
     <div style="font-family: Lato; font-size: 17px; color: #fff">{{popupMsg}}</div> 
