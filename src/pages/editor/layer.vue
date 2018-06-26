@@ -18,7 +18,6 @@
       v-show="elem.visible"
       :z="elem.isBackground ? 1:elem.order"
       :zoom="zoom"
-      :handles="'nw,ne,se, sw'"
       @focused="focused"
       @activated="activated(elem)"
       @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"

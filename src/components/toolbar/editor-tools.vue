@@ -396,9 +396,15 @@ export default {
   watch: {
     layers: {
       handler(val) {
-        console.log('tae')
         if (!this.editorData.isResponsive) {
           this.editorData.originalLayers = val;
+        } else {
+           for (var i = 0; i < this.editorData.ratios.length; i++) {
+            if (this.editorData.selectedRatio === this.editorData.ratios[i].name) {
+              this.editorData.ratios[i].layers = val;
+              break;
+            }
+          }
         }
       },
       deep: true

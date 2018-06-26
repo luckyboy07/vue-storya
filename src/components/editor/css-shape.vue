@@ -3,9 +3,9 @@
     <div v-if="data.attributes.shape === 'Rectangle'" class="shape" :style="getRectangleStyle()" ></div>
     <div v-if="data.attributes.shape === 'Circle'" class="shape" :style="getCircleStyle()"></div>
     <div v-if="data.attributes.shape === 'Triangle'" class="shape" :style="getTriangleStyle()"></div>
-    <div v-if="data.attributes.shape === 'Trapezoid'" :style="getTrapeziodStyle()"></div>
-    <div v-if="data.attributes.shape === 'Parallelogram'" :style="getParallelogramStyle()"></div>
-    <div v-if="data.attributes.shape === 'Diamond'" :style="getDiamondStyle()"></div>
+    <div v-if="data.attributes.shape === 'Trapezoid'" class="shape" :style="getTrapeziodStyle()"></div>
+    <div v-if="data.attributes.shape === 'Parallelogram'" class="shape" :style="getParallelogramStyle()"></div>
+    <div v-if="data.attributes.shape === 'Diamond'" class="shape" :style="getDiamondStyle()"></div>
   </div>
 </template>
 <script>
