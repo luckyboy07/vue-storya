@@ -572,13 +572,21 @@ export default {
     }
 
     function getRatioFromAspectPerc(val) {
-        if (val.x === val.y) {
-            return val.x + '-' + val.d;
-        } else if (val.x > val.y) {
-            return parseInt(val.x / val.y) + '-1'
-        } else {
-            return '1-' + parseInt(val.y / val.x);
-        }
+      if (val.x === val.y) {
+        return val.x + '-' + val.d;
+      } else if (val.x > val.y) {
+          var x = parseInt(val.x / val.y);
+          if (x > 1 && x%2 !== 0) {
+              x += 1;
+          }
+          return  x + '-1'
+      } else {
+          var y = parseInt(val.y / val.x);
+          if (y > 1 && y%2 !== 0) {
+              y += 1;
+          }
+          return '1-' + y;
+      }
     }
 
     function toWPercent(val) {
