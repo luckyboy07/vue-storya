@@ -18,6 +18,7 @@
       v-show="elem.visible"
       :z="elem.isBackground ? 1:elem.order"
       :zoom="zoom"
+      :handles="'nw,ne,se, sw'"
       @focused="focused"
       @activated="activated(elem)"
       @rotateStarted="rotateStarted" @rotated="rotated" @rotateEnded="rotateEnded"
@@ -234,7 +235,7 @@ export default {
       this.$emit('scaling', this.selectedLayer)
     },
     rotated(deg) {
-      // this.selectedLayer.attributes.rotation = deg;
+      this.selectedLayer.attributes.rotation = deg;
       this.$emit('scaling', this.selectedLayer)
     },
     rotateEnded() {

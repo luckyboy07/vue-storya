@@ -396,6 +396,7 @@ export default {
   watch: {
     layers: {
       handler(val) {
+        console.log('tae')
         if (!this.editorData.isResponsive) {
           this.editorData.originalLayers = val;
         }
