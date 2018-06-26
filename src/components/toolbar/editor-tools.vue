@@ -328,23 +328,29 @@ export default {
       this.editorData.isResponsive = evt.value
       let layers = this.dataLayer
       let ratios = this.editorData.ratios
+      var zoom = 0;
       if (!this.editorData.isResponsive && this.editorData.selectedRatio) {
           // for (let i=0;i<this.editorData.originalLayers.length;i++) {
           //     this.editorData.originalLayers[i].x = 100
           //     this.editorData.originalLayers[i].y = 100
           // }
+        this.editorData.zoom = this.editorData.originalZoom;
+        zoom = this.editorData.zoom;
         console.log('originalLayers:', this.editorData.originalLayers)
         this.updateLayers(this.editorData.originalLayers)
       } else if (this.editorData.isResponsive && this.editorData.selectedRatio) {
           for (let i=0;i<ratios.length;i++) {
              if (this.editorData.selectedRatio === ratios[i].name){
                console.log(';ASDASD',ratios[i].layers)
+               this.editorData.zoom = ratios[i].zoom;
+               zoom = this.editorData.zoom;
                 // this.editorData.layers = JSON.parse(JSON.stringify(ratios[i].layers))
                 this.updateLayers(ratios[i].layers)
                 break;
              } 
           }
       }
+       this.$refs.zoomInp.value = zoom + '%';
       this.savetoLocalstorage()
     },
     beforeClose () {
@@ -395,6 +401,19 @@ export default {
         }
       },
       deep: true
+    },
+    "editorData.zoom": function(val) {
+      // console.log('this.editorData.zoom', this.editorData.zoom, this.editorData.isResponsive);
+      if (!this.editorData.isResponsive) {
+        this.editorData.originalZoom = val;
+      } else {
+        for (var i = 0; i < this.editorData.ratios.length; i++) {
+          if (this.editorData.selectedRatio === this.editorData.ratios[i].name) {
+            this.editorData.ratios[i].zoom = val;
+            break;
+          }
+        }
+      }
     }
   }
 }

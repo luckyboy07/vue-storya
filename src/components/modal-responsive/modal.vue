@@ -474,6 +474,7 @@ export default {
 
             console.log('this.ratioSelected:',this.ratioSelected)
             this.updateLayers(this.ratioSelected.layers)
+             this.ratioSelected.zoom = 100
             this.ratioSelected.isPick = true
             this.template.ratios.push(this.ratioSelected)
             this.currentElement.target.removeAttribute('style')

@@ -18,6 +18,7 @@ export const store = new Vuex.Store({
             width: 900,
             height: 500,
             zoom: 100,
+            originalZoom: 100,
             zoomIncrease: 10,
             bgColor: '#fff',
             gridLines: true,
