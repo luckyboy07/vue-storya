@@ -12,13 +12,13 @@
       <input v-if="currentPage === 'editor'" v-model="getCanvasData.project_name" spellcheck="false" slot="left" class="default-inp" style="margin-left: 10px; min-width: 200px;"/>
       <div slot="left" class="s-unsave-info" :class="[autoData === '1' || autoData === '2' ? 'info-shown' : 'info-hidden']">{{getInfo()}}</div>
       <div slot="right" class="s-header-acct-sett-container">
-        <div class="s-header-acct-owner"><div>Hi Storjak</div></div>
+        <div class="s-header-acct-owner"><div>Hi John</div></div>
         <div class="acct-settings">
-          <div class="acct-avatar">
+          <mu-flat-button class="acct-avatar">
             <div class="acct-avatar-wrapper">
               <div>SS</div>
             </div>
-          </div>
+          </mu-flat-button>
         </div>
       </div>
   </mu-appbar>
@@ -215,7 +215,12 @@ export default {
 .acct-avatar {
   border-radius: 50%;
   background-color:#009d70;
+  width: 45px;
   height: 100%;
+}
+.acct-avatar.hover {
+  background-color: transparent;
+  border: solid #009d70 2px;
 }
 .acct-avatar-wrapper {
    height: 100%;

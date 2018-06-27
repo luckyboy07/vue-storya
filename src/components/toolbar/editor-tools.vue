@@ -1,6 +1,5 @@
 <template>
 <div>
-  
   <mu-appbar class="header-tools editor-tools">
     <mu-flat-button style="width: 100px;" id="btn" class="save-menu-btn" labelPosition="before" 
       label="Save" slot="left" icon="keyboard_arrow_down"
@@ -60,9 +59,8 @@
       <i class="material-icons">{{editorData.gridLines ? 'grid_on' :  'grid_off'}}</i>
     </mu-flat-button> -->
   </mu-appbar>
-  <mu-icon-menu icon="" @change="handleChange" :anchorOrigin="rightTop"
-      :targetOrigin="rightTop"
-      :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
+  <mu-icon-menu menuClass="save-menu" icon="" @change="handleChange" :anchorOrigin="rightTop"
+      :targetOrigin="rightTop" :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
     <mu-menu-item value="0" title="Save" @click="SaveContent()"/>
     <mu-divider inset class="temp-action-item-divider"/>
     <!-- <mu-menu-item value="2" title="Save Project" @click="SaveContent()"/>
@@ -168,8 +166,9 @@ export default {
         // last resort
         setTimeout(() => {
           var elem = document.getElementsByClassName('mu-popover')[0];
-          if (elem) {
-            elem.setAttribute('style', `
+          if (elem && elem.children[0].className.indexOf('save-menu') !== -1) {
+            elem.classList.add('save-menu-container');
+            elem.setAttribute('style', ` 
               left: 10px!important; z-index: 4; background-color: #009d70!important;`);
             elem = document.getElementsByClassName('mu-menu')[0]; 
                elem.setAttribute('style', `width: 150px!important;`);
@@ -520,5 +519,6 @@ background-color: red!important;
   height: 100px;
   margin-top: 20px;
 }
+
 </style>
 
