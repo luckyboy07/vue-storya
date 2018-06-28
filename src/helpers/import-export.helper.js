@@ -12,6 +12,42 @@ export default {
     <head>
       <title></title>
       <style type="text/css">
+        body {
+            margin: 0;
+        }
+        .lds-ripple {
+            display: inline-block;
+            position: relative;
+            width: 64px;
+            height: 64px;
+        }
+        .lds-ripple div {
+            position: absolute;
+            border: 4px solid #fff;
+            opacity: 1;
+            border-radius: 50%;
+            margin: auto auto;
+            animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+        }
+        .lds-ripple div:nth-child(2) {
+            animation-delay: -0.5s;
+        }
+        @keyframes lds-ripple {
+            0% {
+                top: 28px;
+                left: 28px;
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            100% {
+                top: -1px;
+                left: -1px;
+                width: 58px;
+                height: 58px;
+                opacity: 0;
+            }
+        }
       .tl-container {
         width: 100%;
         cursor: auto;
@@ -325,6 +361,14 @@ export default {
       </style>
     </head>
     <body onload="_p()">
+    <div id="loader" style="width: 100%; height: 100vh; background-color: black; margin: 0; overflow: hidden;">
+        <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto auto; width: 65px; height: 65px;">
+            <div class="lds-ripple">
+                <div></div>
+            </div>
+        </div>
+    </div>
+
     <!-- REPLACE THIS PART -->
   `,
     exportHtmlTemplatePart2: function(array, original) {
@@ -694,17 +738,21 @@ export default {
         }
 
         function _p() {
-            document.getElementsByTagName('body')[0].style.overflow = 'hidden';
-            // var gsap = new TimelineMax();
-            // var elem1 = document.getElementsByClassName('rr-resizer');
-            // gsap.from(elem1[0],1,{left:100,opacity:0,repeat: -1, yoyo: true});
-            var editable_elements = document.querySelectorAll("[contenteditable=true]");
-            var editor = document.getElementById('parent1')
-            editor.style.width = '100%';
-            editor.style.height = '100%';
-            for (var i = 0; i < editable_elements.length; i++) {
+            setTimeout(function() {
+                document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+                document.getElementById('parent1').style.display = "block";
+                document.getElementById('loader').parentElement.removeChild(document.getElementById('loader'));
+                // var gsap = new TimelineMax();
+                // var elem1 = document.getElementsByClassName('rr-resizer');
+                // gsap.from(elem1[0],1,{left:100,opacity:0,repeat: -1, yoyo: true});
+                var editable_elements = document.querySelectorAll("[contenteditable=true]");
+                var editor = document.getElementById('parent1')
+                editor.style.width = '100%';
+                editor.style.height = '100%';
+                for (var i = 0; i < editable_elements.length; i++) {
                 editable_elements[i].setAttribute("contenteditable", false);
-            }
+                }
+            }, 1000);
         }
         window.onload = function() {
             _p();
@@ -757,6 +805,7 @@ export default {
         // })
 
         var editorElem = document.getElementsByClassName('editor-box')[0].cloneNode(true); // clone the div element
+        editorElem.style.display = 'none';
         editorElem = this.$_responsiveness(editorElem, animatedData);
         return editorElem;
     },
