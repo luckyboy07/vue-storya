@@ -14,6 +14,8 @@ export default {
       <style type="text/css">
         body {
             margin: 0;
+            user-select: none;
+            moz-user-select: none;
         }
         .lds-ripple {
             display: inline-block;
