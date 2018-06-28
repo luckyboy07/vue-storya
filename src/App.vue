@@ -6,6 +6,7 @@
         <!-- <div id="loader-wrapper">
 			<div id="loader"></div>
 		</div> -->
+      <!-- <layer-cloner :style="{left: cloneLayerContainerBounds.left + 'px', top: cloneLayerContainerBounds.top + 'px'}" :layers="layers"></layer-cloner> -->
       </div>
     </div>
   </div>
@@ -31,7 +32,11 @@ import* as $ from 'linq'
 import snackbar from './helpers/snackbar.js';
 import animation from './helpers/animation.js';
 import API from './helpers/API.js'
+import layerCloner from './components/clone-layer/layer-cloner'
 export default {
+  components: {
+    'layer-cloner': layerCloner,
+  },
   data () {
     return {
       show: false,
@@ -41,7 +46,7 @@ export default {
       idleTimer: null, // the idle timer function. Assigned to a variable to be able to use it such as stopping the timer
       allowedKeys: ['y', 'z', 'Delete','Escape', 'c', 'v'], // allowed keys
       autoSaveInfoDisplayDuration: 0,
-      copiedLayer: null, // the container of copied layer
+      copiedLayer: null, // the container of copied layer,
     }
   },
   name: 'App',
