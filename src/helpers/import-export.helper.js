@@ -598,13 +598,29 @@ export default {
                 console.log('new ratio', ratio)
                 if (!ratioExisted(ratio)) {
                     console.log('still not found------------------------')
-                    if (w > h) {
-                        var mod = w % 10 + h % 10;
-                        ratio = Math.round((w + mod) / h) + '-' + ratio[2];
-                    } else if (h > w) {
-                        var mod = w % 10 + h % 10;
-                        ratio = ratio[0] + '-' + Math.round((h + mod) / w);
+                    var max = Math.max(w, h), min = Math.min(w,h);
+                    var diff = max - min;
+                    console.log('diff', diff)
+                    if (diff >= 100) {
+                       console.log('what')
+                      if (w > h) {
+                         var nw = w + diff;
+                         console.log('nw',nw)
+                         ratio = Math.ceil(nw / h) + '-' + ratio.split('-')[1];
+                      } else if (h > w) {
+                         var nh = h + diff;
+                         ratio = ratio.split('-')[0] + '-' + Math.ceil(nh / w);
+                      }
+                    } else {
+                          console.log('where')
+                      var mod = w % 10 + h % 10;
+                      if (w > h) {
+                          ratio = Math.round((w + mod) / h) + '-' + ratio.split('-')[1];
+                      } else if (h > w) {
+                          ratio = ratio.split('-')[0] + '-' + Math.round((h + mod) / w);
+                      }
                     }
+                    
                     console.log('new ratio', ratio)
                 }
             }
@@ -613,7 +629,7 @@ export default {
                 console.log('ratio has no data')
                 // finding closest ratio/relative ratio
                 ratio = getClosestRatio(ratio, w, h);
-                 console.log('getting closest ratio', ratio)
+                console.log('getting closest ratio', ratio)
             }
             return ratio;
         }
@@ -628,21 +644,30 @@ export default {
         }
 
         function getClosestRatio(ratio, w, h) {
-            var ratios = w > h ? getLandscapeRatios() : getPortaintRatios();
-            var highestRatio = null;
-            var temp = 0;
-            for (var i = 0; i < ratios.length; i++) {
-                var sum = ratios[i].rw + ratios[i].rh;
-                if (sum > temp) {
-                    highestRatio = ratios[i];
-                    temp = sum;
-                }
-            }
-            if (highestRatio) {
-                return highestRatio.name;
-            }
+          var ratios = w > h ? getLandscapeRatios() : getPortaintRatios();
+          var n = getRatioBeforeCurrent(ratios, ratio, w, h);
+          console.log('getRatioBeforeCurrent result', n)
+          ratio = w > h ? n + '-' + ratio.split('-')[1] : ratio.split('-')[0] + '-' + n;
 
-            return ratio;
+          return ratio;
+        }
+
+        function getRatioBeforeCurrent(ratios, ratio, w, h) {
+          console.log('getRatioBeforeCurrent', ratio)
+          var x = 0;
+          var sm = 0;
+          var n = w > h ? parseInt(ratio.split('-')[0]) :  parseInt(ratio.split('-')[1]);
+          for (var i = 0; i < ratios.length; i++) {
+            x =  w > h ? ratios[i].rw : ratios[i].rh;
+            console.log(ratios[i].name, n, x)
+
+            if (x < n) {
+              sm = x;
+            }
+          }
+          console.log('found', sm)
+
+          return sm;
         }
 
         function getPortaintRatios() {
@@ -741,6 +766,7 @@ export default {
             setTimeout(function() {
                 document.getElementsByTagName('body')[0].style.overflow = 'hidden';
                 document.getElementById('parent1').style.display = "block";
+                document.getElementById('parent1').style.border = 'none';
                 document.getElementById('loader').parentElement.removeChild(document.getElementById('loader'));
                 // var gsap = new TimelineMax();
                 // var elem1 = document.getElementsByClassName('rr-resizer');
