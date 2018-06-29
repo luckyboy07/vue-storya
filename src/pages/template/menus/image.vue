@@ -1,7 +1,7 @@
 <template>
 <div class="yawaa" :class="data.selected ? 'activeTool': ''">
     <mu-list-item title="Image Layer" :open="data.selected && !data.islocked" @click.stop="open">
-          <mu-icon slot="left" value="image" style="color: #fff"/>
+          <i slot="left" class="si-image"/>
           <mu-icon-button :class="{'s-cannot-delete':statuses && statuses.layerId === data.id}" :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
           <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
         <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.selected && !data.islocked ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>

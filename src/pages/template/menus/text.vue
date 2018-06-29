@@ -1,9 +1,7 @@
 <template>
   <div class="yawaa" :class="data.selected ? 'activeTool': ''">
-   <mu-list-item :title="getTextContent() || 'Text Layer'" 
-    :open="data.selected && !data.islocked"
-     @click.stop="open">
-        <mu-icon slot="left" value="text_fields" style="color: #fff"/>
+   <mu-list-item :title="getTextContent() || 'Text Layer'" :open="data.selected && !data.islocked" @click.stop="open">
+        <i slot="left" class="si-text"/>
         <mu-icon-button :class="{'s-cannot-delete':statuses && statuses.layerId === data.id}" :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
         <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
         <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.selected && !data.islocked ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
@@ -254,7 +252,7 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Rotate Start</mu-grid-list>
                 <mu-grid-list class="right" style="padding-top: 5px;">
-                <mu-slider @mouseover.native="createPreview(anim, 'start')" @mouseout.native="removePreview()" @input="createPreview(anim, 'start')" v-model="anim.start" :max="360" class="mmslider" :step="1"/>
+                <mu-slider @mouseover.native="createPreview(anim, 'start')" @mouseout.native="removePreview()" @input="createPreview(anim, 'start')" v-model="anim.start" :min="-360" :max="360" class="mmslider" :step="1"/>
                 <input disabled style="width: 57px!important;" :value="anim.start + '°'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>
@@ -263,7 +261,7 @@
               <div class="gridlist-demo-container">
                 <mu-grid-list class="gridlist-demo left">Rotate End</mu-grid-list>
                 <mu-grid-list class="right" style="padding-top: 5px;">
-                <mu-slider @mouseover.native="createPreview(anim, 'end')" @mouseout.native="removePreview()" @input="createPreview(anim, 'end')" v-model="anim.end" :max="360" class="mmslider" :step="1"/>
+                <mu-slider @mouseover.native="createPreview(anim, 'end')" @mouseout.native="removePreview()" @input="createPreview(anim, 'end')" v-model="anim.end"  :min="-360"  :max="360" class="mmslider" :step="1"/>
                 <input style="width: 57px!important;" :value="anim.end + '°'" v-digitsonly  spellcheck="false" class="input-size sliderInput">
                 </mu-grid-list>
               </div>

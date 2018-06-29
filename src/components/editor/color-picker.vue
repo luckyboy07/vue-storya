@@ -3,12 +3,12 @@
        <!-- 350 / -80 -->
         <hsc-window id="colorPicker" initialPosition="initialPosition" style="z-index:999;" :resizable="true" :initialWidth="225" :initialHeight="240"
         :closeButton="true" :isOpen="pickerisShow" @closebuttonclick="close" >
-          <color-picker v-model="colors" @input="updateValue"></color-picker>
+          <color-picker v-model="colors"  @input="updateValue"></color-picker>
         </hsc-window>
       </hsc-window-style-metal>
 </template>
 <script>
-import {Photoshop, Chrome} from 'vue-color'
+import {Chrome} from 'vue-color'
 export default {
   name:'Colorpicker',
   props:['pickerisShow','initialPosition','target'],
@@ -31,8 +31,7 @@ export default {
      console.log('pickerisShow:',this.pickerisShow)
   },
   components:{
-    'photoshop-picker': Photoshop,
-    'color-picker': Chrome
+    'color-picker': Chrome,
   },
   methods: {
     updateValue (value) {

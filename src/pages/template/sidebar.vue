@@ -3,15 +3,25 @@
   <mu-drawer id="sidenavpropertydrawer" left :open="true" @close="toggle()" :zDepth="0" class="custom-drawer">
       <mu-list style="padding-top: 0;">
         <mu-list-item afterText="(None)" title="Template Selected" :open="false" :toggleNested="true">
-          <mu-list-item slot="nested" :disableRipple="true">
+          <mu-list-item slot="nested" class="template-container" :disableRipple="true">
+            <!-- <div class="no-tempates">
+              <i class="material-icons">close</i> 
+              <span class="text-desc">No available templates</span>
+            </div> -->
             <select-template :items="[{'id': '1', 'name': 'ej'}, {'id': '2', 'name': 'ej'}]"></select-template>
           </mu-list-item>
         </mu-list-item>
       </mu-list>
       <mu-appbar title="Add New Layer">
-        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_down" slot="left" @click="moveDown"/>
-        <mu-icon-button class="custom-icon-button" icon="keyboard_arrow_up" slot="left" @click="moveUp"/>
-        <mu-icon-button class="custom-icon-button" icon="delete" slot="left" @click="removeLayer()"/>
+        <mu-flat-button class="custom-icon-button" slot="left" @click="moveDown">
+          <i class="si-movedown"></i>
+        </mu-flat-button>
+        <mu-flat-button class="custom-icon-button" slot="left" @click="moveUp">
+          <i class="si-moveup"></i>
+        </mu-flat-button>
+        <mu-flat-button class="custom-icon-button" slot="left" @click="removeLayer()">
+          <i class="si-delete"></i>
+        </mu-flat-button>
         <mu-icon-menu class="custom-icon-button" icon="add"  slot="right" :open="showhover" @open="hoverBtn" @close="closeLayer" desktop :anchorOrigin="leftBot" :targetOrigin="leftBot">
             <span class="pop-title" slot="right">Add New Layer</span>
             <mu-divider style="margin-left: 10px;width: 315px;" />
@@ -584,5 +594,24 @@ export default {
     line-height: 32px;
     border: 1px dashed;
     border-color: #5d5b5b;
+}
+.no-tempates {
+  display: flex;
+  background-color: #222222;
+  padding: 15px 10px;
+  margin: -10px 0px;
+  color: #7d7d7d;
+  font-size: 16px;
+  text-align: center;
+
+  .text-desc {
+    margin-left: 15px;
+     text-align: center;
+  }
+}
+.template-container:first-child:hover {
+  .mu-item-wrapper.hover {
+    background-color: transparent;
+  }
 }
 </style>

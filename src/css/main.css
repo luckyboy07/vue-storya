@@ -814,6 +814,30 @@ a {
     position: relative;
 }
 
+.si-delete::before {
+    content: url(../assets/icons/icon_delete.png);
+}
+
+.si-image::before {
+    content: url(../assets/icons/icon_image_layer.png);
+}
+
+.si-movedown::before {
+    content: url(../assets/icons/icon_move_down.png);
+}
+
+.si-moveup::before {
+    content: url(../assets/icons/icon_move_up.png);
+}
+
+.si-shape::before {
+    content: url(../assets/icons/icon_shape_layer.png);
+}
+
+.si-text::before {
+    content: url(../assets/icons/icon_text_layer.png);
+}
+
 
 /* storya defaults */
 
@@ -961,4 +985,12 @@ label {
 
 .ics {
     font-size: 10px
+}
+
+.save-menu {
+    width: 200px!important;
+}
+
+.save-menu>.mu-menu-list {
+    width: 200px!important;
 }

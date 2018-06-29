@@ -71,6 +71,10 @@ export default {
     islocked: {
       type: Boolean,
       default: false,
+    },
+    canExecute: {
+      type: Boolean,
+      default: true,
     }
   },
   data() {
@@ -435,25 +439,30 @@ export default {
           if (rect.left <= 3 && rect.left >= -3) {
             rect.left = 0;
             self.emitShowLeftGridLine(true, 0, true);
+            self.emitDragging(rect.left,  rect.top);
           }
           if (rect.left + rect.width >= pW - 3 && rect.left + rect.width <= pW + 3) {
             rect.left = pW - rect.width;
             self.emitShowLeftGridLine(true,rect.width, true);
+            self.emitDragging(rect.left,  rect.top);
           }
 
           if (cX - 10 <=  (pW / 4) && (cX + 10 >=  (pW / 4))) {
             rect.left = (pW / 4) - rect.width / 2;
             self.emitShowLeftGridLine(true, (pW / 4));
+            self.emitDragging(rect.left,  rect.top);
           }
 
           if (cX - 10 <=  (pW / 2) && (cX + 10 >=  (pW / 2))) {
             rect.left = (pW / 2) - rect.width / 2;
             self.emitShowLeftGridLine(true, (pW / 2));
+            self.emitDragging(rect.left,  rect.top);
           }
 
           if (cX - 10 <= pW - (pW / 4) && (cX + 10 >= pW - (pW / 4))) {
             rect.left = pW - (pW / 4) - rect.width / 2;
             self.emitShowLeftGridLine(true, pW - (pW / 4));
+            self.emitDragging(rect.left,  rect.top);
           }
 
           // Y
@@ -466,34 +475,40 @@ export default {
           if (rect.top + rect.height >= pH - 3 && rect.top + rect.height <= pH + 3) {
             rect.top = pH - rect.height;
             self.emitShowRightGridLine(true,rect.height, true);
+            self.emitDragging(rect.left,  rect.top);
           }
 
           if (cY - 10 <=  (pH / 4) && (cY + 10 >=  (pH / 4))) {
             rect.top = (pH / 4) - rect.height / 2;
             self.emitShowRightGridLine(true,  (pH / 4));
+            self.emitDragging(rect.left,  rect.top);
           }
 
           if (cY - 10 <=  (pH / 2) && (cY + 10 >=  (pH / 2))) {
             rect.top = (pH / 2) - rect.height / 2;
             self.emitShowRightGridLine(true,  (pH / 2));
+            self.emitDragging(rect.left,  rect.top);
           }
 
           if (cY - 10 <= pH - (pH / 4) && (cY + 10 >= pH - (pH / 4))) {
             rect.top = pH - (pH / 4) - rect.height / 2;
             self.emitShowRightGridLine(true,  pH - (pH / 4));
+            self.emitDragging(rect.left,  rect.top);
           }
 
           // showing a border when an element is out of the box when dragging
           if ( (rect.left + rect.width < 0) || 
-               (rect.top + rect.height < 0) || 
+              (rect.top + rect.height < 0) || 
                (rect.left > pW) || (rect.top > pH) ) {
             self.emitOnItemOutOfTheBox(true);
           }
 
-          dom.style.left = rect.left + 'px';
-          dom.style.top = rect.top + 'px';
-          dom.style.width = rect.width + 'px';
-          dom.style.height = rect.height + 'px';
+          if (self.canExecute) {
+            dom.style.left = rect.left + 'px';
+            dom.style.top = rect.top + 'px';
+            dom.style.width = rect.width + 'px';
+            dom.style.height = rect.height + 'px';
+          }
 
           // emit dragging event
           self.emitDragging(rect.left,  rect.top);

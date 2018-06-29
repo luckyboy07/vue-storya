@@ -1,6 +1,5 @@
 <template>
 <div>
-  
   <mu-appbar class="header-tools editor-tools">
     <mu-flat-button style="width: 100px;" id="btn" class="save-menu-btn" labelPosition="before" 
       label="Save" slot="left" icon="keyboard_arrow_down"
@@ -60,9 +59,8 @@
       <i class="material-icons">{{editorData.gridLines ? 'grid_on' :  'grid_off'}}</i>
     </mu-flat-button> -->
   </mu-appbar>
-  <mu-icon-menu icon="" @change="handleChange" :anchorOrigin="rightTop"
-      :targetOrigin="rightTop"
-      :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
+  <mu-icon-menu menuClass="save-menu" icon="" @change="handleChange" :anchorOrigin="rightTop"
+      :targetOrigin="rightTop" :open="menuOpen" @open="menuOpen = true" @close="menuOpen = false">
     <mu-menu-item value="0" title="Save" @click="SaveContent()"/>
     <mu-divider inset class="temp-action-item-divider"/>
     <!-- <mu-menu-item value="2" title="Save Project" @click="SaveContent()"/>
@@ -171,8 +169,9 @@ export default {
         // last resort
         setTimeout(() => {
           var elem = document.getElementsByClassName('mu-popover')[0];
-          if (elem) {
-            elem.setAttribute('style', `
+          if (elem && elem.children[0].className.indexOf('save-menu') !== -1) {
+            elem.classList.add('save-menu-container');
+            elem.setAttribute('style', ` 
               left: 10px!important; z-index: 4; background-color: #009d70!important;`);
             elem = document.getElementsByClassName('mu-menu')[0]; 
                elem.setAttribute('style', `width: 150px!important;`);
@@ -435,23 +434,30 @@ export default {
       this.editorData.isResponsive = evt.value
       let layers = this.dataLayer
       let ratios = this.editorData.ratios
+      var zoom = 0;
       if (!this.editorData.isResponsive && this.editorData.selectedRatio) {
           // for (let i=0;i<this.editorData.originalLayers.length;i++) {
           //     this.editorData.originalLayers[i].x = 100
           //     this.editorData.originalLayers[i].y = 100
           // }
+        this.editorData.zoom = this.editorData.originalZoom;
+        zoom = this.editorData.zoom;
         console.log('originalLayers:', this.editorData.originalLayers)
         this.updateLayers(this.editorData.originalLayers)
       } else if (this.editorData.isResponsive && this.editorData.selectedRatio) {
           for (let i=0;i<ratios.length;i++) {
              if (this.editorData.selectedRatio === ratios[i].name){
-               console.log(';ASDASD',ratios[i].layers)
+               console.log(';ASDASD',ratios[i].zoom)
+               this.editorData.zoom = 100;
+               zoom = this.editorData.zoom;
                 // this.editorData.layers = JSON.parse(JSON.stringify(ratios[i].layers))
                 this.updateLayers(ratios[i].layers)
                 break;
              } 
           }
       }
+      zoom = zoom > 0 ? zoom : 100
+       this.$refs.zoomInp.value = zoom + '%';
       this.savetoLocalstorage()
     },
     beforeClose () {
@@ -631,9 +637,28 @@ export default {
       handler(val) {
         if (!this.editorData.isResponsive) {
           this.editorData.originalLayers = val;
+        } else {
+           for (var i = 0; i < this.editorData.ratios.length; i++) {
+            if (this.editorData.selectedRatio === this.editorData.ratios[i].name) {
+              this.editorData.ratios[i].layers = val;
+              break;
+            }
+          }
         }
       },
       deep: true
+    },
+    "editorData.zoom": function(val) {
+      if (!this.editorData.isResponsive) {
+        this.editorData.originalZoom = val;
+      } else {
+        for (var i = 0; i < this.editorData.ratios.length; i++) {
+          if (this.editorData.selectedRatio === this.editorData.ratios[i].name) {
+            this.editorData.ratios[i].zoom = val;
+            break;
+          }
+        }
+      }
     }
   }
 }
@@ -733,5 +758,6 @@ background-color: red!important;
   height: 100px;
   margin-top: 20px;
 }
+
 </style>
 
