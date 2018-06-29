@@ -7,6 +7,9 @@
 			<div id="loader"></div>
 		</div> -->
       <!-- <layer-cloner :style="{left: cloneLayerContainerBounds.left + 'px', top: cloneLayerContainerBounds.top + 'px'}" :layers="layers"></layer-cloner> -->
+        <div id="loader-wrapper" v-if="isSaved">
+			    <div id="loader"></div>
+		    </div>
       </div>
     </div>
   </div>
@@ -248,7 +251,8 @@ export default {
     ...mapGetters({
       layers: 'getLayers',
       lastLayerAddTime: 'getLastLayerAddTime',
-      selectedLayer: 'getSelectedLayerId'
+      selectedLayer: 'getSelectedLayerId',
+      isSaved: 'getBroadcastSave'
     })
   },
   watch: {
@@ -290,6 +294,9 @@ export default {
     width: 100%;
     height: 100%;
     z-index: 1000;
+    background: #000;
+    z-index: 9999;
+    opacity: 0.6;
 }
 #loader {
     display: block;
@@ -301,8 +308,8 @@ export default {
     margin: -75px 0 0 -75px;
     border-radius: 50%;
     border: 3px solid transparent;
-    border-top-color: #3498db;
-
+    border-top-color: #525252;
+    opacity: 1;
     -webkit-animation: spin 2s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
     animation: spin 2s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */
 }
@@ -316,8 +323,8 @@ export default {
         bottom: 5px;
         border-radius: 50%;
         border: 3px solid transparent;
-        border-top-color: #e74c3c;
-
+        border-top-color: #d4b7b7;
+        opacity: 1;
         -webkit-animation: spin 3s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
         animation: spin 3s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */
     }
@@ -331,8 +338,8 @@ export default {
         bottom: 15px;
         border-radius: 50%;
         border: 3px solid transparent;
-        border-top-color: #f9c922;
-
+        border-top-color: #d6d0bb;
+        opacity: 1;
         -webkit-animation: spin 1.5s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
           animation: spin 1.5s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */
     }

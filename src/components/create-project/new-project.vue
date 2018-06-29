@@ -49,7 +49,7 @@
             <div class="item inp">
               Project Name <span class="error-msg" v-if="isProject">*Required</span>
               <div class="np-g-inp" ref="menuContainer">
-                <input style="margin: 0;" class="default-inp" type="text" v-model="setupData.project_name"/>
+                <input style="margin: 0;" class="default-inp" type="text" v-model="setupData.project_name" @input="handleInput"/>
                 <mu-flat-button class="np-g-more-btn" @click="showMore">
                   <i class="material-icons">
                     expand_more
@@ -58,9 +58,10 @@
               </div>
               <div class="np-more-items" ref="menuMore" v-show="showMoreItems">
                 <mu-list style="padding: 0">
-                  <mu-list-item v-for="(item, i) in prjs" :key="i" :title="item.name" 
+                  <mu-list-item v-for="(item, i) in projects.row" :key="i" :title="item.project_name" 
                     class="tem-action-item" @click="handleItemClick(item)"/>
                   <!-- <mu-divider inset class="temp-action-item-divider"/> -->
+                 <mu-infinite-scroll :scroller="scroller" @load="loadMore"/>
                 </mu-list>
               </div>
             </div>
@@ -149,7 +150,9 @@ import { Photoshop, Chrome } from "vue-color";
 import colorHelper from '../../helpers/color-helper'
 import header from '../../pages/template/header'
 import {mapActions} from 'vuex'
+import apiService from '../../helpers/API.js'
 // const service = new sampleService()
+import * as $ from 'linq'
 export default {
   name: "new-project",
   components: {
@@ -160,8 +163,23 @@ export default {
   },
   mounted() {
     // removing the
+    this.scroller = document.getElementsByClassName('mu-list')[0]
+    console.log('this.scroller:',this.scroller)
     this.$el.getElementsByClassName('mu-tab-link-highlight')[0].className = '';
     document.addEventListener('click', this.handleMouseDown);
+    apiService.getProjects().then((response) =>{
+      if (response.data.response.statusCode === 200) {
+        let temps = response.data.response.data.projects
+        for (let i =0;i<temps.length;i+=20) {
+            this.chunk.push(temps.slice(i,i+20))
+        }
+        this.projects = {
+          row: this.chunk[0],
+          scroll: 0
+        }
+      console.log('this.projects:',this.projects)
+      }
+    })
   },
   beforeDestroy() {
     document.removeEventListener('click', this.handleMouseDown);
@@ -210,7 +228,10 @@ export default {
           name: 'vertical',
           selected: false
         }
-      ]
+      ],
+      projects: {},
+      scroller: null,
+      chunk: []
     }
   },
   methods: {
@@ -236,7 +257,6 @@ export default {
         }
     },
     onCancel() {
-      console.log('onCancel');
       this.$emit('onCancel');
       this.$router.go(-1)
     },
@@ -244,6 +264,7 @@ export default {
       var selected = {};
       // console.log('selected:',selected)
       // console.log('this.setupData:',this.setupData)
+      console.log('this.setupData:',this.setupData)
       selected.width = parseInt(this.setupData.width)
       selected.height = parseInt(this.setupData.height)
       selected.templateSelected = this.setupData.templateSelected
@@ -252,10 +273,11 @@ export default {
       selected.canvas_name = this.setupData.canvas_name;
       selected.project_name = this.setupData.project_name;
       selected.backgroundcolor = this.setupData.backgroundcolor || '#fff';
+      selected.project_id = this.setupData.project_id;
+      console.log('selected:',selected)
       if(this.setupData.canvas_name && this.setupData.project_name){
           this.isFile = false
           this.isProject = false
-          console.log('this.setupData:',this.setupData)
           // apiService.saveCanvas(this.setupData).then((response)=>{
           //   console.log('response:',response)
           // })
@@ -425,6 +447,7 @@ export default {
       return colorHelper.invertColor(hex);
     },
     showMore() {
+      
       this.userShow = true;
       this.showMoreItems = !this.showMoreItems;
       if (this.showMoreItems) {
@@ -434,12 +457,24 @@ export default {
       }
     },
     handleItemClick(item) {
-      this.setupData.project_name = item.name;
-       this.showMoreItems = false;
+      this.setupData.project_name = item.project_name;
+      this.setupData.project_id = item.project_id;
+      this.showMoreItems = false;
     },
     handleviewScroll () {
       let view = document.getElementById('info')
       view.scrollIntoView()
+    },
+    loadMore() {
+      console.log('SCROLL')
+       this.projects.scroll += 1
+      if(this.projects.scroll !== this.chunk.length) {
+      this.projects.row.concat(this.chunk[1])
+      this.projects.row = $.from(this.projects.row).union(this.chunk[this.projects.scroll]).toArray()
+      }
+    },
+    handleInput(value) {
+       this.setupData.project_id = undefined;
     }
   }
 }

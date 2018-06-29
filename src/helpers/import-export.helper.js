@@ -373,7 +373,7 @@ export default {
 
     <!-- REPLACE THIS PART -->
   `,
-    exportHtmlTemplatePart2: function(array, original) {
+    exportHtmlTemplatePart2: function(name, array, original) {
         return `
     <!-- REPLACE THIS PART -->
       <!-- DO NOT REMOVE ME -->
@@ -381,76 +381,162 @@ export default {
       var defaultW, 
         defaultH = 0
         arr =` + JSON.stringify(array) + `, original = ` + JSON.stringify(original) + `;\n
+        var _export = '` + name + `';
         var defaultLayerValues = [];
-
         function fnResize() {
             var ratio = getRatio();
             var hasRatio = false;
-            for (var i = 0; i < arr.ratios.length; i++) {
-                if (arr.ratios[i].name == ratio) {
-                    console.log('applying', arr.ratios[i].name)
-                    var layers = arr.ratios[i].layers
-                    for (var j = 0; j < layers.length; j++) {
-                        // console.log('layers[j]:',layers[j]);
-                        let attr = layers[j].attributes;
-                        var elem = document.getElementById(layers[j].id)
-                        elem.style.top = getPercInH(arr.ratios[i].height, layers[j].y) + 'px';
-                        elem.style.left = getPercInW(arr.ratios[i].width, layers[j].x) + 'px';
-                        elem.style.width = getPercInW(arr.ratios[i].width, layers[j].width) + 'px';
-                        elem.style.height = getPercInH(arr.ratios[i].height, layers[j].height) + 'px';
+            if (_export == 'image') {
+                executeOrig();
+            } else {
+                for (var i = 0; i < arr.ratios.length; i++) {
+                    if (arr.ratios[i].name == ratio) {
+                        console.log('applying', arr.ratios[i].name)
+                        var layers = arr.ratios[i].layers
+                        for (var j = 0; j < layers.length; j++) {
+                            // console.log('layers[j]:',layers[j]);
+                            let attr = layers[j].attributes;
+                            var elem = document.getElementById(layers[j].id)
+                            elem.style.top = getPercInH(arr.ratios[i].height, layers[j].y) + 'px';
+                            elem.style.left = getPercInW(arr.ratios[i].width, layers[j].x) + 'px';
+                            elem.style.width = getPercInW(arr.ratios[i].width, layers[j].width) + 'px';
+                            elem.style.height = getPercInH(arr.ratios[i].height, layers[j].height) + 'px';
+                            var shape = elem.querySelector('.shape');
+                            var im = elem.querySelector('.img-sel');
+                            var tex = elem.querySelector('.tl-container');
+                            if (shape) {
+                                var bg = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient(' + layers[j].attributes.gradientBackgroundData.rotation + 'deg,' + layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor + ' ' + layers[j].attributes.gradientBackgroundData.value[0] + '%,' + layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor + ' ' + layers[j].attributes.gradientBackgroundData.value[1] + '%)' + ', url(' + layers[j].attributes.backgroundImageUri.url + ')';
+                                shape.style.opacity = attr.opacity;
+                                shape.style.filter = "blur(" + attr.filterBlur + "px)";
+                                if (attr.shape === 'Rectangle' || attr.shape === 'Circle') {
+                                    shape.style.background = bg
+                                    // shape.style.backgroundBlendMode = 'multiply';
+                                    shape.style.boxShadow = getPercInW(arr.ratios[i].width, attr.shadowSize) > 0 ? attr.shadowColor ? '1px 12px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + attr.shadowColor : '' : '';
+                                    shape.style.border = getPercInW(arr.ratios[i].width, attr.borderWidth) + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
+                                    // shape.style.backgroundSize = 'cover
+                                } else if (attr.shape === 'Triangle') {
+                                    shape.style.borderLeft = (getPercInW(arr.ratios[i].width, layers[j].width) / 2) - getPercInW(arr.ratios[i].width, 0.5) + 'px solid transparent';
+                                    shape.style.borderRight = (getPercInW(arr.ratios[i].width, layers[j].width) / 2) + 'px solid transparent';
+                                    shape.style.borderBottom = getPercInH(arr.ratios[i].height, layers[j].height) - getPercInH(layers[j].height, 5) + 'px solid ' + bg;
+                                } else if (attr.shape === 'Trapezoid') {
+                                    // console.log('Trapezoid')
+                                    shape.style.borderBottom = getPercInH(arr.ratios[i].height, layers[j].height) - getPercInH(arr.ratios[i].height, 1) + 'px solid' + bg;
+                                    shape.style.borderLeft = getPercInW(arr.ratios[i].width, layers[j].width) / getPercInW(arr.ratios[i].width, 3) + 'px solid transparent';
+                                    shape.style.borderRight = getPercInW(arr.ratios[i].width, layers[j].width) / getPercInW(arr.ratios[i].width, 3) + 'px solid transparent';
+                                } else if (attr.shape === 'Parallelogram') {
+                                    shape.style.width = getPercInW(arr.ratios[i].width, layers[j].width) - getPercInW(arr.ratios[i].width, 40) + 'px';
+                                    shape.style.height = getPercInH(arr.ratios[i].height, layers[j].height) - getPercInH(arr.ratios[i].height, 1) + 'px';
+                                    shape.style.background = bg;
+                                    shape.style.border = getPercInW(arr.ratios[i].width, attr.borderWidth) + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
+                                } else if (attr.shape === 'Diamond') {
+                                    shape.style.width = Math.max(layers[j].height, layers[j].width) + 'px';
+                                    shape.style.height = Math.max(layers[j].height, layers[j].width) + 'px';
+                                    shape.backgroundColor = bg;
+                                    shape.style.marginTop = Math.max(this.data.height, this.data.width) / 2 + 'px'
+                                    shape.style.marginBottom = Math.max(this.data.height, this.data.width) / 2 + 'px'
+                                }
+                            }
+                            if (layers[j].type == 'image') {
+                                // console.log('image', im);
+                                var shadows = attr.shadowSize > 0 ? '1px 12px ' + attr.shadowSize + 'px ' + attr.shadowColor : ''
+                                im.style.borderColor = attr.borderColor;
+                                im.style.borderWidth = getPercInW(arr.ratios[i].width, attr.borderWidth) + 'px';
+                                im.style.borderStyle = attr.borderStyle;
+                                im.style.objectFit = attr.objectFit.toLowerCase();
+                                im.style.opacity = layers[j].loaded ? attr.opacity : 0.5
+                                im.style.rotation = attr.rotation;
+                                im.style.shadowColor = attr.shadowColor;
+                                im.style.sizeOption = attr.sizeOption;
+                                im.style.boxShadow = attr.shadowColor ? shadows : '';
+                                im.style.filter = "blur(" + attr.filterBlur + "px)";
+                            }
+                            if (layers[j].type == 'text') {
+                                tex.style.opacity = attr.opacity;
+                                tex.style.fontFamily = attr.fontFamily;
+                                tex.style.fontSize = getPercInW(arr.ratios[i].width, parseInt(attr.fontSize)) + 'px';
+                                tex.style.fontWeight = attr.fontWeight;
+                                tex.style.fontStyle = attr.fontStyle;
+                                tex.style.textDecoration = attr.textDecoration;
+                                tex.style.textAlign = attr.textAlign;
+                                tex.style.lineHeight = attr.lineHeight;
+                                tex.style.color = attr.color;
+                                tex.style.filter = "blur(" + attr.filterBlur + "px)";
+                                tex.style.backgroundColor = attr.backgroundColor;
+                                tex.style.border = getPercInW(arr.ratios[i].width, attr.borderSize) + 'px ' + attr.borderStyle + ' ' + attr.borderColor;
+                                tex.style.textShadow = '' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px' + ' ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + attr.shadowColor + ',' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + attr.shadowColor;
+                            }
+                            if (layers[j].isBackground) {
+                                elem.style.height = window.innerHeight + 'px';
+                                elem.style.width = window.innerWidth + 'px';
+                                // console.log('elem:', elem)
+                            }
+                        }
+                        hasRatio = true;
+                    }
+                }
+                if (!hasRatio || ratio === '1-1') {
+                    // apply original ratio here
+                    var layers = original;
+                    for (var i = 0; i < layers.length; i++) {
+                        let attr = layers[i].attributes;
+                        var elem = document.getElementById(layers[i].id)
+                        elem.style.top =  getPercInH(arr.height, layers[i].y) + 'px';
+                        elem.style.left = getPercInW(arr.width, layers[i].x) + 'px';
+                        elem.style.width = getPercInW(arr.width,layers[i].width) + 'px';
+                        elem.style.height = getPercInW(arr.height, layers[i].height) + 'px';
                         var shape = elem.querySelector('.shape');
                         var im = elem.querySelector('.img-sel');
                         var tex = elem.querySelector('.tl-container');
                         if (shape) {
-                            var bg = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient(' + layers[j].attributes.gradientBackgroundData.rotation + 'deg,' + layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor + ' ' + layers[j].attributes.gradientBackgroundData.value[0] + '%,' + layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor + ' ' + layers[j].attributes.gradientBackgroundData.value[1] + '%)' + ', url(' + layers[j].attributes.backgroundImageUri.url + ')';
+                            var bg = !layers[i].attributes.isGradient ? layers[i].attributes.color : 'linear-gradient(' + layers[i].attributes.gradientBackgroundData.rotation + 'deg,' + layers[i].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor + ' ' + layers[i].attributes.gradientBackgroundData.value[0] + '%,' + layers[i].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor + ' ' + layers[i].attributes.gradientBackgroundData.value[1] + '%)' + ', url(' + layers[i].attributes.backgroundImageUri.url + ')';
                             shape.style.opacity = attr.opacity;
                             shape.style.filter = "blur(" + attr.filterBlur + "px)";
                             if (attr.shape === 'Rectangle' || attr.shape === 'Circle') {
                                 shape.style.background = bg
                                 // shape.style.backgroundBlendMode = 'multiply';
-                                shape.style.boxShadow = getPercInW(arr.ratios[i].width, attr.shadowSize) > 0 ? attr.shadowColor ? '1px 12px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + attr.shadowColor : '' : '';
-                                shape.style.border = getPercInW(arr.ratios[i].width, attr.borderWidth) + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
+                                shape.style.boxShadow = getPercInW(arr.width, attr.shadowSize) > 0 ? attr.shadowColor ? '1px 12px ' + getPercInW(arr.width, attr.shadowSize) + 'px ' + attr.shadowColor : '' : '';
+                                shape.style.border = getPercInW(arr.width, attr.borderWidth) + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
                                 // shape.style.backgroundSize = 'cover
                             } else if (attr.shape === 'Triangle') {
-                                shape.style.borderLeft = (getPercInW(arr.ratios[i].width, layers[j].width) / 2) - getPercInW(arr.ratios[i].width, 0.5) + 'px solid transparent';
-                                shape.style.borderRight = (getPercInW(arr.ratios[i].width, layers[j].width) / 2) + 'px solid transparent';
-                                shape.style.borderBottom = getPercInH(arr.ratios[i].height, layers[j].height) - getPercInH(layers[j].height, 5) + 'px solid ' + bg;
+                                shape.style.borderLeft = (getPercInW(arr.width, layers[i].width) / 2) - getPercInW(arr.width, 0.5) + 'px solid transparent';
+                                shape.style.borderRight = (getPercInW(arr.width, layers[i].width) / 2) + 'px solid transparent';
+                                shape.style.borderBottom = getPercInH(arr.height, layers[i].height) - getPercInH(layers[i].height, 5) + 'px solid ' + bg;
                             } else if (attr.shape === 'Trapezoid') {
                                 // console.log('Trapezoid')
-                                shape.style.borderBottom = getPercInH(arr.ratios[i].height, layers[j].height) - getPercInH(arr.ratios[i].height, 1) + 'px solid' + bg;
-                                shape.style.borderLeft = getPercInW(arr.ratios[i].width, layers[j].width) / getPercInW(arr.ratios[i].width, 3) + 'px solid transparent';
-                                shape.style.borderRight = getPercInW(arr.ratios[i].width, layers[j].width) / getPercInW(arr.ratios[i].width, 3) + 'px solid transparent';
+                                shape.style.borderBottom = getPercInH(arr.height, layers[i].height) - getPercInH(arr.height, 1) + 'px solid' + bg;
+                                shape.style.borderLeft = getPercInW(arr.width, layers[i].width) / getPercInW(arr.width, 3) + 'px solid transparent';
+                                shape.style.borderRight = getPercInW(arr.width, layers[i].width) / getPercInW(arr.width, 3) + 'px solid transparent';
                             } else if (attr.shape === 'Parallelogram') {
-                                shape.style.width = getPercInW(arr.ratios[i].width, layers[j].width) - getPercInW(arr.ratios[i].width, 40) + 'px';
-                                shape.style.height = getPercInH(arr.ratios[i].height, layers[j].height) - getPercInH(arr.ratios[i].height, 1) + 'px';
+                                shape.style.width = getPercInW(arr.width, layers[i].width) - getPercInW(arr.width, 40) + 'px';
+                                shape.style.height = getPercInH(arr.height, layers[i].height) - getPercInH(arr.height, 1) + 'px';
                                 shape.style.background = bg;
-                                shape.style.border = getPercInW(arr.ratios[i].width, attr.borderWidth) + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
+                                shape.style.border = getPercInW(arr.width, attr.borderWidth) + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
                             } else if (attr.shape === 'Diamond') {
-                                shape.style.width = Math.max(layers[j].height, layers[j].width) + 'px';
-                                shape.style.height = Math.max(layers[j].height, layers[j].width) + 'px';
+                                shape.style.width = Math.max(layers[i].height, layers[i].width) + 'px';
+                                shape.style.height = Math.max(layers[i].height, layers[i].width) + 'px';
                                 shape.backgroundColor = bg;
                                 shape.style.marginTop = Math.max(this.data.height, this.data.width) / 2 + 'px'
                                 shape.style.marginBottom = Math.max(this.data.height, this.data.width) / 2 + 'px'
                             }
                         }
-                        if (layers[j].type == 'image') {
+                        if (layers[i].type == 'image') {
                             // console.log('image', im);
                             var shadows = attr.shadowSize > 0 ? '1px 12px ' + attr.shadowSize + 'px ' + attr.shadowColor : ''
                             im.style.borderColor = attr.borderColor;
-                            im.style.borderWidth = getPercInW(arr.ratios[i].width, attr.borderWidth) + 'px';
+                            im.style.borderWidth = getPercInW(arr.width, attr.borderWidth) + 'px';
                             im.style.borderStyle = attr.borderStyle;
                             im.style.objectFit = attr.objectFit.toLowerCase();
-                            im.style.opacity = layers[j].loaded ? attr.opacity : 0.5
+                            im.style.opacity = layers[i].loaded ? attr.opacity : 0.5
                             im.style.rotation = attr.rotation;
                             im.style.shadowColor = attr.shadowColor;
                             im.style.sizeOption = attr.sizeOption;
                             im.style.boxShadow = attr.shadowColor ? shadows : '';
                             im.style.filter = "blur(" + attr.filterBlur + "px)";
                         }
-                        if (layers[j].type == 'text') {
+                        if (layers[i].type == 'text') {
                             tex.style.opacity = attr.opacity;
                             tex.style.fontFamily = attr.fontFamily;
-                            tex.style.fontSize = getPercInW(arr.ratios[i].width, parseInt(attr.fontSize)) + 'px';
+                            tex.style.fontSize = getPercInW(arr.width, parseInt(attr.fontSize)) + 'px';
                             tex.style.fontWeight = attr.fontWeight;
                             tex.style.fontStyle = attr.fontStyle;
                             tex.style.textDecoration = attr.textDecoration;
@@ -459,98 +545,16 @@ export default {
                             tex.style.color = attr.color;
                             tex.style.filter = "blur(" + attr.filterBlur + "px)";
                             tex.style.backgroundColor = attr.backgroundColor;
-                            tex.style.border = getPercInW(arr.ratios[i].width, attr.borderSize) + 'px ' + attr.borderStyle + ' ' + attr.borderColor;
-                            tex.style.textShadow = '' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px' + ' ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + attr.shadowColor + ',' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + attr.shadowColor;
+                            tex.style.border = getPercInW(arr.width, attr.borderSize) + 'px ' + attr.borderStyle + ' ' + attr.borderColor;
+                            tex.style.textShadow = '' + getPercInW(arr.width, attr.shadowSize) + 'px' + ' ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + attr.shadowColor + ',' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + attr.shadowColor;
                         }
-                        if (layers[j].isBackground) {
+                        if (layers[i].isBackground) {
                             elem.style.height = window.innerHeight + 'px';
                             elem.style.width = window.innerWidth + 'px';
                             // console.log('elem:', elem)
                         }
                     }
-                    hasRatio = true;
-                }
-            }
-            if (!hasRatio || ratio === '1-1') {
-                // apply original ratio here
-                var layers = original;
-                for (var i = 0; i < layers.length; i++) {
-                    let attr = layers[i].attributes;
-                    var elem = document.getElementById(layers[i].id)
-                    elem.style.top =  getPercInH(arr.height, layers[i].y) + 'px';
-                    elem.style.left = getPercInW(arr.width, layers[i].x) + 'px';
-                    elem.style.width = getPercInW(arr.width,layers[i].width) + 'px';
-                    elem.style.height = getPercInW(arr.height, layers[i].height) + 'px';
-                    var shape = elem.querySelector('.shape');
-                    var im = elem.querySelector('.img-sel');
-                    var tex = elem.querySelector('.tl-container');
-                    if (shape) {
-                        var bg = !layers[i].attributes.isGradient ? layers[i].attributes.color : 'linear-gradient(' + layers[i].attributes.gradientBackgroundData.rotation + 'deg,' + layers[i].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor + ' ' + layers[i].attributes.gradientBackgroundData.value[0] + '%,' + layers[i].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor + ' ' + layers[i].attributes.gradientBackgroundData.value[1] + '%)' + ', url(' + layers[i].attributes.backgroundImageUri.url + ')';
-                        shape.style.opacity = attr.opacity;
-                        shape.style.filter = "blur(" + attr.filterBlur + "px)";
-                        if (attr.shape === 'Rectangle' || attr.shape === 'Circle') {
-                            shape.style.background = bg
-                            // shape.style.backgroundBlendMode = 'multiply';
-                            shape.style.boxShadow = getPercInW(arr.width, attr.shadowSize) > 0 ? attr.shadowColor ? '1px 12px ' + getPercInW(arr.width, attr.shadowSize) + 'px ' + attr.shadowColor : '' : '';
-                            shape.style.border = getPercInW(arr.width, attr.borderWidth) + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
-                            // shape.style.backgroundSize = 'cover
-                        } else if (attr.shape === 'Triangle') {
-                            shape.style.borderLeft = (getPercInW(arr.width, layers[i].width) / 2) - getPercInW(arr.width, 0.5) + 'px solid transparent';
-                            shape.style.borderRight = (getPercInW(arr.width, layers[i].width) / 2) + 'px solid transparent';
-                            shape.style.borderBottom = getPercInH(arr.height, layers[i].height) - getPercInH(layers[i].height, 5) + 'px solid ' + bg;
-                        } else if (attr.shape === 'Trapezoid') {
-                            // console.log('Trapezoid')
-                            shape.style.borderBottom = getPercInH(arr.height, layers[i].height) - getPercInH(arr.height, 1) + 'px solid' + bg;
-                            shape.style.borderLeft = getPercInW(arr.width, layers[i].width) / getPercInW(arr.width, 3) + 'px solid transparent';
-                            shape.style.borderRight = getPercInW(arr.width, layers[i].width) / getPercInW(arr.width, 3) + 'px solid transparent';
-                        } else if (attr.shape === 'Parallelogram') {
-                            shape.style.width = getPercInW(arr.width, layers[i].width) - getPercInW(arr.width, 40) + 'px';
-                            shape.style.height = getPercInH(arr.height, layers[i].height) - getPercInH(arr.height, 1) + 'px';
-                            shape.style.background = bg;
-                            shape.style.border = getPercInW(arr.width, attr.borderWidth) + 'px ' + attr.borderColor + ' ' + attr.borderStyle;
-                        } else if (attr.shape === 'Diamond') {
-                            shape.style.width = Math.max(layers[i].height, layers[i].width) + 'px';
-                            shape.style.height = Math.max(layers[i].height, layers[i].width) + 'px';
-                            shape.backgroundColor = bg;
-                            shape.style.marginTop = Math.max(this.data.height, this.data.width) / 2 + 'px'
-                            shape.style.marginBottom = Math.max(this.data.height, this.data.width) / 2 + 'px'
-                        }
-                    }
-                    if (layers[i].type == 'image') {
-                        // console.log('image', im);
-                        var shadows = attr.shadowSize > 0 ? '1px 12px ' + attr.shadowSize + 'px ' + attr.shadowColor : ''
-                        im.style.borderColor = attr.borderColor;
-                        im.style.borderWidth = getPercInW(arr.width, attr.borderWidth) + 'px';
-                        im.style.borderStyle = attr.borderStyle;
-                        im.style.objectFit = attr.objectFit.toLowerCase();
-                        im.style.opacity = layers[i].loaded ? attr.opacity : 0.5
-                        im.style.rotation = attr.rotation;
-                        im.style.shadowColor = attr.shadowColor;
-                        im.style.sizeOption = attr.sizeOption;
-                        im.style.boxShadow = attr.shadowColor ? shadows : '';
-                        im.style.filter = "blur(" + attr.filterBlur + "px)";
-                    }
-                    if (layers[i].type == 'text') {
-                        tex.style.opacity = attr.opacity;
-                        tex.style.fontFamily = attr.fontFamily;
-                        tex.style.fontSize = getPercInW(arr.width, parseInt(attr.fontSize)) + 'px';
-                        tex.style.fontWeight = attr.fontWeight;
-                        tex.style.fontStyle = attr.fontStyle;
-                        tex.style.textDecoration = attr.textDecoration;
-                        tex.style.textAlign = attr.textAlign;
-                        tex.style.lineHeight = attr.lineHeight;
-                        tex.style.color = attr.color;
-                        tex.style.filter = "blur(" + attr.filterBlur + "px)";
-                        tex.style.backgroundColor = attr.backgroundColor;
-                        tex.style.border = getPercInW(arr.width, attr.borderSize) + 'px ' + attr.borderStyle + ' ' + attr.borderColor;
-                        tex.style.textShadow = '' + getPercInW(arr.width, attr.shadowSize) + 'px' + ' ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + attr.shadowColor + ',' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + getPercInW(arr.ratios[i].width, attr.shadowSize) + 'px ' + attr.shadowColor;
-                    }
-                    if (layers[i].isBackground) {
-                        elem.style.height = window.innerHeight + 'px';
-                        elem.style.width = window.innerWidth + 'px';
-                        // console.log('elem:', elem)
-                    }
-                }
+                } 
             }
         }
 
@@ -756,6 +760,31 @@ export default {
             return parseInt(elemContent.children[0].style.fontSize.replace('px', ''));
         }
 
+        function executeOrig() {
+            console.log('EXECUTE');
+            var layers = original;
+            console.log('default layer', layers)
+            for (var j = 0; j < layers.length; j++) {
+              var elem = document.getElementById(layers[j].id)
+              console.log('layers[j]:',layers[j]);
+              console.log('elem:',elem);
+              elem.style.top = layers[j].y + 'px';
+              elem.style.left = layers[j].x + 'px';
+              elem.style.width = layers[j].width + 'px';
+              elem.style.height = layers[j].height + 'px';
+              var shape = elem.querySelector('.shape');
+              if (shape) {
+                  // console.log(layers[j].attributes.isGradient, shape)
+                  shape.style.background = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
+              }
+              if (layers[j].isBackground) {
+                  elem.style.height = window.innerHeight + 'px';
+                  elem.style.width = window.innerWidth + 'px';
+                  // console.log('elem:', elem)
+              }
+            }
+        }
+
         function _clean(elem) {
             var count = 1;
             console.log("elem.getElementsByTagName('comment')", elem.getElementsByTagName('comment'))
@@ -818,7 +847,7 @@ export default {
             // // apped amination css  
             var content = this.exportHtmlTemplatePart1.replace('--CUSTOM_STYLES--', cssText);
             content = content.replace('--FONTS_HERE--', fonts);
-            this.$_download('export-' + appHelper.generateTimestamp() + '.html', content + htmlContent + this.exportHtmlTemplatePart2(array, layerData));
+            this.$_download('export-' + appHelper.generateTimestamp() + '.html', content + htmlContent + this.exportHtmlTemplatePart2('template', array, layerData));
             setTimeout(() => {
                 res(true);
             }, 100);
@@ -837,9 +866,9 @@ export default {
         editorElem = this.$_responsiveness(editorElem, animatedData);
         return editorElem;
     },
-    getHtmlString() {
+    getHtmlString(array, layerData) {
         var htmlContent = this.getExportingElement().outerHTML;
-        return this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2;
+        return this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2('image', array, layerData);
     },
     /**
      * Generates a responsive version of the exported HTML

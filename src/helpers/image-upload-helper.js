@@ -11,8 +11,9 @@ export default {
                     this.finish(id, response.data);
                 })
                 .catch((err) => {
-                    this.finish(id, response.data);
+                    this.finish(id, { url: null });
                     snackbar.show('File is not acceptable.');
+                    console.warn(err)
                 });
         }
     },

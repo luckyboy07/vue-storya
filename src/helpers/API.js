@@ -27,13 +27,40 @@ export default {
     saveRatio (payload, id) {
         return new Promise((resolve, reject) => {
             axios.post(API_URL + 'canvas/' + id + '/ratios',payload).then(response =>{
-                resolve(response)
+                resolve(response.data)
             })
         })
     },
     saveLayer (payload) {
         return new Promise((resolve ,reject)=> {
             axios.post(API_URL+ 'layers',payload).then(response =>{
+                resolve(response)
+            }).catch(error =>{
+                reject(error)
+            })
+        })
+    },
+    getProjects () {
+        return new Promise((resolve,reject) =>{
+            axios.get(API_URL+'projects').then(response=>{
+                resolve(response)
+            }).catch(error =>{
+                reject(error)
+            })
+        })
+    },
+    getCanvasProject (project_id) {
+        return new Promise((resolve, reject) =>{
+            axios.get(API_URL + 'projects/'+project_id+'/canvas').then(response=>{
+                resolve(response)
+            }).catch(error =>{
+                reject(error)
+            })
+        })
+    },
+    getCanvasLayers (canvas_id) {
+        return new Promise((resolve, reject) =>{
+            axios.get(API_URL+ 'canvas/'+canvas_id+'/layers').then(response=>{
                 resolve(response)
             }).catch(error =>{
                 reject(error)
@@ -57,5 +84,59 @@ export default {
             })
         })
     },
+    saveCanvasProject(project_id,canvas_id,payload) {
+        return new Promise((resolve, reject) =>{
+            axios.post(API_URL + 'projects/'+project_id+'/canvas/'+canvas_id,payload).then(response=>{
+                resolve(response)
+            }).catch(error =>{
+                reject(error)
+            })
+        })
+    },
+    updateCanvas(canvas_id,payload) {
+        return new Promise((resolve, reject) =>{
+            axios.put(API_URL + 'canvas/'+canvas_id,payload).then(response=>{
+                resolve(response)
+            }).catch(error =>{
+                reject(error)
+            })
+        })
+    },
+    saveCanvalayer(payload) {
+        return new Promise((resolve, reject) =>{
+            axios.post(API_URL + 'layers',payload).then(response=>{
+                resolve(response)
+            }).catch(error =>{
+                reject(error)
+            })
+        })
+    },
+    updateLayer (layer_id,payload) {
+        return new Promise((resolve, reject) =>{
+            axios.put(API_URL + 'layers/'+layer_id,payload).then(response=>{
+                resolve(response)
+            }).catch(error =>{
+                reject(error)
+            })
+        })
+    },
+    deleteLayer(layer_id) {
+        return new Promise((resolve, reject) => {
+            axios.delete(API_URL + 'layers/'+layer_id).then(response=>{
+                resolve(response)
+            }).catch(error =>{
+                reject(error)
+            })
+        })
+    },
+    generateThumbnail (canvas_id, payload) {
+        return new Promise((resolve, reject) => {
+            axios.delete(API_URL + 'canvas/'+canvas_id+'thumbnail',payload).then(response=>{
+                resolve(response)
+            }).catch(error =>{
+                reject(error)
+            })
+        })
+    }
     
 }

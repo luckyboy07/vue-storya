@@ -74,6 +74,7 @@ export const store = new Vuex.Store({
                 zindex: null,
                 content: 'Shape Layer',
                 isBackground: false,
+                layer_id: null,
                 attributes: {
                     shape: 'Circle',
                     shape_type: '',
@@ -167,6 +168,7 @@ export const store = new Vuex.Store({
                 content: 'Image Layer',
                 isBackground: false,
                 loaded: true,
+                layer_id: null,
                 attributes: {
                     src: 'http://via.placeholder.com/140x100',
                     sizeOption: 'Auto',
@@ -215,6 +217,7 @@ export const store = new Vuex.Store({
                 open: false,
                 content: 'Text Layer',
                 isBackground: false,
+                layer_id: null,
                 attributes: {
                     rotation: 0,
                     fontFamily: "Lato",
@@ -278,6 +281,7 @@ export const store = new Vuex.Store({
             }
         ],
         broadcastedStatuses: null,
+        broadcastSave: false,
     },
     mutations: {
         addLayer: (state, payload) => {
@@ -303,12 +307,10 @@ export const store = new Vuex.Store({
             let sam = layers.sort((a, b) => {
                 return b.order - a.order
             })
-            console.log('state.canvasData.ratios:', state.canvasData)
             let ratios = state.canvasData.ratios
             if (ratios.length > 0) {
                 for (let i = 0; i < ratios.length; i++) {
                     let ratiolayers = ratios[i].layers
-                    console.log('ratiolayers:', ratiolayers)
                     if (state.canvasData.selectedRatio === ratios[i].name) {
                         // ratiolayers.push(payload)
                         // ratiolayers.sort((a, b) => {
@@ -551,7 +553,12 @@ export const store = new Vuex.Store({
         },
         updatecanvasData: (state, payload) => {
             let pay = payload
+            Vue.localStorage.set('canvas', JSON.stringify(pay))
             Vue.set(state, 'canvasData', pay)
+        },
+        updateProject: (state,payload) =>{
+            let project = payload
+            Vue.set(state,'projects',project)
         }
     },
     getters: {
@@ -620,6 +627,9 @@ export const store = new Vuex.Store({
         getImageBackground: state => {
             return $.from(state.layers).firstOrDefault(l => l.type === 'background');
         },
+        getBroadcastSave: state => {
+            return state.broadcastSave
+        }
     },
     actions: {
         addLayer: ({ commit }, payload) => {
@@ -640,28 +650,59 @@ export const store = new Vuex.Store({
                     template.templateSelected = payload.templateSelected
                     template.description = 'asdasd'
                     template.is_public = false
-                    let project = {
-                        project_name: template.project_name,
-                        is_public: template.is_public,
-                        orientation: 'asdasd',
-                    }
-
-                    store.dispatch('saveProject', project).then(response => {
-                        if (response.data.response.statusCode === 201) {
-                            let proj = response.data.response.data
-                            let stateproj = state.projects
-                            stateproj.project_id = proj.project_id
-                            stateproj.project_name = proj.project_name
-                            stateproj.is_public = proj.is_public
-                            stateproj.orientation = proj.orientation
-                            console.log(stateproj)
-                            Vue.set(state, 'projects', stateproj)
-                            Vue.localStorage.set('canvas', JSON.stringify(template))
-                            resolve(response)
+                    if(payload.project_id) {
+                        let project = {
+                            project_id: payload.project_id,
+                            project_name: template.project_name,
+                            is_public: false,
+                            orientation: 'asdasd',
                         }
-                    }).catch(err => {
-                        reject(err)
-                    })
+                        Vue.set(state, 'projects', project)
+                        Vue.localStorage.set('projects', JSON.stringify(project))
+                        resolve({data: {
+                            response: {
+                                statusCode: 201
+                            }
+                        }})
+                    }else{
+                        let project = {
+                            project_name: template.project_name,
+                            is_public: template.is_public,
+                            orientation: 'asdasd',
+                        }
+                        store.dispatch('saveProject', project).then(response => {
+                            if (response.data.response.statusCode === 201) {
+                                let proj = response.data.response.data
+                                console.log('proj:',proj)
+                                let stateproj = state.projects
+                                stateproj.project_id = proj.project_id
+                                stateproj.project_name = proj.project_name
+                                stateproj.is_public = proj.is_public
+                                stateproj.orientation = proj.orientation
+                                Vue.set(state, 'projects', stateproj)
+                                Vue.localStorage.set('projects', JSON.stringify(stateproj))
+                                let obj = {
+                                    canvas_name: template.canvas_name,
+                                    description: template.description,
+                                    height: template.height,
+                                    width: template.width,
+                                    backgroundcolor: template.backgroundcolor,
+                                    is_responsive: template.isResponsive,
+                                    zoom: template.zoom,
+                                    zoom_increase: template.zoomIncrease,
+                                    thumbnail: template.thumbnail,
+                                    ratio: 'string',
+                                  }
+                                store.dispatch('saveCanvas',obj).then(resp =>{
+                                    template.canvas_id = resp.data.response.data.canvas_id
+                                    Vue.localStorage.set('canvas', JSON.stringify(template))
+                                })
+                                resolve(response)
+                            }
+                        }).catch(err => {
+                            reject(err)
+                        })
+                    }
                 })
                 // commit('selectTemplate',payload)
                 // return store.dispatch('selectTemplate',payload).then((response)=>{
@@ -685,6 +726,17 @@ export const store = new Vuex.Store({
         },
         updatecanvasData: ({ commit }, payload) => {
             commit('updatecanvasData', payload)
+        },
+        updateProject: ({ commit }, payload) => {
+            commit('updateProject', payload)
+        },
+        saveCanvas: ({commit},payload) => {
+            return apiService.saveCanvas(payload,
+            data =>{
+                commit(data)
+            },errors =>{
+                commit(errors)
+            })
         }
     }
     //   strict: process.env.NODE_ENV !== 'production'

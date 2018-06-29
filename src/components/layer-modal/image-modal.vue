@@ -149,6 +149,7 @@ export default {
         }
         if (newFile && oldFile) {
           // update
+          console.log('newFile;',newFile);
         }
         if (!newFile && oldFile) {
           // remove

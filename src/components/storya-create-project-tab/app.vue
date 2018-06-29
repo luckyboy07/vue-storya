@@ -1,48 +1,64 @@
 <template>
   <div>
     <div class="s-create-tab-btns">
-      <mu-raised-button @click="tabClicked(0)" label="Recent" class="s-tab-btn" :class="selectedTab === 0 ? 's-primary-btn' : 's-default-btn'"/>
+      <!-- <mu-raised-button @click="tabClicked(0)" label="Recent" class="s-tab-btn" :class="selectedTab === 0 ? 's-primary-btn' : 's-default-btn'"/> -->
       <mu-raised-button @click="tabClicked(1)" label="Templates" class="s-tab-btn" :class="selectedTab === 1 ? 's-primary-btn' : 's-default-btn'"/>
-      <mu-raised-button @click="tabClicked(2)" label="Projects" class="s-tab-btn" :class="selectedTab === 2 || selectedTab === 3 ? 's-primary-btn' : 's-default-btn'"/>
+      <mu-raised-button @click="tabClicked(2);isCanvas = false" label="Projects" class="s-tab-btn" :class="selectedTab === 2 || selectedTab === 3 ? 's-primary-btn' : 's-default-btn'"/>
       <mu-raised-button @click="tabClicked(3)" label="Assets" class="s-tab-btn" :class="selectedTab === 3 ? 's-primary-btn' : 's-default-btn'"/>
     </div>
     <div class="s-tab-content">
       <div v-if="selectedTab === 0">
-        <mu-grid-list :cols="5" :padding="10" :cellHeight="300">
+        <mu-grid-list :cols="5" :padding="10" :cellHeight="200" class="gridlist">
           <mu-grid-tile v-for="(tile, index) in tempData" :key="index" v-if="tile.id !== '-1'">
             <mu-flat-button class="tem-avatar" @click="handleItemClick(tile, 'template', $event)">
               <img v-if="tile.id !== '-1'" class="tem-avatar" :src="tile.avatar"/>
+              <!-- <img v-if="tile.id !== '-1'" class="tem-avatar" src="@/assets/samples/flow.png"/> -->
               <div v-if="tile.id === '-1'" class="blank-template"><div>{{tile.name}}</div></div>
             </mu-flat-button>
           </mu-grid-tile>
         </mu-grid-list>
       </div>
       <div v-if="selectedTab === 1">
-        <mu-grid-list :cols="5" :padding="10" :cellHeight="300">
-          <mu-grid-tile v-for="(tile, index) in tempData" :key="index">
+        <mu-grid-list :cols="5" :padding="10" :cellHeight="200" class="gridlist" style="height:305px;" id="canv">
+            <mu-grid-tile  >
+               <mu-flat-button  class="tem-avatar" @click="handleItemClick('-1', 'template', $event)">
+              <div class="blank-template"><div>Blank Template</div></div>
+               </mu-flat-button>
+            </mu-grid-tile>
+          <mu-grid-tile v-for="(tile, index) in canvas.row" :key="index">
             <mu-flat-button class="tem-avatar" @click="handleItemClick(tile, 'template', $event)">
-              <img v-if="tile.id !== '-1'" class="tem-avatar" :src="tile.avatar"/>
-              <div v-if="tile.id === '-1'" class="blank-template"><div>{{tile.name}}</div></div>
+              <img v-if="tile.id !== '-1'" class="tem-avatar" :src="tile.thumbnai_url" v-show="tile.thumbnai_url !== ''"/>
+              <div class="blank-template" v-if="tile.thumbnai_url === ''"><div>No image yet</div></div>
+              <!-- <img v-if="tile.id !== '-1'" class="tem-avatar" :src="tile.avatar"/> -->
+              <div v-if="tile.id === '-1'" class="blank-template"><div>{{tile.canvas_name}}</div></div>
             </mu-flat-button>
           </mu-grid-tile>
+          <mu-infinite-scroll :scroller="scroller" :loading="loading" @load="loadMore"/>
         </mu-grid-list>
       </div>
        <div v-if="selectedTab === 2">
-         <mu-grid-list :cols="5" :padding="10" :cellHeight="300">
-          <mu-grid-tile v-for="(tile, index) in projData" :key="index">
+         <mu-grid-list :cols="5" :padding="10" :cellHeight="200" class="gridlist">
+          <mu-grid-tile v-for="(tile, index) in projects" :key="index" v-if="!isCanvas">
             <mu-flat-button class="tem-avatar" @click="handleItemClick(tile, 'project', $event)">
-              <img v-if="tile.id !== '-1'" class="tem-avatar" :src="tile.avatar"/>
+              <img v-if="tile.id !== '-1'" class="tem-avatar" src="@/assets/samples/flow.png"/>
               <div class="s-create-proj-name">
                 <div>
-                  <div class="s-create-proj-name-content">{{tile.name}}</div> 
+                  <div class="s-create-proj-name-content">{{tile.project_name}}</div> 
                 </div> 
                 </div>
             </mu-flat-button>
           </mu-grid-tile>
+         <mu-grid-tile v-for="(tile, index) in projectCanvas" :key="index" v-if="isCanvas">
+              <mu-flat-button class="tem-avatar" @click="handleItemClick(tile, 'project', $event, true)">
+              <img v-if="tile.id !== '-1'" class="tem-avatar" src="@/assets/samples/Reflux.png"/>
+              <!-- <img v-if="tile.id !== '-1'" class="tem-avatar" :src="tile.avatar"/> -->
+              <div v-if="tile.id === '-1'" class="blank-template"><div>{{tile.canvas_name}}</div></div>
+            </mu-flat-button>
+           </mu-grid-tile>
         </mu-grid-list>
       </div>
       <div v-if="selectedTab === 3">
-         <mu-grid-list :cols="5" :padding="10" :cellHeight="300">
+         <mu-grid-list :cols="5" :padding="10" :cellHeight="200" class="gridlist">
           <mu-grid-tile v-for="(tile, index) in asstsData" :key="index">
             <mu-flat-button class="tem-avatar" @click="handleItemClick(tile, 'asset', $event)">
               <img v-if="tile.id !== '-1'" class="tem-avatar" :src="tile.avatar"/>
@@ -62,7 +78,7 @@
           </div>
         </div>
         <div class="s-create-proj-detail-container">
-          <mu-grid-list :cols="5" :padding="10" :cellHeight="300">
+          <mu-grid-list :cols="5" :padding="10" :cellHeight="200" class="gridlist">
             <mu-grid-tile v-for="(tile, index) in projDetailData" :key="index">
               <mu-flat-button class="tem-avatar" @click="handleItemClick(tile, 'project', $event, true)">
                 <img v-if="tile.id !== '-1'" class="tem-avatar" :src="tile.avatar"/>
@@ -86,9 +102,9 @@
     <div ref="templateMenu" v-show="tabType === 'template'"  
       class="tem-action-menu h-100" :class="[tabType === 'template' ? 'tem-action-menu-shown' : 'tem-action-menu-hidden']">
        <mu-list style="padding: 0">
-        <mu-list-item title="Create Project" class="tem-action-item" @click="templateMenuCommands(0)"/>
+        <!-- <mu-list-item title="Create Project" class="tem-action-item" @click="templateMenuCommands(0)"/> -->
         <mu-divider inset class="temp-action-item-divider"/>
-        <mu-list-item title="Edit Template" class="tem-action-item" @click="templateMenuCommands(1)"/>
+        <mu-list-item title="Edit Template" class="tem-action-item" @click="openCanvas(selectedTemplate)"/>
         <mu-divider inset class="temp-action-item-divider"/>
         <mu-list-item title="Delete Template" class="tem-action-item" @click="templateMenuCommands(2)"/>
       </mu-list>
@@ -96,7 +112,8 @@
      <div ref="projectMenu" v-show="tabType === 'project'"  
       class="tem-action-menu h-97" :class="[tabType === 'project' ? 'tem-action-menu-shown' : 'tem-action-menu-hidden']">
        <mu-list style="padding: 0">
-        <mu-list-item title="Open Project" class="tem-action-item" @click="projectMenuCommands(0)"/>
+        <mu-list-item title="Open" class="tem-action-item" @click="openCanvas(selectedCanvas)" v-if="isCanvas"/>
+        <mu-list-item title="Open Project" class="tem-action-item" @click="openProject()" v-if="!isCanvas"/>
         <mu-divider inset class="temp-action-item-divider"/>
         <mu-list-item title="Delete Project" class="tem-action-item" @click="projectMenuCommands(1)"/>
       </mu-list>
@@ -104,12 +121,15 @@
   </div>
 </template>
 <script>
+import apiService from '../../helpers/API.js'
+import {mapActions} from 'vuex'
+import * as $ from 'linq'
 export default {
   name: "storya-tabs",
   props: ["items"],
   data() {
     return {
-      selectedTab: 0, // the current selected tab
+      selectedTab: 1, // the current selected tab
       tabType: "", // the type of tan being opened
       tempData: [
         {
@@ -196,7 +216,17 @@ export default {
           avatar:
             "data:image/png;base64,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"
         }
-      ]
+      ],
+      projects: [],
+      selectedProject: {},
+      projectCanvas: [],
+      isCanvas: false,
+      selectedCanvas: {},
+      canvas: {},
+      scroller: null,
+      loading: false,
+      chunk: [],
+      selectedTemplate: {}
     };
   },
   beforeMount() {
@@ -208,16 +238,53 @@ export default {
       this.listenForDocumentClickEvents
     );
   },
+  mounted () {
+     apiService.getProjects().then((response)=>{
+      if(response.statusText == 'OK' && response.data.statusCode === 200) {
+      this.projects = response.data.response.data.projects
+      // console.log('this.projects:',this.projects)
+      }
+    })
+    apiService.getCanvas().then((response) =>{
+       if(response.statusText == 'OK' && response.data.statusCode === 200) {
+         let temps = response.data.response.data.canvas
+         for(let i =0;i<temps.length;i+=20) {
+          this.chunk.push(temps.slice(i,i+20))
+         }
+         this.canvas = {
+           row: this.chunk[0],
+           scroll: 0
+         }
+         console.log('canvas;',this.canvas)
+       }
+    })
+    this.scroller = document.getElementsByClassName('gridlist')[0]
+    console.log('scroller:',this.scroller)
+    // setTimeout(()=>{
+    // },5000)
+  },
   methods: {
+    ...mapActions(['updateProject','updatecanvasData','updateLayers']),
     tabClicked(val) {
       this.selectedTab = val;
       this.menuType = "";
+      // this.isCanvas = false
     },
     handleItemClick(item, type, evnt, isProjectDetail) {
-      if (item.id === "-1") {
+      if (item === "-1") {
          this.$router.push({ name: "New Project" });
       }
       this.tabType = type;
+      if(type === 'project') {
+        if(!this.isCanvas) {
+          this.selectedProject = item
+        }
+      }else if (type === 'template') {
+        this.selectedTemplate = item
+      }
+      if (this.isCanvas) {
+        this.selectedCanvas = item
+      }
       // set a delay to make sure the menu is rendered
       // setTimeout(() => {
       //   this.$_showMenu(evnt, type);
@@ -236,6 +303,7 @@ export default {
     $_showMenu(evnt, type) {
       if (evnt.target.className === 'mu-ripple-wrapper') {
         var elem = this.$_getMenu();
+        console.log('elem:',elem)
         var pe = evnt.target;
         pe.appendChild(elem);
       } else {
@@ -263,6 +331,63 @@ export default {
     },
     backButtonClicked() {
       this.selectedTab = 1;
+    },
+    openProject () {
+      apiService.getCanvasProject(this.selectedProject.project_id).then(response =>{
+        if(response.statusText === 'OK' && response.data.statusCode === 200) {
+        this.projectCanvas = response.data.response.data.canvas
+        console.log('this.projectCanvas:',this.projectCanvas)
+        this.isCanvas = true
+        // this.selectedTab = 1
+        }
+      })
+      // this.tabType = type;
+      // this.$_showMenu(evnt, type);
+    },
+    openCanvas(item) {
+      console.log('openCavas',this.projectCanvas)
+      console.log('selectedProject',this.selectedProject)
+      console.log('selectedCanvas',item)
+      console.log('store',this.$store.state)
+      let obj = this.$store.state.canvasData
+      console.log('obj:',obj)
+        obj.canvas_name =  item.canvas_name
+        obj.backgroundcolor =  item.backgroundcolor
+        obj.description =  item.description
+        obj.gridLines =  true
+        obj.height =  item.height
+        obj.width =  item.width
+        obj.zoom =  item.zoom
+        obj.zoomIncrease =  item.zoom_increase
+        obj.canvas_id =  item.canvas_id
+        obj.is_public =  item.is_public
+        obj.isResponsive =  item.is_responsive
+        this.updatecanvasData(obj)
+        if(this.tabType !== 'template') {
+          this.updateProject(this.selectedProject)
+        }
+        apiService.getCanvasLayers(item.canvas_id).then(response =>{
+          console.log('response:',response)
+          if(response.statusText === 'OK' && response.data.statusCode === 200 ) {
+            let layers = response.data.response.data.layers
+            this.updateLayers(layers)
+            this.$router.push({name: 'EditorApp'})
+          } 
+        })
+      // let obj = {
+
+      // }
+    },
+    loadMore() {
+      console.log('loadMore',this.canvas)
+      this.canvas.scroll += 1
+      if(this.canvas.scroll !== this.chunk.length) {
+      this.canvas.row.concat(this.chunk[1])
+      this.canvas.row = $.from(this.canvas.row).union(this.chunk[this.canvas.scroll]).toArray()
+      // console.log('sam:',sam)
+      
+      // console.log('this.canvas:',this.canvas)
+      }
     }
   }
 };
@@ -408,5 +533,9 @@ export default {
 .blank-template-w > :first-child {
   display: table-cell;
   vertical-align: middle;
+}
+.gridlist {
+  height: 500px;
+  overflow: auto;
 }
 </style>

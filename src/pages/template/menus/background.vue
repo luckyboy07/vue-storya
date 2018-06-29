@@ -15,8 +15,7 @@
                 :drop-directory="true"
                 v-model="files"
                 ref="upload"
-                :post-action="'http://206.189.153.177:4000/canvas/4/media'">
-                <!-- :post-action="'http://206.189.153.177:4000/canvas/4/media'" -->
+                 :post-action="'http://206.189.153.177:4000/canvas/4/media'">
                     <mu-flexbox class="flx">
                         <mu-flexbox-item class="flex-container" > 
                                     + Drag and Drop Images
@@ -40,7 +39,6 @@
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Position</mu-grid-list>
                 <mu-grid-list class="right">
                   <vue-slider :disabled="!data.attributes.isGradient" ref="gradientSlider" v-model="data.attributes.gradientBackgroundData.value" @callback="handleDrag" @drag-start="setGradientColors($event)" v-bind="data.attributes.gradientBackgroundData" ></vue-slider>
-                  <!-- <input spellcheck="false" class="input-size sliderInput"> -->
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -186,6 +184,7 @@ export default {
       }
     },
      inputFilter(newFile, oldFile, prevent) {
+         console.log('ASDASD')
         if (newFile && !oldFile) {
             if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
             this.alert('Your choice is not a picture')
@@ -193,15 +192,16 @@ export default {
             }
         }
         if (newFile) {
+          console.log('asasdasdasdasd')
             newFile.url = ''
-            newFile.selected = false
-                console.log('newFile:',newFile)
-                this.data.image = newFile
-            if (newFile.progress === '100.00' && newFile.response.statusCode === 201) {
-                this.data.image = newFile.response.response.data;
-                console.log('newFile:',newFile.response.response.data)
-                console.log('this.data:',this.data)
-            } 
+            // newFile.selected = false
+            //     this.data.image = newFile
+           
+            //  let URL = window.URL || window.webkitURL
+          // if (URL && URL.createObjectURL) {
+          //   newFile.url =  URL.createObjectURL(newFile.file)
+          //   console.log("newFile",newFile)
+          // }
         }
       },
        inputFile(newFile, oldFile,prevent) {
@@ -210,13 +210,20 @@ export default {
           // add
         }
         if (newFile && oldFile) {
+          console.log('newFile;',newFile)
           // update
+          this.data.image = newFile
+          this.data.image.url = newFile.success ? newFile.response.response.data.url : ''
+          //  if (newFile.success && newFile.response.statusCode === 201) {
+          //     console.log('asdasdasdasd;',newFile)
+          //       this.data.image = newFile.response.response.data;
+          //   } 
         }
         if (!newFile && oldFile) {
           // remove
         }
         setTimeout(()=>{
-          console.log('this.files[0]:',this.files[0])
+          // console.log('this.files[0]:',this.files[0])
           // this.data.image = this.files[0]
         },1000)
       },
