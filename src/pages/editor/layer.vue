@@ -193,7 +193,7 @@ export default {
       // starting a timer to switch between z-indexes
       this.focusTimeout = window.setTimeout(() => {
         this.resetFocus();
-      }, 1000);
+      }, 3000);
     },
     activated(elem) {
       // handle click and shiftkey

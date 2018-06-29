@@ -55,7 +55,8 @@
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
-                  <div class="input-size colorPicka div-inp">{{data.attributes.color}}</div>
+                  <!-- <div class="input-size colorPicka div-inp">{{data.attributes.color}}</div> -->
+                  <input spellcheck="false" id="colour" class="input-size sliderInput" v-model="data.attributes.color" style="width: 135px !important">
                   <input spellcheck="false" id="colour" class="input-size sliderInput" :style="{backgroundColor:data.attributes.color, border: 'thin ' + invertColor(data.attributes.color) + ' solid'}"  @click="showPicker($event,'')">
                 </mu-grid-list>
                 <!-- <div ref="colorPicker" v-show="selectedPicker === 'colorPicker'" class="item-color-picker">
