@@ -167,8 +167,8 @@ export default {
                     image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
                     category: 'portrait',
                     selected: false,
-                    width:'',
-                    height: '',
+                    width:'600',
+                    height: '900',
                     isPick: false
                 
                 },
@@ -178,8 +178,8 @@ export default {
                     image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
                     category: 'portrait',
                     selected: false,
-                    width:'',
-                    height: '',
+                    width:'900',
+                    height: '1200',
                     isPick: false
                 
                 },
@@ -189,8 +189,8 @@ export default {
                     image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
                     category: 'portrait',
                     selected: false,
-                    width:'',
-                    height: '',
+                    width:'900',
+                    height: '1500',
                     isPick: false
                 
                 },{
@@ -199,8 +199,8 @@ export default {
                     image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
                     category: 'portrait',
                     selected: false,
-                    width:'',
-                    height: '',
+                    width:'300',
+                    height: '1800',
                     isPick: false
                 
                 },{
@@ -229,8 +229,8 @@ export default {
                     image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
                     category: 'landscape',
                     selected: false,
-                    width:'',
-                    height: '',
+                    width:'900',
+                    height: '600',
                     isPick: false
                 
                 },
@@ -240,8 +240,8 @@ export default {
                     image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
                     category: 'landscape',
                     selected: false,
-                    width:'',
-                    height: '',
+                    width:'1200',
+                    height: '900',
                     isPick: false
                 
                 },{
@@ -250,8 +250,8 @@ export default {
                     image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
                     category: 'landscape',
                     selected: false,
-                    width:'',
-                    height: '',
+                    width:'1500',
+                    height: '900',
                     isPick: false
                 
                 },{
@@ -260,8 +260,8 @@ export default {
                     image: 'http://www.mediafire.com/convkey/8d3c/0af2e1r94w7d25qzg.jpg?size_id=6',
                     category: 'landscape',
                     selected: false,
-                    width:'',
-                    height: '',
+                    width:'1920',
+                    height: '1080',
                     isPick: false
                 
                 },{
