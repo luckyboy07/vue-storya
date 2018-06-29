@@ -15,15 +15,15 @@ export default {
         this.scale = this.$_getScale(type);
         this.$_scale(canvasData, layers);
     },
-    gotoZoom(canvasData, layers, from, to, type) {
+    gotoZoom(canvasData, layers, from, to, type, includeCanvas = true) {
         return new Promise((res, rej) => {
             var newTo = Math.min(from, to);
             var newFrom = Math.max(from, to);
 
             while (newFrom > newTo) {
-                newFrom -= canvasData.zoomIncrease;
                 this.scale = this.$_getScale(type);
-                this.$_scale(canvasData, layers);
+                this.$_scale(canvasData, layers, includeCanvas);
+                newFrom -= canvasData.zoomIncrease;
             }
 
             setTimeout(() => {
@@ -38,13 +38,15 @@ export default {
         this.zoom = Math.max(this.zoom, -30);
         return Math.pow(1.09, (this.zoom / 30));
     },
-    $_scale(canvasData, layers) {
-        if (!canvasData.isResponsive) {
-            canvasData.width = Math.round(canvasData.width / this.scale);
-            canvasData.height = Math.round(canvasData.height / this.scale);
-        } else {
-            canvasData.activeSize.width = Math.round(canvasData.activeSize.width / this.scale);
-            canvasData.activeSize.height = Math.round(canvasData.activeSize.height / this.scale);
+    $_scale(canvasData, layers, includeCanvas = true) {
+        if (includeCanvas) {
+            if (!canvasData.isResponsive) {
+                canvasData.width = Math.round(canvasData.width / this.scale);
+                canvasData.height = Math.round(canvasData.height / this.scale);
+            } else {
+                canvasData.activeSize.width = Math.round(canvasData.activeSize.width / this.scale);
+                canvasData.activeSize.height = Math.round(canvasData.activeSize.height / this.scale);
+            }
         }
 
         for (var i = 0; i < layers.length; i++) {

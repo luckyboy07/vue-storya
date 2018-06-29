@@ -39,7 +39,7 @@
             <i class="si-zoomout" style="height: 90%"></i>
           </mu-flat-button>
           <div class="tool-item-group-content">
-            <input disabled ref="zoomInp" @blur="zoom()" @keydown.enter="zoom()" style="width: 100%; text-align: center; opacity: 1!important;" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'"/>
+            <input disabled ref="zoomInp" @blur="zoom()" @keydown.enter="zoom()" style="width: 100%; text-align: center; opacity: 1!important;" class="default-inp" spellcheck="false" :value="editorData.zoom + '%'"/>
           </div>
           <mu-flat-button class="s-editor-btn-zoom-ctrl" @click="zoom('in')">
             <i class="si-zoomin" style="height: 90%"></i>
@@ -114,6 +114,7 @@
     onAdd:
       - occurs when the 'Add Canvas' button was clicked
 */
+import Vue from 'vue'
 import customMenu from '../menus/custom-menu'
 import {mapGetters,mapActions} from 'vuex'
 import zoomHelper from '../../helpers/zoom.helper.js'
@@ -150,7 +151,7 @@ export default {
   //   zoomHelper.adjustCanvasAndLayerDimension(this.editorData);
   // },
   mounted() {
-    this.$refs.zoomInp.value = this.editorData.zoom + '%';
+    // this.$refs.zoomInp.value = this.editorData.zoom + '%';
     if (browserHelper.isFirefox()) {
       this.$el.querySelector('#secretDKoMagsaba').style.marginLeft = '20px';
     }
@@ -193,22 +194,34 @@ export default {
     zoom(zoomType) {
       if (zoomType === 'out' && this.editorData.zoom <= 0 || zoomType === 'in' && this.editorData.zoom >= 500) return;
 
-      var value = !this.$refs.zoomInp.value ?  this.editorData.zoom :  parseInt(this.$refs.zoomInp.value.replace('%', ''));
+      // var value = !this.$refs.zoomInp.value ?  this.editorData.zoom :  parseInt(this.$refs.zoomInp.value.replace('%', ''));
       if (!zoomType) {
         // handle enter or unfocus (blur)
          this.editorData.zoom = value;
       } else {
         if (zoomType === 'in') {
-          this.editorData.zoom = value + this.editorData.zoomIncrease;
+          this.editorData.zoom = this.editorData.zoom + this.editorData.zoomIncrease;
         } else {
           if (this.editorData.zoom > 0) {
-            this.editorData.zoom = value - this.editorData.zoomIncrease;
+            this.editorData.zoom = this.editorData.zoom - this.editorData.zoomIncrease;
           }
         }
       }
       zoomHelper.execZoom(zoomType, this.editorData, this.layers);
+
+      if (this.editorData.isResponsive) {
+         for (var i = 0; i < this.editorData.ratios.length; i++) {
+            if (this.editorData.selectedRatio === this.editorData.ratios[i].name) {
+              this.editorData.ratios[i].zoom = this.editorData.zoom;
+              break;
+            }
+          }
+      } else {
+        console.log('zoom')
+        this.editorData.originalZoom = this.editorData.zoom;
+      }
       
-      this.$refs.zoomInp.value = this.editorData.zoom + '%';
+      // this.$refs.zoomInp.value = this.editorData.zoom + '%';
       this.savetoLocalstorage()
     },
     SaveContent() {
@@ -431,34 +444,24 @@ export default {
       })
     },
     watchChanges(evt) {
+      // console.log('watchChanges', this.editorData.zoom, this.editorData.originalZoom)
       this.editorData.isResponsive = evt.value
       let layers = this.dataLayer
       let ratios = this.editorData.ratios
-      var zoom = 0;
-      if (!this.editorData.isResponsive && this.editorData.selectedRatio) {
-          // for (let i=0;i<this.editorData.originalLayers.length;i++) {
-          //     this.editorData.originalLayers[i].x = 100
-          //     this.editorData.originalLayers[i].y = 100
-          // }
+      if (!this.editorData.isResponsive) {
+        // console.log('if', this.editorData.originalZoom)
         this.editorData.zoom = this.editorData.originalZoom;
-        zoom = this.editorData.zoom;
-        console.log('originalLayers:', this.editorData.originalLayers)
         this.updateLayers(this.editorData.originalLayers)
       } else if (this.editorData.isResponsive && this.editorData.selectedRatio) {
-          for (let i=0;i<ratios.length;i++) {
+        //  console.log('else', this.editorData.originalZoom)
+          for (let i = 0; i < ratios.length;i++) {
              if (this.editorData.selectedRatio === ratios[i].name){
-               console.log(';ASDASD',ratios[i].zoom)
-               this.editorData.zoom = 100;
-               zoom = this.editorData.zoom;
-                // this.editorData.layers = JSON.parse(JSON.stringify(ratios[i].layers))
+               this.editorData.zoom = ratios[i].zoom;
                 this.updateLayers(ratios[i].layers)
                 break;
-             } 
+             }
           }
       }
-      zoom = zoom > 0 ? zoom : 100
-       this.$refs.zoomInp.value = zoom + '%';
-      this.savetoLocalstorage()
     },
     beforeClose () {
       console.log('close')
@@ -648,18 +651,6 @@ export default {
       },
       deep: true
     },
-    "editorData.zoom": function(val) {
-      if (!this.editorData.isResponsive) {
-        this.editorData.originalZoom = val;
-      } else {
-        for (var i = 0; i < this.editorData.ratios.length; i++) {
-          if (this.editorData.selectedRatio === this.editorData.ratios[i].name) {
-            this.editorData.ratios[i].zoom = val;
-            break;
-          }
-        }
-      }
-    }
   }
 }
 </script>
