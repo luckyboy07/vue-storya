@@ -3,7 +3,7 @@
      <div class="yawaa"  :class="data.selected ? 'activeTool': ''">
        <!-- :title="data.attributes.shape === 'Triangle' ? 'Shape Layer (SVG)' : data.content" -->
         <mu-list-item :title="getTitle()" @click.stop="open" :open="data.selected && !data.islocked">
-            <mu-icon slot="left" value="landscape" style="color: #fff"/>
+            <i slot="left" class="si-shape"/>
             <mu-icon-button :class="{'s-cannot-delete':statuses && statuses.layerId === data.id}" :icon="data.islocked ? 'lock' : 'lock_open'" slot="right" @click="lockLayer($event)"/>
             <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.visible ? 'visibility' : 'visibility_off'" slot="right" @click.stop="toggleLayer()"/>
             <mu-icon-button :class="{'disabled': data.islocked}" :icon="data.selected && !data.islocked ? 'expand_less' : 'expand_more'" class="expand-btn" slot="right" @click.stop="open"/>
@@ -51,11 +51,12 @@
                 </mu-grid-list>
               </div>
             </mu-list-item>
-            <mu-list-item  slot="nested" class="paddingZero" :disabled="data.attributes.shape_type === 'filled'">
+            <mu-list-item  slot="nested" class="paddingZero" :disabled="data.attributes.shape_type === 'filled'" :disableRipple="true">
               <div class="gridlist-demo-container" style="margin-top: -6px;">
                 <mu-grid-list class="gridlist-demo left">Colour</mu-grid-list>
                 <mu-grid-list class="right">
-                  <div class="input-size colorPicka div-inp">{{data.attributes.color}}</div>
+                  <!-- <div class="input-size colorPicka div-inp">{{data.attributes.color}}</div> -->
+                  <input spellcheck="false" id="colour" class="input-size sliderInput" v-model="data.attributes.color" style="width: 135px !important">
                   <input spellcheck="false" id="colour" class="input-size sliderInput" :style="{backgroundColor:data.attributes.color, border: 'thin ' + invertColor(data.attributes.color) + ' solid'}"  @click="showPicker($event,'')">
                 </mu-grid-list>
                 <!-- <div ref="colorPicker" v-show="selectedPicker === 'colorPicker'" class="item-color-picker">

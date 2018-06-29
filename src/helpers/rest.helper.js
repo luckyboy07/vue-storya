@@ -23,25 +23,15 @@ export default {
 
     },
     post(url, param, contentType = 'application/json') {
-        // if (typeof param !== 'object') {
-        //     console.warn('Object is require for http post');
-        // }
-        console.log('url:',url)
         var formBox = new FormData();
         if (contentType == "multipart/form-data") {
             formBox.append('file', param);
         }
-        console.log('formBox', formBox)
         return new Promise((resolve, reject) => {
-            // axios.post(this.getCompleteUrl(url),param).then(response =>{
-            //     resolve(response)
-            // }).catch(error =>{
-            //     reject(error)
-            // })
             return axios({
                     method: 'post',
                     url: this.getCompleteUrl(url),
-                    data: param,
+                    data: contentType == "multipart/form-data" ? formBox : param,
                     headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': contentType }
                 })
                 .then((response) => {
@@ -50,14 +40,6 @@ export default {
                 .catch((error) => {
                     reject(error)
                 });
-
-            // axious.post(this.getCompleteUrl(url), param)
-            //     .then((response) => {
-            //         resolve(this.$_getReponseData(response));
-            //     })
-            //     .catch((err) => {
-            //         reject(err)
-            //     })
         });
     },
     put() {

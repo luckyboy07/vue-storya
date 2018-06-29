@@ -338,6 +338,7 @@ export default {
     border-style: solid;
     border-color: rgb(255, 255, 255);
     border-image: initial;
+    border: thin dashed violet;
     /* margin: 50px; */
 }
 .canvas-wrap {
