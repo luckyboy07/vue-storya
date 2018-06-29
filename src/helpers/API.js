@@ -131,7 +131,16 @@ export default {
     },
     generateThumbnail (canvas_id, payload) {
         return new Promise((resolve, reject) => {
-            axios.delete(API_URL + 'canvas/'+canvas_id+'thumbnail',payload).then(response=>{
+            axios.post(API_URL + 'canvas/'+canvas_id+'thumbnail',payload).then(response=>{
+                resolve(response)
+            }).catch(error =>{
+                reject(error)
+            })
+        })
+    },
+    deleteProject (project_id)  {
+            return new Promise((resolve, reject) => {
+            axios.delete(API_URL + 'projects/'+project_id).then(response=>{
                 resolve(response)
             }).catch(error =>{
                 reject(error)
