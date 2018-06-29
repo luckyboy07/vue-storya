@@ -26,6 +26,11 @@ import Header from "../template/header";
 // custom tab
 import StoryaTab from "../../components/storya-create-project-tab/app";
 export default {
+  data () {
+    return {
+      projects: []
+    }
+  },
   name: "create-project",
   components: {
     headers: Header,
@@ -38,6 +43,8 @@ export default {
     closeButtonClicked() {
       this.$router.go(-1);
     }
+  },
+  mounted () {
   }
 };
 </script>

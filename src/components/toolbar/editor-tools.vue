@@ -126,6 +126,8 @@ import rest from '../../helpers/rest.helper'
 import snackbar from '../../helpers/snackbar';
 import browserHelper from '../../helpers/browser.js'
 import apiService from '../../helpers/API.js'
+import * as _ from 'lodash'
+import * as async from 'async-es'
 export default {
   name: 'editor-tools',
   props:['dataLayer'],
@@ -143,6 +145,7 @@ export default {
       isExporting: false,
       hasBackgroundProcess: true,
       exportedImgData: null,
+      count: 0
     }
   },
   // beforeMount() {
@@ -211,75 +214,180 @@ export default {
     },
     SaveContent() {
       // let ratios = this.editorData.ratios
-        console.log('editorData:',this.editorData)
-        apiService.saveCanvas({
-          canvas_name: this.editorData.canvas_name,
-          description: this.editorData.description,
-          height: this.editorData.height,
-          width: this.editorData.width,
-          backgroundcolor: this.editorData.backgroundcolor,
-          // project_name: this.editorData.project_name,
-          is_responsive: this.editorData.isResponsive,
-          zoom: this.editorData.zoom,
-          zoom_increase: this.editorData.zoomIncrease,
-          thumbnail: this.editorData.thumbnail,
-          ratio: 'string',
-        }).then(response=>{
-          console.log('response:',response)
-          if(response.data.response.statusCode === 201) {
-            let data = response.data.response.data
-            this.editorData.ratios.forEach(val =>{
-              console.log('vaal:',val)
-              let obj = {
-                canvas_name: this.editorData.canvas_name,
-                width: val.width,
-                height: val.height,
-                backgroundcolor: this.editorData.backgroundcolor,
-                height: this.editorData.height,
-                is_responsive: this.editorData.isResponsive,
-                zoom: this.editorData.zoom,
-                zoom_increase: this.editorData.zoomIncrease,
-                ratio: val.name,
-              }
-              apiService.saveRatio(obj,data.canvas_id).then((data)=>{
-                if(data.data.response.statusCode === 201) {
-                  val.layers.forEach((row) =>{
-                    console.log('row:',row)
-                    apiService.saveLayer({
-                      layer_name: row.content ? row.content : 'null',
-                      description: 'ss',
-                      canvas_id: data.data.response.data.canvas_id,
-                      layer_type: row.type ? row.type : 'background',
-                      icon: row.icon ? row.icon : 'background',
-                      layer_order: row.order,
-                      visible: row.visible,
-                      animation: row.animation,
-                      selected: row.selected,
-                      open: row.open,
-                      component: row.component,
-                      x: row.x,
-                      y: row.y,
-                      z: row.order,
-                      width: row.width,
-                      height: row.height,
-                      target_element: 'string',
-                      angle: 0,
-                      layer_attributes: row.attributes,
-                      image: row.image,
-                      is_lock : row.islocked ? row.islocked : false,
-                      is_background : row.isBackground ? row.isBackground : false,
-                    }).then((resp) =>{
+        this.$store.state.broadcastSave = true 
+        let projects = this.$store.state.projects.project_id === 0 ? JSON.parse(this.$localStorage.get('projects')) : this.$store.state.projects
+        apiService.getCanvasProject(projects.project_id).then(res => {
+          console.log('response:P',res)
+          if(res.data.statusCode === 200) {
+            let canvas = res.data.response.data.canvas
+            console.log('canmvas:',canvas)
+            if(canvas.length > 0 ) {
+              this.$store.state.broadcastSave = true
+              let canv = canvas.find((val)=> {return val.canvas_id === this.editorData.canvas_id})
+              console.log('canvas:',canv)
+              if (canv) {
+                console.log('UPDATE')
+                apiService.updateCanvas(canv.canvas_id,{
+                   canvas_name: this.editorData.canvas_name,
+                  description: this.editorData.description,
+                  height: this.editorData.height,
+                  width: this.editorData.width,
+                  backgroundcolor: this.editorData.backgroundcolor,
+                  // project_name: this.editorData.project_name,
+                  is_responsive: this.editorData.isResponsive,
+                  is_public: this.editorData.is_public,
+                  zoom: this.editorData.zoom,
+                  zoom_increase: this.editorData.zoomIncrease,
+                  thumbnail: this.editorData.thumbnail,
+                  ratio: 'string',
+                }).then(resp =>{
                       console.log('resp:',resp)
-                    }).catch(err =>{
-                      console.log('ee:',err)
-                    })  
-                  })
-                }
-              })
-            })
-           
+                      if(resp.data.statusCode === 201) {
+                      this.generateThumbnail(canv.canvas_id,this.editorData)
+                        apiService.getCanvasLayers(canv.canvas_id).then((kapoya)=>{
+                          console.log('kapoya:',kapoya)
+                          console.log('this.dataLayer:',this.dataLayer)
+                          if (kapoya.data.statusCode == 200) {
+                          let layers = kapoya.data.response.data.layers
+                          console.log('layers:',layers)
+                            if (layers.length > 0 ) {
+                              console.log('UPDATE')
+                              async.waterfall([
+                                (callback) => {
+                                  this.count = 0
+                                  _.each(layers, (row) => {
+                                    this.count ++
+                                    if(this.count !== layers.length) {
+                                        apiService.deleteLayer(row.layer_id).then((res) => {
+                                          console.log('count:',this.count)
+                                      })
+                                    }else if (this.count === layers.length) {
+                                      console.log('WALA NA FINISH NA')
+                                      callback();
+                                    }
+                                  })
+                                }, (callback) =>{
+                                  console.log('1')
+                                  this.count = 0
+                                  _.each(this.dataLayer, (row) => {
+                                      this.count ++                                    
+                                    if (this.count !== this.dataLayer.length) {
+                                      let obj = {
+                                        layer_name: row.content ? row.content : 'null',
+                                        description: 'ss',
+                                        canvas_id: canv.canvas_id,
+                                        layer_type: row.type ? row.type : 'background',
+                                        icon: row.icon ? row.icon : 'background',
+                                        layer_order: row.order,
+                                        visible: row.visible,
+                                        animation: row.animation,
+                                        selected: row.selected,
+                                        open: row.open,
+                                        component: row.component,
+                                        x: row.x,
+                                        y: row.y,
+                                        z: row.order,
+                                        width: row.width,
+                                        height: row.height,
+                                        target_element: 'string',
+                                        angle: 0,
+                                        layer_attributes: row.attributes,
+                                        image: row.image,
+                                        is_lock : row.islocked ? row.islocked : false,
+                                        is_background : row.isBackground ? row.isBackground : false,
+                                      }
+                                      apiService.saveCanvalayer(obj).then((respo)=>{
+                                        if(respo.data.response.statusCode === 201) {
+                                          row.layer_id = respo.data.response.data.layer_id
+                                        }
+                                      })
+                                    }else if (this.count === this.dataLayer.length) {
+                                      console.log('FINISH')
+                                      callback()
+                                    }
+                                  })
+                                }, (callback) =>{
+                                    this.updateLayers(this.dataLayer)
+                                    this.$store.state.broadcastSave = false
+                                    snackbar.show('Successfully Save!')
+                                }
+                              ])
+                            }else {
+                              console.log('SAVE')
+                              async.waterfall([
+                                (callback) => {
+                                  this.count = 0
+                                  _.each(this.dataLayer, (row) => {
+                                    console.log('this.count:',this.count)
+                                    console.log('this.dataLayer:',this.dataLayer.length)
+                                    this.count++
+                                    if (this.count !== this.dataLayer.length) {
+                                        console.log('asd:')
+                                      let obj = {
+                                        layer_name: row.content ? row.content : 'null',
+                                        description: 'ss',
+                                        canvas_id: canv.canvas_id,
+                                        layer_type: row.type ? row.type : 'background',
+                                        icon: row.icon ? row.icon : 'background',
+                                        layer_order: row.order,
+                                        visible: row.visible,
+                                        animation: row.animation,
+                                        selected: row.selected,
+                                        open: row.open,
+                                        component: row.component,
+                                        x: row.x,
+                                        y: row.y,
+                                        z: row.order,
+                                        width: row.width,
+                                        height: row.height,
+                                        target_element: 'string',
+                                        angle: 0,
+                                        layer_attributes: row.attributes,
+                                        image: row.image,
+                                        is_lock : row.islocked ? row.islocked : false,
+                                        is_background : row.isBackground ? row.isBackground : false,
+                                      }
+                                      apiService.saveCanvalayer(obj).then((respo)=>{
+                                        console.log('respo:',respo)
+                                        if(respo.data.response.statusCode === 201) {
+                                          row.layer_id = respo.data.response.data.layer_id
+                                        console.log('this.count:',this.count)
+                                        }
+                                      })
+                                    }else if (this.count === this.dataLayer.length) {
+                                        console.log('ASDASDt')
+                                      callback()
+                                    }
+                                  })
+                                }, (callback) => {
+                                  this.updateLayers(this.dataLayer)
+                                  this.$store.state.broadcastSave = false
+                                  snackbar.show('Successfully Save!')
+                                } 
+                              ])
+                            }
+                          }
+                        })
+                      }
+                })
+              }else {
+                console.log('SAVE')
+                this.saveCanva(projects.project_id)
+              this.generateThumbnail(this.editorData.canvas_id,this.editorData)
+              }
+              // canvas.forEach(row =>{
+              //   if(row.canvas_id === this.editorData.canvas_id) {
+
+              //   }
+              // })
+            }else {
+              console.log("ASDASD")
+              this.saveCanva(projects.project_id)
+              this.generateThumbnail(this.editorData.canvas_id,this.editorData)
+            }
           }
         })
+     
       // if(this.editorData.isResponsive){
         // for(let i = 0;i < ratios.length;i++){
         //     if(this.editorData.selectedRatio === ratios[i].name) {
@@ -288,7 +396,6 @@ export default {
         //     }
         // }
       // }
-        console.log('ASDASD')
       //  this.$emit('openPopup',true)
       // this.savetoLocalstorage()
       // alert('Save As');
@@ -351,9 +458,12 @@ export default {
       console.log('close')
     },
     ExportImage() {
+       this.editorData.layers = JSON.parse(JSON.stringify(this.dataLayer))
+      //  console.log('this.editorData:',this.editorData)
       this.isExporting = this.hasBackgroundProcess = true;
-      var htmlStr = exportHelper.getHtmlString();
-      rest.post('renderimage', {
+      var htmlStr = exportHelper.getHtmlString(this.editorData,this.editorData.originalLayers);
+      console.log('htmlStr:',htmlStr)
+      rest.post('canvas/'+ this.editorData.canvas_id+'/thumbnail', {
         width: this.editorData.width,
         height: this.editorData.height,
         html: htmlStr
@@ -361,7 +471,10 @@ export default {
       .then((response) => {
         console.log('result', response)
         this.hasBackgroundProcess = false;
-        this.exportedImgData = {data: response.body.base64, url: response.body.url};
+        // this.exportedImgData = {data: response.body.base64, url: response.body.url};
+        this.exportedImgData = {url: response.data.response.data};
+        this.download()
+        console.log('result', response)
       })
       .catch((err) => {
          this.hasBackgroundProcess = false;
@@ -370,16 +483,142 @@ export default {
       });
     },
     download() {
+      console.log('this.exportedImgData:',this.exportedImgData)
       var link = document.createElement("a"); // Or maybe get it from the current document
-      link.href =  this.exportedImgData.data;
-      link.download = appHelper.generateGUID() + '.png';;
+      link.href =  this.exportedImgData.url;
+      // link.setAttribute('target','_blank');
+      link.download = appHelper.generateGUID() + '.png';
       document.body.appendChild(link); // Or append it whereever you want
       link.click();
+      //  window.open(this.exportedImgData.url, '_blank');
       this.isExporting = false;
     },
     close() {
        this.isExporting = false;
     },
+    saveCanva (project_id) {
+       apiService.saveCanvasProject(project_id,this.editorData.canvas_id,{
+        canvas_name: this.editorData.canvas_name,
+        description: this.editorData.description,
+        height: this.editorData.height,
+        width: this.editorData.width,
+        backgroundcolor: this.editorData.backgroundcolor,
+        // project_name: this.editorData.project_name,
+        is_responsive: this.editorData.isResponsive,
+        zoom: this.editorData.zoom,
+        zoom_increase: this.editorData.zoomIncrease,
+        thumbnail: this.editorData.thumbnail,
+        ratio: 'string',
+      }).then(response=>{
+        console.log('this.editorData:',this.editorData)
+        if(response.data.response.statusCode === 201) {
+          let data = response.data.response.data
+          if(this.dataLayer.length > 0) {
+              this.dataLayer.forEach(row => {
+                 let obj = {
+                    layer_name: row.content ? row.content : 'null',
+                    description: 'ss',
+                    canvas_id: data.canvas_id,
+                    layer_type: row.type ? row.type : 'background',
+                    icon: row.icon ? row.icon : 'background',
+                    layer_order: row.order,
+                    visible: row.visible,
+                    animation: row.animation,
+                    selected: row.selected,
+                    open: row.open,
+                    component: row.component,
+                    x: row.x,
+                    y: row.y,
+                    z: row.order,
+                    width: row.width,
+                    height: row.height,
+                    target_element: 'string',
+                    angle: 0,
+                    layer_attributes: row.attributes,
+                    image: row.image,
+                    is_lock : row.islocked ? row.islocked : false,
+                    is_background : row.isBackground ? row.isBackground : false,
+                }
+                apiService.saveCanvalayer(obj).then((respo)=>{
+                  console.log('respo:',respo)
+                  if(respo.data.response.statusCode === 201) {
+                    row.layer_id = respo.data.response.data.layer_id
+                  }
+                })
+              })
+              console.log('this.dataLayer:',this.dataLayer)
+              this.updateLayers(this.dataLayer)
+              if(this.editorData.ratios.length > 0) {
+                    this.editorData.ratios.forEach(val =>{
+                      console.log('vaal:',val)
+                      let obj = {
+                        canvas_name: this.editorData.canvas_name,
+                        width: val.width,
+                        height: val.height,
+                        backgroundcolor: this.editorData.backgroundcolor,
+                        height: this.editorData.height,
+                        is_responsive: this.editorData.isResponsive,
+                        zoom: this.editorData.zoom,
+                        zoom_increase: this.editorData.zoomIncrease,
+                        ratio: val.name,
+                      }
+                      apiService.saveRatio(obj,data.canvas_id).then((data)=>{
+                        if(data.data.response.statusCode === 201) {
+                          val.layers.forEach((row) =>{
+                            apiService.saveLayer({
+                              layer_name: row.content ? row.content : 'null',
+                              description: 'ss',
+                              canvas_id: data.data.response.data.canvas_id,
+                              layer_type: row.type ? row.type : 'background',
+                              icon: row.icon ? row.icon : 'background',
+                              layer_order: row.order,
+                              visible: row.visible,
+                              animation: row.animation,
+                              selected: row.selected,
+                              open: row.open,
+                              component: row.component,
+                              x: row.x,
+                              y: row.y,
+                              z: row.order,
+                              width: row.width,
+                              height: row.height,
+                              target_element: 'string',
+                              angle: 0,
+                              layer_attributes: row.attributes,
+                              image: row.image,
+                              is_lock : row.islocked ? row.islocked : false,
+                              is_background : row.isBackground ? row.isBackground : false,
+                            }).then((resp) =>{
+                              console.log('resp:',resp)
+                              if(resp.data.response.statusCode === 201) {
+                                row.layer_id = resp.data.response.data.layer_id
+                              }
+                            }).catch(err =>{
+                              console.log('ee:',err)
+                            })  
+                          })
+                        }
+                      })
+                    })
+              } //end if condition
+              this.$store.state.broadcastSave = false 
+              snackbar.show("Successfully Save!");
+          }
+          
+        }
+      })
+    },
+    generateThumbnail (canvas_id,obj) {
+      var htmlStr = exportHelper.getHtmlString(this.editor,this.editorData.originalLayers)
+      apiService.generateThumbnail(this.editorData.canvas_id,{
+        width: obj.width,
+        height: obj.height,
+        html: htmlStr
+      }).then((response) => {
+        console.log('response:',response)
+        return response
+      })
+    } 
   },
   computed: {
     ...mapGetters({

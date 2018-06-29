@@ -13,11 +13,9 @@
                 :multiple="false"
                 :drop="true"
                 :drop-directory="true"
-                v-model="data.image"
+                v-model="files"
                 ref="upload"
                  :post-action="'http://206.189.153.177:4000/canvas/4/media'">
-                <!-- -->
-                <!-- :post-action="'http://206.189.153.177:4000/canvas/4/media'" -->
                     <mu-flexbox class="flx">
                         <mu-flexbox-item class="flex-container" > 
                                     + Drag and Drop Images
@@ -41,7 +39,6 @@
                 <mu-grid-list class="gridlist-demo left" style="padding: 2px 8px !important;line-height: 15px;">Selected Position</mu-grid-list>
                 <mu-grid-list class="right">
                   <vue-slider :disabled="!data.attributes.isGradient" ref="gradientSlider" v-model="data.attributes.gradientBackgroundData.value" @callback="handleDrag" @drag-start="setGradientColors($event)" v-bind="data.attributes.gradientBackgroundData" ></vue-slider>
-                  <!-- <input spellcheck="false" class="input-size sliderInput"> -->
                 </mu-grid-list>
               </div>
             </mu-list-item>
@@ -215,7 +212,8 @@ export default {
         if (newFile && oldFile) {
           console.log('newFile;',newFile)
           // update
-          this.data.image =newFile
+          this.data.image = newFile
+          this.data.image.url = newFile.success ? newFile.response.response.data.url : ''
           //  if (newFile.success && newFile.response.statusCode === 201) {
           //     console.log('asdasdasdasd;',newFile)
           //       this.data.image = newFile.response.response.data;

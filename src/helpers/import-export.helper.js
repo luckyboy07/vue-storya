@@ -327,7 +327,7 @@ export default {
     <body onload="_p()">
     <!-- REPLACE THIS PART -->
   `,
-    exportHtmlTemplatePart2: function(array, original) {
+    exportHtmlTemplatePart2: function(name, array, original) {
         return `
     <!-- REPLACE THIS PART -->
       <!-- DO NOT REMOVE ME -->
@@ -335,11 +335,15 @@ export default {
       var defaultW, 
         defaultH = 0
         arr =` + JSON.stringify(array) + `, original = ` + JSON.stringify(original) + `;\n
-      var defaultLayerValues = [];
+        var export = ` + name +`
+        var defaultLayerValues = [];
       function fnResize() {
         var ratio = getRatio();
         console.log('ratio', ratio)
         var hasRatio = false;
+        if (export == 'image') {
+          executeOrig();
+        }else {
         for (var i = 0; i < arr.ratios.length; i++) {
           if (arr.ratios[i].name == ratio) {
             console.log('applying', arr.ratios[i].name)
@@ -429,33 +433,37 @@ export default {
               hasRatio = true;
           }
         }
-
         if (!hasRatio) {
           // apply original ratio here
-          var layers = original;
-          console.log('default layer', layers)
-          for (var j = 0; j < layers.length; j++) {
-            var elem = document.getElementById(layers[j].id)
-            console.log('layers[j]:',layers[j]);
-            console.log('elem:',elem);
-            elem.style.top = layers[j].y + 'px';
-            elem.style.left = layers[j].x + 'px';
-            elem.style.width = layers[j].width + 'px';
-            elem.style.height = layers[j].height + 'px';
-            var shape = elem.querySelector('.shape');
-            if (shape) {
-                // console.log(layers[j].attributes.isGradient, shape)
-                shape.style.background = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
-            }
-            if (layers[j].isBackground) {
-                elem.style.height = window.innerHeight + 'px';
-                elem.style.width = window.innerWidth + 'px';
-                // console.log('elem:', elem)
-            }
-          }
+          executeOrig();
         }
+      }
+        
     }
-
+    function executeOrig() {
+      console.log('EXECUTE');
+      var layers = original;
+      console.log('default layer', layers)
+      for (var j = 0; j < layers.length; j++) {
+        var elem = document.getElementById(layers[j].id)
+        console.log('layers[j]:',layers[j]);
+        console.log('elem:',elem);
+        elem.style.top = layers[j].y + 'px';
+        elem.style.left = layers[j].x + 'px';
+        elem.style.width = layers[j].width + 'px';
+        elem.style.height = layers[j].height + 'px';
+        var shape = elem.querySelector('.shape');
+        if (shape) {
+            // console.log(layers[j].attributes.isGradient, shape)
+            shape.style.background = !layers[j].attributes.isGradient ? layers[j].attributes.color : 'linear-gradient('+layers[j].attributes.gradientBackgroundData.rotation+'deg,'+layers[j].attributes.gradientBackgroundData.sliderStyle[0].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[0]+'%,'+layers[j].attributes.gradientBackgroundData.sliderStyle[1].backgroundColor+' '+layers[j].attributes.gradientBackgroundData.value[1]+'%)' +', url('+layers[j].attributes.backgroundImageUri.url+')'
+        }
+        if (layers[j].isBackground) {
+            elem.style.height = window.innerHeight + 'px';
+            elem.style.width = window.innerWidth + 'px';
+            // console.log('elem:', elem)
+        }
+      }
+    }
     function getPercInW(bV, eV) {
       // console.log('getPercInW', bV, eV)
       var perc = (eV / parseInt(bV));
@@ -559,7 +567,7 @@ export default {
             // // apped amination css  
             var content = this.exportHtmlTemplatePart1.replace('--CUSTOM_STYLES--', cssText);
             content = content.replace('--FONTS_HERE--', fonts);
-            this.$_download('export-' + appHelper.generateTimestamp() + '.html', content + htmlContent + this.exportHtmlTemplatePart2(array, layerData));
+            this.$_download('export-' + appHelper.generateTimestamp() + '.html', content + htmlContent + this.exportHtmlTemplatePart2('template', array, layerData));
             setTimeout(() => {
                 res(true);
             }, 100);
@@ -577,9 +585,9 @@ export default {
         editorElem = this.$_responsiveness(editorElem, animatedData);
         return editorElem;
     },
-    getHtmlString() {
+    getHtmlString(array, layerData) {
         var htmlContent = this.getExportingElement().outerHTML;
-        return this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2;
+        return this.exportHtmlTemplatePart1 + htmlContent + this.exportHtmlTemplatePart2('image',array, layerData);
     },
     /**
      * Generates a responsive version of the exported HTML
