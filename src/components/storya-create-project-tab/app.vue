@@ -22,7 +22,7 @@
         <mu-grid-list :cols="5" :padding="10" :cellHeight="200" class="gridlist" style="height:305px;" id="canv">
             <mu-grid-tile  >
                <mu-flat-button  class="tem-avatar" @click="handleItemClick('-1', 'template', $event)">
-              <div class="blank-template"><div>Blank Template</div></div>
+              <div class="blank-template"><div>Create Blank Template</div></div>
                </mu-flat-button>
             </mu-grid-tile>
           <mu-grid-tile v-for="(tile, index) in canvas.row" :key="index">
@@ -50,7 +50,8 @@
           </mu-grid-tile>
          <mu-grid-tile v-for="(tile, index) in projectCanvas" :key="index" v-if="isCanvas">
               <mu-flat-button class="tem-avatar" @click="handleItemClick(tile, 'project', $event, true)">
-              <img v-if="tile.id !== '-1'" class="tem-avatar" src="@/assets/samples/Reflux.png"/>
+              <img  class="tem-avatar" src="@/assets/samples/Reflux.png" v-if="tile.thumbnail_url === ''"/>
+              <img  class="tem-avatar" :src="tile.thumbnail_url" v-if="tile.thumbnail_url !== ''"/>
               <!-- <img v-if="tile.id !== '-1'" class="tem-avatar" :src="tile.avatar"/> -->
               <div v-if="tile.id === '-1'" class="blank-template"><div>{{tile.canvas_name}}</div></div>
             </mu-flat-button>
@@ -115,7 +116,7 @@
         <mu-list-item title="Open" class="tem-action-item" @click="openCanvas(selectedCanvas)" v-if="isCanvas"/>
         <mu-list-item title="Open Project" class="tem-action-item" @click="openProject()" v-if="!isCanvas"/>
         <mu-divider inset class="temp-action-item-divider"/>
-        <mu-list-item title="Delete Project" class="tem-action-item" @click="projectMenuCommands(1)"/>
+        <mu-list-item title="Delete Project" class="tem-action-item" @click="deleteProject"/>
       </mu-list>
     </div>
   </div>
@@ -124,6 +125,7 @@
 import apiService from '../../helpers/API.js'
 import {mapActions} from 'vuex'
 import * as $ from 'linq'
+import snackbar from '../../helpers/snackbar.js';
 export default {
   name: "storya-tabs",
   props: ["items"],
@@ -388,6 +390,20 @@ export default {
       
       // console.log('this.canvas:',this.canvas)
       }
+    },
+    deleteProject() {
+      console.log('this.selectedProject:',this.selectedProject)
+      apiService.deleteProject(this.selectedProject.project_id).then(response =>{
+        console.log('resp[mkse:',response)
+        if(response.data.response.statusCode === 200 || 201) {
+            snackbar.show('Delete Succesfully')
+        }else {
+            snackbar.show("Can't delete Project")
+        }
+      }).catch(err =>{
+          console.log('err:',err)
+            snackbar.show(err)
+      })
     }
   }
 };
