@@ -417,7 +417,9 @@ export default {
     exportContent() {
       var zoom = this.editorData.zoom;
       zoomHelper.resetAllZoom(this.editorData, this.editorData.zoom, this.layers)
-      exportHelper.exportTemplate(this.editorData, this.editorData.originalLayers);
+      setTimeout(() => {
+        exportHelper.exportTemplate(this.editorData, this.editorData.originalLayers);
+      }, 100);
       // console.log('going back to zoom', zoom);
       // if (zoom !== 100) {
       //   var layers = this.editorData.isResponsive ? $.from(this.editorData.ratios).firstOrDefault(r => r.name === this.editorData.selectedRatio).layers :
