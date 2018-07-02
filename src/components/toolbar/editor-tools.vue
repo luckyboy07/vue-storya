@@ -127,6 +127,7 @@ import browserHelper from '../../helpers/browser.js'
 import apiService from '../../helpers/API.js'
 import * as _ from 'lodash'
 import * as async from 'async-es'
+import $ from 'linq'
 export default {
   name: 'editor-tools',
   props:['dataLayer'],
@@ -202,9 +203,7 @@ export default {
         if (zoomType === 'in') {
           this.editorData.zoom = this.editorData.zoom + this.editorData.zoomIncrease;
         } else {
-          if (this.editorData.zoom > 0) {
-            this.editorData.zoom = this.editorData.zoom - this.editorData.zoomIncrease;
-          }
+          this.editorData.zoom = this.editorData.zoom - this.editorData.zoomIncrease;
         }
       }
       zoomHelper.execZoom(zoomType, this.editorData, this.layers);
@@ -416,23 +415,16 @@ export default {
        alert('Save As Template');
     },
     exportContent() {
-      var zoom = 100;
-      var type = '';
-      this.editorData.layers = JSON.parse(JSON.stringify(this.dataLayer))
-      if (this.editorData.zoom !== 100) {
-        zoom = this.editorData.zoom;
-        type = zoom < 100 ? 'in' : 'out';
-        zoomHelper.gotoZoom(this.editorData, this.layers, zoom, 100, type).then((resp) => {
-          exportHelper.exportTemplate( this.editorData,this.editorData.originalLayers).then((val) => {
-            console.log('Export finished', val)
-            if (zoom !== 100) {
-              zoomHelper.gotoZoom(this.editorData, this.layers, zoom, 100, type === 'in' ? 'out' : type === 'out' ? 'in' : '');
-            }
-          });
-        });
-      } else {
-        exportHelper.exportTemplate(this.editorData, this.editorData.originalLayers);
-      }
+      var zoom = this.editorData.zoom;
+      zoomHelper.resetAllZoom(this.editorData, this.editorData.zoom, this.layers)
+      exportHelper.exportTemplate(this.editorData, this.editorData.originalLayers);
+      // console.log('going back to zoom', zoom);
+      // if (zoom !== 100) {
+      //   var layers = this.editorData.isResponsive ? $.from(this.editorData.ratios).firstOrDefault(r => r.name === this.editorData.selectedRatio).layers :
+      //     this.editorData.originalLayers;
+
+      //   zoomHelper.gotoZoom(this.editorData, layers, from, to, type, includeCanvas = true)
+      // }
     },
     savetoLocalstorage () {
       this.$localStorage.set('canvas',JSON.stringify(this.editorData))

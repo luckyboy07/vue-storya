@@ -401,6 +401,7 @@ export default {
                             elem.style.left = getPercInW(arr.ratios[i].width, layers[j].x) + 'px';
                             elem.style.width = getPercInW(arr.ratios[i].width, layers[j].width) + 'px';
                             elem.style.height = getPercInH(arr.ratios[i].height, layers[j].height) + 'px';
+                            elem.style.transform = 'rotateZ(' + attr.rotation + 'deg)';
                             var shape = elem.querySelector('.shape');
                             var im = elem.querySelector('.img-sel');
                             var tex = elem.querySelector('.tl-container');
@@ -444,7 +445,6 @@ export default {
                                 im.style.borderStyle = attr.borderStyle;
                                 im.style.objectFit = attr.objectFit.toLowerCase();
                                 im.style.opacity = layers[j].loaded ? attr.opacity : 0.5
-                                im.style.rotation = attr.rotation;
                                 im.style.shadowColor = attr.shadowColor;
                                 im.style.sizeOption = attr.sizeOption;
                                 im.style.boxShadow = attr.shadowColor ? shadows : '';
@@ -484,6 +484,7 @@ export default {
                         elem.style.left = getPercInW(arr.width, layers[i].x) + 'px';
                         elem.style.width = getPercInW(arr.width,layers[i].width) + 'px';
                         elem.style.height = getPercInW(arr.height, layers[i].height) + 'px';
+                        elem.style.transform = 'rotateZ(' + attr.rotation + 'deg)';
                         var shape = elem.querySelector('.shape');
                         var im = elem.querySelector('.img-sel');
                         var tex = elem.querySelector('.tl-container');
@@ -527,7 +528,6 @@ export default {
                             im.style.borderStyle = attr.borderStyle;
                             im.style.objectFit = attr.objectFit.toLowerCase();
                             im.style.opacity = layers[i].loaded ? attr.opacity : 0.5
-                            im.style.rotation = attr.rotation;
                             im.style.shadowColor = attr.shadowColor;
                             im.style.sizeOption = attr.sizeOption;
                             im.style.boxShadow = attr.shadowColor ? shadows : '';
