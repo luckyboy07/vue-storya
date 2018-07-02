@@ -24,7 +24,8 @@ export default {
     this.oldLayerData = appHelper.cloneLayer(this.data);
     this.$nextTick(() => this.formatContent(this.data.content))
   },
-  beforeUpdate() {
+  updated() {
+     this.$nextTick(() => this.formatContent(this.data.content))
   },
   methods: {
     _p(e) {
