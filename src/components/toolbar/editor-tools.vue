@@ -471,19 +471,16 @@ export default {
       //  console.log('this.editorData:',this.editorData)
       this.isExporting = this.hasBackgroundProcess = true;
       var htmlStr = exportHelper.getHtmlString(this.editorData,this.editorData.originalLayers);
-      console.log('htmlStr:',htmlStr)
       rest.post('canvas/'+ this.editorData.canvas_id+'/thumbnail', {
         width: this.editorData.width,
         height: this.editorData.height,
         html: htmlStr
       })
       .then((response) => {
-        console.log('result', response)
         this.hasBackgroundProcess = false;
         // this.exportedImgData = {data: response.body.base64, url: response.body.url};
-        this.exportedImgData = {url: response.data.response.data};
+        this.exportedImgData = {url: response.data};
         this.download()
-        console.log('result', response)
       })
       .catch((err) => {
          this.hasBackgroundProcess = false;
@@ -492,14 +489,12 @@ export default {
       });
     },
     download() {
-      console.log('this.exportedImgData:',this.exportedImgData)
       var link = document.createElement("a"); // Or maybe get it from the current document
-      link.href =  this.exportedImgData.url;
-      // link.setAttribute('target','_blank');
-      link.download = appHelper.generateGUID() + '.png';
+      link.setAttribute('href', this.exportedImgData.url)
+      link.setAttribute('download', 'img-export-' + appHelper.generateGUID() + '.png')
       document.body.appendChild(link); // Or append it whereever you want
       link.click();
-      //  window.open(this.exportedImgData.url, '_blank');
+      document.body.removeChild(link)
       this.isExporting = false;
     },
     close() {
