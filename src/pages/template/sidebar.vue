@@ -35,7 +35,7 @@
               </div>
             </mu-menu>
             <mu-divider v-show="shapeSelected"/>
-            <mu-menu menuClass="menu-add-layer" v-show="shapeSelected" class="pop-content">
+            <mu-menu menuClass="menu-add-layer" class="pop-content" :class="{'hid-pop': !shapeSelected}">
               <div class="">
                 <!-- <mu-flat-button v-for="(item, i) in shapeTypes"  :key="i" 
                   @click="addShape(item.name)" 
@@ -297,7 +297,8 @@ export default {
       event.stopPropagation()
     },
     isOpen (val){
-      console.log('val;',val)
+      this.$store.state.broadCastPicker = true
+      console.log('val;',this.$store.state.broadCastPicker)
       this.$emit('openWindow',val)
       //this.setLayerValue(val)
     },
@@ -559,9 +560,9 @@ export default {
 
 }
 .mu-popover {
-  left: 345px !important;
-  top: 115px !important;
-  background-color: #171616 !important;
+  left: 345px !important; //dili  walaon
+  top: 115px !important; //dili walaon
+  background-color: #171616 !important; // dili walaon
 }
 .mu-menu-list{
   width: 330px;
@@ -613,5 +614,8 @@ export default {
   .mu-item-wrapper.hover {
     background-color: transparent;
   }
+}
+.hid-pop {
+  display: none !important;
 }
 </style>

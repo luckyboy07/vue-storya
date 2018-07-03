@@ -23,6 +23,10 @@ export default {
       }
       }
   },
+  created () {
+    document.addEventListener('keydown', this.keydownEventHandler);
+    
+  },
    beforeMount () {
     document.addEventListener('click', this.hidePicker)
   },
@@ -34,6 +38,8 @@ export default {
     'color-picker': Chrome,
   },
   methods: {
+    keydownEventHandler(evt) {
+    },
     updateValue (value) {
         this.target[1].style.backgroundColor = value.hex
         if(this.target[3] === 'border'){
@@ -64,6 +70,7 @@ export default {
       }
     },hidePicker(evt) {
         if(this.pickerisShow && !document.getElementById('colorPicker').contains(window.event.target)){
+            this.$store.state.broadCastPicker = false
             this.close()
         }
     },

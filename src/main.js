@@ -24,6 +24,10 @@ import { store } from './store/index.js'
 import VueLocalStorage from 'vue-localstorage'
 import ToggleButton from './components/switchButton/button'
 import browserHelper from './helpers/browser'
+import VueProgress from 'vue-progress-path'
+import 'vue-progress-path/dist/vue-progress-path.css'
+import VueProgressBar from 'vue-progressbar'
+import Axios from 'axios'
 // import 'muse-components/styles/base.less'
 Vue.use(MuseUI)
 Vue.use(VueWindow)
@@ -37,9 +41,12 @@ Vue.use(LayerComponent)
 Vue.component('multiselect', Multiselect)
 Vue.component('rotatable-resizer', RotatableResizer)
     // custom circle progress
-import VueProgress from 'vue-progress-path'
-import 'vue-progress-path/dist/vue-progress-path.css'
 Vue.use(VueProgress)
+Vue.use(VueProgressBar, {
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '4px'
+  })
     /* eslint-disable no-new */
     // filter if mobile
     // just show something abno hahaha
@@ -52,4 +59,21 @@ new Vue({
     store,
     components: { App },
     template: '<App/>'
+})
+
+Axios.interceptors.request.use((config) => {
+    router.app.$Progress.start()
+    return config
+},(error) =>{
+    // this.$Progress.fail()
+    router.app.$Progress.fail()
+    return Promise.reject(error)
+})
+Axios.interceptors.response.use((response) =>{
+    router.app.$Progress.finish()
+    return response
+},(error) => {
+    // this.$Progress.fail()
+    router.app.$Progress.fail()
+    return Promise.reject(error)
 })

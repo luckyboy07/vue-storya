@@ -225,7 +225,8 @@ a {
 }
 
 .mu-dialog {
-    background-color: #424242;
+    background-color: #1d1d1d;
+    /* background-color: #424242; */
 }
 
 .mu-dialog-footer.scrollable,

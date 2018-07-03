@@ -29,9 +29,9 @@
                                     </span>
                                 </mu-grid-tile>
                             </div>
-                            <div style="width: 160px;margin-right: 10px;">
-                                    <div class="overlay">
-                                        <img class="img-overlay" src="../../assets/icoCheck.png" />
+                            <div style="width: 160px;margin-right: 10px;"  v-for="(item,i) in banners"  :key="i" v-if="item.id === -1"  @click="selectRatio(banners[0],'-1',$event)" >
+                                    <div class="overlay"  :class="{'overlay-active': item.selected || item.isPick}">
+                                        <img class="img-overlay" src="../../assets/icoCheck.png" v-if="item.isPick" />
                                     </div>
                                 <mu-grid-tile style="width: 160px; padding: 5px 20px;border: 1px solid rgba(117, 117, 117, 0.48);margin-right: 10px;"> 
                                     <div class="img-container">
@@ -47,7 +47,7 @@
                     <mu-raised-button label="Landscape" fullWidth  v-no-ripple/>
                     <div class="tab-detail">
                          <mu-grid-list :cols="1" :padding="10" class="gridlist">
-                               <div style="display: flex;"  v-for="(item,i) in banners"  :key="i" v-if="item.category === 'landscape'"  @click="selectRatio(item,'banners',$event)">
+                               <div style="display: flex;"  v-for="(item,i) in banners"  :key="i" v-if="item.category === 'landscape' && item.id !== -1"  @click="selectRatio(item,'banners',$event)">
                                     <!-- :class="{'overlay-active': item.selected}" -->
                                      <div class="overlay" :class="{'overlay-active': item.selected || item.isPick}">
                                         <img v-if="item.isPick" class="img-overlay" src="../../assets/icoCheck.png" />
@@ -161,6 +161,7 @@ export default {
             modal: {},
             layers: [],
             screens: [
+               
                 {
                     id:1,
                     name:'2-3',
@@ -277,6 +278,16 @@ export default {
                 }
             ],
             banners: [
+                 {
+                     id: -1,
+                    name:'1-1',
+                    // image: 'http://www.mediafire.com/convkey/5042/wrhx6oqn5ld8zeyzg.jpg',
+                    category: 'landscape',
+                    selected: false,
+                    width:'300',
+                    height: '300',
+                    isPick: false
+                },
                 {
                     id:1,
                     name:'2-1',
@@ -388,6 +399,13 @@ export default {
             if(this.template.selectedRatio !== '') {
                this.refresh(this.activeTab)
             }
+            console.log('banners:',this.banners)
+            // for(let i = 0; i< ratios.length;i++) {
+            //     if(ratios[i].id === -1){
+            //        return true
+                
+            //     }
+            // }
         },
          tabChanged(val) {
              console.log("ASDASD",val)
@@ -399,11 +417,16 @@ export default {
          },
         selectRatio (item, name,event) {
             let arr = []
+            console.log('name:',name)
+            console.log('event:',event)
             if(name === 'banners') {
                 arr = this.banners
-            }else{
+            }else if(name === '-1') {
+                item.selected = true
+                }else{
                 arr = this.screens
             }
+
             for(let i = 0;i < arr.length;i++){
                     if(item.id === arr[i].id){
                         arr[i].selected = true
@@ -420,9 +443,11 @@ export default {
             this.ratioSelected = item
             this.ratioSelected.tabSelected = name
             this.showMenu = this.ratioSelected != null;
+            console.log('this.showMenu:',this.showMenu)
             this.removeSelectedfn(item,event)
         },
         removeSelectedfn (item, event) {
+            console.log('event:',event)
                 event.stopPropagation()
                 let popover = document.getElementsByClassName('tem-action-menu')[0]
                 popover.style.zIndex = '9999'
@@ -469,6 +494,7 @@ export default {
             }
             else{
                 // let newlayer = this.template.layers
+              
                 this.ratioSelected.layers = JSON.parse(JSON.stringify(newLayer))
             }
 
@@ -481,7 +507,6 @@ export default {
             this.showMenu = false
             this.template.selectedRatio = this.ratioSelected.name
             this.template.tabSelected = this.ratioSelected.tabSelected
-            console.log('this.template:',this.template)
             this.$localStorage.set('canvas',JSON.stringify(this.template))
             this.closeModal()
         },
@@ -490,6 +515,9 @@ export default {
             let arr = []
             if(this.template.tabSelected === 'banners'){
                 arr = this.banners
+            } else if(this.ratioSelected.id == -1) {
+                    this.banners[0].selected = false
+                    this.banners[0].isPick = false
             }else {
                 arr = this.screens
             }
@@ -505,7 +533,7 @@ export default {
             if(ratios.length === 0) {
                 this.template.activeSize.height = this.template.height
                 this.template.activeSize.width = this.template.width
-                this.template.selectedRatio= ''
+                this.template.selectedRatio = ''
                 // this.template.layers = this.template.originalLayers
                 this.updateLayers(this.template.originalLayers)
             }
@@ -556,6 +584,42 @@ export default {
             this.showMenu = false
             this.ratioSelected.selected = false
             this.ratioSelected.isPick = false
+            this.banners[0].selected = false
+            this.banners[0].isPick = false
+            console.log("this.banners",this.banners)
+        },
+        selectone (item,event) {
+            console.log('item:',this.banners)
+            console.log('item:',item)
+            this.banners[0].selected = true
+            // for(let i = 0; i< this.template.length;i++) {
+            //     if(this.template[i].id === -1){
+            //         this.banners[0].selected = true
+            //     }
+            // }
+            // this.banners[0].isPick = true
+             if(item.isPick) {
+                this.isRemove = true
+            }else{
+                this.isRemove = false
+            }
+            this.currentElement = event
+            this.ratioSelected = item
+            this.ratioSelected.tabSelected = name
+            console.log('this.ratioSelected:',this.ratioSelected)
+            this.showMenu = this.ratioSelected != null;
+            this.removeSelectedfn(item,event)
+        },
+        checkRatios () {
+            // let ratios = this.template.ratios
+            // console.log('ratios:',ratios)
+            // if(ratios) {
+            // for(let i = 0; i< ratios.length;i++) {
+            //     if(ratios[i].id === -1){
+            //        return true
+                
+            //     }
+            // }
         }
     }
 }

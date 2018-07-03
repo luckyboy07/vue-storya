@@ -3,7 +3,7 @@
     <app-header :hideSecondHeader="true"></app-header>
     <div class="project-container row-scroll">
       <mu-row gutter>
-        <mu-col width="30" class="left-content">
+        <mu-col width="50" class="left-content">
           <mu-tabs :value="activeTab" @change="tabChanged">
             <mu-tab :titleClass="tabStyle" value="1" title="Templates"/>
             <mu-tab value="2" title="Custom"/>
@@ -44,7 +44,7 @@
             </div>
            </div>
         </mu-col>
-        <mu-col width="70" tablet="70" desktop="70" class="right-content">
+        <mu-col  class="right-content">
           <div style="display: table" id="info">
             <div class="item inp">
               Project Name <span class="error-msg" v-if="isProject">*Required</span>
@@ -58,7 +58,7 @@
               </div>
               <div class="np-more-items" ref="menuMore" v-show="showMoreItems">
                 <mu-list style="padding: 0">
-                  <mu-list-item v-for="(item, i) in projects.row" :key="i" :title="item.project_name" 
+                  <mu-list-item v-for="item in filterList" :key="item.id" :title="item.project_name" 
                     class="tem-action-item" @click="handleItemClick(item)"/>
                   <!-- <mu-divider inset class="temp-action-item-divider"/> -->
                  <mu-infinite-scroll :scroller="scroller" @load="loadMore"/>
@@ -108,11 +108,11 @@
             </div>
           </div>
           <div class="create-action-buttons">
+            <mu-raised-button @click="onConfirm" label="Create" class="demo-raised-button create-action-buttons-item" 
+            style="margin-top: 1px; background-color: #009D70; text-transform: none;margin-bottom: 6px;"/>
+            <br>
             <mu-raised-button @click="onCancel" label="Cancel" class="demo-raised-button create-action-buttons-item"
               style="background-color: transparent; border: 1px solid #4B4B4B; text-transform: none"/>
-            <br/>
-            <mu-raised-button @click="onConfirm" label="Create" class="demo-raised-button create-action-buttons-item" 
-            style="margin-top: 10px; background-color: #009D70; text-transform: none"/>
           </div>
         </mu-col>
       </mu-row>
@@ -177,6 +177,7 @@ export default {
           row: this.chunk[0],
           scroll: 0
         }
+        this.rows = this.chunk[0]
       console.log('this.projects:',this.projects)
       }
     })
@@ -230,6 +231,7 @@ export default {
         }
       ],
       projects: {},
+     rows: [],
       scroller: null,
       chunk: []
     }
@@ -371,7 +373,7 @@ export default {
           },
           {
             id: '4',
-            label: 'Puto Photo',
+            label: 'Landscape Photo',
             w: '800',
             h: '400'
           },
@@ -466,15 +468,29 @@ export default {
       view.scrollIntoView()
     },
     loadMore() {
-      console.log('SCROLL')
        this.projects.scroll += 1
       if(this.projects.scroll !== this.chunk.length) {
-      this.projects.row.concat(this.chunk[1])
-      this.projects.row = $.from(this.projects.row).union(this.chunk[this.projects.scroll]).toArray()
+      this.rows.concat(this.chunk[1])
+      this.rows = $.from(this.rows).union(this.chunk[this.projects.scroll]).toArray()
       }
     },
     handleInput(value) {
+      if(this.setupData.project_name.length > 0) {
+        this.showMoreItems = true
+      }else {
+        this.showMoreItems = false
+      }
        this.setupData.project_id = undefined;
+    }
+  },
+  computed: {
+    filterList () {
+        if(this.rows && this.rows.length > 0) {
+         var list =  this.rows.filter(row => {
+            return row.project_name.toLowerCase().includes(this.setupData.project_name.toLowerCase())
+          })
+          return list
+        }
     }
   }
 }
@@ -527,13 +543,17 @@ export default {
     background-color: transparent!important;
   }
   .project-container {
-    width: 900px;
-    margin-left: 20%;
+    position: absolute;
+    width: 80%;
+    /* margin-left: 20%;
     margin-right: 20%;
-    margin-top: 5%;
+    margin-top: 5%; */
     border: #323232 solid 1px;
     background: #111111;
-    height: 70vh;
+    /* height: 70vh; */
+    /* top: 20%; */
+    bottom: 0;
+    left: 10%;
   }
   .mu-tabs {
     background-color: #000000;
@@ -555,21 +575,22 @@ export default {
     /* background-color: #181818; */
     /* height: 69.7vh; */
   }
-  .right-content {
+  .project-container .right-content {
     width: 30% !important;
     padding: 10px !important;
     /* background: #111111 !important; */
     height: 69.7vh !important;
     display: table !important;
-    overflow-y: scroll !important;
-    overflow-x: scroll !important;
+    /* overflow-y: scroll !important; */
+    /* overflow-x: scroll !important; */
   }
   .tab-item {
     margin-top: 25px;
     margin-left: 10px;
     margin-right: 10px;
   }
-  .create-action-buttons {
+  
+  .right-content .create-action-buttons {
     vertical-align: bottom;
      display: table-footer-group;
   }
@@ -631,7 +652,7 @@ export default {
     font-family: Lato;
   }
   .row-scroll{ 
-   overflow-y: scroll;
+   overflow-y: auto;
   }
   .portrait-sze {
     width: 53px;

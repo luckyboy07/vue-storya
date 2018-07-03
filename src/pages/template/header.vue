@@ -26,9 +26,14 @@
   <editor-tools v-if="!hideSecondHeader" :dataLayer="getLayers" @openPopup="openPopup"></editor-tools>
   <!-- alert modal -->
   <mu-dialog :open="confirmOpen" :title="popupTitle">
-    <div style="font-family: Lato; font-size: 17px; color: #fff">{{popupMsg}}</div> 
-    <mu-flat-button label="Yes" slot="actions" primary @click="confirm(1)"/>
-    <mu-flat-button label="No" slot="actions" primary @click="confirm(2)"/>
+    <div style="font-family: Lato; font-size: 17px; color: #fff">Are you sure you want to leave this page?</div> 
+    <!-- <mu-flat-button label="Yes" slot="actions" primary @click="confirm(1)"/>
+    <mu-flat-button label="No" slot="actions" primary @click="confirm(2)"/> -->
+    <div class="action-btn">
+      <mu-raised-button label="Yes" class="demo-raised-button"  style="margin-right: 10px" @click="confirm(1)"/>
+    <mu-raised-button label="No" class="demo-raised-button"  style="margin-right: 10px" @click="confirm(2)"/>
+    </div>
+    
   </mu-dialog>
 </div>
 </template>
@@ -92,6 +97,10 @@ export default {
       this.confirmOpen = false;
       switch (this.confirmAction) {
         case 'back':
+          if (status === 2) {
+              this.confirmOpen = false
+              break;
+          }
           this.$router.go(-1);
         break;
         case 'create':
@@ -117,7 +126,6 @@ export default {
       }
     },
     openPopup (val){
-      console.log('val:',val)
       this.$emit('popupSave',val)
     } 
   }
@@ -234,5 +242,9 @@ export default {
 }
 .mu-popover {
   display: none!important;
+}
+.action-btn {
+  position: relative;
+  float: right;
 }
 </style>

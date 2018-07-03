@@ -3,6 +3,7 @@
     <div class="content">
       <div class="body">
         <router-view/>
+        <vue-progress-bar></vue-progress-bar>
         <!-- <div id="loader-wrapper">
 			<div id="loader"></div>
 		</div> -->
@@ -69,13 +70,16 @@ export default {
     this.eventWritten = true;
   },
   mounted() {
+    //  this.$Progress.start()
      this.setLayer()
     // on loaded, start the timer
     this.idleTimer = setInterval(this.handleIdleTimerElapsed, this.idleTimeout)
     this.$store.watch(this.$store.getters.altGetlayer, v =>{})
     API.getCanvas().then(response =>{
-      console.log('response:',response)
-    })
+    //  this.$Progress.finish()
+    }).catch(error => {
+    //  this.$Progress.fail()
+    }) 
   },
   methods :{
     ...mapGetters(['getSelectedLayerId', 'getAutosaveStatusData']),
@@ -100,9 +104,10 @@ export default {
       // for keys with ctrl
       // metaKey for MAC
       if (evt.ctrlKey || evt.metaKey) {
+      console.log('evt:',evt)
         evt.preventDefault();
         if (evt.key === 'y') {
-           var redoData = undoRedo.redo();
+           var redoData = undoRedo.redo();  
            if (redoData && redoData.lastAction === 'scale') {
             redoData = undoRedo.redo();
           }
@@ -126,17 +131,17 @@ export default {
           }
         } else if (evt.key === 'v') {
           if (this.layers.length <= 0) return;
-
-          this.copiedLayer.order = $.from(this.layers).max(l => l.order) + 1;
-          this.copiedLayer.fromUndoRedo = true; // hack lol; this should be like this
-          this.addLayer(this.copiedLayer);
-          for (var i = 0; i < this.layers.length; i++) {
-            this.layers[i].selected = false;
+          if(!this.$store.state.broadCastPicker) {
+            this.copiedLayer.order = $.from(this.layers).max(l => l.order) + 1;
+            this.copiedLayer.fromUndoRedo = true; // hack lol; this should be like this
+            this.addLayer(this.copiedLayer);
+            for (var i = 0; i < this.layers.length; i++) {
+              this.layers[i].selected = false;
+            }
+            this.copiedLayer.selected = true;
+            this.setSelectedLayerId(this.copiedLayer.id)
+            this.copiedLayer = null;
           }
-
-         this.copiedLayer.selected = true;
-          this.setSelectedLayerId(this.copiedLayer.id)
-          this.copiedLayer = null;
         }
       } else {
         if (evt.key === 'Delete') {

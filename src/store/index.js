@@ -282,6 +282,7 @@ export const store = new Vuex.Store({
         ],
         broadcastedStatuses: null,
         broadcastSave: false,
+        broadCastPicker: false,
     },
     mutations: {
         addLayer: (state, payload) => {
@@ -475,6 +476,7 @@ export const store = new Vuex.Store({
             // })
         },
         setAutosaveData: (state, data) => {
+            console.log('data:',data)
             if (data !== '0' && data !== '1' && data !== '2') {
                 throw new Error("Invalid status data");
             }
