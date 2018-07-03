@@ -653,8 +653,8 @@ export default {
 }
 .error-msg{
   color: #ff0a0a;
-    font-size: 12px;
-    position: relative;
+  font-size: 12px;
+    /* position: relative; */
     /* top: -8px; */
     bottom: 5px;
 }
