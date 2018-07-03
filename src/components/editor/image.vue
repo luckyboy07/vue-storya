@@ -63,7 +63,7 @@ export default {
       },
       bindLoadedEvent(data) {
         var img = new Image();
-         img.onload = () => {
+         img.onload = (e) => {
           this.layerData.loaded = true;
          };
           img.onerror = () => {
@@ -74,7 +74,7 @@ export default {
       },
       getSize() {
         var min = Math.min(this.layerData.width, this.layerData.height);
-        return min / 2;
+        return (min / 2) <= 50 ? (min / 2) : 50;
       },
   },
   computed: {

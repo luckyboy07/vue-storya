@@ -39,7 +39,7 @@
             <i class="si-zoomout" style="height: 90%"></i>
           </mu-flat-button>
           <div class="tool-item-group-content">
-            <input disabled ref="zoomInp" @blur="zoom()" @keydown.enter="zoom()" style="width: 100%; text-align: center; opacity: 1!important;" class="default-inp" spellcheck="false" v-digitsonly v-append-unit="'%'"/>
+            <input disabled ref="zoomInp" @blur="zoom()" @keydown.enter="zoom()" style="width: 100%; text-align: center; opacity: 1!important;" class="default-inp" spellcheck="false" :value="editorData.zoom + '%'"/>
           </div>
           <mu-flat-button class="s-editor-btn-zoom-ctrl" @click="zoom('in')">
             <i class="si-zoomin" style="height: 90%"></i>
@@ -114,6 +114,7 @@
     onAdd:
       - occurs when the 'Add Canvas' button was clicked
 */
+import Vue from 'vue'
 import customMenu from '../menus/custom-menu'
 import {mapGetters,mapActions} from 'vuex'
 import zoomHelper from '../../helpers/zoom.helper.js'
@@ -126,6 +127,7 @@ import browserHelper from '../../helpers/browser.js'
 import apiService from '../../helpers/API.js'
 import * as _ from 'lodash'
 import * as async from 'async-es'
+import $ from 'linq'
 export default {
   name: 'editor-tools',
   props:['dataLayer'],
@@ -150,7 +152,7 @@ export default {
   //   zoomHelper.adjustCanvasAndLayerDimension(this.editorData);
   // },
   mounted() {
-    this.$refs.zoomInp.value = this.editorData.zoom + '%';
+    // this.$refs.zoomInp.value = this.editorData.zoom + '%';
     if (browserHelper.isFirefox()) {
       this.$el.querySelector('#secretDKoMagsaba').style.marginLeft = '20px';
     }
@@ -193,22 +195,32 @@ export default {
     zoom(zoomType) {
       if (zoomType === 'out' && this.editorData.zoom <= 0 || zoomType === 'in' && this.editorData.zoom >= 500) return;
 
-      var value = !this.$refs.zoomInp.value ?  this.editorData.zoom :  parseInt(this.$refs.zoomInp.value.replace('%', ''));
+      // var value = !this.$refs.zoomInp.value ?  this.editorData.zoom :  parseInt(this.$refs.zoomInp.value.replace('%', ''));
       if (!zoomType) {
         // handle enter or unfocus (blur)
          this.editorData.zoom = value;
       } else {
         if (zoomType === 'in') {
-          this.editorData.zoom = value + this.editorData.zoomIncrease;
+          this.editorData.zoom = this.editorData.zoom + this.editorData.zoomIncrease;
         } else {
-          if (this.editorData.zoom > 0) {
-            this.editorData.zoom = value - this.editorData.zoomIncrease;
-          }
+          this.editorData.zoom = this.editorData.zoom - this.editorData.zoomIncrease;
         }
       }
       zoomHelper.execZoom(zoomType, this.editorData, this.layers);
+
+      if (this.editorData.isResponsive) {
+         for (var i = 0; i < this.editorData.ratios.length; i++) {
+            if (this.editorData.selectedRatio === this.editorData.ratios[i].name) {
+              this.editorData.ratios[i].zoom = this.editorData.zoom;
+              break;
+            }
+          }
+      } else {
+        console.log('zoom')
+        this.editorData.originalZoom = this.editorData.zoom;
+      }
       
-      this.$refs.zoomInp.value = this.editorData.zoom + '%';
+      // this.$refs.zoomInp.value = this.editorData.zoom + '%';
       this.savetoLocalstorage()
     },
     SaveContent() {
@@ -403,23 +415,18 @@ export default {
        alert('Save As Template');
     },
     exportContent() {
-      var zoom = 100;
-      var type = '';
-      this.editorData.layers = JSON.parse(JSON.stringify(this.dataLayer))
-      if (this.editorData.zoom !== 100) {
-        zoom = this.editorData.zoom;
-        type = zoom < 100 ? 'in' : 'out';
-        zoomHelper.gotoZoom(this.editorData, this.layers, zoom, 100, type).then((resp) => {
-          exportHelper.exportTemplate( this.editorData,this.editorData.originalLayers).then((val) => {
-            console.log('Export finished', val)
-            if (zoom !== 100) {
-              zoomHelper.gotoZoom(this.editorData, this.layers, zoom, 100, type === 'in' ? 'out' : type === 'out' ? 'in' : '');
-            }
-          });
-        });
-      } else {
+      var zoom = this.editorData.zoom;
+      zoomHelper.resetAllZoom(this.editorData, this.editorData.zoom, this.layers)
+      setTimeout(() => {
         exportHelper.exportTemplate(this.editorData, this.editorData.originalLayers);
-      }
+      }, 100);
+      // console.log('going back to zoom', zoom);
+      // if (zoom !== 100) {
+      //   var layers = this.editorData.isResponsive ? $.from(this.editorData.ratios).firstOrDefault(r => r.name === this.editorData.selectedRatio).layers :
+      //     this.editorData.originalLayers;
+
+      //   zoomHelper.gotoZoom(this.editorData, layers, from, to, type, includeCanvas = true)
+      // }
     },
     savetoLocalstorage () {
       this.$localStorage.set('canvas',JSON.stringify(this.editorData))
@@ -431,34 +438,24 @@ export default {
       })
     },
     watchChanges(evt) {
+      // console.log('watchChanges', this.editorData.zoom, this.editorData.originalZoom)
       this.editorData.isResponsive = evt.value
       let layers = this.dataLayer
       let ratios = this.editorData.ratios
-      var zoom = 0;
-      if (!this.editorData.isResponsive && this.editorData.selectedRatio) {
-          // for (let i=0;i<this.editorData.originalLayers.length;i++) {
-          //     this.editorData.originalLayers[i].x = 100
-          //     this.editorData.originalLayers[i].y = 100
-          // }
+      if (!this.editorData.isResponsive) {
+        // console.log('if', this.editorData.originalZoom)
         this.editorData.zoom = this.editorData.originalZoom;
-        zoom = this.editorData.zoom;
-        console.log('originalLayers:', this.editorData.originalLayers)
         this.updateLayers(this.editorData.originalLayers)
       } else if (this.editorData.isResponsive && this.editorData.selectedRatio) {
-          for (let i=0;i<ratios.length;i++) {
+        //  console.log('else', this.editorData.originalZoom)
+          for (let i = 0; i < ratios.length;i++) {
              if (this.editorData.selectedRatio === ratios[i].name){
-               console.log(';ASDASD',ratios[i].zoom)
-               this.editorData.zoom = 100;
-               zoom = this.editorData.zoom;
-                // this.editorData.layers = JSON.parse(JSON.stringify(ratios[i].layers))
+               this.editorData.zoom = ratios[i].zoom;
                 this.updateLayers(ratios[i].layers)
                 break;
-             } 
+             }
           }
       }
-      zoom = zoom > 0 ? zoom : 100
-       this.$refs.zoomInp.value = zoom + '%';
-      this.savetoLocalstorage()
     },
     beforeClose () {
       console.log('close')
@@ -468,19 +465,16 @@ export default {
       //  console.log('this.editorData:',this.editorData)
       this.isExporting = this.hasBackgroundProcess = true;
       var htmlStr = exportHelper.getHtmlString(this.editorData,this.editorData.originalLayers);
-      console.log('htmlStr:',htmlStr)
       rest.post('canvas/'+ this.editorData.canvas_id+'/thumbnail', {
         width: this.editorData.width,
         height: this.editorData.height,
         html: htmlStr
       })
       .then((response) => {
-        console.log('result', response)
         this.hasBackgroundProcess = false;
         // this.exportedImgData = {data: response.body.base64, url: response.body.url};
-        this.exportedImgData = {url: response.data.response.data};
+        this.exportedImgData = {url: response.data};
         this.download()
-        console.log('result', response)
       })
       .catch((err) => {
          this.hasBackgroundProcess = false;
@@ -489,14 +483,12 @@ export default {
       });
     },
     download() {
-      console.log('this.exportedImgData:',this.exportedImgData)
       var link = document.createElement("a"); // Or maybe get it from the current document
-      link.href =  this.exportedImgData.url;
-      // link.setAttribute('target','_blank');
-      link.download = appHelper.generateGUID() + '.png';
+      link.setAttribute('href', this.exportedImgData.url)
+      link.setAttribute('download', 'img-export-' + appHelper.generateGUID() + '.png')
       document.body.appendChild(link); // Or append it whereever you want
       link.click();
-      //  window.open(this.exportedImgData.url, '_blank');
+      document.body.removeChild(link)
       this.isExporting = false;
     },
     close() {
@@ -648,18 +640,6 @@ export default {
       },
       deep: true
     },
-    "editorData.zoom": function(val) {
-      if (!this.editorData.isResponsive) {
-        this.editorData.originalZoom = val;
-      } else {
-        for (var i = 0; i < this.editorData.ratios.length; i++) {
-          if (this.editorData.selectedRatio === this.editorData.ratios[i].name) {
-            this.editorData.ratios[i].zoom = val;
-            break;
-          }
-        }
-      }
-    }
   }
 }
 </script>

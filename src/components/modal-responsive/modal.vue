@@ -147,6 +147,7 @@
 </template>
 <script>
 import {mapActions} from 'vuex'
+import zoomHelper from '../../helpers/zoom.helper';
 export default {
     name: 'responsiveModal',
     data () {
@@ -498,15 +499,20 @@ export default {
                 this.ratioSelected.layers = JSON.parse(JSON.stringify(newLayer))
             }
 
-            console.log('this.ratioSelected:',this.ratioSelected)
-             this.ratioSelected.zoom = 100
             this.updateLayers(this.ratioSelected.layers)
+            // console.log('going back', this.template.zoom)
+            zoomHelper.gotoZoom(this.template, this.ratioSelected.layers, this.template.zoom, 100,  this.ratioSelected.zoom < 100 ? 'in' : 'out', false);
+            this.ratioSelected.zoom = 100
+            this.template.zoom = 100;
+            // console.log('his.ratioSelected.layers', this.ratioSelected.layers)
+
             this.ratioSelected.isPick = true
             this.template.ratios.push(this.ratioSelected)
             this.currentElement.target.removeAttribute('style')
             this.showMenu = false
             this.template.selectedRatio = this.ratioSelected.name
             this.template.tabSelected = this.ratioSelected.tabSelected
+            // console.log('this.template:',this.template)
             this.$localStorage.set('canvas',JSON.stringify(this.template))
             this.closeModal()
         },

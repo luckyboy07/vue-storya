@@ -2,6 +2,7 @@
 <div>
     <!-- :handles="'nw,ne,se,sw'" -->
     <rotatable-resizer 
+      v-for="(elem, i) in layers" :key="i"
       :id="elem.id"
       :islocked="elem.isBackground ? false :elem.islocked"
       :active="elem.selected"
@@ -14,7 +15,6 @@
       :top="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.y : -7 : elem.y"
       :width="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.width : parentW : elem.width"
       :height="$_isShape(elem) ? elem.attributes.sizeOption === 'Manual' ? elem.height : parentH : elem.height"
-      v-for="(elem, i) in layers" :key="i"
       v-show="elem.visible"
       :z="elem.isBackground ? 1:elem.order"
       :zoom="zoom"

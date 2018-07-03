@@ -21,7 +21,7 @@ export default {
         for (var i = 0; i < this.layers.length; i++) {
             if (id === this.layers[i].id) {
                 this.layers[i].image = val;
-                this.layers[i].loaded = true;
+                // this.layers[i].loaded = true;
                 break;
             }
         }
