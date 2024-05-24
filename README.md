@@ -1,6 +1,18 @@
-# storya-project
+# Storya Project
+ - A banner content creator tool
 
-> A Vue.js project
+ ---------
+ 
+# Screenshots: 
+## Front Page
+
+<img src="https://raw.githubusercontent.com/luckyboy07/vue-storya/master/src/assets/demo/stoya-front.png" />
+## Builder Page
+
+<img src="https://raw.githubusercontent.com/luckyboy07/vue-storya/master/src/assets/demo/1.jpg" />
+<img src="https://raw.githubusercontent.com/luckyboy07/vue-storya/master/src/assets/demo/2.jpg" />
+
+---------- 
 
 ## Build Setup
 
