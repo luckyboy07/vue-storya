@@ -277,26 +277,28 @@ export default {
       selected.backgroundcolor = this.setupData.backgroundcolor || '#fff';
       selected.project_id = this.setupData.project_id;
       console.log('selected:',selected)
-      if(this.setupData.canvas_name && this.setupData.project_name){
-          this.isFile = false
-          this.isProject = false
-          // apiService.saveCanvas(this.setupData).then((response)=>{
-          //   console.log('response:',response)
-          // })
-          this.$store.dispatch('selectTemplate',selected).then(response =>{
-             if (response.data.response.statusCode === 201) {
-              this.$router.push({name: 'EditorApp'})
-            }
-          })
-      }else {
-        if(this.setupData.project_name === '' ){
-          this.isProject = true
-        }
-        if (this.setupData.canvas_name === ''){
-          this.isFile = true
-        }
-        this.handleviewScroll()
-      }
+      
+      this.$router.push({name: 'EditorApp'})
+      // if(this.setupData.canvas_name && this.setupData.project_name){
+      //     this.isFile = false
+      //     this.isProject = false
+      //     // apiService.saveCanvas(this.setupData).then((response)=>{
+      //     //   console.log('response:',response)
+      //     // })
+      //     this.$store.dispatch('selectTemplate',selected).then(response =>{
+      //        if (response.data.response.statusCode === 201) {
+      //         this.$router.push({name: 'EditorApp'})
+      //       }
+      //     })
+      // }else {
+      //   if(this.setupData.project_name === '' ){
+      //     this.isProject = true
+      //   }
+      //   if (this.setupData.canvas_name === ''){
+      //     this.isFile = true
+      //   }
+      //   this.handleviewScroll()
+      // }
     },
     onSubmit() {
       this.$emit('onSubmit', this.setupData);
