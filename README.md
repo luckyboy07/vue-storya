@@ -4,13 +4,19 @@
  ---------
  
 # Screenshots: 
+
 ## Front Page
 
 <img src="https://raw.githubusercontent.com/luckyboy07/vue-storya/master/src/assets/demo/stoya-front.png" />
+
 ## Builder Page
 
 <img src="https://raw.githubusercontent.com/luckyboy07/vue-storya/master/src/assets/demo/1.jpg" />
 <img src="https://raw.githubusercontent.com/luckyboy07/vue-storya/master/src/assets/demo/2.jpg" />
+
+# Sample Demo: 
+
+<img src="https://raw.githubusercontent.com/luckyboy07/vue-storya/master/src/assets/storya-demo.gif" />
 
 ---------- 
 
